@@ -1,0 +1,27 @@
+{
+  "name": "@ngnova/ui",
+  "version": "0.1.0",
+  "description": "NgNova UI is a standalone Angular component library styled with Tailwind CSS.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ngnova/ui.git"
+  },
+  "keywords": [
+    "angular",
+    "angular-library",
+    "components",
+    "ui",
+    "tailwindcss",
+    "standalone-components"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

@@ -1,15 +1,21 @@
 {
-  "name": "angular-library",
+  "name": "ngnova-ui-workspace",
   "version": "0.0.0",
+  "description": "Workspace for NgNova UI, a standalone Angular component library styled with Tailwind CSS.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chiragpatel273/ngnova-ui.git"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:demo": "npm run build:lib && ng build angular-library",
+    "build:demo": "npm run build:lib && ng build demo",
     "build:lib": "ng build ui",
     "test:lib": "ng test ui --watch=false",
     "lint:lib": "ng lint ui",
-    "lint:demo": "ng lint angular-library",
+    "lint:demo": "ng lint demo",
     "pack:lib": "npm run build:lib && cd dist/ui && npm pack",
     "publish:lib": "npm run build:lib && cd dist/ui && npm publish --access public",
     "format": "prettier --write .",

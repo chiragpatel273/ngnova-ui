@@ -7,9 +7,17 @@
     "type": "git",
     "url": "https://github.com/chiragpatel273/ngnova-ui.git"
   },
+  "homepage": "https://github.com/chiragpatel273/ngnova-ui#readme",
+  "bugs": {
+    "url": "https://github.com/chiragpatel273/ngnova-ui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "angular",
-    "angular-library",
+    "angular-components",
+    "component-library",
     "components",
     "ui",
     "tailwindcss",

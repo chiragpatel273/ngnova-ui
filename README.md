@@ -1,11 +1,11 @@
-# Angular Library Workspace
+# NgNova UI
 
 Production-oriented Angular workspace for **NgNova UI**, a small Angular component library published as `@ngnova/ui`, plus a demo app that previews every component.
 
 ## Assumptions
 
-- Angular CLI `22.0.1` is the latest stable CLI verified for this setup.
-- Tailwind CSS `4.3.0` is used through Angular's official Tailwind integration.
+- Angular CLI `22.0.1` was verified during setup.
+- Tailwind CSS `4.3.0` was verified during setup through Angular's official Tailwind integration.
 - The library is published from `dist/ui`, the ng-packagr package output, not from `projects/ui`.
 - `@ngnova/ui` is the intended public package name. Confirm the npm scope is available and that you own it before publishing.
 
@@ -20,8 +20,6 @@ Production-oriented Angular workspace for **NgNova UI**, a small Angular compone
 - Tailwind classes are complete static strings so Tailwind can detect them.
 
 See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md) for the project coding standards checklist used for NgNova UI component work.
-
-See [docs/COMPETITIVE_COMPONENT_REVIEW.md](docs/COMPETITIVE_COMPONENT_REVIEW.md) for the Material/PrimeNG benchmark review and component roadmap.
 
 ## Projects
 
@@ -127,25 +125,13 @@ Run the docs app:
 npm start
 ```
 
-Open the component documentation pages:
+Open a component documentation page:
 
 ```text
-http://127.0.0.1:4200/components/button
-http://127.0.0.1:4200/components/card
-http://127.0.0.1:4200/components/input
-http://127.0.0.1:4200/components/badge
-http://127.0.0.1:4200/components/modal
-http://127.0.0.1:4200/components/checkbox
-http://127.0.0.1:4200/components/select
-http://127.0.0.1:4200/components/radio
-http://127.0.0.1:4200/components/switch
-http://127.0.0.1:4200/components/textarea
-http://127.0.0.1:4200/components/alert
-http://127.0.0.1:4200/components/tabs
-http://127.0.0.1:4200/components/spinner
+http://localhost:4200/components/button
 ```
 
-Each page includes a live preview, import snippet, usage example, copy button, and API table.
+Each component page follows the same pattern with a live preview, import snippet, usage example, copy button, and API table.
 
 ## Scripts
 
@@ -159,7 +145,7 @@ npm run publish:lib   # Build then publish dist/ui with public scoped access
 
 ## npm Publishing Checklist
 
-1. Replace the placeholder repository URL in `projects/ui/package.json`.
+1. Confirm the repository URL in `projects/ui/package.json` is correct.
 2. Confirm the npm org or user scope `@ngnova` exists and you have publish rights.
 3. Run `npm login`.
 4. Run `npm run test:lib`.

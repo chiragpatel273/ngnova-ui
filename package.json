@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@angular/build": "^22.0.1",
+    "@angular/cdk": "^22.0.0",
     "@angular/cli": "^22.0.1",
     "@angular/compiler-cli": "^22.0.0",
     "@changesets/cli": "^2.31.0",

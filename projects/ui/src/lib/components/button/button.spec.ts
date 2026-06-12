@@ -32,6 +32,17 @@ describe('UiButtonComponent', () => {
     expect(fixture.componentInstance.clicked).toBe(true);
   });
 
+  it('lets native click events bubble for DOM-aligned behavior', () => {
+    let bubbled = false;
+    fixture.nativeElement.addEventListener('click', () => {
+      bubbled = true;
+    });
+
+    fixture.nativeElement.querySelector('button').click();
+
+    expect(bubbled).toBe(true);
+  });
+
   it('disables clicks while loading', () => {
     const buttonFixture = TestBed.createComponent(UiButtonComponent);
     buttonFixture.componentInstance.loading = true;
@@ -52,5 +63,18 @@ describe('UiButtonComponent', () => {
     buttonFixture.detectChanges();
 
     expect(buttonFixture.nativeElement.querySelector('button').className).toContain('w-full');
+  });
+
+  it('only sets aria-busy while loading', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    expect(button.getAttribute('aria-busy')).toBeNull();
+
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.detectChanges();
+
+    expect(button.getAttribute('aria-busy')).toBe('true');
   });
 });

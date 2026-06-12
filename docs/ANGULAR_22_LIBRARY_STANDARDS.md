@@ -159,6 +159,10 @@ If NgNova UI later ships prebuilt CSS, document the CSS import clearly and reass
 - Test disabled and loading states.
 - Test `ControlValueAccessor` behavior for form controls.
 - Test modal/dialog close paths, focus behavior, and generated IDs.
+- Provide Angular CDK component harnesses for reusable interactive components.
+- Publish harnesses from the `@ngnova/ui/testing` secondary entry point, not from the main runtime entry point.
+- Keep harness APIs user-focused, such as `click`, `setValue`, `isDisabled`, `selectTab`, and `isOpen`.
+- Do not expose internal DOM nodes from harnesses unless the element is consumer-provided content.
 - Prefer behavior assertions over brittle DOM structure assertions.
 - Keep tests next to the component under test with `.spec.ts` suffix.
 

@@ -34,6 +34,32 @@ import { UiButtonComponent } from '@ngnova/ui';
 export class ExampleComponent {}
 ```
 
+## Testing
+
+NgNova UI provides Angular CDK test harnesses from `@ngnova/ui/testing`.
+
+```ts
+import { UiButtonHarness, UiInputHarness } from '@ngnova/ui/testing';
+
+const button = await loader.getHarness(UiButtonHarness.with({ text: 'Save' }));
+await button.click();
+
+const input = await loader.getHarness(UiInputHarness.with({ label: 'Email' }));
+await input.setValue('dev@example.com');
+```
+
+Available harnesses:
+
+- `UiButtonHarness`
+- `UiInputHarness`
+- `UiCheckboxHarness`
+- `UiSelectHarness`
+- `UiRadioGroupHarness`
+- `UiSwitchHarness`
+- `UiTextareaHarness`
+- `UiModalHarness`
+- `UiTabsHarness`
+
 ## Components
 
 ```html
@@ -54,7 +80,15 @@ export class ExampleComponent {}
   helperText="Use your work email"
   required
   [formControl]="email"
-/>
+  [validationMessages]="{ required: 'Email is required.', email: 'Use a valid email address.' }"
+>
+  <span uiInputPrefix>@</span>
+</ui-input>
+
+<ui-input label="Username" maxLength="24" clearable [formControl]="username">
+  <span uiInputPrefix>user/</span>
+  <ui-badge uiInputSuffix variant="info" size="sm">public</ui-badge>
+</ui-input>
 
 <ui-badge variant="success" ariaRole="status">Active</ui-badge>
 
@@ -63,6 +97,22 @@ export class ExampleComponent {}
   <p id="confirm-description">Modal body</p>
   <button uiModalFooter type="button">Confirm</button>
 </ui-modal>
+
+<ui-checkbox label="Email updates" [formControl]="newsletter" />
+
+<ui-select label="Plan" [options]="planOptions" [formControl]="plan" />
+
+<ui-radio-group label="Contact preference" [options]="contactOptions" [formControl]="contact" />
+
+<ui-switch label="Release notifications" [formControl]="notifications" />
+
+<ui-textarea label="Release notes" maxLength="240" [formControl]="releaseNotes" />
+
+<ui-alert variant="success" title="Saved" dismissible> Your changes are ready. </ui-alert>
+
+<ui-tabs [tabs]="tabs" [(active)]="activeTab"> Current tab content </ui-tabs>
+
+<ui-spinner label="Loading components" />
 ```
 
 ## Publishing

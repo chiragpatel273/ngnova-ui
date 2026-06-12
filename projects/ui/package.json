@@ -17,8 +17,14 @@
   ],
   "peerDependencies": {
     "@angular/common": "^22.0.0",
+    "@angular/cdk": "^22.0.0",
     "@angular/core": "^22.0.0",
     "@angular/forms": "^22.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/cdk": {
+      "optional": true
+    }
   },
   "dependencies": {
     "tslib": "^2.3.0"

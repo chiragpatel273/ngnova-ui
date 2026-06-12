@@ -4,12 +4,21 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import {
+  UiAlertComponent,
   UiBadgeComponent,
   UiButtonComponent,
   UiCardComponent,
+  UiCheckboxComponent,
   UiInputComponent,
   UiModalComponent,
+  UiRadioGroupComponent,
+  UiSelectComponent,
+  UiSpinnerComponent,
+  UiSwitchComponent,
+  UiTabsComponent,
+  UiTextareaComponent,
 } from '@ngnova/ui';
+import type { UiRadioOption, UiSelectOption, UiTabItem } from '@ngnova/ui';
 
 import { docsBySlug } from './docs-data';
 
@@ -22,8 +31,16 @@ import { docsBySlug } from './docs-data';
     UiBadgeComponent,
     UiButtonComponent,
     UiCardComponent,
+    UiCheckboxComponent,
     UiInputComponent,
     UiModalComponent,
+    UiRadioGroupComponent,
+    UiSelectComponent,
+    UiSpinnerComponent,
+    UiSwitchComponent,
+    UiTabsComponent,
+    UiTextareaComponent,
+    UiAlertComponent,
   ],
   template: `
     @if (doc(); as componentDoc) {
@@ -115,6 +132,126 @@ import { docsBySlug } from './docs-data';
                     Open the dialog to check header, body, footer, backdrop click, and Escape close.
                   </p>
                   <ui-button (pressed)="modalOpen.set(true)">Open modal</ui-button>
+                </div>
+              }
+              @case ('checkbox') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-checkbox
+                    label="Email updates"
+                    helperText="Bound to a reactive FormControl."
+                    [formControl]="newsletter"
+                  />
+                  <ui-checkbox
+                    label="Require approval before publishing"
+                    helperText="Useful for release workflows."
+                    indeterminate
+                  />
+                  <ui-checkbox label="Disabled option" disabled />
+                </div>
+              }
+              @case ('select') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-select
+                    label="Plan"
+                    placeholder="Choose a plan"
+                    helperText="Bound to a reactive FormControl."
+                    [options]="planOptions"
+                    [formControl]="plan"
+                  />
+                  <ui-select
+                    label="Release channel"
+                    placeholder="Select channel"
+                    errorText="Choose a stable channel before publishing."
+                    [options]="channelOptions"
+                  />
+                </div>
+              }
+              @case ('radio') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-radio-group
+                    label="Contact preference"
+                    helperText="Bound to a reactive FormControl."
+                    [options]="contactOptions"
+                    [formControl]="contactPreference"
+                  />
+                  <ui-radio-group
+                    label="Layout"
+                    orientation="horizontal"
+                    [options]="layoutOptions"
+                    [formControl]="layoutDensity"
+                  />
+                </div>
+              }
+              @case ('switch') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-switch
+                    label="Release notifications"
+                    helperText="Bound to a reactive FormControl."
+                    [formControl]="notifications"
+                  />
+                  <ui-switch label="Disabled switch" disabled />
+                </div>
+              }
+              @case ('textarea') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-textarea
+                    label="Release notes"
+                    placeholder="Describe what changed..."
+                    helperText="Bound to a reactive FormControl."
+                    [formControl]="releaseNotes"
+                  />
+                  <ui-textarea
+                    label="Review notes"
+                    errorText="Notes are required before publishing."
+                    resize="none"
+                    [rows]="3"
+                  />
+                </div>
+              }
+              @case ('alert') {
+                <div class="grid gap-4">
+                  <ui-alert variant="info" title="Documentation ready">
+                    Each component page includes preview, usage, inputs, and outputs.
+                  </ui-alert>
+                  <ui-alert variant="success" title="Package build passed" dismissible>
+                    The npm package can be inspected with a dry-run pack command.
+                  </ui-alert>
+                  <ui-alert variant="warning" title="Release note needed">
+                    Add a changeset for public API changes before publishing.
+                  </ui-alert>
+                  <ui-alert variant="danger" title="Publish blocked">
+                    Never publish from the source project folder.
+                  </ui-alert>
+                </div>
+              }
+              @case ('tabs') {
+                <ui-tabs
+                  [tabs]="componentTabs"
+                  [active]="activeTab()"
+                  (activeChange)="activeTab.set($event)"
+                  ariaLabel="Component sections"
+                >
+                  @if (activeTab() === 'overview') {
+                    <p class="text-slate-600 dark:text-slate-300">
+                      Tabs use real tablist semantics and keyboard navigation.
+                    </p>
+                  } @else if (activeTab() === 'api') {
+                    <p class="text-slate-600 dark:text-slate-300">
+                      Pair the active value with your own projected panel content.
+                    </p>
+                  } @else {
+                    <p class="text-slate-600 dark:text-slate-300">
+                      Disabled tabs stay visible but cannot be selected.
+                    </p>
+                  }
+                </ui-tabs>
+              }
+              @case ('spinner') {
+                <div class="flex flex-wrap items-center gap-6">
+                  <ui-spinner size="sm" label="Loading small preview" />
+                  <ui-spinner label="Loading default preview" />
+                  <ui-spinner size="lg" label="Loading large preview" />
+                  <ui-button loading>Saving</ui-button>
                 </div>
               }
             }
@@ -263,8 +400,39 @@ import { docsBySlug } from './docs-data';
 export class ComponentDocPageComponent {
   private readonly route = inject(ActivatedRoute);
   protected readonly email = new FormControl('developer@example.com');
+  protected readonly newsletter = new FormControl(true);
+  protected readonly plan = new FormControl('pro');
+  protected readonly contactPreference = new FormControl('email');
+  protected readonly layoutDensity = new FormControl('comfortable');
+  protected readonly notifications = new FormControl(false);
+  protected readonly releaseNotes = new FormControl('Added form components.');
   protected readonly modalOpen = signal(false);
   protected readonly copied = signal(false);
+  protected readonly activeTab = signal('overview');
+  protected readonly planOptions: readonly UiSelectOption[] = [
+    { label: 'Starter', value: 'starter' },
+    { label: 'Pro', value: 'pro' },
+    { label: 'Enterprise', value: 'enterprise' },
+  ];
+  protected readonly channelOptions: readonly UiSelectOption[] = [
+    { label: 'Stable', value: 'stable' },
+    { label: 'Next', value: 'next' },
+    { label: 'Deprecated', value: 'deprecated', disabled: true },
+  ];
+  protected readonly contactOptions: readonly UiRadioOption[] = [
+    { label: 'Email', value: 'email', helperText: 'Best for async updates.' },
+    { label: 'SMS', value: 'sms' },
+    { label: 'Phone', value: 'phone', disabled: true },
+  ];
+  protected readonly layoutOptions: readonly UiRadioOption[] = [
+    { label: 'Compact', value: 'compact' },
+    { label: 'Comfortable', value: 'comfortable' },
+  ];
+  protected readonly componentTabs: readonly UiTabItem[] = [
+    { label: 'Overview', value: 'overview' },
+    { label: 'API', value: 'api' },
+    { label: 'Disabled', value: 'disabled', disabled: true },
+  ];
   private readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug') ?? '')),
     {

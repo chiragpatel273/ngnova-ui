@@ -21,6 +21,8 @@ Production-oriented Angular workspace for **NgNova UI**, a small Angular compone
 
 See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md) for the project coding standards checklist used for NgNova UI component work.
 
+See [docs/COMPETITIVE_COMPONENT_REVIEW.md](docs/COMPETITIVE_COMPONENT_REVIEW.md) for the Material/PrimeNG benchmark review and component roadmap.
+
 ## Projects
 
 - `projects/ui`: Angular library package source.
@@ -30,9 +32,17 @@ See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md)
 
 - `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; sizes `sm`, `md`, `lg`; disabled/loading states; `pressed`, `focused`, and `blurred` outputs.
 - `UiCardComponent`: header/body/footer content projection, outline/elevated variants, and body padding sizes.
-- `UiInputComponent`: label, placeholder, helper text, error text, size, native input attributes, disabled/read-only/required states, focus/blur outputs, and Angular forms support through `ControlValueAccessor`.
+- `UiInputComponent`: label, placeholder, helper/error text, prefix/suffix slots, clear button, character counter, outline/filled appearance, size variants, validation message mapping, native input attributes, disabled/read-only/required states, focus/blur outputs, and Angular forms support through `ControlValueAccessor`.
 - `UiBadgeComponent`: variants `default`, `success`, `warning`, `danger`, `info`; sizes `sm`, `md`; optional ARIA role/label.
 - `UiModalComponent`: open/close state, sizes, header/body/footer slots, close button, backdrop close, Escape close, focus restore/trap behavior, and dialog ARIA basics.
+- `UiCheckboxComponent`: native checkbox with label, helper text, indeterminate/disabled/required states, and Angular forms support.
+- `UiSelectComponent`: native select with label, placeholder, helper/error text, size variants, disabled options, and Angular forms support.
+- `UiRadioGroupComponent`: native radio group with helper/error text, horizontal/vertical layout, disabled options, and Angular forms support.
+- `UiSwitchComponent`: accessible boolean switch with helper text and Angular forms support.
+- `UiTextareaComponent`: multi-line text field with helper/error text, character counter, validation message mapping, outline/filled appearance, resize options, and Angular forms support.
+- `UiAlertComponent`: semantic feedback alert with `info`, `success`, `warning`, and `danger` variants plus optional dismiss action.
+- `UiTabsComponent`: keyboard-friendly tablist with two-way active state and disabled tabs.
+- `UiSpinnerComponent`: accessible loading indicator with sizes and decorative mode.
 
 ## Install In A Consumer App
 
@@ -63,6 +73,42 @@ import { UiButtonComponent } from '@ngnova/ui';
 export class SaveButtonExample {}
 ```
 
+## Component Test Harnesses
+
+NgNova UI ships Angular CDK component harnesses from the secondary testing entry point:
+
+```ts
+import { UiButtonHarness, UiInputHarness } from '@ngnova/ui/testing';
+```
+
+Harnesses are available for:
+
+- `UiButtonHarness`
+- `UiInputHarness`
+- `UiCheckboxHarness`
+- `UiSelectHarness`
+- `UiRadioGroupHarness`
+- `UiSwitchHarness`
+- `UiTextareaHarness`
+- `UiModalHarness`
+- `UiTabsHarness`
+
+Install Angular CDK in apps that use these harnesses:
+
+```bash
+npm install --save-dev @angular/cdk
+```
+
+Example:
+
+```ts
+const button = await loader.getHarness(UiButtonHarness.with({ text: 'Save' }));
+await button.click();
+
+const email = await loader.getHarness(UiInputHarness.with({ label: 'Email' }));
+await email.setValue('dev@example.com');
+```
+
 ## Local Development
 
 ```bash
@@ -89,6 +135,14 @@ http://127.0.0.1:4200/components/card
 http://127.0.0.1:4200/components/input
 http://127.0.0.1:4200/components/badge
 http://127.0.0.1:4200/components/modal
+http://127.0.0.1:4200/components/checkbox
+http://127.0.0.1:4200/components/select
+http://127.0.0.1:4200/components/radio
+http://127.0.0.1:4200/components/switch
+http://127.0.0.1:4200/components/textarea
+http://127.0.0.1:4200/components/alert
+http://127.0.0.1:4200/components/tabs
+http://127.0.0.1:4200/components/spinner
 ```
 
 Each page includes a live preview, import snippet, usage example, copy button, and API table.

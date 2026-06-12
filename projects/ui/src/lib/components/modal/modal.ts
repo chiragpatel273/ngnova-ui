@@ -38,7 +38,8 @@ let nextModalId = 0;
           [class.max-w-4xl]="size === 'xl'"
           role="dialog"
           aria-modal="true"
-          [attr.aria-labelledby]="titleId"
+          [attr.aria-label]="ariaLabel || null"
+          [attr.aria-labelledby]="ariaLabel ? null : titleId"
           [attr.aria-describedby]="descriptionId || null"
           tabindex="-1"
         >
@@ -80,6 +81,7 @@ export class UiModalComponent implements AfterViewChecked, OnChanges {
   @Input() size: UiModalSize = 'md';
   @Input() titleId = `ui-modal-title-${++nextModalId}`;
   @Input() descriptionId = '';
+  @Input() ariaLabel = '';
   @Input({ transform: booleanAttribute }) restoreFocus = true;
   readonly openChange = output<boolean>();
   readonly opened = output<void>();

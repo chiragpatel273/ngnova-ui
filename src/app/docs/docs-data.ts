@@ -338,6 +338,12 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Optional ID used by aria-describedby.',
       },
       {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible dialog label for headerless dialogs.',
+      },
+      {
         name: 'restoreFocus',
         type: 'boolean',
         defaultValue: 'true',
@@ -371,6 +377,560 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits when Escape closes the dialog.',
       },
     ],
+  },
+  {
+    slug: 'checkbox',
+    name: 'Checkbox',
+    selector: 'ui-checkbox',
+    summary: 'Accessible checkbox with helper text, disabled state, and Angular forms support.',
+    importName: 'UiCheckboxComponent',
+    usage: `<ui-checkbox
+  label="Email updates"
+  helperText="Receive product and release news."
+  [formControl]="newsletter"
+/>`,
+    inputs: [
+      { name: 'label', type: 'string', defaultValue: "''", description: 'Visible checkbox label.' },
+      {
+        name: 'helperText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Support text shown below the label.',
+      },
+      {
+        name: 'inputId',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'ID applied to the native checkbox.',
+      },
+      { name: 'name', type: 'string', defaultValue: "''", description: 'Native input name.' },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables the native checkbox.',
+      },
+      {
+        name: 'required',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Marks the native checkbox as required.',
+      },
+      {
+        name: 'indeterminate',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows the native mixed visual state until the user changes the value.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'valueChange',
+        type: 'OutputEmitterRef<boolean>',
+        description: 'Emits the checked value after user interaction.',
+      },
+      {
+        name: 'indeterminateChange',
+        type: 'OutputEmitterRef<boolean>',
+        description:
+          'Supports two-way binding when the mixed state is cleared by user interaction.',
+      },
+      {
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the native checkbox receives focus.',
+      },
+      {
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the native checkbox loses focus.',
+      },
+    ],
+  },
+  {
+    slug: 'select',
+    name: 'Select',
+    selector: 'ui-select',
+    summary: 'Native select field with label, helper/error text, and Angular forms support.',
+    importName: 'UiSelectComponent',
+    usage: `<ui-select
+  label="Plan"
+  placeholder="Choose a plan"
+  helperText="You can change this later."
+  [options]="planOptions"
+  [formControl]="plan"
+/>`,
+    inputs: [
+      { name: 'label', type: 'string', defaultValue: "''", description: 'Visible field label.' },
+      {
+        name: 'placeholder',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Optional empty option label shown first.',
+      },
+      {
+        name: 'helperText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Support text shown below the field.',
+      },
+      {
+        name: 'errorText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Error text shown below the field and reflected in aria-invalid.',
+      },
+      {
+        name: 'inputId',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'ID applied to the native select.',
+      },
+      { name: 'name', type: 'string', defaultValue: "''", description: 'Native select name.' },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Select height and text scale.',
+      },
+      {
+        name: 'options',
+        type: 'readonly UiSelectOption[]',
+        defaultValue: '[]',
+        description: 'Options rendered as native option elements.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables the native select.',
+      },
+      {
+        name: 'required',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Marks the native select as required.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'valueChange',
+        type: 'OutputEmitterRef<string>',
+        description: 'Emits the selected value after user interaction.',
+      },
+      {
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the native select receives focus.',
+      },
+      {
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the native select loses focus.',
+      },
+    ],
+  },
+  {
+    slug: 'alert',
+    name: 'Alert',
+    selector: 'ui-alert',
+    summary: 'Semantic feedback message with variants and an optional dismiss action.',
+    importName: 'UiAlertComponent',
+    usage: `<ui-alert variant="success" title="Package ready" dismissible>
+  The library build finished and can be packed from dist/ui.
+</ui-alert>`,
+    inputs: [
+      {
+        name: 'variant',
+        type: "'info' | 'success' | 'warning' | 'danger'",
+        defaultValue: "'info'",
+        description: 'Semantic feedback treatment.',
+      },
+      { name: 'title', type: 'string', defaultValue: "''", description: 'Optional heading text.' },
+      {
+        name: 'open',
+        type: 'boolean',
+        defaultValue: 'true',
+        description: 'Controls alert visibility and supports reopening dismissed alerts.',
+      },
+      {
+        name: 'ariaRole',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Overrides the default status/alert role.',
+      },
+      {
+        name: 'dismissible',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows a close button and hides the alert when pressed.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'openChange',
+        type: 'OutputEmitterRef<boolean>',
+        description: 'Supports two-way open binding for dismissible alerts.',
+      },
+      {
+        name: 'dismissed',
+        type: 'OutputEmitterRef<void>',
+        description: 'Emits after the dismiss button hides the alert.',
+      },
+    ],
+  },
+  {
+    slug: 'radio',
+    name: 'Radio Group',
+    selector: 'ui-radio-group',
+    summary:
+      'Native radio group with options, helper/error text, orientation, and Angular forms support.',
+    importName: 'UiRadioGroupComponent',
+    usage: `<ui-radio-group
+  label="Contact preference"
+  helperText="Choose one option."
+  [options]="contactOptions"
+  [formControl]="contactPreference"
+/>`,
+    inputs: [
+      { name: 'label', type: 'string', defaultValue: "''", description: 'Visible group label.' },
+      {
+        name: 'helperText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Support text shown below the group.',
+      },
+      {
+        name: 'errorText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Error text shown below the group.',
+      },
+      {
+        name: 'name',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Native radio name. Defaults to the generated group ID.',
+      },
+      {
+        name: 'groupId',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'Base ID used for group description wiring.',
+      },
+      {
+        name: 'orientation',
+        type: "'vertical' | 'horizontal'",
+        defaultValue: "'vertical'",
+        description: 'Radio option layout direction.',
+      },
+      {
+        name: 'options',
+        type: 'readonly UiRadioOption[]',
+        defaultValue: '[]',
+        description: 'Radio options rendered as native input elements.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables the whole radio group.',
+      },
+      {
+        name: 'required',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Marks radio options as required.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'valueChange',
+        type: 'OutputEmitterRef<string>',
+        description: 'Emits the selected value after user interaction.',
+      },
+      {
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when a radio receives focus.',
+      },
+      {
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when a radio loses focus.',
+      },
+    ],
+  },
+  {
+    slug: 'switch',
+    name: 'Switch',
+    selector: 'ui-switch',
+    summary: 'Accessible boolean switch with label, helper text, and Angular forms support.',
+    importName: 'UiSwitchComponent',
+    usage: `<ui-switch
+  label="Release notifications"
+  helperText="Email me when a release is published."
+  [formControl]="notifications"
+/>`,
+    inputs: [
+      { name: 'label', type: 'string', defaultValue: "''", description: 'Visible switch label.' },
+      {
+        name: 'helperText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Support text shown below the label.',
+      },
+      {
+        name: 'inputId',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'ID applied to the native checkbox.',
+      },
+      { name: 'name', type: 'string', defaultValue: "''", description: 'Native input name.' },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables the switch.',
+      },
+      {
+        name: 'required',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Marks the switch as required.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'valueChange',
+        type: 'OutputEmitterRef<boolean>',
+        description: 'Emits the checked value after user interaction.',
+      },
+      {
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the switch receives focus.',
+      },
+      {
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the switch loses focus.',
+      },
+    ],
+  },
+  {
+    slug: 'textarea',
+    name: 'Textarea',
+    selector: 'ui-textarea',
+    summary:
+      'Multi-line text field with label, helper/error text, resize options, and Angular forms support.',
+    importName: 'UiTextareaComponent',
+    usage: `<ui-textarea
+  label="Release notes"
+  placeholder="Describe what changed..."
+  helperText="Markdown is supported in your app."
+  [formControl]="releaseNotes"
+/>`,
+    inputs: [
+      { name: 'label', type: 'string', defaultValue: "''", description: 'Visible field label.' },
+      {
+        name: 'placeholder',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Native textarea placeholder.',
+      },
+      {
+        name: 'helperText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Support text shown below the field.',
+      },
+      {
+        name: 'errorText',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Error text shown below the field and reflected in aria-invalid.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Textarea padding and text scale.',
+      },
+      {
+        name: 'resize',
+        type: "'none' | 'vertical' | 'horizontal' | 'both'",
+        defaultValue: "'vertical'",
+        description: 'Native resize affordance.',
+      },
+      {
+        name: 'inputId',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'ID applied to the native textarea.',
+      },
+      { name: 'name', type: 'string', defaultValue: "''", description: 'Native textarea name.' },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'rows',
+        type: 'number',
+        defaultValue: '4',
+        description: 'Native rows attribute.',
+      },
+      {
+        name: 'maxLength',
+        type: 'number | null',
+        defaultValue: 'null',
+        description: 'Native maxlength constraint.',
+      },
+      {
+        name: 'minLength',
+        type: 'number | null',
+        defaultValue: 'null',
+        description: 'Native minlength constraint.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables the native textarea.',
+      },
+      {
+        name: 'readonly',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Makes the native textarea read-only.',
+      },
+      {
+        name: 'required',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Marks the native textarea as required.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'valueChange',
+        type: 'OutputEmitterRef<string>',
+        description: 'Emits the current value on input.',
+      },
+      {
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the textarea receives focus.',
+      },
+      {
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when the textarea loses focus.',
+      },
+    ],
+  },
+  {
+    slug: 'tabs',
+    name: 'Tabs',
+    selector: 'ui-tabs',
+    summary: 'Keyboard-friendly tablist for switching between related sections.',
+    importName: 'UiTabsComponent',
+    usage: `<ui-tabs [tabs]="tabs" [(active)]="activeTab" ariaLabel="Package docs">
+  @if (activeTab === 'overview') {
+    Overview content
+  } @else {
+    API content
+  }
+</ui-tabs>`,
+    inputs: [
+      {
+        name: 'id',
+        type: 'string',
+        defaultValue: 'generated',
+        description: 'Base ID used for tab and panel ARIA relationships.',
+      },
+      {
+        name: 'tabs',
+        type: 'readonly UiTabItem[]',
+        defaultValue: '[]',
+        description: 'Tab labels, values, and disabled states.',
+      },
+      {
+        name: 'active',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Currently selected tab value.',
+      },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "'Tabs'",
+        description: 'Accessible label for the tablist.',
+      },
+      {
+        name: 'fullWidth',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Stretches tab buttons across the available width.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'activeChange',
+        type: 'OutputEmitterRef<string>',
+        description: 'Supports two-way binding for the active tab value.',
+      },
+    ],
+  },
+  {
+    slug: 'spinner',
+    name: 'Spinner',
+    selector: 'ui-spinner',
+    summary: 'Lightweight loading indicator with accessible status text.',
+    importName: 'UiSpinnerComponent',
+    usage: `<ui-spinner label="Loading components" />
+<ui-spinner size="sm" decorative />`,
+    inputs: [
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Spinner diameter and border thickness.',
+      },
+      {
+        name: 'label',
+        type: 'string',
+        defaultValue: "'Loading'",
+        description: 'Accessible loading label when the spinner is not decorative.',
+      },
+      {
+        name: 'decorative',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Removes status semantics when another element already announces loading.',
+      },
+    ],
+    outputs: [],
   },
 ];
 

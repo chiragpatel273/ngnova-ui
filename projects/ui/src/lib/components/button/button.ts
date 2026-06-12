@@ -36,7 +36,7 @@ const SIZE_CLASSES: Record<UiButtonSize, string> = {
       [attr.type]="type"
       [attr.aria-label]="ariaLabel || null"
       [disabled]="disabled || loading"
-      [attr.aria-busy]="loading"
+      [attr.aria-busy]="loading ? 'true' : null"
       [class]="classes"
       (click)="emitPressed($event)"
       (focus)="emitFocused($event)"
@@ -81,11 +81,9 @@ export class UiButtonComponent {
   protected emitPressed(event: MouseEvent): void {
     if (this.disabled || this.loading) {
       event.preventDefault();
-      event.stopImmediatePropagation();
       return;
     }
 
-    event.stopPropagation();
     this.pressed.emit(event);
   }
 

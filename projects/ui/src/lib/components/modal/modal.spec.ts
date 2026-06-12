@@ -46,4 +46,16 @@ describe('UiModalComponent', () => {
 
     expect(first.titleId).not.toBe(second.titleId);
   });
+
+  it('supports aria-label for headerless dialogs', () => {
+    const modalFixture = TestBed.createComponent(UiModalComponent);
+    modalFixture.componentInstance.open = true;
+    modalFixture.componentInstance.ariaLabel = 'Quick settings';
+    modalFixture.detectChanges();
+
+    const dialog = modalFixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
+
+    expect(dialog.getAttribute('aria-label')).toBe('Quick settings');
+    expect(dialog.getAttribute('aria-labelledby')).toBeNull();
+  });
 });

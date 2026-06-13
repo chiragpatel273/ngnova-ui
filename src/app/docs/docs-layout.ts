@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UiBadgeComponent } from '@ngnova/ui';
 
@@ -9,6 +9,12 @@ interface ComponentDocGroup {
   readonly label: string;
   readonly description: string;
   readonly docs: readonly ComponentDoc[];
+}
+
+interface PrimaryNavItem {
+  readonly label: string;
+  readonly path: string;
+  readonly exact?: boolean;
 }
 
 const COMPONENT_GROUPS: readonly {
@@ -43,12 +49,10 @@ const COMPONENT_GROUPS: readonly {
   standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet, UiBadgeComponent],
   template: `
-    <main
-      class="min-h-dvh bg-[radial-gradient(circle_at_top_left,_rgba(37,99,235,0.10),_transparent_34rem),linear-gradient(180deg,_#f8fafc_0%,_#ffffff_42%,_#f8fafc_100%)] text-slate-950 dark:bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_34rem),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#020617_100%)] dark:text-slate-50"
-    >
+    <main class="min-h-dvh bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       <div class="mx-auto grid min-h-dvh max-w-[92rem] lg:grid-cols-[20rem_1fr]">
         <aside
-          class="border-b border-slate-200/80 bg-white/90 px-5 py-5 backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/85 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r"
+          class="border-b border-slate-200 bg-white px-5 py-5 dark:border-slate-800 dark:bg-slate-950 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r"
         >
           <a
             routerLink="/"
@@ -90,28 +94,34 @@ const COMPONENT_GROUPS: readonly {
           </div>
 
           <nav class="mt-6 grid gap-1" aria-label="Documentation start">
-            <a
-              routerLink="/"
-              routerLinkActive="bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100 dark:bg-blue-950/70 dark:text-blue-200 dark:ring-blue-900"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-            >
-              Overview
-            </a>
-            <a
-              routerLink="/get-started"
-              routerLinkActive="bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100 dark:bg-blue-950/70 dark:text-blue-200 dark:ring-blue-900"
-              class="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-            >
-              Get Started
-            </a>
+            @for (item of primaryNav; track item.path) {
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="bg-blue-50 text-blue-700 shadow-sm ring-1 ring-blue-100 dark:bg-blue-950/70 dark:text-blue-200 dark:ring-blue-900"
+                [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+                class="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+              >
+                {{ item.label }}
+              </a>
+            }
           </nav>
+
+          <label class="mt-6 block">
+            <span class="sr-only">Search components</span>
+            <input
+              type="search"
+              placeholder="Search components"
+              [value]="query()"
+              (input)="updateQuery($event)"
+              class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:placeholder:text-slate-500 dark:focus:border-blue-400"
+            />
+          </label>
 
           <nav
             class="mt-8 flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
             aria-label="Component documentation"
           >
-            @for (group of groups; track group.label) {
+            @for (group of groups(); track group.label) {
               <section class="min-w-56 lg:min-w-0">
                 <div class="mb-2 px-2">
                   <h2 class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">
@@ -141,6 +151,12 @@ const COMPONENT_GROUPS: readonly {
                   }
                 </div>
               </section>
+            } @empty {
+              <div
+                class="rounded-md border border-dashed border-slate-300 p-4 text-sm leading-6 text-slate-500 dark:border-slate-700 dark:text-slate-400"
+              >
+                No components match "{{ query() }}".
+              </div>
             }
           </nav>
         </aside>
@@ -151,14 +167,43 @@ const COMPONENT_GROUPS: readonly {
       </div>
     </main>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocsLayoutComponent {
   protected readonly docs = componentDocs;
-  protected readonly groups: readonly ComponentDocGroup[] = COMPONENT_GROUPS.map((group) => ({
-    label: group.label,
-    description: group.description,
-    docs: group.slugs
-      .map((slug) => componentDocs.find((doc) => doc.slug === slug))
-      .filter((doc): doc is ComponentDoc => !!doc),
-  }));
+  protected readonly query = signal('');
+  protected readonly primaryNav: readonly PrimaryNavItem[] = [
+    { label: 'Overview', path: '/', exact: true },
+    { label: 'Get Started', path: '/get-started' },
+    { label: 'Components', path: '/components' },
+    { label: 'Accessibility', path: '/accessibility' },
+    { label: 'Theming', path: '/theming' },
+    { label: 'Roadmap', path: '/roadmap' },
+  ];
+  protected readonly groups = computed<readonly ComponentDocGroup[]>(() => {
+    const normalizedQuery = this.query().trim().toLowerCase();
+
+    return COMPONENT_GROUPS.map((group) => ({
+      label: group.label,
+      description: group.description,
+      docs: group.slugs
+        .map((slug) => componentDocs.find((doc) => doc.slug === slug))
+        .filter((doc): doc is ComponentDoc => !!doc)
+        .filter((doc) => this.matchesQuery(doc, normalizedQuery)),
+    })).filter((group) => group.docs.length > 0);
+  });
+
+  protected updateQuery(event: Event): void {
+    this.query.set((event.target as HTMLInputElement).value);
+  }
+
+  private matchesQuery(doc: ComponentDoc, query: string): boolean {
+    if (!query) {
+      return true;
+    }
+
+    return [doc.name, doc.selector, doc.summary, doc.importName].some((value) =>
+      value.toLowerCase().includes(query),
+    );
+  }
 }

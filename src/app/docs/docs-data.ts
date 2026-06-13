@@ -1166,9 +1166,12 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-toast',
     summary: 'Application notification viewport powered by UiToastService.',
     importName: 'UiToastComponent, UiToastService',
-    usage: `<ui-toast />
+    usage: `import { inject } from '@angular/core';
+import { UiToastService } from '@ngnova/ui';
 
-constructor(private readonly toast: UiToastService) {}
+<ui-toast />
+
+private readonly toast = inject(UiToastService);
 
 save(): void {
   this.toast.success('Saved', 'Your settings are ready.');

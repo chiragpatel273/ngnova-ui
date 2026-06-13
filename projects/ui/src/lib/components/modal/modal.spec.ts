@@ -23,9 +23,15 @@ describe('UiModalComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
 
   beforeEach(async () => {
+    document.body.style.overflow = '';
     await TestBed.configureTestingModule({ imports: [HostComponent] }).compileComponents();
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy();
+    document.body.style.overflow = '';
   });
 
   it('renders projected dialog content', () => {
@@ -57,5 +63,36 @@ describe('UiModalComponent', () => {
 
     expect(dialog.getAttribute('aria-label')).toBe('Quick settings');
     expect(dialog.getAttribute('aria-labelledby')).toBeNull();
+
+    modalFixture.destroy();
+  });
+
+  it('keeps keyboard focus inside the dialog', () => {
+    const dialog = fixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
+    dialog.focus();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }));
+
+    const footerButton = fixture.nativeElement.querySelector(
+      '[uiModalFooter]',
+    ) as HTMLButtonElement;
+    expect(document.activeElement).toBe(footerButton);
+  });
+
+  it('locks body scroll while open', () => {
+    fixture.destroy();
+    document.body.style.overflow = '';
+
+    const modalFixture = TestBed.createComponent(UiModalComponent);
+    modalFixture.componentRef.setInput('open', true);
+    modalFixture.detectChanges();
+
+    expect(document.body.style.overflow).toBe('hidden');
+
+    modalFixture.componentRef.setInput('open', false);
+    modalFixture.detectChanges();
+
+    expect(document.body.style.overflow).toBe('');
+    modalFixture.destroy();
   });
 });

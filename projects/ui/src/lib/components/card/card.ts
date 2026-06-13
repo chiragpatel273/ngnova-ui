@@ -21,6 +21,9 @@ const BODY_CLASSES: Record<UiCardPadding, string> = {
 @Component({
   selector: 'ui-card',
   standalone: true,
+  host: {
+    class: 'block',
+  },
   template: `
     <section [class]="cardClasses">
       <div class="ui-card-slot border-b border-slate-200 px-5 py-4 dark:border-slate-800">

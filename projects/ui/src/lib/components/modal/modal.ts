@@ -8,7 +8,13 @@ import {
   output,
   ViewChild,
 } from '@angular/core';
-import type { AfterViewChecked, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import type {
+  AfterViewChecked,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
 
 export type UiModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -23,12 +29,11 @@ let nextModalId = 0;
   template: `
     @if (open) {
       <div class="fixed inset-0 z-50 flex min-h-dvh items-center justify-center p-4">
-        <button
-          type="button"
+        <div
           class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
-          aria-label="Close dialog"
+          aria-hidden="true"
           (click)="handleBackdropClick($event)"
-        ></button>
+        ></div>
         <section
           #dialogPanel
           class="relative max-h-[90dvh] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/20 outline-none dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/40"
@@ -74,7 +79,7 @@ let nextModalId = 0;
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiModalComponent implements AfterViewChecked, OnChanges {
+export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy {
   @Input({ transform: booleanAttribute }) open = false;
   @Input({ transform: booleanAttribute }) closeOnBackdrop = true;
   @Input({ transform: booleanAttribute }) closeOnEscape = true;
@@ -93,16 +98,25 @@ export class UiModalComponent implements AfterViewChecked, OnChanges {
 
   private readonly document = inject(DOCUMENT);
   private previouslyFocusedElement: HTMLElement | null = null;
+  private previousBodyOverflow = '';
   private shouldFocusDialog = false;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['open']?.currentValue === true) {
       this.previouslyFocusedElement = this.document.activeElement as HTMLElement | null;
+      this.lockDocumentScroll();
       this.shouldFocusDialog = true;
       this.opened.emit();
     } else if (changes['open']?.previousValue === true && changes['open']?.currentValue === false) {
       this.closed.emit();
+      this.unlockDocumentScroll();
       this.restorePreviouslyFocusedElement();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.open) {
+      this.unlockDocumentScroll();
     }
   }
 
@@ -185,6 +199,16 @@ export class UiModalComponent implements AfterViewChecked, OnChanges {
     const last = focusableElements[focusableElements.length - 1];
     const activeElement = this.document.activeElement;
 
+    if (
+      !(activeElement instanceof HTMLElement) ||
+      activeElement === panel ||
+      !panel.contains(activeElement)
+    ) {
+      event.preventDefault();
+      (event.shiftKey ? last : first).focus();
+      return;
+    }
+
     if (event.shiftKey && activeElement === first) {
       event.preventDefault();
       last.focus();
@@ -200,5 +224,14 @@ export class UiModalComponent implements AfterViewChecked, OnChanges {
         'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
       ),
     ).filter((element) => !element.hasAttribute('disabled') && element.tabIndex !== -1);
+  }
+
+  private lockDocumentScroll(): void {
+    this.previousBodyOverflow = this.document.body.style.overflow;
+    this.document.body.style.overflow = 'hidden';
+  }
+
+  private unlockDocumentScroll(): void {
+    this.document.body.style.overflow = this.previousBodyOverflow;
   }
 }

@@ -53,4 +53,25 @@ describe('UiTableComponent', () => {
 
     expect(sortKey).toBe('name');
   });
+
+  it('exposes aria-sort for sortable headers', async () => {
+    await TestBed.configureTestingModule({ imports: [UiTableComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(UiTableComponent);
+    fixture.componentRef.setInput('columns', columns);
+    fixture.componentRef.setInput('rows', rows);
+    fixture.detectChanges();
+
+    const sortableHeader = fixture.nativeElement.querySelector('th') as HTMLTableCellElement;
+    const sortButton = sortableHeader.querySelector('button') as HTMLButtonElement;
+
+    expect(sortableHeader.getAttribute('aria-sort')).toBe('none');
+
+    sortButton.click();
+    fixture.detectChanges();
+    expect(sortableHeader.getAttribute('aria-sort')).toBe('ascending');
+
+    sortButton.click();
+    fixture.detectChanges();
+    expect(sortableHeader.getAttribute('aria-sort')).toBe('descending');
+  });
 });

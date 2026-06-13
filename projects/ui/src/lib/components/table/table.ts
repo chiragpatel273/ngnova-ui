@@ -44,7 +44,7 @@ const ALIGN_CLASSES: Record<UiTableAlign, string> = {
           <thead class="bg-slate-50 text-slate-600 dark:bg-slate-900 dark:text-slate-300">
             <tr>
               @for (column of columns(); track column.key) {
-                <th [class]="headerClasses(column)" scope="col">
+                <th [class]="headerClasses(column)" scope="col" [attr.aria-sort]="ariaSort(column)">
                   @if (column.sortable) {
                     <button
                       type="button"
@@ -158,9 +158,22 @@ export class UiTableComponent {
   protected sortIcon(column: UiTableColumn): string {
     const current = this.currentSort();
     if (current?.key !== column.key) {
-      return '↕';
+      return 'sort';
     }
 
-    return current.direction === 'asc' ? '↑' : '↓';
+    return current.direction;
+  }
+
+  protected ariaSort(column: UiTableColumn): 'ascending' | 'descending' | 'none' | null {
+    if (!column.sortable) {
+      return null;
+    }
+
+    const current = this.currentSort();
+    if (current?.key !== column.key) {
+      return 'none';
+    }
+
+    return current.direction === 'asc' ? 'ascending' : 'descending';
   }
 }

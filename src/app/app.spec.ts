@@ -38,6 +38,13 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('NgNova UI');
     expect(compiled.textContent).toContain('Button');
+
+    await router.navigateByUrl('/accessibility');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      'Accessible Angular Components',
+    );
   });
 
   it('has route-ready docs and detail content for every component', () => {

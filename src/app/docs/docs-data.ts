@@ -22,6 +22,23 @@ export interface ComponentDoc {
   outputs: ApiOutput[];
 }
 
+export interface ComponentExample {
+  title: string;
+  description: string;
+  code: string;
+}
+
+export interface ComponentDocDetails {
+  overview: string[];
+  whenToUse: string[];
+  examples: ComponentExample[];
+  accessibility: string[];
+  keyboard: string[];
+  forms: string[];
+  edgeCases: string[];
+  testing: string[];
+}
+
 export const componentDocs: ComponentDoc[] = [
   {
     slug: 'button',
@@ -1199,3 +1216,626 @@ save(): void {
 ];
 
 export const docsBySlug = new Map(componentDocs.map((doc) => [doc.slug, doc]));
+
+export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
+  [
+    'button',
+    {
+      overview: [
+        'Button is the primary action primitive for commands, form submission, and workflow steps.',
+        'It wraps a native button so keyboard activation, disabled behavior, form submission, and focus semantics stay predictable.',
+      ],
+      whenToUse: [
+        'Use primary for the main page action, secondary for safe alternatives, outline for low-emphasis actions, ghost for toolbar actions, and danger for destructive work.',
+        'Use loading when an action has started and should not be triggered twice.',
+      ],
+      examples: [
+        {
+          title: 'Action row',
+          description: 'A common modal or form footer pattern.',
+          code: `<div class="flex justify-end gap-3">
+  <ui-button variant="outline" (pressed)="cancel()">Cancel</ui-button>
+  <ui-button [loading]="saving" loadingLabel="Saving changes" (pressed)="save()">Save</ui-button>
+</div>`,
+        },
+        {
+          title: 'Icon-only accessible button',
+          description: 'Provide ariaLabel whenever the visible content is not descriptive.',
+          code: `<ui-button variant="ghost" ariaLabel="Open settings" (pressed)="openSettings()">
+  <span aria-hidden="true">...</span>
+</ui-button>`,
+        },
+      ],
+      accessibility: [
+        'Uses a native button element.',
+        'The loading state sets aria-busy and disables activation.',
+        'Icon-only buttons must provide ariaLabel.',
+      ],
+      keyboard: [
+        'Enter and Space activate the native button.',
+        'Tab moves focus to enabled buttons.',
+      ],
+      forms: [
+        'Set type="submit" for form submission; the default type is button to avoid accidental submits.',
+      ],
+      edgeCases: [
+        'Disabled and loading buttons do not emit pressed.',
+        'Use fullWidth in narrow mobile layouts.',
+      ],
+      testing: [
+        'Assert pressed emits only when enabled.',
+        'Assert aria-busy appears only during loading.',
+      ],
+    },
+  ],
+  [
+    'card',
+    {
+      overview: [
+        'Card groups related content into a bordered or elevated surface with optional header and footer slots.',
+        'It is intentionally simple so consumers can compose their own headings, actions, forms, and media.',
+      ],
+      whenToUse: [
+        'Use cards for repeated dashboard panels, settings sections, pricing options, or preview blocks.',
+      ],
+      examples: [
+        {
+          title: 'Settings card',
+          description: 'Header and footer slots frame the main content.',
+          code: `<ui-card variant="elevated" padding="lg">
+  <div uiCardHeader>
+    <h3>Billing</h3>
+    <p>Manage plan and invoices.</p>
+  </div>
+  <p>Your Pro plan renews next month.</p>
+  <div uiCardFooter>
+    <ui-button variant="outline">View invoices</ui-button>
+  </div>
+</ui-card>`,
+        },
+      ],
+      accessibility: [
+        'Uses a section element; provide a heading inside the projected header for named regions.',
+      ],
+      keyboard: [
+        'Card itself has no keyboard interaction. Interactive projected content keeps its own behavior.',
+      ],
+      forms: ['Cards can wrap forms, but they do not manage form state.'],
+      edgeCases: [
+        'Empty header and footer slots collapse automatically.',
+        'Use padding="none" for custom media layouts.',
+      ],
+      testing: [
+        'Assert projected header, body, and footer content render.',
+        'Assert variant and padding classes.',
+      ],
+    },
+  ],
+  [
+    'input',
+    {
+      overview: [
+        'Input is a form-ready text field with label, helper text, error text, counter, prefix/suffix slots, and native attributes.',
+        'It implements ControlValueAccessor and keeps value changes separate from writeValue.',
+      ],
+      whenToUse: [
+        'Use for short free-text values such as names, email addresses, URLs, search terms, and package names.',
+      ],
+      examples: [
+        {
+          title: 'Reactive form input',
+          description: 'Works directly with FormControl.',
+          code: `<ui-input
+  label="Email"
+  type="email"
+  autocomplete="email"
+  helperText="Use your work email."
+  [formControl]="email"
+/>`,
+        },
+        {
+          title: 'Clearable with counter',
+          description: 'Useful for short names or search fields.',
+          code: `<ui-input label="Project name" clearable [maxLength]="40" [formControl]="projectName" />`,
+        },
+      ],
+      accessibility: [
+        'Visible labels are connected with the native input using for/id.',
+        'Helper, error, and counter text are wired through aria-describedby.',
+        'Invalid state sets aria-invalid.',
+      ],
+      keyboard: [
+        'Uses native input keyboard behavior.',
+        'The clear button is reachable by Tab when visible.',
+      ],
+      forms: [
+        'Implements ControlValueAccessor.',
+        'Does not call valueChange or onChange from writeValue.',
+      ],
+      edgeCases: [
+        'Provide ariaLabel when using the input without a visible label.',
+        'Use inputMode for mobile keyboard hints.',
+      ],
+      testing: [
+        'Assert CVA writeValue and disabled state.',
+        'Assert aria-invalid and aria-describedby for errors.',
+      ],
+    },
+  ],
+  [
+    'badge',
+    {
+      overview: ['Badge is a compact status or metadata label for counts, states, and categories.'],
+      whenToUse: [
+        'Use for short non-interactive labels such as Active, Beta, New, Warning, or count metadata.',
+      ],
+      examples: [
+        {
+          title: 'Status badges',
+          description: 'Pair semantic variants with domain status text.',
+          code: `<ui-badge variant="success" ariaRole="status">Active</ui-badge>
+<ui-badge variant="warning">Pending review</ui-badge>`,
+        },
+      ],
+      accessibility: [
+        'Use ariaRole="status" only when the badge announces dynamic status changes.',
+      ],
+      keyboard: ['Badge is non-interactive and should not receive focus.'],
+      forms: ['Badge does not integrate with forms.'],
+      edgeCases: ['Keep badge text short; prefer Tag or Alert for longer copy.'],
+      testing: ['Assert semantic variant classes and optional aria-label/role.'],
+    },
+  ],
+  [
+    'tag',
+    {
+      overview: [
+        'Tag represents removable filters, labels, categories, and metadata with optional icon text.',
+      ],
+      whenToUse: ['Use Tag when the label may be removed or acts like a selected filter chip.'],
+      examples: [
+        {
+          title: 'Filter tag',
+          description: 'Emit removed and let the parent update filter state.',
+          code: `<ui-tag variant="info" removable removeLabel="Remove Angular filter" (removed)="remove('angular')">
+  Angular
+</ui-tag>`,
+        },
+      ],
+      accessibility: [
+        'The remove control is a native button with a configurable accessible label.',
+      ],
+      keyboard: [
+        'Tab reaches removable tag buttons.',
+        'Enter or Space activates the remove button.',
+      ],
+      forms: ['Tag does not manage forms; parent state owns selected filters.'],
+      edgeCases: [
+        'Long tag content truncates inside the tag.',
+        'Do not use icon-only tags without ariaLabel.',
+      ],
+      testing: ['Assert removed emits from the remove button.', 'Assert removeLabel is applied.'],
+    },
+  ],
+  [
+    'avatar',
+    {
+      overview: [
+        'Avatar displays a person, team, project, or organization using an image or initials fallback.',
+      ],
+      whenToUse: [
+        'Use beside user names, authors, table rows, comments, team lists, and account menus.',
+      ],
+      examples: [
+        {
+          title: 'Initials fallback',
+          description: 'Initials are derived from the label.',
+          code: `<ui-avatar label="Grace Hopper" />
+<ui-avatar label="NgNova UI" shape="square" size="lg" />`,
+        },
+      ],
+      accessibility: ['The avatar uses role="img" and derives aria-label from ariaLabel or label.'],
+      keyboard: [
+        'Avatar is visual and non-interactive; wrap it in a button or link only when it opens an action.',
+      ],
+      forms: ['Avatar does not integrate with forms.'],
+      edgeCases: [
+        'Provide alt text when src is set.',
+        'Use label for fallback initials even when an image is present.',
+      ],
+      testing: ['Assert initials fallback and image alt text.'],
+    },
+  ],
+  [
+    'skeleton',
+    {
+      overview: [
+        'Skeleton provides decorative loading placeholders that preserve layout while content loads.',
+      ],
+      whenToUse: [
+        'Use when real content shape is known and loading may take long enough to cause visual shift.',
+      ],
+      examples: [
+        {
+          title: 'Card placeholder',
+          description: 'Combine circle and text placeholders for realistic loading states.',
+          code: `<div class="space-y-3">
+  <ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
+  <ui-skeleton shape="text" width="70%" height="0.875rem" />
+  <ui-skeleton height="8rem" />
+</div>`,
+        },
+      ],
+      accessibility: [
+        'Skeleton is aria-hidden because another live region or loading label should announce loading.',
+      ],
+      keyboard: ['Skeleton has no keyboard interaction.'],
+      forms: ['Skeleton does not integrate with forms.'],
+      edgeCases: [
+        'Avoid replacing every tiny detail with a skeleton; preserve major layout blocks only.',
+      ],
+      testing: ['Assert aria-hidden and width/height style bindings.'],
+    },
+  ],
+  [
+    'progress-bar',
+    {
+      overview: [
+        'Progress Bar communicates task completion for uploads, builds, imports, and background jobs.',
+      ],
+      whenToUse: [
+        'Use determinate progress when a value is known; use indeterminate when work has started but the percent is unknown.',
+      ],
+      examples: [
+        {
+          title: 'Build progress',
+          description: 'Determinate progress exposes aria-valuenow and aria-valuemax.',
+          code: `<ui-progress-bar [value]="buildPercent" [max]="100" label="Build progress" />`,
+        },
+      ],
+      accessibility: ['Uses role="progressbar".', 'Indeterminate mode omits value semantics.'],
+      keyboard: ['Progress bars are read-only status indicators and do not receive focus.'],
+      forms: ['Progress Bar does not integrate with forms.'],
+      edgeCases: ['Values are clamped between 0 and max.', 'Always provide a meaningful label.'],
+      testing: ['Assert determinate ARIA values and indeterminate omission.'],
+    },
+  ],
+  [
+    'modal',
+    {
+      overview: [
+        'Modal presents blocking decisions or focused workflows above the page with backdrop, Escape close, and focus restoration.',
+      ],
+      whenToUse: [
+        'Use for confirmations, focused forms, destructive decisions, or short workflows that must interrupt the current page.',
+      ],
+      examples: [
+        {
+          title: 'Confirmation dialog',
+          description: 'Use two-way open binding and a description ID.',
+          code: `<ui-modal [(open)]="open" descriptionId="publish-description">
+  <span uiModalHeader>Publish package</span>
+  <p id="publish-description">This publishes the package to npm.</p>
+  <div uiModalFooter>
+    <ui-button variant="outline" (pressed)="open = false">Cancel</ui-button>
+    <ui-button (pressed)="publish()">Publish</ui-button>
+  </div>
+</ui-modal>`,
+        },
+      ],
+      accessibility: [
+        'Uses role="dialog" and aria-modal="true".',
+        'Supports aria-labelledby or ariaLabel and optional aria-describedby.',
+      ],
+      keyboard: [
+        'Escape closes when closeOnEscape is true.',
+        'Tab is trapped inside the dialog while open.',
+      ],
+      forms: ['Modal can contain forms; parent state owns submit and close behavior.'],
+      edgeCases: [
+        'Use ariaLabel for headerless dialogs.',
+        'Disable backdrop close for destructive confirmations.',
+      ],
+      testing: ['Assert Escape, backdrop, focus trap, and focus restore behavior.'],
+    },
+  ],
+  [
+    'checkbox',
+    {
+      overview: [
+        'Checkbox captures independent boolean choices and supports indeterminate mixed state.',
+      ],
+      whenToUse: ['Use for opt-in settings, agreement flags, and multi-select row controls.'],
+      examples: [
+        {
+          title: 'Settings checkbox',
+          description: 'Works with reactive forms.',
+          code: `<ui-checkbox label="Email updates" helperText="Receive release news." [formControl]="newsletter" />`,
+        },
+      ],
+      accessibility: [
+        'Uses a native checkbox input.',
+        'Helper text is associated with the control.',
+      ],
+      keyboard: ['Space toggles the checkbox.', 'Tab moves focus to the checkbox.'],
+      forms: ['Implements ControlValueAccessor for boolean values.'],
+      edgeCases: ['Indeterminate is visual and should be cleared when the user chooses a value.'],
+      testing: ['Assert CVA value, disabled state, indeterminateChange, focus, and blur outputs.'],
+    },
+  ],
+  [
+    'select',
+    {
+      overview: ['Select is a native dropdown field for choosing one option from a known list.'],
+      whenToUse: [
+        'Use for compact single-choice fields where native browser behavior is acceptable.',
+      ],
+      examples: [
+        {
+          title: 'Plan select',
+          description: 'Use placeholder for an empty starting state.',
+          code: `<ui-select label="Plan" placeholder="Choose a plan" [options]="planOptions" [formControl]="plan" />`,
+        },
+      ],
+      accessibility: [
+        'Visible label, helper text, and error text are associated with the native select.',
+      ],
+      keyboard: ['Uses native select keyboard behavior for the current browser and platform.'],
+      forms: ['Implements ControlValueAccessor for string values.'],
+      edgeCases: [
+        'Use disabled options for unavailable choices.',
+        'Use required with placeholder to force a real selection.',
+      ],
+      testing: ['Assert option rendering, valueChange, CVA writeValue, and disabled state.'],
+    },
+  ],
+  [
+    'alert',
+    {
+      overview: [
+        'Alert communicates persistent feedback such as success, warning, info, or danger messages.',
+      ],
+      whenToUse: [
+        'Use for page-level or section-level messages that should remain visible until resolved or dismissed.',
+      ],
+      examples: [
+        {
+          title: 'Dismissible success',
+          description: 'Dismiss emits openChange and dismissed.',
+          code: `<ui-alert variant="success" title="Saved" dismissible (dismissed)="trackDismiss()">
+  Your settings were updated.
+</ui-alert>`,
+        },
+      ],
+      accessibility: [
+        'Defaults to status or alert semantics based on variant unless ariaRole overrides it.',
+      ],
+      keyboard: ['Dismiss button is keyboard reachable when dismissible.'],
+      forms: ['Use alerts near forms to summarize submission or validation status.'],
+      edgeCases: ['Use concise title text; long remediation copy belongs in the body.'],
+      testing: ['Assert roles, variants, openChange, and dismissed output.'],
+    },
+  ],
+  [
+    'radio',
+    {
+      overview: ['Radio Group captures exactly one choice from a small set of related options.'],
+      whenToUse: ['Use when all choices should be visible and the user must compare them.'],
+      examples: [
+        {
+          title: 'Preference group',
+          description: 'Use helper text for extra context.',
+          code: `<ui-radio-group label="Contact preference" [options]="contactOptions" [formControl]="preference" />`,
+        },
+      ],
+      accessibility: ['Uses native radio inputs grouped by name and labelled by visible text.'],
+      keyboard: [
+        'Arrow keys move between radios in native browser behavior.',
+        'Space selects the focused option.',
+      ],
+      forms: ['Implements ControlValueAccessor for string values.'],
+      edgeCases: ['Avoid radio groups with too many options; use Select for long lists.'],
+      testing: ['Assert selection, disabled options, CVA, and orientation classes.'],
+    },
+  ],
+  [
+    'switch',
+    {
+      overview: [
+        'Switch captures an immediate on/off preference using native checkbox behavior and switch semantics.',
+      ],
+      whenToUse: [
+        'Use for settings that can be toggled independently, such as notifications or feature flags.',
+      ],
+      examples: [
+        {
+          title: 'Notification setting',
+          description: 'Boolean state stays in the parent form control.',
+          code: `<ui-switch label="Release notifications" helperText="Email me on release." [formControl]="notifications" />`,
+        },
+      ],
+      accessibility: ['Uses role="switch" on a native checkbox pattern and exposes checked state.'],
+      keyboard: ['Space toggles the switch.', 'Tab moves focus to the switch.'],
+      forms: ['Implements ControlValueAccessor for boolean values.'],
+      edgeCases: [
+        'Do not use Switch for actions that require confirmation; use Button or Modal instead.',
+      ],
+      testing: ['Assert checked state, valueChange, CVA disabled state, focus, and blur outputs.'],
+    },
+  ],
+  [
+    'textarea',
+    {
+      overview: [
+        'Textarea captures longer free-form content with label, helper text, errors, counter, and resize controls.',
+      ],
+      whenToUse: ['Use for comments, notes, descriptions, issue summaries, and release notes.'],
+      examples: [
+        {
+          title: 'Release notes',
+          description: 'Pair maxLength with the built-in counter.',
+          code: `<ui-textarea label="Release notes" [maxLength]="280" [rows]="5" [formControl]="releaseNotes" />`,
+        },
+      ],
+      accessibility: ['Labels and helper/error/counter text are wired to the native textarea.'],
+      keyboard: ['Uses native textarea behavior including multiline typing.'],
+      forms: ['Implements ControlValueAccessor for string values.'],
+      edgeCases: [
+        'Use resize="none" only when layout requires fixed height.',
+        'Provide ariaLabel if no visible label exists.',
+      ],
+      testing: ['Assert CVA behavior, counter text, validation messages, and aria-describedby.'],
+    },
+  ],
+  [
+    'tabs',
+    {
+      overview: ['Tabs switch between related panels without leaving the current page context.'],
+      whenToUse: ['Use when sections are peers and users frequently move between them.'],
+      examples: [
+        {
+          title: 'Controlled tabs',
+          description: 'Parent state owns the active value.',
+          code: `<ui-tabs [tabs]="tabs" [active]="activeTab" (activeChange)="activeTab = $event">
+  @if (activeTab === 'overview') { Overview }
+</ui-tabs>`,
+        },
+      ],
+      accessibility: ['Uses tablist, tab, and tabpanel roles with generated ARIA relationships.'],
+      keyboard: [
+        'ArrowLeft and ArrowRight move between enabled tabs.',
+        'Home and End jump to first and last tabs.',
+      ],
+      forms: ['Tabs do not integrate with forms directly.'],
+      edgeCases: ['Do not hide critical errors inside inactive tabs without summary messaging.'],
+      testing: ['Assert keyboard navigation, disabled tabs, activeChange, and ARIA IDs.'],
+    },
+  ],
+  [
+    'accordion',
+    {
+      overview: [
+        'Accordion organizes dense content into collapsible sections with controlled active state.',
+      ],
+      whenToUse: [
+        'Use for FAQs, setup steps, or advanced settings where users usually need one section at a time.',
+      ],
+      examples: [
+        {
+          title: 'Multiple sections',
+          description: 'Enable multiple when sections can stay open together.',
+          code: `<ui-accordion
+  multiple
+  [items]="items"
+  [active]="activeSections"
+  (activeChange)="activeSections = $event"
+/>`,
+        },
+      ],
+      accessibility: [
+        'Each trigger exposes aria-expanded and aria-controls.',
+        'Each panel is labelled by its trigger.',
+      ],
+      keyboard: ['Triggers are native buttons, so Enter and Space toggle the section.'],
+      forms: [
+        'Accordion does not integrate with forms, but can contain form controls in panel content.',
+      ],
+      edgeCases: [
+        'Disabled items remain visible but cannot be expanded.',
+        'Parent state must update active after activeChange.',
+      ],
+      testing: ['Assert activeChange, single vs multiple mode, disabled items, and ARIA wiring.'],
+    },
+  ],
+  [
+    'table',
+    {
+      overview: [
+        'Table displays record data with column metadata, loading and empty states, sortable headers, and optional row selection.',
+      ],
+      whenToUse: ['Use for structured datasets where users compare rows and columns.'],
+      examples: [
+        {
+          title: 'Selectable table',
+          description: 'Selection and sorting emit events; parent code owns data changes.',
+          code: `<ui-table
+  [columns]="columns"
+  [rows]="rows"
+  selectable
+  (rowSelected)="openRow($event)"
+  (sortChange)="sortRows($event)"
+/>`,
+        },
+      ],
+      accessibility: [
+        'Uses semantic table, thead, tbody, th, and td elements.',
+        'Sortable headers use native buttons.',
+      ],
+      keyboard: ['Sortable header buttons are reachable by Tab and activated with Enter or Space.'],
+      forms: [
+        'Table does not integrate with forms directly. Put form controls inside richer table cells in a future template API.',
+      ],
+      edgeCases: [
+        'Loading and empty states span all columns.',
+        'Current rows are not internally sorted; sortChange lets the parent own data order.',
+      ],
+      testing: ['Assert rows, empty/loading states, rowSelected, and sortChange emissions.'],
+    },
+  ],
+  [
+    'toast',
+    {
+      overview: [
+        'Toast shows transient application feedback through UiToastService and a viewport component.',
+      ],
+      whenToUse: ['Use after background actions such as save, publish, upload, invite, or delete.'],
+      examples: [
+        {
+          title: 'Service usage',
+          description: 'Render one viewport near the app root and push messages from features.',
+          code: `<ui-toast />
+
+private readonly toast = inject(UiToastService);
+
+save(): void {
+  this.toast.success('Saved', 'Your changes are ready.');
+}`,
+        },
+      ],
+      accessibility: [
+        'Viewport uses aria-live="polite" so new notifications are announced without interrupting users.',
+      ],
+      keyboard: ['Dismiss buttons are keyboard reachable.'],
+      forms: [
+        'Use Toast for non-blocking form success feedback; keep validation errors near fields.',
+      ],
+      edgeCases: ['Clear messages on route changes if stale notifications would confuse users.'],
+      testing: ['Assert service show/dismiss/clear and rendered message content.'],
+    },
+  ],
+  [
+    'spinner',
+    {
+      overview: [
+        'Spinner communicates indeterminate loading for compact spaces and inline actions.',
+      ],
+      whenToUse: ['Use when work is ongoing but progress percentage is unknown.'],
+      examples: [
+        {
+          title: 'Accessible loading',
+          description: 'Provide a label unless another element already announces loading.',
+          code: `<ui-spinner label="Loading invoices" />
+<ui-spinner decorative />`,
+        },
+      ],
+      accessibility: [
+        'Non-decorative spinners expose a status label.',
+        'Decorative spinners are hidden from assistive technology.',
+      ],
+      keyboard: ['Spinner has no keyboard interaction.'],
+      forms: ['Use inside buttons or near forms while submit work is pending.'],
+      edgeCases: ['Prefer Progress Bar when actual progress is known.'],
+      testing: ['Assert role/status behavior and decorative mode.'],
+    },
+  ],
+]);

@@ -36,7 +36,10 @@ let nextTextareaId = 0;
   template: `
     <div class="block">
       @if (label) {
-        <label [for]="inputId" class="mb-1.5 block text-sm font-medium text-slate-800 dark:text-slate-100">
+        <label
+          [for]="inputId"
+          class="mb-1.5 block text-sm font-medium text-slate-800 dark:text-slate-100"
+        >
           {{ label }}
           @if (required) {
             <span class="text-red-600 dark:text-red-400" aria-hidden="true">*</span>
@@ -68,7 +71,11 @@ let nextTextareaId = 0;
       @if (supportText || showCounter) {
         <div class="mt-1.5 flex items-start justify-between gap-3">
           @if (supportText) {
-            <p [id]="messageId" [class]="supportTextClasses" [attr.role]="isInvalid ? 'alert' : null">
+            <p
+              [id]="messageId"
+              [class]="supportTextClasses"
+              [attr.role]="isInvalid ? 'alert' : null"
+            >
               {{ supportText }}
             </p>
           }
@@ -129,7 +136,10 @@ export class UiTextareaComponent implements ControlValueAccessor {
   }
 
   protected get describedBy(): string | null {
-    const ids = [this.supportText ? this.messageId : '', this.showCounter ? this.counterId : ''].filter(Boolean);
+    const ids = [
+      this.supportText ? this.messageId : '',
+      this.showCounter ? this.counterId : '',
+    ].filter(Boolean);
     return ids.length ? ids.join(' ') : null;
   }
 
@@ -149,7 +159,9 @@ export class UiTextareaComponent implements ControlValueAccessor {
     return uiClassNames(
       'block w-full rounded-md border text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500 dark:disabled:bg-slate-900',
       SIZE_CLASSES[this.size],
-      this.appearance === 'filled' ? 'bg-slate-100 dark:bg-slate-900' : 'bg-white dark:bg-slate-950',
+      this.appearance === 'filled'
+        ? 'bg-slate-100 dark:bg-slate-900'
+        : 'bg-white dark:bg-slate-950',
       this.resize === 'none' && 'resize-none',
       this.resize === 'vertical' && 'resize-y',
       this.resize === 'horizontal' && 'resize-x',
@@ -161,7 +173,9 @@ export class UiTextareaComponent implements ControlValueAccessor {
   }
 
   protected get supportTextClasses(): string {
-    return this.isInvalid ? 'text-sm text-red-600 dark:text-red-400' : 'text-sm text-slate-500 dark:text-slate-400';
+    return this.isInvalid
+      ? 'text-sm text-red-600 dark:text-red-400'
+      : 'text-sm text-slate-500 dark:text-slate-400';
   }
 
   writeValue(value: string | null): void {
@@ -212,6 +226,8 @@ export class UiTextareaComponent implements ControlValueAccessor {
 
   private resolveValidationMessage(errors: ValidationErrors): string {
     const key = Object.keys(errors)[0];
-    return this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.';
+    return (
+      this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.'
+    );
   }
 }

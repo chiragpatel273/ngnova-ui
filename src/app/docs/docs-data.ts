@@ -285,6 +285,142 @@ export const componentDocs: ComponentDoc[] = [
     outputs: [],
   },
   {
+    slug: 'tag',
+    name: 'Tag',
+    selector: 'ui-tag',
+    summary: 'Compact removable or icon-enhanced label for filters, metadata, and statuses.',
+    importName: 'UiTagComponent',
+    usage: `<ui-tag icon="+">Angular</ui-tag>
+<ui-tag variant="success">Published</ui-tag>
+<ui-tag variant="warning" removable (removed)="removeFilter()">Review needed</ui-tag>`,
+    inputs: [
+      {
+        name: 'variant',
+        type: "'default' | 'success' | 'warning' | 'danger' | 'info'",
+        defaultValue: "'default'",
+        description: 'Semantic color treatment.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md'",
+        defaultValue: "'md'",
+        description: 'Tag padding and text size.',
+      },
+      {
+        name: 'icon',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Optional leading icon text.',
+      },
+      {
+        name: 'removable',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows an accessible remove button.',
+      },
+      {
+        name: 'removeLabel',
+        type: 'string',
+        defaultValue: "'Remove tag'",
+        description: 'Accessible label for the remove action.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'removed',
+        type: 'OutputEmitterRef<void>',
+        description: 'Emits when the remove button is pressed.',
+      },
+    ],
+  },
+  {
+    slug: 'avatar',
+    name: 'Avatar',
+    selector: 'ui-avatar',
+    summary: 'User or entity avatar with image, initials fallback, sizes, and shapes.',
+    importName: 'UiAvatarComponent',
+    usage: `<ui-avatar label="Ada Lovelace" />
+<ui-avatar src="/team/ada.png" alt="Ada Lovelace" label="Ada Lovelace" />
+<ui-avatar label="NgNova UI" shape="square" size="lg" />`,
+    inputs: [
+      { name: 'src', type: 'string', defaultValue: "''", description: 'Optional image source.' },
+      { name: 'alt', type: 'string', defaultValue: "''", description: 'Image alt text.' },
+      {
+        name: 'label',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label and initials source.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Avatar dimensions.',
+      },
+      {
+        name: 'shape',
+        type: "'circle' | 'square'",
+        defaultValue: "'circle'",
+        description: 'Avatar border radius.',
+      },
+    ],
+    outputs: [],
+  },
+  {
+    slug: 'skeleton',
+    name: 'Skeleton',
+    selector: 'ui-skeleton',
+    summary: 'Decorative loading placeholder for cards, text, avatars, and table rows.',
+    importName: 'UiSkeletonComponent',
+    usage: `<ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
+<ui-skeleton shape="text" width="60%" height="0.875rem" />
+<ui-skeleton height="8rem" />`,
+    inputs: [
+      {
+        name: 'shape',
+        type: "'text' | 'rect' | 'circle'",
+        defaultValue: "'rect'",
+        description: 'Placeholder shape.',
+      },
+      { name: 'width', type: 'string', defaultValue: "'100%'", description: 'CSS width value.' },
+      { name: 'height', type: 'string', defaultValue: "'1rem'", description: 'CSS height value.' },
+    ],
+    outputs: [],
+  },
+  {
+    slug: 'progress-bar',
+    name: 'Progress Bar',
+    selector: 'ui-progress-bar',
+    summary: 'Accessible determinate or indeterminate progress indicator.',
+    importName: 'UiProgressBarComponent',
+    usage: `<ui-progress-bar [value]="65" label="Build progress" />
+<ui-progress-bar [value]="90" variant="success" label="Coverage" />
+<ui-progress-bar indeterminate label="Publishing package" />`,
+    inputs: [
+      { name: 'value', type: 'number', defaultValue: '0', description: 'Current progress value.' },
+      { name: 'max', type: 'number', defaultValue: '100', description: 'Maximum progress value.' },
+      {
+        name: 'label',
+        type: 'string',
+        defaultValue: "'Progress'",
+        description: 'Accessible progressbar label.',
+      },
+      {
+        name: 'variant',
+        type: "'primary' | 'success' | 'warning' | 'danger'",
+        defaultValue: "'primary'",
+        description: 'Semantic bar color.',
+      },
+      {
+        name: 'indeterminate',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Removes value semantics when progress is unknown.',
+      },
+    ],
+    outputs: [],
+  },
+  {
     slug: 'modal',
     name: 'Modal',
     selector: 'ui-modal',
@@ -901,6 +1037,134 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Supports two-way binding for the active tab value.',
       },
     ],
+  },
+  {
+    slug: 'accordion',
+    name: 'Accordion',
+    selector: 'ui-accordion',
+    summary: 'Accessible disclosure list for dense related content sections.',
+    importName: 'UiAccordionComponent',
+    usage: `<ui-accordion
+  [items]="items"
+  [active]="activeSections"
+  (activeChange)="activeSections = $event"
+/>`,
+    inputs: [
+      { name: 'id', type: 'string', defaultValue: "'ui-accordion'", description: 'Base ARIA ID.' },
+      {
+        name: 'items',
+        type: 'readonly UiAccordionItem[]',
+        defaultValue: '[]',
+        description: 'Disclosure items with value, title, content, and disabled state.',
+      },
+      {
+        name: 'active',
+        type: 'readonly string[]',
+        defaultValue: '[]',
+        description: 'Currently expanded item values.',
+      },
+      {
+        name: 'multiple',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Allows more than one item to be open.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'activeChange',
+        type: 'OutputEmitterRef<readonly string[]>',
+        description: 'Emits the next active item values after user interaction.',
+      },
+    ],
+  },
+  {
+    slug: 'table',
+    name: 'Table',
+    selector: 'ui-table',
+    summary:
+      'Responsive data table with columns, loading/empty states, row selection, and sort events.',
+    importName: 'UiTableComponent',
+    usage: `<ui-table
+  [columns]="columns"
+  [rows]="rows"
+  selectable
+  (rowSelected)="openRow($event)"
+  (sortChange)="sortRows($event)"
+/>`,
+    inputs: [
+      {
+        name: 'columns',
+        type: 'readonly UiTableColumn[]',
+        defaultValue: '[]',
+        description: 'Column definitions with key, header, alignment, and sortable flag.',
+      },
+      {
+        name: 'rows',
+        type: 'readonly UiTableRow[]',
+        defaultValue: '[]',
+        description: 'Records rendered in the table body.',
+      },
+      {
+        name: 'emptyText',
+        type: 'string',
+        defaultValue: "'No records found.'",
+        description: 'Message shown when no rows are available.',
+      },
+      {
+        name: 'loadingText',
+        type: 'string',
+        defaultValue: "'Loading records...'",
+        description: 'Message shown while loading.',
+      },
+      {
+        name: 'loading',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows the loading state.',
+      },
+      {
+        name: 'selectable',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Emits rowSelected when a row is clicked.',
+      },
+    ],
+    outputs: [
+      {
+        name: 'rowSelected',
+        type: 'OutputEmitterRef<UiTableRow>',
+        description: 'Emits the clicked row when selectable.',
+      },
+      {
+        name: 'sortChange',
+        type: 'OutputEmitterRef<UiTableSort>',
+        description: 'Emits the requested sort key and direction.',
+      },
+    ],
+  },
+  {
+    slug: 'toast',
+    name: 'Toast',
+    selector: 'ui-toast',
+    summary: 'Application notification viewport powered by UiToastService.',
+    importName: 'UiToastComponent, UiToastService',
+    usage: `<ui-toast />
+
+constructor(private readonly toast: UiToastService) {}
+
+save(): void {
+  this.toast.success('Saved', 'Your settings are ready.');
+}`,
+    inputs: [
+      {
+        name: 'position',
+        type: "'top-right' | 'bottom-right'",
+        defaultValue: "'top-right'",
+        description: 'Viewport placement.',
+      },
+    ],
+    outputs: [],
   },
   {
     slug: 'spinner',

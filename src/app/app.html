@@ -5,7 +5,8 @@
       <div class="max-w-3xl">
         <h1 class="text-4xl font-semibold tracking-tight">My Org UI</h1>
         <p class="mt-3 text-lg text-slate-600 dark:text-slate-300">
-          A compact Angular component library with standalone components, Tailwind styling, and npm-ready packaging.
+          A compact Angular component library with standalone components, Tailwind styling, and
+          npm-ready packaging.
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -18,7 +19,9 @@
       <ui-card>
         <div uiCardHeader>
           <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">Buttons</h2>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Variants, sizes, disabled, and loading states.</p>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Variants, sizes, disabled, and loading states.
+          </p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
           <ui-button variant="primary">Primary</ui-button>
@@ -36,7 +39,9 @@
       <ui-card>
         <div uiCardHeader>
           <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">Badges</h2>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Semantic labels for compact status display.</p>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Semantic labels for compact status display.
+          </p>
         </div>
         <div class="flex flex-wrap gap-3">
           <ui-badge>Default</ui-badge>
@@ -63,7 +68,10 @@
             helperText="Bound to a reactive FormControl."
             autocomplete="email"
             [formControl]="email"
-            [validationMessages]="{ required: 'Email is required.', email: 'Use a valid email address.' }"
+            [validationMessages]="{
+              required: 'Email is required.',
+              email: 'Use a valid email address.',
+            }"
           >
             <span uiInputPrefix class="text-slate-400" aria-hidden="true">@</span>
           </ui-input>
@@ -75,7 +83,10 @@
             clearable
             required
             [formControl]="username"
-            [validationMessages]="{ required: 'Choose a username.', minlength: 'Use at least 3 characters.' }"
+            [validationMessages]="{
+              required: 'Choose a username.',
+              minlength: 'Use at least 3 characters.',
+            }"
           >
             <span uiInputPrefix class="text-slate-400" aria-hidden="true">user/</span>
             <ui-badge uiInputSuffix variant="info" size="sm">public</ui-badge>
@@ -104,9 +115,14 @@
       <ui-card>
         <div uiCardHeader>
           <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">Card + Modal</h2>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Projection slots and accessible dialog basics.</p>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Projection slots and accessible dialog basics.
+          </p>
         </div>
-        <p class="mb-4">Cards support header, body, and footer projection. The modal supports Escape and backdrop close.</p>
+        <p class="mb-4">
+          Cards support header, body, and footer projection. The modal supports Escape and backdrop
+          close.
+        </p>
         <ui-button variant="secondary" (uiClick)="modalOpen.set(true)">Launch dialog</ui-button>
         <div uiCardFooter>
           <ui-badge variant="success" size="sm">Ready for packaging</ui-badge>
@@ -119,7 +135,10 @@
 <ui-modal [open]="modalOpen()" (openChange)="modalOpen.set($event)">
   <span uiModalHeader>Publish checklist</span>
   <div class="space-y-3">
-    <p>Build the library in production mode, inspect the package, then publish from <code>dist/ui</code>.</p>
+    <p>
+      Build the library in production mode, inspect the package, then publish from
+      <code>dist/ui</code>.
+    </p>
     <ul class="list-disc space-y-1 pl-5">
       <li><code>npm run build:lib</code></li>
       <li><code>npm run pack:lib</code></li>

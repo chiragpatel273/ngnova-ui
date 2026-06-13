@@ -40,7 +40,10 @@ let nextInputId = 0;
   template: `
     <div class="block">
       @if (label) {
-        <label [for]="inputId" class="mb-1.5 block text-sm font-medium text-slate-800 dark:text-slate-100">
+        <label
+          [for]="inputId"
+          class="mb-1.5 block text-sm font-medium text-slate-800 dark:text-slate-100"
+        >
           {{ label }}
           @if (required) {
             <span class="text-red-600 dark:text-red-400" aria-hidden="true">*</span>
@@ -88,7 +91,11 @@ let nextInputId = 0;
       @if (supportText || showCounter) {
         <div class="mt-1.5 flex items-start justify-between gap-3">
           @if (supportText) {
-            <p [id]="messageId" [class]="supportTextClasses" [attr.role]="isInvalid ? 'alert' : null">
+            <p
+              [id]="messageId"
+              [class]="supportTextClasses"
+              [attr.role]="isInvalid ? 'alert' : null"
+            >
               {{ supportText }}
             </p>
           }
@@ -152,7 +159,10 @@ export class UiInputComponent implements ControlValueAccessor {
   }
 
   protected get describedBy(): string | null {
-    const ids = [this.supportText ? this.messageId : '', this.showCounter ? this.counterId : ''].filter(Boolean);
+    const ids = [
+      this.supportText ? this.messageId : '',
+      this.showCounter ? this.counterId : '',
+    ].filter(Boolean);
     return ids.length ? ids.join(' ') : null;
   }
 
@@ -182,12 +192,13 @@ export class UiInputComponent implements ControlValueAccessor {
     );
   }
 
-  protected get nativeControlClasses(): string {
-    return 'min-w-0 flex-1 border-0 bg-transparent p-0 text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500';
-  }
+  protected readonly nativeControlClasses =
+    'min-w-0 flex-1 border-0 bg-transparent p-0 text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500';
 
   protected get supportTextClasses(): string {
-    return this.isInvalid ? 'text-sm text-red-600 dark:text-red-400' : 'text-sm text-slate-500 dark:text-slate-400';
+    return this.isInvalid
+      ? 'text-sm text-red-600 dark:text-red-400'
+      : 'text-sm text-slate-500 dark:text-slate-400';
   }
 
   writeValue(value: string | number | null): void {
@@ -250,6 +261,8 @@ export class UiInputComponent implements ControlValueAccessor {
 
   private resolveValidationMessage(errors: ValidationErrors): string {
     const key = Object.keys(errors)[0];
-    return this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.';
+    return (
+      this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.'
+    );
   }
 }

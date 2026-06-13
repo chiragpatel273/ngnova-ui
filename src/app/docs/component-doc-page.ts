@@ -5,20 +5,35 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import {
   UiAlertComponent,
+  UiAccordionComponent,
+  UiAvatarComponent,
   UiBadgeComponent,
   UiButtonComponent,
   UiCardComponent,
   UiCheckboxComponent,
   UiInputComponent,
   UiModalComponent,
+  UiProgressBarComponent,
   UiRadioGroupComponent,
   UiSelectComponent,
+  UiSkeletonComponent,
   UiSpinnerComponent,
   UiSwitchComponent,
   UiTabsComponent,
+  UiTableComponent,
+  UiTagComponent,
   UiTextareaComponent,
+  UiToastComponent,
+  UiToastService,
 } from '@ngnova/ui';
-import type { UiRadioOption, UiSelectOption, UiTabItem } from '@ngnova/ui';
+import type {
+  UiAccordionItem,
+  UiRadioOption,
+  UiSelectOption,
+  UiTableColumn,
+  UiTableRow,
+  UiTabItem,
+} from '@ngnova/ui';
 
 import { docsBySlug } from './docs-data';
 
@@ -29,18 +44,25 @@ import { docsBySlug } from './docs-data';
     ReactiveFormsModule,
     RouterLink,
     UiBadgeComponent,
+    UiAccordionComponent,
+    UiAvatarComponent,
     UiButtonComponent,
     UiCardComponent,
     UiCheckboxComponent,
     UiInputComponent,
     UiModalComponent,
+    UiProgressBarComponent,
     UiRadioGroupComponent,
     UiSelectComponent,
+    UiSkeletonComponent,
     UiSpinnerComponent,
     UiSwitchComponent,
     UiTabsComponent,
+    UiTableComponent,
+    UiTagComponent,
     UiTextareaComponent,
     UiAlertComponent,
+    UiToastComponent,
   ],
   template: `
     @if (doc(); as componentDoc) {
@@ -126,12 +148,79 @@ import { docsBySlug } from './docs-data';
                   <ui-badge size="sm">Small</ui-badge>
                 </div>
               }
+              @case ('tag') {
+                <div class="flex flex-wrap gap-3">
+                  <ui-tag icon="+">Angular</ui-tag>
+                  <ui-tag variant="success">Published</ui-tag>
+                  <ui-tag variant="warning" removable (removed)="tagRemoved.set(true)">
+                    Review needed
+                  </ui-tag>
+                  @if (tagRemoved()) {
+                    <ui-badge variant="info">Removed event emitted</ui-badge>
+                  }
+                </div>
+              }
+              @case ('avatar') {
+                <div class="flex items-center gap-3">
+                  <ui-avatar label="Ada Lovelace" />
+                  <ui-avatar label="Grace Hopper" size="lg" />
+                  <ui-avatar label="NgNova UI" shape="square" />
+                </div>
+              }
+              @case ('skeleton') {
+                <div class="max-w-md space-y-3">
+                  <div class="flex items-center gap-3">
+                    <ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
+                    <div class="flex-1 space-y-2">
+                      <ui-skeleton shape="text" width="65%" height="0.875rem" />
+                      <ui-skeleton shape="text" width="40%" height="0.75rem" />
+                    </div>
+                  </div>
+                  <ui-skeleton height="7rem" />
+                </div>
+              }
+              @case ('progress-bar') {
+                <div class="grid max-w-xl gap-5">
+                  <ui-progress-bar [value]="65" label="Build progress" />
+                  <ui-progress-bar [value]="90" variant="success" label="Test coverage" />
+                  <ui-progress-bar indeterminate label="Publishing package" />
+                </div>
+              }
               @case ('modal') {
                 <div class="flex flex-col gap-4">
                   <p class="text-slate-600 dark:text-slate-300">
                     Open the dialog to check header, body, footer, backdrop click, and Escape close.
                   </p>
                   <ui-button (pressed)="modalOpen.set(true)">Open modal</ui-button>
+                </div>
+              }
+              @case ('accordion') {
+                <ui-accordion
+                  [items]="accordionItems"
+                  [active]="accordionActive()"
+                  (activeChange)="accordionActive.set($event)"
+                />
+              }
+              @case ('table') {
+                <ui-table
+                  [columns]="tableColumns"
+                  [rows]="tableRows"
+                  selectable
+                  (rowSelected)="selectedTableRow.set($event)"
+                />
+                @if (selectedTableRow(); as row) {
+                  <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                    Selected {{ row['component'] }}
+                  </p>
+                }
+              }
+              @case ('toast') {
+                <div class="flex flex-col gap-4">
+                  <p class="text-slate-600 dark:text-slate-300">
+                    Toast messages are pushed through UiToastService and rendered by ui-toast.
+                  </p>
+                  <ui-button (pressed)="showToast()">Show toast</ui-button>
+                  <ui-toast />
                 </div>
               }
               @case ('checkbox') {
@@ -399,6 +488,7 @@ import { docsBySlug } from './docs-data';
 })
 export class ComponentDocPageComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly toast = inject(UiToastService);
   protected readonly email = new FormControl('developer@example.com');
   protected readonly newsletter = new FormControl(true);
   protected readonly plan = new FormControl('pro');
@@ -409,6 +499,9 @@ export class ComponentDocPageComponent {
   protected readonly modalOpen = signal(false);
   protected readonly copied = signal(false);
   protected readonly activeTab = signal('overview');
+  protected readonly tagRemoved = signal(false);
+  protected readonly accordionActive = signal<readonly string[]>(['overview']);
+  protected readonly selectedTableRow = signal<UiTableRow | null>(null);
   protected readonly planOptions: readonly UiSelectOption[] = [
     { label: 'Starter', value: 'starter' },
     { label: 'Pro', value: 'pro' },
@@ -433,6 +526,29 @@ export class ComponentDocPageComponent {
     { label: 'API', value: 'api' },
     { label: 'Disabled', value: 'disabled', disabled: true },
   ];
+  protected readonly accordionItems: readonly UiAccordionItem[] = [
+    {
+      value: 'overview',
+      title: 'Overview',
+      content: 'Use accordions for dense, related sections where users need one answer at a time.',
+    },
+    {
+      value: 'accessibility',
+      title: 'Accessibility',
+      content:
+        'Each trigger exposes aria-expanded and aria-controls, and each panel is labelled by its trigger.',
+    },
+  ];
+  protected readonly tableColumns: readonly UiTableColumn[] = [
+    { key: 'component', header: 'Component', sortable: true },
+    { key: 'category', header: 'Category' },
+    { key: 'status', header: 'Status' },
+  ];
+  protected readonly tableRows: readonly UiTableRow[] = [
+    { component: 'Button', category: 'Foundation', status: 'Ready' },
+    { component: 'Select', category: 'Forms', status: 'Ready' },
+    { component: 'Table', category: 'Data', status: 'New' },
+  ];
   private readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug') ?? '')),
     {
@@ -445,5 +561,9 @@ export class ComponentDocPageComponent {
     await navigator.clipboard.writeText(text);
     this.copied.set(true);
     window.setTimeout(() => this.copied.set(false), 1500);
+  }
+
+  protected showToast(): void {
+    this.toast.success('Package saved', 'The toast service is ready for application feedback.');
   }
 }

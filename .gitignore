@@ -39,6 +39,10 @@ testem.log
 /typings
 __screenshots__/
 
+# Local planning prompts
+/docs/WORLD_CLASS_COMPONENT_LIBRARY_PROMPT.md
+/TASKS.md
+
 # System files
 .DS_Store
 Thumbs.db

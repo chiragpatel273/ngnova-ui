@@ -50,9 +50,9 @@ const COMPONENT_GROUPS: readonly {
   imports: [RouterLink, RouterLinkActive, RouterOutlet, UiBadgeComponent],
   template: `
     <main class="min-h-dvh bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
-      <div class="mx-auto grid min-h-dvh max-w-[92rem] lg:grid-cols-[20rem_1fr]">
+      <div class="mx-auto grid min-h-dvh max-w-[92rem] lg:grid-cols-[18rem_1fr]">
         <aside
-          class="border-b border-slate-200 bg-white px-5 py-5 dark:border-slate-800 dark:bg-slate-950 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r"
+          class="border-b border-slate-200 bg-white px-4 py-4 dark:border-slate-800 dark:bg-slate-950 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r"
         >
           <a
             routerLink="/"
@@ -64,19 +64,19 @@ const COMPONENT_GROUPS: readonly {
             >
               NN
             </div>
-            <div class="mt-4 flex flex-wrap items-center gap-2">
+            <div class="mt-3 flex flex-wrap items-center gap-2">
               <ui-badge variant="info" size="sm">Angular 22</ui-badge>
               <ui-badge variant="success" size="sm">Tailwind 4</ui-badge>
             </div>
-            <h1 class="mt-4 text-2xl font-semibold">NgNova UI</h1>
-            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+            <h1 class="mt-3 text-xl font-semibold">NgNova UI</h1>
+            <p class="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
               Production-ready standalone components with polished docs, typed APIs, and
               accessibility guidance.
             </p>
           </a>
 
           <div
-            class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/70"
+            class="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/70"
           >
             <p class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400">
               Documentation Surface
@@ -93,7 +93,7 @@ const COMPONENT_GROUPS: readonly {
             </div>
           </div>
 
-          <nav class="mt-6 grid gap-1" aria-label="Documentation start">
+          <nav class="mt-5 grid gap-1" aria-label="Documentation start">
             @for (item of primaryNav; track item.path) {
               <a
                 [routerLink]="item.path"
@@ -106,7 +106,7 @@ const COMPONENT_GROUPS: readonly {
             }
           </nav>
 
-          <label class="mt-6 block">
+          <label class="mt-5 block">
             <span class="sr-only">Search components</span>
             <input
               type="search"
@@ -118,7 +118,7 @@ const COMPONENT_GROUPS: readonly {
           </label>
 
           <nav
-            class="mt-8 flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
+            class="mt-6 flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0"
             aria-label="Component documentation"
           >
             @for (group of groups(); track group.label) {
@@ -161,7 +161,7 @@ const COMPONENT_GROUPS: readonly {
           </nav>
         </aside>
 
-        <section class="min-w-0 px-5 py-8 sm:px-8 lg:px-10 xl:px-12">
+        <section class="min-w-0 px-4 py-5 sm:px-6 lg:px-8 xl:px-10">
           <router-outlet />
         </section>
       </div>

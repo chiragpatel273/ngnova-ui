@@ -149,14 +149,15 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Input',
     selector: 'ui-input',
     summary:
-      'Text input with label, helper text, error text, disabled state, and Angular forms support.',
+      'Text input with label, helper text, validation, counters, clearable state, and Angular forms support.',
     importName: 'UiInputComponent',
     usage: `<ui-input
   label="Email"
-  placeholder="you@example.com"
-  helperText="Use your work email"
+  type="email"
   autocomplete="email"
-  required
+  helperText="Use your organization email."
+  clearable
+  [maxLength]="80"
   [formControl]="email"
 />`,
     inputs: [
@@ -192,6 +193,12 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Input height and text scale.',
       },
       {
+        name: 'appearance',
+        type: "'outline' | 'filled'",
+        defaultValue: "'outline'",
+        description: 'Visual field treatment for standard or denser form surfaces.',
+      },
+      {
         name: 'inputId',
         type: 'string',
         defaultValue: 'generated',
@@ -215,6 +222,12 @@ export const componentDocs: ComponentDoc[] = [
         type: 'string',
         defaultValue: "''",
         description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'validationMessages',
+        type: 'Record<string, string>',
+        defaultValue: '{}',
+        description: 'Custom validation messages keyed by Angular validation error name.',
       },
       {
         name: 'maxLength',
@@ -246,6 +259,18 @@ export const componentDocs: ComponentDoc[] = [
         defaultValue: 'false',
         description: 'Marks the native input as required.',
       },
+      {
+        name: 'clearable',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows a keyboard-reachable clear button when the field has a value.',
+      },
+      {
+        name: 'hideCounter',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Hides the character counter when maxLength is set.',
+      },
     ],
     outputs: [
       {
@@ -262,6 +287,11 @@ export const componentDocs: ComponentDoc[] = [
         name: 'blurred',
         type: 'OutputEmitterRef<FocusEvent>',
         description: 'Emits when the input loses focus.',
+      },
+      {
+        name: 'cleared',
+        type: 'OutputEmitterRef<void>',
+        description: 'Emits when the clear button resets the current value.',
       },
     ],
   },
@@ -441,15 +471,21 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'modal',
     name: 'Modal',
     selector: 'ui-modal',
-    summary: 'Dialog overlay with header/body/footer projection, backdrop close, and Escape close.',
+    summary:
+      'Dialog overlay with focus management, header/body/footer projection, backdrop policy, and Escape handling.',
     importName: 'UiModalComponent',
-    usage: `<ui-button (pressed)="open = true">Open dialog</ui-button>
+    usage: `<ui-button (pressed)="publishOpen = true">Open dialog</ui-button>
 
-<ui-modal [(open)]="open" size="lg" descriptionId="publish-dialog-description">
-  <span uiModalHeader>Confirm publish</span>
-  <p id="publish-dialog-description">This action publishes the package.</p>
+<ui-modal
+  [(open)]="publishOpen"
+  size="lg"
+  descriptionId="publish-dialog-description"
+  [closeOnBackdrop]="false"
+>
+  <span uiModalHeader>Publish package</span>
+  <p id="publish-dialog-description">This action publishes @ngnova/ui to npm.</p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="open = false">Cancel</ui-button>
+    <ui-button variant="outline" (pressed)="publishOpen = false">Cancel</ui-button>
     <ui-button (pressed)="publish()">Publish</ui-button>
   </div>
 </ui-modal>`,
@@ -935,6 +971,12 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Native resize affordance.',
       },
       {
+        name: 'appearance',
+        type: "'outline' | 'filled'",
+        defaultValue: "'outline'",
+        description: 'Visual field treatment for standard or denser form surfaces.',
+      },
+      {
         name: 'inputId',
         type: 'string',
         defaultValue: 'generated',
@@ -946,6 +988,12 @@ export const componentDocs: ComponentDoc[] = [
         type: 'string',
         defaultValue: "''",
         description: 'Accessible label when no visible label is provided.',
+      },
+      {
+        name: 'validationMessages',
+        type: 'Record<string, string>',
+        defaultValue: '{}',
+        description: 'Custom validation messages keyed by Angular validation error name.',
       },
       {
         name: 'rows',
@@ -982,6 +1030,12 @@ export const componentDocs: ComponentDoc[] = [
         type: 'boolean',
         defaultValue: 'false',
         description: 'Marks the native textarea as required.',
+      },
+      {
+        name: 'hideCounter',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Hides the character counter when maxLength is set.',
       },
     ],
     outputs: [
@@ -1104,10 +1158,12 @@ export const componentDocs: ComponentDoc[] = [
     importName: 'UiTableComponent',
     usage: `<ui-table
   [columns]="columns"
-  [rows]="rows"
+  [rows]="components"
   selectable
-  (rowSelected)="openRow($event)"
-  (sortChange)="sortRows($event)"
+  emptyText="No components match your filters."
+  loadingText="Loading components..."
+  (rowSelected)="openComponent($event)"
+  (sortChange)="sortComponents($event)"
 />`,
     inputs: [
       {
@@ -1234,18 +1290,26 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       examples: [
         {
-          title: 'Action row',
-          description: 'A common modal or form footer pattern.',
-          code: `<div class="flex justify-end gap-3">
+          title: 'Release footer',
+          description: 'A page footer with safe, secondary, and primary actions.',
+          code: `<div class="flex flex-wrap justify-end gap-2">
   <ui-button variant="outline" (pressed)="cancel()">Cancel</ui-button>
-  <ui-button [loading]="saving" loadingLabel="Saving changes" (pressed)="save()">Save</ui-button>
+  <ui-button variant="secondary" (pressed)="saveDraft()">Save draft</ui-button>
+  <ui-button [loading]="publishing" loadingLabel="Publishing release" (pressed)="publish()">
+    Publish
+  </ui-button>
 </div>`,
         },
         {
-          title: 'Icon-only accessible button',
-          description: 'Provide ariaLabel whenever the visible content is not descriptive.',
-          code: `<ui-button variant="ghost" ariaLabel="Open settings" (pressed)="openSettings()">
-  <span aria-hidden="true">...</span>
+          title: 'Destructive confirmation action',
+          description: 'Use danger only for irreversible or high-risk actions.',
+          code: `<ui-button
+  variant="danger"
+  [loading]="deleting"
+  loadingLabel="Deleting package"
+  (pressed)="deletePackage()"
+>
+  Delete package
 </ui-button>`,
         },
       ],
@@ -1327,19 +1391,26 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       examples: [
         {
           title: 'Reactive form input',
-          description: 'Works directly with FormControl.',
+          description: 'Use CVA behavior with helper text, autocomplete, and counters.',
           code: `<ui-input
   label="Email"
   type="email"
   autocomplete="email"
-  helperText="Use your work email."
+  helperText="Use your organization email."
+  clearable
+  [maxLength]="80"
   [formControl]="email"
 />`,
         },
         {
-          title: 'Clearable with counter',
-          description: 'Useful for short names or search fields.',
-          code: `<ui-input label="Project name" clearable [maxLength]="40" [formControl]="projectName" />`,
+          title: 'Validation state',
+          description: 'Error text is announced and reflected with aria-invalid.',
+          code: `<ui-input
+  label="Package scope"
+  placeholder="@ngnova"
+  errorText="Package scope must match your npm organization."
+  required
+/>`,
         },
       ],
       accessibility: [
@@ -1514,14 +1585,35 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       examples: [
         {
-          title: 'Confirmation dialog',
-          description: 'Use two-way open binding and a description ID.',
-          code: `<ui-modal [(open)]="open" descriptionId="publish-description">
+          title: 'Publish confirmation',
+          description: 'Use two-way open binding, a description ID, and explicit dismissal policy.',
+          code: `<ui-modal
+  [(open)]="publishOpen"
+  size="lg"
+  descriptionId="publish-description"
+  [closeOnBackdrop]="false"
+>
   <span uiModalHeader>Publish package</span>
   <p id="publish-description">This publishes the package to npm.</p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="open = false">Cancel</ui-button>
+    <ui-button variant="outline" (pressed)="publishOpen = false">Cancel</ui-button>
     <ui-button (pressed)="publish()">Publish</ui-button>
+  </div>
+</ui-modal>`,
+        },
+        {
+          title: 'Headerless destructive dialog',
+          description: 'Use ariaLabel when no visible header labels the dialog.',
+          code: `<ui-modal
+  [(open)]="deleteOpen"
+  ariaLabel="Delete package confirmation"
+  size="sm"
+  [closeOnEscape]="false"
+>
+  <p>This action cannot be undone.</p>
+  <div uiModalFooter>
+    <ui-button variant="outline" (pressed)="deleteOpen = false">Keep package</ui-button>
+    <ui-button variant="danger" (pressed)="deletePackage()">Delete</ui-button>
   </div>
 </ui-modal>`,
         },
@@ -1546,48 +1638,101 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
     'checkbox',
     {
       overview: [
-        'Checkbox captures independent boolean choices and supports indeterminate mixed state.',
+        'Checkbox captures independent boolean choices, supports disabled workflow states, and can show an indeterminate parent-selection state.',
+        'The component preserves native checkbox semantics while adding NgNova label, helper text, dark mode, and ControlValueAccessor behavior.',
       ],
-      whenToUse: ['Use for opt-in settings, agreement flags, and multi-select row controls.'],
+      whenToUse: [
+        'Use for opt-in settings, agreement flags, independent preferences, and multi-select row controls.',
+        'Use indeterminate only for parent controls that represent mixed child selection.',
+      ],
       examples: [
         {
-          title: 'Settings checkbox',
-          description: 'Works with reactive forms.',
-          code: `<ui-checkbox label="Email updates" helperText="Receive release news." [formControl]="newsletter" />`,
+          title: 'Release checklist',
+          description: 'Combine checked, mixed, and disabled states in one review workflow.',
+          code: `<ui-checkbox
+  label="Email subscribers"
+  helperText="Reactive form boolean value."
+  [formControl]="newsletter"
+/>
+
+<ui-checkbox
+  label="Select all packages"
+  helperText="Mixed while only some packages are selected."
+  indeterminate
+/>
+
+<ui-checkbox
+  label="Security approval"
+  helperText="Unavailable until audit finishes."
+  disabled
+/>`,
         },
       ],
       accessibility: [
         'Uses a native checkbox input.',
         'Helper text is associated with the control.',
+        'When indeterminate is true, the native input exposes the mixed visual state and clears it after user interaction.',
       ],
       keyboard: ['Space toggles the checkbox.', 'Tab moves focus to the checkbox.'],
-      forms: ['Implements ControlValueAccessor for boolean values.'],
-      edgeCases: ['Indeterminate is visual and should be cleared when the user chooses a value.'],
+      forms: [
+        'Implements ControlValueAccessor for boolean values.',
+        'writeValue updates checked state without emitting valueChange.',
+      ],
+      edgeCases: [
+        'Indeterminate is visual and should be controlled by parent selection state.',
+        'Use one checkbox per independent decision; use Radio Group when the choices are mutually exclusive.',
+      ],
       testing: ['Assert CVA value, disabled state, indeterminateChange, focus, and blur outputs.'],
     },
   ],
   [
     'select',
     {
-      overview: ['Select is a native dropdown field for choosing one option from a known list.'],
+      overview: [
+        'Select is a native dropdown field for choosing one value from a known list.',
+        'It adds consistent NgNova form styling, labels, helper/error text, size variants, disabled options, and reactive forms support.',
+      ],
       whenToUse: [
         'Use for compact single-choice fields where native browser behavior is acceptable.',
+        'Use when the option list is known up front and does not need search, icons, or async loading.',
       ],
       examples: [
         {
           title: 'Plan select',
-          description: 'Use placeholder for an empty starting state.',
-          code: `<ui-select label="Plan" placeholder="Choose a plan" [options]="planOptions" [formControl]="plan" />`,
+          description: 'Use placeholder for an empty starting state and let the form own value.',
+          code: `<ui-select
+  label="Plan"
+  placeholder="Choose a plan"
+  helperText="Selection is owned by the reactive form."
+  [options]="planOptions"
+  [formControl]="plan"
+/>`,
+        },
+        {
+          title: 'Required select',
+          description: 'Pair required with a placeholder and clear error text.',
+          code: `<ui-select
+  label="Release channel"
+  placeholder="Select channel"
+  errorText="Choose a stable channel before publishing."
+  [options]="channelOptions"
+  required
+/>`,
         },
       ],
       accessibility: [
         'Visible label, helper text, and error text are associated with the native select.',
+        'Required and disabled states are applied to the native select element.',
       ],
       keyboard: ['Uses native select keyboard behavior for the current browser and platform.'],
-      forms: ['Implements ControlValueAccessor for string values.'],
+      forms: [
+        'Implements ControlValueAccessor for string values.',
+        'Disabled state stays synced with Angular forms and the disabled input.',
+      ],
       edgeCases: [
         'Use disabled options for unavailable choices.',
         'Use required with placeholder to force a real selection.',
+        'Use a future combobox/autocomplete pattern instead of Select for large or searchable lists.',
       ],
       testing: ['Assert option rendering, valueChange, CVA writeValue, and disabled state.'],
     },
@@ -1622,22 +1767,49 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
   [
     'radio',
     {
-      overview: ['Radio Group captures exactly one choice from a small set of related options.'],
-      whenToUse: ['Use when all choices should be visible and the user must compare them.'],
+      overview: [
+        'Radio Group captures exactly one choice from a small set of related options.',
+        'Options can include helper text and disabled values, and the group supports vertical or horizontal layouts.',
+      ],
+      whenToUse: [
+        'Use when all choices should be visible and the user must compare them.',
+        'Use for small mutually exclusive decisions such as contact method, billing interval, density, or environment.',
+      ],
       examples: [
         {
           title: 'Preference group',
-          description: 'Use helper text for extra context.',
-          code: `<ui-radio-group label="Contact preference" [options]="contactOptions" [formControl]="preference" />`,
+          description: 'Use helper text for context and keep parent form state in control.',
+          code: `<ui-radio-group
+  label="Contact preference"
+  helperText="Use helper text to clarify tradeoffs."
+  [options]="contactOptions"
+  [formControl]="contactPreference"
+/>
+
+<ui-radio-group
+  label="Layout density"
+  orientation="horizontal"
+  [options]="layoutOptions"
+  [formControl]="layoutDensity"
+/>`,
         },
       ],
-      accessibility: ['Uses native radio inputs grouped by name and labelled by visible text.'],
+      accessibility: [
+        'Uses native radio inputs grouped by name and labelled by visible text.',
+        'Helper and error text are associated with the group.',
+      ],
       keyboard: [
         'Arrow keys move between radios in native browser behavior.',
         'Space selects the focused option.',
       ],
-      forms: ['Implements ControlValueAccessor for string values.'],
-      edgeCases: ['Avoid radio groups with too many options; use Select for long lists.'],
+      forms: [
+        'Implements ControlValueAccessor for string values.',
+        'Disabled state can apply to the full group or individual options.',
+      ],
+      edgeCases: [
+        'Avoid radio groups with too many options; use Select for long lists.',
+        'Use horizontal orientation only when labels are short and wrapping will not harm scanning.',
+      ],
       testing: ['Assert selection, disabled options, CVA, and orientation classes.'],
     },
   ],
@@ -1646,22 +1818,32 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
     {
       overview: [
         'Switch captures an immediate on/off preference using native checkbox behavior and switch semantics.',
+        'It is intentionally optimized for settings, not one-time actions.',
       ],
       whenToUse: [
         'Use for settings that can be toggled independently, such as notifications or feature flags.',
+        'Use when changing the value can take effect immediately without a confirmation step.',
       ],
       examples: [
         {
           title: 'Notification setting',
           description: 'Boolean state stays in the parent form control.',
-          code: `<ui-switch label="Release notifications" helperText="Email me on release." [formControl]="notifications" />`,
+          code: `<ui-switch
+  label="Release notifications"
+  helperText="Boolean state stays in the parent form control."
+  [formControl]="notifications"
+/>`,
         },
       ],
       accessibility: ['Uses role="switch" on a native checkbox pattern and exposes checked state.'],
       keyboard: ['Space toggles the switch.', 'Tab moves focus to the switch.'],
-      forms: ['Implements ControlValueAccessor for boolean values.'],
+      forms: [
+        'Implements ControlValueAccessor for boolean values.',
+        'setDisabledState disables the underlying control when Angular forms disable it.',
+      ],
       edgeCases: [
         'Do not use Switch for actions that require confirmation; use Button or Modal instead.',
+        'Avoid using Switch for destructive actions or server actions that may fail without feedback.',
       ],
       testing: ['Assert checked state, valueChange, CVA disabled state, focus, and blur outputs.'],
     },
@@ -1671,21 +1853,47 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
     {
       overview: [
         'Textarea captures longer free-form content with label, helper text, errors, counter, and resize controls.',
+        'It supports outline and filled appearances, Angular validation messages, row sizing, max length counters, and predictable resize policy.',
       ],
-      whenToUse: ['Use for comments, notes, descriptions, issue summaries, and release notes.'],
+      whenToUse: [
+        'Use for comments, notes, descriptions, issue summaries, release notes, and review feedback.',
+        'Use when users need more than one line and may revise text before submitting.',
+      ],
       examples: [
         {
           title: 'Release notes',
           description: 'Pair maxLength with the built-in counter.',
-          code: `<ui-textarea label="Release notes" [maxLength]="280" [rows]="5" [formControl]="releaseNotes" />`,
+          code: `<ui-textarea
+  label="Release notes"
+  placeholder="Describe what changed..."
+  helperText="Keep release notes concise and user-facing."
+  [maxLength]="280"
+  [rows]="5"
+  [formControl]="releaseNotes"
+/>`,
+        },
+        {
+          title: 'Validation state',
+          description: 'Use fixed resize and clear error text for required review notes.',
+          code: `<ui-textarea
+  label="Review notes"
+  errorText="Notes are required before publishing."
+  resize="none"
+  required
+  [rows]="4"
+/>`,
         },
       ],
       accessibility: ['Labels and helper/error/counter text are wired to the native textarea.'],
       keyboard: ['Uses native textarea behavior including multiline typing.'],
-      forms: ['Implements ControlValueAccessor for string values.'],
+      forms: [
+        'Implements ControlValueAccessor for string values.',
+        'writeValue updates text without emitting valueChange, and blur marks the control touched.',
+      ],
       edgeCases: [
         'Use resize="none" only when layout requires fixed height.',
         'Provide ariaLabel if no visible label exists.',
+        'Hide the counter only when another character-limit affordance is already visible.',
       ],
       testing: ['Assert CVA behavior, counter text, validation messages, and aria-describedby.'],
     },
@@ -1759,14 +1967,30 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       whenToUse: ['Use for structured datasets where users compare rows and columns.'],
       examples: [
         {
-          title: 'Selectable table',
+          title: 'Selectable component catalog',
           description: 'Selection and sorting emit events; parent code owns data changes.',
           code: `<ui-table
   [columns]="columns"
-  [rows]="rows"
+  [rows]="components"
   selectable
-  (rowSelected)="openRow($event)"
-  (sortChange)="sortRows($event)"
+  (rowSelected)="openComponent($event)"
+  (sortChange)="sortComponents($event)"
+/>`,
+        },
+        {
+          title: 'Loading and empty states',
+          description: 'Keep state messages specific to the current dataset.',
+          code: `<ui-table
+  [columns]="columns"
+  [rows]="[]"
+  emptyText="No components match your filters."
+/>
+
+<ui-table
+  [columns]="columns"
+  [rows]="[]"
+  loading
+  loadingText="Loading components..."
 />`,
         },
       ],

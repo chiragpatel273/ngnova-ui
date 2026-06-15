@@ -54,4 +54,44 @@ describe('App', () => {
       expect(doc.selector).toMatch(/^ui-/);
     }
   });
+
+  it('renders flagship component docs with unique section IDs, valid section links, and code blocks', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    for (const slug of [
+      'button',
+      'input',
+      'textarea',
+      'checkbox',
+      'select',
+      'radio',
+      'switch',
+      'modal',
+      'table',
+    ]) {
+      await router.navigateByUrl(`/components/${slug}`);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const sectionIds = Array.from(compiled.querySelectorAll<HTMLElement>('[id]')).map(
+        (element) => element.id,
+      );
+      expect(new Set(sectionIds).size).toBe(sectionIds.length);
+
+      const sectionLinks = Array.from(
+        compiled.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Page sections"] a[href]'),
+      );
+      expect(sectionLinks.length).toBeGreaterThan(0);
+
+      for (const link of sectionLinks) {
+        const hash = link.getAttribute('href')?.split('#')[1];
+        expect(hash).toBeTruthy();
+        expect(compiled.querySelector(`#${hash}`)).toBeTruthy();
+      }
+
+      expect(compiled.querySelectorAll('app-docs-code-block figure').length).toBeGreaterThan(0);
+    }
+  });
 });

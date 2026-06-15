@@ -49,29 +49,33 @@ const COMPONENT_GROUPS: readonly {
   standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet, UiBadgeComponent],
   template: `
-    <main class="min-h-dvh bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+    <main class="min-h-dvh bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       <div class="mx-auto grid min-h-dvh max-w-[92rem] lg:grid-cols-[18rem_1fr]">
         <aside
           class="border-b border-slate-200 bg-white px-4 py-4 dark:border-slate-800 dark:bg-slate-950 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r"
         >
           <a
             routerLink="/"
-            class="block rounded-lg p-2 transition hover:bg-slate-50 dark:hover:bg-slate-900"
+            class="block rounded-lg border border-slate-200 bg-slate-50 p-3 transition hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-900/70"
           >
-            <div
-              class="flex size-10 items-center justify-center rounded-lg bg-blue-600 text-sm font-semibold text-white shadow-sm shadow-blue-600/20"
-              aria-hidden="true"
-            >
-              NN
+            <div class="flex items-center gap-3">
+              <div
+                class="flex size-10 items-center justify-center rounded-lg bg-blue-600 text-sm font-semibold text-white shadow-sm shadow-blue-600/20"
+                aria-hidden="true"
+              >
+                NN
+              </div>
+              <div>
+                <h1 class="text-lg font-semibold">NgNova UI</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Angular component library</p>
+              </div>
             </div>
             <div class="mt-3 flex flex-wrap items-center gap-2">
               <ui-badge variant="info" size="sm">Angular 22</ui-badge>
               <ui-badge variant="success" size="sm">Tailwind 4</ui-badge>
             </div>
-            <h1 class="mt-3 text-xl font-semibold">NgNova UI</h1>
             <p class="mt-1.5 text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Production-ready standalone components with polished docs, typed APIs, and
-              accessibility guidance.
+              Production-ready standalone components with typed APIs and accessibility guidance.
             </p>
           </a>
 

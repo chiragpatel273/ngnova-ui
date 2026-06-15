@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UiBadgeComponent, UiButtonComponent, UiCardComponent } from '@ngnova/ui';
 
+import { DocsCodeBlockComponent } from './docs-code-block';
+
 interface SetupStep {
   readonly title: string;
   readonly description: string;
@@ -16,7 +18,13 @@ interface ChecklistItem {
 @Component({
   selector: 'app-get-started',
   standalone: true,
-  imports: [RouterLink, UiBadgeComponent, UiButtonComponent, UiCardComponent],
+  imports: [
+    RouterLink,
+    UiBadgeComponent,
+    UiButtonComponent,
+    UiCardComponent,
+    DocsCodeBlockComponent,
+  ],
   template: `
     <article class="mx-auto max-w-6xl">
       <header
@@ -63,9 +71,11 @@ interface ChecklistItem {
                 </div>
               </div>
             </div>
-            <pre
-              class="overflow-x-auto rounded-lg bg-slate-950 p-5 text-sm leading-6 text-slate-100"
-            ><code>{{ step.code }}</code></pre>
+            <app-docs-code-block
+              [code]="step.code"
+              [filename]="'step-' + (index + 1) + '.txt'"
+              language="Setup"
+            />
           </ui-card>
         }
       </section>

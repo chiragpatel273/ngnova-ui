@@ -34,12 +34,34 @@ class RichHostComponent {
   control = new FormControl('', { nonNullable: true, validators: [Validators.required] });
 }
 
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiInputComponent],
+  template: `
+    <ui-input
+      label="Password"
+      type="password"
+      labelMode="floating"
+      counterMode="words"
+      counterMax="3"
+      intent="warning"
+      revealable
+      [formControl]="control"
+      (submitted)="submittedValue = $event"
+    />
+  `,
+})
+class PremiumHostComponent {
+  control = new FormControl('alpha beta gamma delta', { nonNullable: true });
+  submittedValue = '';
+}
+
 describe('UiInputComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HostComponent, RichHostComponent],
+      imports: [HostComponent, RichHostComponent, PremiumHostComponent],
     }).compileComponents();
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
@@ -117,5 +139,37 @@ describe('UiInputComponent', () => {
     const input = richFixture.nativeElement.querySelector('input') as HTMLInputElement;
     expect(input.getAttribute('aria-invalid')).toBe('true');
     expect(richFixture.nativeElement.textContent).toContain('Name is required.');
+  });
+
+  it('supports floating labels, warning intent, and word counters', () => {
+    const premiumFixture = TestBed.createComponent(PremiumHostComponent);
+    premiumFixture.detectChanges();
+
+    const input = premiumFixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const label = premiumFixture.nativeElement.querySelector('label') as HTMLLabelElement;
+
+    expect(input.type).toBe('password');
+    expect(label.className).toContain('top-1');
+    expect(premiumFixture.nativeElement.textContent).toContain('4 / 3');
+    expect(premiumFixture.nativeElement.textContent).toContain('Show');
+  });
+
+  it('toggles password visibility and emits submitted value', () => {
+    const premiumFixture = TestBed.createComponent(PremiumHostComponent);
+    premiumFixture.detectChanges();
+
+    const input = premiumFixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const button = premiumFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    button.click();
+    premiumFixture.detectChanges();
+
+    expect(input.type).toBe('text');
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    premiumFixture.detectChanges();
+
+    expect(premiumFixture.componentInstance.submittedValue).toBe('alpha beta gamma delta');
   });
 });

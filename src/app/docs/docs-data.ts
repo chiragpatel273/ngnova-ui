@@ -149,13 +149,15 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Input',
     selector: 'ui-input',
     summary:
-      'Text input with label, helper text, validation, counters, clearable state, and Angular forms support.',
+      'Text input with floating labels, semantic intent, password reveal, smart counters, validation, and Angular forms support.',
     importName: 'UiInputComponent',
     usage: `<ui-input
   label="Email"
   type="email"
   autocomplete="email"
   helperText="Use your organization email."
+  labelMode="floating"
+  intent="success"
   clearable
   [maxLength]="80"
   [formControl]="email"
@@ -199,6 +201,20 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Visual field treatment for standard or denser form surfaces.',
       },
       {
+        name: 'intent',
+        type: "'default' | 'success' | 'warning' | 'danger'",
+        defaultValue: "'default'",
+        description:
+          'Semantic field intent. Angular invalid state automatically takes danger priority.',
+      },
+      {
+        name: 'labelMode',
+        type: "'top' | 'floating' | 'hidden'",
+        defaultValue: "'top'",
+        description:
+          'Label placement. Hidden keeps an accessible label while removing visual label text.',
+      },
+      {
         name: 'inputId',
         type: 'string',
         defaultValue: 'generated',
@@ -230,6 +246,30 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Custom validation messages keyed by Angular validation error name.',
       },
       {
+        name: 'clearLabel',
+        type: 'string',
+        defaultValue: "'Clear input'",
+        description: 'Accessible label and fallback text for the clear action.',
+      },
+      {
+        name: 'showPasswordLabel',
+        type: 'string',
+        defaultValue: "'Show password'",
+        description: 'Accessible label and fallback text for revealing a password field.',
+      },
+      {
+        name: 'hidePasswordLabel',
+        type: 'string',
+        defaultValue: "'Hide password'",
+        description: 'Accessible label and fallback text for hiding a revealed password field.',
+      },
+      {
+        name: 'counterMode',
+        type: "'characters' | 'words'",
+        defaultValue: "'characters'",
+        description: 'Counter strategy for character-limited or word-limited fields.',
+      },
+      {
         name: 'maxLength',
         type: 'number | null',
         defaultValue: 'null',
@@ -240,6 +280,13 @@ export const componentDocs: ComponentDoc[] = [
         type: 'number | null',
         defaultValue: 'null',
         description: 'Native minlength constraint.',
+      },
+      {
+        name: 'counterMax',
+        type: 'number | null',
+        defaultValue: 'null',
+        description:
+          'Counter-only limit. Use this for word counts or soft limits without native maxlength.',
       },
       {
         name: 'disabled',
@@ -269,7 +316,13 @@ export const componentDocs: ComponentDoc[] = [
         name: 'hideCounter',
         type: 'boolean',
         defaultValue: 'false',
-        description: 'Hides the character counter when maxLength is set.',
+        description: 'Hides the character or word counter when a counter limit is set.',
+      },
+      {
+        name: 'revealable',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Shows a keyboard-accessible password visibility toggle for password inputs.',
       },
     ],
     outputs: [
@@ -292,6 +345,16 @@ export const componentDocs: ComponentDoc[] = [
         name: 'cleared',
         type: 'OutputEmitterRef<void>',
         description: 'Emits when the clear button resets the current value.',
+      },
+      {
+        name: 'submitted',
+        type: 'OutputEmitterRef<string>',
+        description: 'Emits the current value when Enter is pressed inside the input.',
+      },
+      {
+        name: 'passwordVisibilityChange',
+        type: 'OutputEmitterRef<boolean>',
+        description: 'Emits after the password reveal state changes.',
       },
     ],
   },
@@ -1382,20 +1445,28 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
     'input',
     {
       overview: [
-        'Input is a form-ready text field with label, helper text, error text, counter, prefix/suffix slots, and native attributes.',
-        'It implements ControlValueAccessor and keeps value changes separate from writeValue.',
+        'Input is a production-grade text field for settings forms, search bars, command entry, authentication secrets, package identifiers, and AI prompt summaries.',
+        'It combines label strategy, helper text, validation, prefix/suffix projection, semantic intent, password reveal, Enter submission, and character or word counting in one standalone Angular component.',
+        'The documentation follows the depth users expect from mature libraries: variants, status, clear, password, search, counters, prefix/suffix, forms, accessibility, keyboard behavior, API, and testing are separated into practical sections.',
       ],
       whenToUse: [
-        'Use for short free-text values such as names, email addresses, URLs, search terms, and package names.',
+        'Use for short single-line values where native input semantics are correct and assistive text matters.',
+        'Use with Angular reactive forms when validation, disabled state, touched state, or accessibility wiring matters.',
+        'Use labelMode="floating" for compact enterprise forms and labelMode="hidden" for search or command fields that still need an accessible label.',
+        'Use counterMode="words" for prompt, summary, SEO, or editorial fields where word limits matter more than native maxlength.',
+        'Use projected prefix and suffix content for stable adornments such as protocol text, file extensions, shortcuts, and units.',
       ],
       examples: [
         {
-          title: 'Reactive form input',
-          description: 'Use CVA behavior with helper text, autocomplete, and counters.',
+          title: 'Floating validated field',
+          description:
+            'Use semantic intent for positive or warning guidance before validation fails.',
           code: `<ui-input
   label="Email"
   type="email"
   autocomplete="email"
+  labelMode="floating"
+  intent="success"
   helperText="Use your organization email."
   clearable
   [maxLength]="80"
@@ -1403,8 +1474,62 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 />`,
         },
         {
+          title: 'Field intelligence',
+          description:
+            'Password reveal, word counters, clear behavior, and Enter submission are built in.',
+          code: `<ui-input
+  label="Deploy token"
+  type="password"
+  labelMode="floating"
+  helperText="Reveal is opt-in and emits passwordVisibilityChange."
+  revealable
+  [formControl]="token"
+/>
+
+<ui-input
+  label="Prompt summary"
+  helperText="Word counts are useful for AI prompts and editorial fields."
+  counterMode="words"
+  [counterMax]="8"
+  clearable
+  [formControl]="summary"
+  (submitted)="runSearch($event)"
+/>`,
+        },
+        {
+          title: 'Projected anatomy',
+          description: 'Use prefix and suffix slots without losing helper text or clear behavior.',
+          code: `<ui-input
+  label="Repository URL"
+  type="url"
+  helperText="Prefix and suffix are projected; clear remains keyboard reachable."
+  clearable
+  [formControl]="repositoryUrl"
+>
+  <span uiInputPrefix>https://</span>
+  <span uiInputSuffix>.git</span>
+</ui-input>`,
+        },
+        {
+          title: 'Search recipe',
+          description:
+            'Hidden label keeps the search field accessible while preserving compact UI.',
+          code: `<ui-input
+  label="Search components"
+  labelMode="hidden"
+  type="search"
+  placeholder="Search components"
+  clearable
+  [formControl]="componentSearch"
+  (submitted)="searchComponents($event)"
+>
+  <span uiInputSuffix>Ctrl K</span>
+</ui-input>`,
+        },
+        {
           title: 'Validation state',
-          description: 'Error text is announced and reflected with aria-invalid.',
+          description:
+            'Error text is announced, reflected with aria-invalid, and overrides intent.',
           code: `<ui-input
   label="Package scope"
   placeholder="@ngnova"
@@ -1415,24 +1540,37 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       accessibility: [
         'Visible labels are connected with the native input using for/id.',
+        'labelMode="hidden" renders a screen-reader-only label instead of relying on placeholder text.',
         'Helper, error, and counter text are wired through aria-describedby.',
-        'Invalid state sets aria-invalid.',
+        'Invalid state sets aria-invalid and error text uses role="alert".',
+        'Clear and password reveal actions are native buttons with configurable accessible labels.',
+        'Projected prefix and suffix content should be decorative or supplemental; the label remains the accessible name.',
       ],
       keyboard: [
-        'Uses native input keyboard behavior.',
+        'Tab moves focus to the native input.',
+        'Typing updates the value and emits valueChange.',
         'The clear button is reachable by Tab when visible.',
+        'Enter emits submitted with the current string value.',
+        'Password reveal is keyboard reachable and exposes aria-pressed.',
+        'Projected suffix shortcuts must not replace the submitted output or native keyboard behavior.',
       ],
       forms: [
         'Implements ControlValueAccessor.',
-        'Does not call valueChange or onChange from writeValue.',
+        'writeValue updates the view without emitting valueChange.',
+        'setDisabledState syncs the disabled state.',
+        'submitted is useful for search fields or command fields, while form submit remains owned by the parent form.',
       ],
       edgeCases: [
-        'Provide ariaLabel when using the input without a visible label.',
-        'Use inputMode for mobile keyboard hints.',
+        'Provide ariaLabel or a visible/hidden label for icon-only or search-only inputs.',
+        'Use hideCounter when a maxLength or counterMax exists but the counter would duplicate nearby copy.',
+        'Use counterMax for soft limits such as word counts; use maxLength only when the browser should enforce a hard character limit.',
+        'Do not use type="number" for values that need leading zeros; use inputMode instead.',
+        'Avoid placing interactive controls in projected suffix content until the component exposes a formal action-slot pattern.',
       ],
       testing: [
-        'Assert CVA writeValue and disabled state.',
-        'Assert aria-invalid and aria-describedby for errors.',
+        'Assert CVA writeValue, valueChange, touched state, disabled state, validation message, clear button, prefix/suffix projection, and counter behavior.',
+        'For premium behavior, test floating labels, intent classes, passwordVisibilityChange, word counters, and submitted output.',
+        'Docs route tests should verify every Input page anchor resolves and every recipe has a code block.',
       ],
     },
   ],

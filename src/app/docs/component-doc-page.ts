@@ -95,7 +95,7 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
   template: `
     @if (doc(); as componentDoc) {
       <article class="mx-auto max-w-[84rem]">
-        <header class="pb-6">
+        <header [class]="componentDoc.slug === 'input' ? 'pb-1' : 'pb-6'">
           <div class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
             <a
               routerLink="/"
@@ -150,696 +150,1130 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
           </div>
         </nav>
 
-        <div class="mt-6 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_15rem] xl:items-start">
+        <div
+          [class]="
+            componentDoc.slug === 'input'
+              ? 'mt-2 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_15rem] xl:items-start'
+              : 'mt-6 grid min-w-0 gap-8 xl:grid-cols-[minmax(0,1fr)_15rem] xl:items-start'
+          "
+        >
           <div class="grid min-w-0 gap-5">
             <section class="grid min-w-0 gap-6">
-              <app-docs-section
-                sectionId="preview"
-                title="Basic"
-                [description]="previewDescription(componentDoc)"
-              >
-                <app-docs-preview-canvas
-                  title="Production states"
-                  description="Real component examples rendered from the public package API."
-                  status="Interactive"
-                >
-                  @switch (componentDoc.slug) {
-                    @case ('button') {
-                      <div class="grid gap-5">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <div class="flex flex-wrap items-center justify-between gap-5">
+              @if (componentDoc.slug === 'input') {
+                <app-docs-section sectionId="input-docs" title="Input" hideHeader>
+                  <ui-tabs
+                    [tabs]="inputDocTabs"
+                    [active]="inputDocTab()"
+                    (activeChange)="inputDocTab.set($event)"
+                    ariaLabel="Input documentation sections"
+                    fullWidth
+                  >
+                    @if (inputDocTab() === 'preview') {
+                      <app-docs-preview-canvas
+                        title="Input feature preview"
+                        description="A scannable tour of labels, appearances, states, actions, counters, projection slots, and form-ready behavior."
+                        status="Interactive"
+                      >
+                        <div class="grid gap-5">
+                          <section class="grid gap-3">
                             <div>
                               <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Release workflow
+                                Simple text field
                               </p>
-                              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                                A common page footer with clear action hierarchy and no accidental
-                                submit behavior.
+                              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                The default field covers the everyday case: label, placeholder, and
+                                helper text.
                               </p>
                             </div>
-                            <div class="flex flex-wrap items-center gap-2">
-                              <ui-button variant="outline">Cancel</ui-button>
-                              <ui-button variant="secondary">Save draft</ui-button>
-                              <ui-button variant="primary">Publish</ui-button>
+                            <div
+                              class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                            >
+                              <ui-input
+                                label="Package name"
+                                placeholder="@ngnova/ui"
+                                helperText="Use this pattern for normal text entry."
+                                [formControl]="packageName"
+                              />
                             </div>
-                          </div>
-                        </section>
+                          </section>
 
-                        <div class="grid gap-3 lg:grid-cols-3">
-                          <section
-                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                          >
-                            <p
-                              class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
-                            >
-                              Loading
-                            </p>
-                            <div class="mt-3">
-                              <ui-button loading loadingLabel="Publishing release">
-                                Publishing
-                              </ui-button>
+                          <section class="grid gap-3">
+                            <div>
+                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                Helpful field patterns
+                              </p>
+                              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                Layer in floating labels, clear behavior, password reveal, counters,
+                                and prefix or suffix slots only where they help the task.
+                              </p>
+                            </div>
+                            <div class="grid gap-4 md:grid-cols-2">
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Email address"
+                                  placeholder="you@example.com"
+                                  labelMode="floating"
+                                  intent="success"
+                                  helperText="Floating label, email type, and autocomplete."
+                                  type="email"
+                                  autocomplete="email"
+                                  [formControl]="email"
+                                />
+                              </div>
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Release summary"
+                                  placeholder="Aurora components"
+                                  helperText="Clearable text field with a native maxlength counter."
+                                  clearable
+                                  [maxLength]="40"
+                                  [formControl]="releaseName"
+                                />
+                              </div>
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Deploy token"
+                                  type="password"
+                                  appearance="filled"
+                                  helperText="Filled appearance with keyboard-reachable password reveal."
+                                  revealable
+                                  [formControl]="password"
+                                />
+                              </div>
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Repository URL"
+                                  type="url"
+                                  helperText="Projected prefix and suffix keep URLs readable."
+                                  clearable
+                                  [formControl]="repositoryUrl"
+                                >
+                                  <span
+                                    uiInputPrefix
+                                    class="text-sm font-medium text-slate-500 dark:text-slate-400"
+                                  >
+                                    https://
+                                  </span>
+                                  <span
+                                    uiInputSuffix
+                                    class="text-sm text-slate-500 dark:text-slate-400"
+                                  >
+                                    .git
+                                  </span>
+                                </ui-input>
+                              </div>
                             </div>
                           </section>
-                          <section
-                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                          >
-                            <p
-                              class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
-                            >
-                              Sizes
-                            </p>
-                            <div class="mt-3 flex flex-wrap items-center gap-2">
-                              <ui-button size="sm">Toolbar</ui-button>
-                              <ui-button>Default</ui-button>
-                              <ui-button size="lg">Page action</ui-button>
+
+                          <section class="grid gap-3">
+                            <div>
+                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                Production states
+                              </p>
+                              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                Sizes, validation states, readonly and disabled fields, search, and
+                                word counters stay consistent in dense product screens.
+                              </p>
                             </div>
-                          </section>
-                          <section
-                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                          >
-                            <p
-                              class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
-                            >
-                              Critical
-                            </p>
-                            <div class="mt-3 flex flex-wrap items-center gap-2">
-                              <ui-button variant="danger">Delete</ui-button>
-                              <ui-button variant="ghost" disabled>Unavailable</ui-button>
+                            <div class="grid gap-4 lg:grid-cols-3">
+                              <div
+                                class="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <p class="text-xs font-semibold uppercase text-slate-500">Sizes</p>
+                                <ui-input
+                                  label="Compact"
+                                  size="sm"
+                                  placeholder="Small field"
+                                  labelMode="hidden"
+                                  ariaLabel="Small input preview"
+                                />
+                                <ui-input
+                                  label="Default"
+                                  placeholder="Default field"
+                                  labelMode="hidden"
+                                  ariaLabel="Default input preview"
+                                />
+                                <ui-input
+                                  label="Large"
+                                  size="lg"
+                                  placeholder="Large field"
+                                  labelMode="hidden"
+                                  ariaLabel="Large input preview"
+                                />
+                              </div>
+                              <div
+                                class="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <p class="text-xs font-semibold uppercase text-slate-500">
+                                  Intent and validation
+                                </p>
+                                <ui-input
+                                  label="Stable channel"
+                                  intent="success"
+                                  helperText="Ready to publish."
+                                />
+                                <ui-input
+                                  label="Release channel"
+                                  intent="warning"
+                                  helperText="Warn before blocking."
+                                />
+                                <ui-input
+                                  label="Work email"
+                                  type="email"
+                                  errorText="Use an organization email address."
+                                  required
+                                />
+                              </div>
+                              <div
+                                class="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <p class="text-xs font-semibold uppercase text-slate-500">
+                                  Disabled and readonly
+                                </p>
+                                <ui-input
+                                  label="Locked scope"
+                                  helperText="Readonly values can still be copied."
+                                  [readonly]="true"
+                                  [formControl]="lockedScope"
+                                />
+                                <ui-input
+                                  label="Pending review"
+                                  helperText="Disabled fields are skipped by users."
+                                  [disabled]="true"
+                                  [formControl]="reviewStatus"
+                                />
+                              </div>
+                            </div>
+                            <div class="grid gap-4 lg:grid-cols-2">
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Search components"
+                                  labelMode="hidden"
+                                  type="search"
+                                  placeholder="Search components"
+                                  clearable
+                                  [formControl]="componentSearch"
+                                >
+                                  <span
+                                    uiInputSuffix
+                                    class="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-300"
+                                  >
+                                    Ctrl K
+                                  </span>
+                                </ui-input>
+                              </div>
+                              <div
+                                class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                              >
+                                <ui-input
+                                  label="Prompt summary"
+                                  helperText="Word limits guide AI prompts and editorial text."
+                                  counterMode="words"
+                                  [counterMax]="6"
+                                  clearable
+                                  [formControl]="releaseName"
+                                />
+                              </div>
                             </div>
                           </section>
                         </div>
-                      </div>
-                    }
-                    @case ('card') {
-                      <div class="grid gap-3 lg:grid-cols-2">
-                        <ui-card>
-                          <div uiCardHeader>
-                            <div class="flex items-start justify-between gap-3">
-                              <div>
-                                <h4 class="font-semibold text-slate-950 dark:text-slate-50">
-                                  Release readiness
-                                </h4>
-                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                  Package checks for a public UI library.
-                                </p>
-                              </div>
-                              <ui-badge variant="success" size="sm">Ready</ui-badge>
-                            </div>
-                          </div>
-                          <div class="grid gap-2 text-sm text-slate-600 dark:text-slate-300">
-                            <div class="flex justify-between gap-4">
-                              <span>Library tests</span>
-                              <strong class="text-slate-950 dark:text-slate-50">69 passed</strong>
-                            </div>
-                            <div class="flex justify-between gap-4">
-                              <span>Package size</span>
-                              <strong class="text-slate-950 dark:text-slate-50">52 kB</strong>
-                            </div>
-                          </div>
-                          <div uiCardFooter>
-                            <ui-button size="sm">View report</ui-button>
-                          </div>
-                        </ui-card>
-                        <ui-card variant="elevated">
-                          <div uiCardHeader>
-                            <h4 class="font-semibold text-slate-950 dark:text-slate-50">
-                              Component maturity
-                            </h4>
-                          </div>
-                          <p class="text-sm text-slate-600 dark:text-slate-300">
-                            Use cards for bounded summaries, review states, and compact dashboards.
-                          </p>
-                        </ui-card>
-                      </div>
-                    }
-                    @case ('input') {
-                      <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                      </app-docs-preview-canvas>
+                      <app-docs-code-block
+                        class="mt-5 block"
+                        [code]="componentDoc.usage"
+                        filename="input-basic.example.html"
+                        language="Angular template"
+                      />
+                      <div class="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                        <app-docs-code-block
+                          [code]="inputImportExample"
+                          filename="input-import.example.ts"
+                          language="TypeScript"
+                        />
+                        <aside
+                          class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-900"
                         >
-                          <div class="flex flex-wrap items-start justify-between gap-3">
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Package settings
-                              </p>
-                              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                Labels, support text, counters, and validation work together.
-                              </p>
-                            </div>
-                            <ui-badge variant="success" size="sm">CVA ready</ui-badge>
+                          <p class="font-semibold text-slate-950 dark:text-slate-50">
+                            Setup checklist
+                          </p>
+                          <div class="mt-3 grid gap-2.5 text-slate-600 dark:text-slate-300">
+                            <p>
+                              Import <code>UiInputComponent</code> from <code>&#64;ngnova/ui</code>.
+                            </p>
+                            <p>Add <code>ReactiveFormsModule</code> when binding form controls.</p>
+                            <p>
+                              Start with the default field, then add clear, reveal, counter, or
+                              slots only when the workflow needs them.
+                            </p>
                           </div>
-                          <div class="mt-4 grid gap-4 md:grid-cols-2">
+                        </aside>
+                      </div>
+                    } @else if (inputDocTab() === 'forms') {
+                      <div class="grid gap-5">
+                        <div
+                          class="grid gap-5 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900 lg:grid-cols-[minmax(0,1fr)_20rem]"
+                        >
+                          <div class="grid gap-4 rounded-lg bg-white p-4 dark:bg-slate-950">
                             <ui-input
-                              label="Email address"
-                              placeholder="you@example.com"
-                              helperText="Bound to a reactive FormControl."
+                              label="Email"
                               type="email"
                               autocomplete="email"
+                              helperText="Bound to an Angular FormControl."
                               [formControl]="email"
                             />
                             <ui-input
-                              label="Package name"
-                              placeholder="@ngnova/ui"
-                              helperText="Clearable with a character counter."
-                              clearable
-                              [maxLength]="40"
-                              [formControl]="packageName"
-                            />
-                            <ui-input
-                              label="Release name"
-                              appearance="filled"
-                              helperText="Filled appearance for dense settings forms."
-                              [formControl]="releaseName"
-                            />
-                            <ui-input
-                              label="Organization email"
-                              placeholder="team@example.com"
-                              errorText="Use an organization email address."
+                              label="Package scope"
+                              placeholder="@ngnova"
+                              errorText="Package scope must match your npm organization."
                               required
                             />
                           </div>
-                        </section>
-                        <section
-                          class="rounded-lg bg-white p-4 text-sm shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <p class="font-semibold text-slate-950 dark:text-slate-50">Coverage</p>
-                          <div class="mt-3 grid gap-3">
-                            <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
-                              <p class="font-medium text-slate-950 dark:text-slate-50">Forms</p>
-                              <p class="mt-1 text-slate-600 dark:text-slate-300">
+                          <aside class="rounded-lg bg-white p-4 text-sm dark:bg-slate-950">
+                            <p class="font-semibold text-slate-950 dark:text-slate-50">
+                              Forms contract
+                            </p>
+                            <code
+                              class="mt-2 block rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                            >
+                              {{ email.value }}
+                            </code>
+                            <ul
+                              class="mt-4 list-disc space-y-2 pl-5 text-slate-600 dark:text-slate-300"
+                            >
+                              <li><code>writeValue</code> never emits valueChange.</li>
+                              <li><code>blur</code> marks the field as touched.</li>
+                              <li>Angular invalid state overrides semantic intent.</li>
+                              <li>Enter emits <code>submitted</code> for explicit parent logic.</li>
+                            </ul>
+                          </aside>
+                        </div>
+
+                        <div class="grid gap-4 lg:grid-cols-3">
+                          <section
+                            class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                          >
+                            <h3 class="font-semibold text-slate-950 dark:text-slate-50">
+                              Accessibility
+                            </h3>
+                            <ul
+                              class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300"
+                            >
+                              <li>Visible labels are preferred; hidden labels stay semantic.</li>
+                              <li>
+                                Helper, error, and counter text compose into aria-describedby.
+                              </li>
+                              <li>
+                                Invalid state maps to aria-invalid when validation is present.
+                              </li>
+                            </ul>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                          >
+                            <h3 class="font-semibold text-slate-950 dark:text-slate-50">
+                              Keyboard
+                            </h3>
+                            <ul
+                              class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300"
+                            >
+                              <li>Tab moves focus into the native input and projected actions.</li>
+                              <li>
+                                Enter emits <code>submitted</code> without hiding browser semantics.
+                              </li>
+                              <li>
+                                Escape is left to parent search, dialog, or command workflows.
+                              </li>
+                            </ul>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                          >
+                            <h3 class="font-semibold text-slate-950 dark:text-slate-50">
+                              Edge cases
+                            </h3>
+                            <ul
+                              class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300"
+                            >
+                              <li>Use Textarea for long-form writing.</li>
+                              <li>Use text plus inputMode for ZIP, OTP, and ID values.</li>
+                              <li>Avoid hidden labels outside search or command contexts.</li>
+                            </ul>
+                          </section>
+                        </div>
+
+                        <app-docs-code-block
+                          [code]="inputValidationExample"
+                          filename="input-validation.example.html"
+                          language="Angular template"
+                        />
+                      </div>
+                    } @else if (inputDocTab() === 'api') {
+                      <app-docs-api-table
+                        [apiInputs]="componentDoc.inputs"
+                        [apiOutputs]="componentDoc.outputs"
+                      />
+                    }
+                  </ui-tabs>
+                </app-docs-section>
+              }
+
+              @if (componentDoc.slug !== 'input') {
+                <app-docs-section
+                  sectionId="preview"
+                  [title]="previewTitle(componentDoc)"
+                  [description]="previewDescription(componentDoc)"
+                >
+                  <app-docs-preview-canvas
+                    title="Production states"
+                    description="Real component examples rendered from the public package API."
+                    status="Interactive"
+                  >
+                    @switch (componentDoc.slug) {
+                      @case ('button') {
+                        <div class="grid gap-5">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <div class="flex flex-wrap items-center justify-between gap-5">
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Release workflow
+                                </p>
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                  A common page footer with clear action hierarchy and no accidental
+                                  submit behavior.
+                                </p>
+                              </div>
+                              <div class="flex flex-wrap items-center gap-2">
+                                <ui-button variant="outline">Cancel</ui-button>
+                                <ui-button variant="secondary">Save draft</ui-button>
+                                <ui-button variant="primary">Publish</ui-button>
+                              </div>
+                            </div>
+                          </section>
+
+                          <div class="grid gap-3 lg:grid-cols-3">
+                            <section
+                              class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                            >
+                              <p
+                                class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                              >
+                                Loading
+                              </p>
+                              <div class="mt-3">
+                                <ui-button loading loadingLabel="Publishing release">
+                                  Publishing
+                                </ui-button>
+                              </div>
+                            </section>
+                            <section
+                              class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                            >
+                              <p
+                                class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                              >
+                                Sizes
+                              </p>
+                              <div class="mt-3 flex flex-wrap items-center gap-2">
+                                <ui-button size="sm">Toolbar</ui-button>
+                                <ui-button>Default</ui-button>
+                                <ui-button size="lg">Page action</ui-button>
+                              </div>
+                            </section>
+                            <section
+                              class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                            >
+                              <p
+                                class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                              >
+                                Critical
+                              </p>
+                              <div class="mt-3 flex flex-wrap items-center gap-2">
+                                <ui-button variant="danger">Delete</ui-button>
+                                <ui-button variant="ghost" disabled>Unavailable</ui-button>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+                      }
+                      @case ('card') {
+                        <div class="grid gap-3 lg:grid-cols-2">
+                          <ui-card>
+                            <div uiCardHeader>
+                              <div class="flex items-start justify-between gap-3">
+                                <div>
+                                  <h4 class="font-semibold text-slate-950 dark:text-slate-50">
+                                    Release readiness
+                                  </h4>
+                                  <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                    Package checks for a public UI library.
+                                  </p>
+                                </div>
+                                <ui-badge variant="success" size="sm">Ready</ui-badge>
+                              </div>
+                            </div>
+                            <div class="grid gap-2 text-sm text-slate-600 dark:text-slate-300">
+                              <div class="flex justify-between gap-4">
+                                <span>Library tests</span>
+                                <strong class="text-slate-950 dark:text-slate-50">69 passed</strong>
+                              </div>
+                              <div class="flex justify-between gap-4">
+                                <span>Package size</span>
+                                <strong class="text-slate-950 dark:text-slate-50">52 kB</strong>
+                              </div>
+                            </div>
+                            <div uiCardFooter>
+                              <ui-button size="sm">View report</ui-button>
+                            </div>
+                          </ui-card>
+                          <ui-card variant="elevated">
+                            <div uiCardHeader>
+                              <h4 class="font-semibold text-slate-950 dark:text-slate-50">
+                                Component maturity
+                              </h4>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">
+                              Use cards for bounded summaries, review states, and compact
+                              dashboards.
+                            </p>
+                          </ui-card>
+                        </div>
+                      }
+                      @case ('input') {
+                        <div class="grid gap-4">
+                          <section
+                            class="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <div
+                              class="border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900"
+                            >
+                              <div class="flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                  <p
+                                    class="text-sm font-semibold text-slate-950 dark:text-slate-50"
+                                  >
+                                    Account profile form
+                                  </p>
+                                  <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                    One component handles label strategy, validation, assistance,
+                                    counters, actions, and Angular forms state.
+                                  </p>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                  <ui-badge variant="success" size="sm">CVA ready</ui-badge>
+                                  <ui-badge variant="info" size="sm">A11y wired</ui-badge>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="grid gap-5 p-4 lg:grid-cols-[minmax(0,1fr)_17rem]">
+                              <div>
+                                <div class="grid gap-4 md:grid-cols-2">
+                                  <ui-input
+                                    label="Email address"
+                                    placeholder="you@example.com"
+                                    labelMode="floating"
+                                    intent="success"
+                                    helperText="Floating label with semantic success intent."
+                                    type="email"
+                                    autocomplete="email"
+                                    [formControl]="email"
+                                  />
+                                  <ui-input
+                                    label="Package name"
+                                    placeholder="@ngnova/ui"
+                                    helperText="Clearable with a character counter."
+                                    clearable
+                                    [maxLength]="40"
+                                    [formControl]="packageName"
+                                  />
+                                  <ui-input
+                                    label="Deploy token"
+                                    type="password"
+                                    appearance="filled"
+                                    helperText="Built-in password reveal keeps auth fields consistent."
+                                    revealable
+                                    [formControl]="password"
+                                  />
+                                  <ui-input
+                                    label="Release checklist"
+                                    helperText="Word counter supports editorial and AI prompt fields."
+                                    counterMode="words"
+                                    [counterMax]="6"
+                                    [formControl]="releaseName"
+                                  />
+                                </div>
+                              </div>
+                              <aside
+                                class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-900"
+                              >
+                                <p class="font-semibold text-slate-950 dark:text-slate-50">
+                                  What this demo proves
+                                </p>
+                                <dl class="mt-3 grid gap-3">
+                                  <div class="flex items-start justify-between gap-4">
+                                    <dt class="text-slate-500 dark:text-slate-400">Labels</dt>
+                                    <dd class="font-semibold text-slate-950 dark:text-slate-50">
+                                      Top, floating, hidden
+                                    </dd>
+                                  </div>
+                                  <div class="flex items-start justify-between gap-4">
+                                    <dt class="text-slate-500 dark:text-slate-400">Actions</dt>
+                                    <dd class="font-semibold text-slate-950 dark:text-slate-50">
+                                      Clear, reveal, submit
+                                    </dd>
+                                  </div>
+                                  <div class="flex items-start justify-between gap-4">
+                                    <dt class="text-slate-500 dark:text-slate-400">Counters</dt>
+                                    <dd class="font-semibold text-slate-950 dark:text-slate-50">
+                                      Character and word
+                                    </dd>
+                                  </div>
+                                </dl>
+                              </aside>
+                            </div>
+                          </section>
+                          <div class="grid gap-3 md:grid-cols-3">
+                            <div
+                              class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                            >
+                              <p class="text-xs font-semibold uppercase text-slate-500">Forms</p>
+                              <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                                 Implements ControlValueAccessor and keeps parent state in control.
                               </p>
                             </div>
-                            <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
-                              <p class="font-medium text-slate-950 dark:text-slate-50">
+                            <div
+                              class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                            >
+                              <p class="text-xs font-semibold uppercase text-slate-500">
                                 Accessibility
                               </p>
-                              <p class="mt-1 text-slate-600 dark:text-slate-300">
-                                Labels, helper text, errors, and counters wire into ARIA.
+                              <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                                Labels, helper text, errors, and counters compose into ARIA.
+                              </p>
+                            </div>
+                            <div
+                              class="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950"
+                            >
+                              <p class="text-xs font-semibold uppercase text-slate-500">
+                                Product polish
+                              </p>
+                              <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                                Search, password, counters, and suffix patterns are built in.
                               </p>
                             </div>
                           </div>
-                        </section>
-                      </div>
-                    }
-                    @case ('badge') {
-                      <div class="grid gap-3 sm:grid-cols-3">
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Release
-                          </p>
-                          <div class="mt-3 flex flex-wrap gap-2">
-                            <ui-badge variant="success" ariaRole="status">Stable</ui-badge>
-                            <ui-badge variant="info">v0.1.0</ui-badge>
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Review
-                          </p>
-                          <div class="mt-3 flex flex-wrap gap-2">
-                            <ui-badge variant="warning">Needs docs</ui-badge>
-                            <ui-badge size="sm">Small</ui-badge>
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Blocking
-                          </p>
-                          <div class="mt-3 flex flex-wrap gap-2">
-                            <ui-badge variant="danger">A11y gap</ui-badge>
-                          </div>
-                        </section>
-                      </div>
-                    }
-                    @case ('tag') {
-                      <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
-                        <div class="flex flex-wrap items-start justify-between gap-3">
-                          <div>
-                            <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                              Filtered component search
-                            </p>
-                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                              Removable tags keep query state visible.
-                            </p>
-                          </div>
-                          @if (tagRemoved()) {
-                            <ui-badge variant="info">Removed event emitted</ui-badge>
-                          }
                         </div>
-                        <div class="mt-3 flex flex-wrap gap-2">
-                          <ui-tag icon="+">Angular</ui-tag>
-                          <ui-tag variant="success">Published</ui-tag>
-                          <ui-tag variant="warning" removable (removed)="tagRemoved.set(true)">
-                            Review needed
-                          </ui-tag>
-                        </div>
-                      </div>
-                    }
-                    @case ('avatar') {
-                      <div class="grid gap-3 lg:grid-cols-3">
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <div class="flex items-center gap-3">
-                            <ui-avatar label="Ada Lovelace" />
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Ada Lovelace
-                              </p>
-                              <p class="text-xs text-slate-500 dark:text-slate-400">Maintainer</p>
-                            </div>
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <div class="flex items-center gap-3">
-                            <ui-avatar label="Grace Hopper" size="lg" />
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Grace Hopper
-                              </p>
-                              <p class="text-xs text-slate-500 dark:text-slate-400">Reviewer</p>
-                            </div>
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <div class="flex items-center gap-3">
-                            <ui-avatar label="NgNova UI" shape="square" />
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                NgNova UI
-                              </p>
-                              <p class="text-xs text-slate-500 dark:text-slate-400">Organization</p>
-                            </div>
-                          </div>
-                        </section>
-                      </div>
-                    }
-                    @case ('skeleton') {
-                      <div class="grid gap-3 lg:grid-cols-[18rem_minmax(0,1fr)]">
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <div class="flex items-center gap-3">
-                            <ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
-                            <div class="flex-1 space-y-2">
-                              <ui-skeleton shape="text" width="70%" height="0.875rem" />
-                              <ui-skeleton shape="text" width="45%" height="0.75rem" />
-                            </div>
-                          </div>
-                          <div class="mt-4 space-y-2">
-                            <ui-skeleton shape="text" width="95%" height="0.75rem" />
-                            <ui-skeleton shape="text" width="80%" height="0.75rem" />
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <ui-skeleton height="7rem" />
-                        </section>
-                      </div>
-                    }
-                    @case ('progress-bar') {
-                      <div class="grid gap-3 lg:grid-cols-3">
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Build progress
-                          </p>
-                          <ui-progress-bar [value]="65" label="Build progress" />
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Test coverage
-                          </p>
-                          <ui-progress-bar [value]="90" variant="success" label="Test coverage" />
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                        >
-                          <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Publishing
-                          </p>
-                          <ui-progress-bar indeterminate label="Publishing package" />
-                        </section>
-                      </div>
-                    }
-                    @case ('modal') {
-                      <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Publish confirmation
-                              </p>
-                              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                                Open the dialog to verify focus management, Escape close, backdrop,
-                                and footer projection.
-                              </p>
-                            </div>
-                            <ui-button (pressed)="modalOpen.set(true)">Open modal</ui-button>
-                          </div>
-                        </section>
-                        <section
-                          class="rounded-lg bg-white p-4 text-sm shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <p class="font-semibold text-slate-950 dark:text-slate-50">
-                            Interaction contract
-                          </p>
-                          <ul class="mt-3 grid gap-2 text-slate-600 dark:text-slate-300">
-                            <li>Focus moves into the dialog.</li>
-                            <li>Tab stays inside the overlay.</li>
-                            <li>Focus restores after close.</li>
-                          </ul>
-                        </section>
-                      </div>
-                    }
-                    @case ('table') {
-                      <div class="grid gap-4">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                          <div>
+                      }
+                      @case ('badge') {
+                        <div class="grid gap-3 sm:grid-cols-3">
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
                             <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                              Component readiness
+                              Release
                             </p>
-                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                              Selectable rows with sortable component column.
-                            </p>
-                          </div>
-                          @if (selectedTableRow(); as row) {
-                            <ui-badge variant="info">Selected {{ row['component'] }}</ui-badge>
-                          } @else {
-                            <ui-badge size="sm">Click a row</ui-badge>
-                          }
-                        </div>
-                        <ui-table
-                          [columns]="tableColumns"
-                          [rows]="tableRows"
-                          selectable
-                          (rowSelected)="selectedTableRow.set($event)"
-                        />
-                      </div>
-                    }
-                    @case ('accordion') {
-                      <div class="grid gap-3 lg:grid-cols-[16rem_minmax(0,1fr)]">
-                        <section class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
-                          <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Setup checklist
-                          </p>
-                          <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                            Accordion keeps dense guidance scannable while preserving native button
-                            behavior.
-                          </p>
-                        </section>
-                        <ui-accordion
-                          [items]="accordionItems"
-                          [active]="accordionActive()"
-                          (activeChange)="accordionActive.set($event)"
-                        />
-                      </div>
-                    }
-                    @case ('toast') {
-                      <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
-                        <div class="flex flex-wrap items-center justify-between gap-3">
-                          <div>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                              <ui-badge variant="success" ariaRole="status">Stable</ui-badge>
+                              <ui-badge variant="info">v0.1.0</ui-badge>
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
                             <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                              Save feedback
+                              Review
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                              <ui-badge variant="warning">Needs docs</ui-badge>
+                              <ui-badge size="sm">Small</ui-badge>
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Blocking
+                            </p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                              <ui-badge variant="danger">A11y gap</ui-badge>
+                            </div>
+                          </section>
+                        </div>
+                      }
+                      @case ('tag') {
+                        <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
+                          <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                Filtered component search
+                              </p>
+                              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                Removable tags keep query state visible.
+                              </p>
+                            </div>
+                            @if (tagRemoved()) {
+                              <ui-badge variant="info">Removed event emitted</ui-badge>
+                            }
+                          </div>
+                          <div class="mt-3 flex flex-wrap gap-2">
+                            <ui-tag icon="+">Angular</ui-tag>
+                            <ui-tag variant="success">Published</ui-tag>
+                            <ui-tag variant="warning" removable (removed)="tagRemoved.set(true)">
+                              Review needed
+                            </ui-tag>
+                          </div>
+                        </div>
+                      }
+                      @case ('avatar') {
+                        <div class="grid gap-3 lg:grid-cols-3">
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <div class="flex items-center gap-3">
+                              <ui-avatar label="Ada Lovelace" />
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Ada Lovelace
+                                </p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Maintainer</p>
+                              </div>
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <div class="flex items-center gap-3">
+                              <ui-avatar label="Grace Hopper" size="lg" />
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Grace Hopper
+                                </p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Reviewer</p>
+                              </div>
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <div class="flex items-center gap-3">
+                              <ui-avatar label="NgNova UI" shape="square" />
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  NgNova UI
+                                </p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                  Organization
+                                </p>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
+                      }
+                      @case ('skeleton') {
+                        <div class="grid gap-3 lg:grid-cols-[18rem_minmax(0,1fr)]">
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <div class="flex items-center gap-3">
+                              <ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
+                              <div class="flex-1 space-y-2">
+                                <ui-skeleton shape="text" width="70%" height="0.875rem" />
+                                <ui-skeleton shape="text" width="45%" height="0.75rem" />
+                              </div>
+                            </div>
+                            <div class="mt-4 space-y-2">
+                              <ui-skeleton shape="text" width="95%" height="0.75rem" />
+                              <ui-skeleton shape="text" width="80%" height="0.75rem" />
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <ui-skeleton height="7rem" />
+                          </section>
+                        </div>
+                      }
+                      @case ('progress-bar') {
+                        <div class="grid gap-3 lg:grid-cols-3">
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Build progress
+                            </p>
+                            <ui-progress-bar [value]="65" label="Build progress" />
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Test coverage
+                            </p>
+                            <ui-progress-bar [value]="90" variant="success" label="Test coverage" />
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
+                          >
+                            <p class="mb-3 text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Publishing
+                            </p>
+                            <ui-progress-bar indeterminate label="Publishing package" />
+                          </section>
+                        </div>
+                      }
+                      @case ('modal') {
+                        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Publish confirmation
+                                </p>
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                  Open the dialog to verify focus management, Escape close,
+                                  backdrop, and footer projection.
+                                </p>
+                              </div>
+                              <ui-button (pressed)="modalOpen.set(true)">Open modal</ui-button>
+                            </div>
+                          </section>
+                          <section
+                            class="rounded-lg bg-white p-4 text-sm shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <p class="font-semibold text-slate-950 dark:text-slate-50">
+                              Interaction contract
+                            </p>
+                            <ul class="mt-3 grid gap-2 text-slate-600 dark:text-slate-300">
+                              <li>Focus moves into the dialog.</li>
+                              <li>Tab stays inside the overlay.</li>
+                              <li>Focus restores after close.</li>
+                            </ul>
+                          </section>
+                        </div>
+                      }
+                      @case ('table') {
+                        <div class="grid gap-4">
+                          <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                Component readiness
+                              </p>
+                              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                Selectable rows with sortable component column.
+                              </p>
+                            </div>
+                            @if (selectedTableRow(); as row) {
+                              <ui-badge variant="info">Selected {{ row['component'] }}</ui-badge>
+                            } @else {
+                              <ui-badge size="sm">Click a row</ui-badge>
+                            }
+                          </div>
+                          <ui-table
+                            [columns]="tableColumns"
+                            [rows]="tableRows"
+                            selectable
+                            (rowSelected)="selectedTableRow.set($event)"
+                          />
+                        </div>
+                      }
+                      @case ('accordion') {
+                        <div class="grid gap-3 lg:grid-cols-[16rem_minmax(0,1fr)]">
+                          <section class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                            <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Setup checklist
                             </p>
                             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                              Toast messages are pushed through UiToastService and rendered by
-                              ui-toast.
+                              Accordion keeps dense guidance scannable while preserving native
+                              button behavior.
                             </p>
-                          </div>
-                          <ui-button (pressed)="showToast()">Show toast</ui-button>
+                          </section>
+                          <ui-accordion
+                            [items]="accordionItems"
+                            [active]="accordionActive()"
+                            (activeChange)="accordionActive.set($event)"
+                          />
                         </div>
-                        <ui-toast />
-                      </div>
-                    }
-                    @case ('checkbox') {
-                      <div class="grid gap-4">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <div class="flex flex-wrap items-start justify-between gap-3">
+                      }
+                      @case ('toast') {
+                        <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
+                          <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
                               <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Release checklist
+                                Save feedback
                               </p>
-                              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                Independent boolean choices with helper text and a mixed state.
-                              </p>
-                            </div>
-                            <ui-badge variant="info" size="sm">CVA boolean</ui-badge>
-                          </div>
-                          <div class="mt-4 grid gap-3 lg:grid-cols-3">
-                            <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
-                              <ui-checkbox
-                                label="Email subscribers"
-                                helperText="Bound to a reactive FormControl."
-                                [formControl]="newsletter"
-                              />
-                            </div>
-                            <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
-                              <ui-checkbox
-                                label="Review all packages"
-                                helperText="Mixed while child packages differ."
-                                indeterminate
-                              />
-                            </div>
-                            <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
-                              <ui-checkbox
-                                label="Security approval"
-                                helperText="Disabled by workflow policy."
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </section>
-                      </div>
-                    }
-                    @case ('select') {
-                      <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <div class="grid gap-4 md:grid-cols-2">
-                            <ui-select
-                              label="Plan"
-                              placeholder="Choose a plan"
-                              helperText="Bound to a reactive FormControl."
-                              [options]="planOptions"
-                              [formControl]="plan"
-                            />
-                            <ui-select
-                              label="Release channel"
-                              placeholder="Select channel"
-                              errorText="Choose a stable channel before publishing."
-                              [options]="channelOptions"
-                              required
-                            />
-                          </div>
-                        </section>
-                        <section class="rounded-lg bg-slate-50 p-4 text-sm dark:bg-slate-900">
-                          <p class="font-semibold text-slate-950 dark:text-slate-50">
-                            Native behavior
-                          </p>
-                          <p class="mt-2 leading-6 text-slate-600 dark:text-slate-300">
-                            Use Select when the browser dropdown is the right interaction and the
-                            option list is already known.
-                          </p>
-                        </section>
-                      </div>
-                    }
-                    @case ('radio') {
-                      <div class="grid gap-4 lg:grid-cols-2">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <ui-radio-group
-                            label="Contact preference"
-                            helperText="All choices are visible for comparison."
-                            [options]="contactOptions"
-                            [formControl]="contactPreference"
-                          />
-                        </section>
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <ui-radio-group
-                            label="Layout density"
-                            helperText="Horizontal option layout."
-                            orientation="horizontal"
-                            [options]="layoutOptions"
-                            [formControl]="layoutDensity"
-                          />
-                        </section>
-                      </div>
-                    }
-                    @case ('switch') {
-                      <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <div class="flex flex-wrap items-start justify-between gap-3">
-                            <div>
-                              <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                                Notification settings
-                              </p>
-                              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                Immediate independent preferences with native checkbox behavior.
+                              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                Toast messages are pushed through UiToastService and rendered by
+                                ui-toast.
                               </p>
                             </div>
-                            <ui-badge variant="success" size="sm">Instant</ui-badge>
+                            <ui-button (pressed)="showToast()">Show toast</ui-button>
                           </div>
-                          <div class="mt-4 grid gap-3">
-                            <ui-switch
-                              label="Release notifications"
-                              helperText="Bound to a reactive FormControl."
-                              [formControl]="notifications"
-                            />
-                            <ui-switch label="Disabled switch" disabled />
-                          </div>
-                        </section>
-                        <section class="rounded-lg bg-slate-50 p-4 dark:bg-slate-900">
-                          <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                            Current value
-                          </p>
-                          <code
-                            class="mt-3 block rounded-md bg-white px-3 py-2 font-mono text-xs text-slate-700 ring-1 ring-slate-200 dark:bg-slate-950 dark:text-slate-200 dark:ring-slate-800"
+                          <ui-toast />
+                        </div>
+                      }
+                      @case ('checkbox') {
+                        <div class="grid gap-4">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
                           >
-                            {{ notifications.value ? 'enabled' : 'disabled' }}
-                          </code>
-                        </section>
-                      </div>
-                    }
-                    @case ('textarea') {
-                      <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
-                        <section
-                          class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
-                        >
-                          <ui-textarea
-                            label="Release notes"
-                            placeholder="Describe what changed..."
-                            helperText="Bound to a reactive FormControl with a counter."
-                            [maxLength]="280"
-                            [rows]="5"
-                            [formControl]="releaseNotes"
-                          />
-                        </section>
-                        <section class="rounded-lg bg-slate-50 p-4 text-sm dark:bg-slate-900">
-                          <p class="font-semibold text-slate-950 dark:text-slate-50">
-                            Writing state
-                          </p>
-                          <p class="mt-2 leading-6 text-slate-600 dark:text-slate-300">
-                            Long-form fields need visible labels, helpful guidance, clear error
-                            copy, and predictable resize behavior.
-                          </p>
-                        </section>
-                      </div>
-                    }
-                    @case ('alert') {
-                      <div class="grid gap-3">
-                        <ui-alert variant="info" title="Documentation ready">
-                          Each component page includes preview, usage, inputs, and outputs.
-                        </ui-alert>
-                        <ui-alert variant="success" title="Package build passed" dismissible>
-                          The npm package can be inspected with a dry-run pack command.
-                        </ui-alert>
-                        <ui-alert variant="warning" title="Release note needed">
-                          Add a changeset for public API changes before publishing.
-                        </ui-alert>
-                        <ui-alert variant="danger" title="Publish blocked">
-                          Never publish from the source project folder.
-                        </ui-alert>
-                      </div>
-                    }
-                    @case ('tabs') {
-                      <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
-                        <ui-tabs
-                          [tabs]="componentTabs"
-                          [active]="activeTab()"
-                          (activeChange)="activeTab.set($event)"
-                          ariaLabel="Component sections"
-                        >
-                          @if (activeTab() === 'overview') {
-                            <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
-                              <p class="font-semibold text-slate-950 dark:text-slate-50">
-                                Overview panel
-                              </p>
-                              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                                Tabs use real tablist semantics and keyboard navigation.
-                              </p>
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Release checklist
+                                </p>
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                  Independent boolean choices with helper text and a mixed state.
+                                </p>
+                              </div>
+                              <ui-badge variant="info" size="sm">CVA boolean</ui-badge>
                             </div>
-                          } @else if (activeTab() === 'api') {
-                            <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
-                              <p class="font-semibold text-slate-950 dark:text-slate-50">
-                                API panel
-                              </p>
-                              <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                                Pair the active value with your own projected panel content.
-                              </p>
+                            <div class="mt-4 grid gap-3 lg:grid-cols-3">
+                              <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                                <ui-checkbox
+                                  label="Email subscribers"
+                                  helperText="Bound to a reactive FormControl."
+                                  [formControl]="newsletter"
+                                />
+                              </div>
+                              <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                                <ui-checkbox
+                                  label="Review all packages"
+                                  helperText="Mixed while child packages differ."
+                                  indeterminate
+                                />
+                              </div>
+                              <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                                <ui-checkbox
+                                  label="Security approval"
+                                  helperText="Disabled by workflow policy."
+                                  disabled
+                                />
+                              </div>
                             </div>
-                          } @else {
-                            <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
-                              <p class="text-sm text-slate-600 dark:text-slate-300">
-                                Disabled tabs stay visible but cannot be selected.
-                              </p>
+                          </section>
+                        </div>
+                      }
+                      @case ('select') {
+                        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <div class="grid gap-4 md:grid-cols-2">
+                              <ui-select
+                                label="Plan"
+                                placeholder="Choose a plan"
+                                helperText="Bound to a reactive FormControl."
+                                [options]="planOptions"
+                                [formControl]="plan"
+                              />
+                              <ui-select
+                                label="Release channel"
+                                placeholder="Select channel"
+                                errorText="Choose a stable channel before publishing."
+                                [options]="channelOptions"
+                                required
+                              />
                             </div>
-                          }
-                        </ui-tabs>
-                      </div>
+                          </section>
+                          <section class="rounded-lg bg-slate-50 p-4 text-sm dark:bg-slate-900">
+                            <p class="font-semibold text-slate-950 dark:text-slate-50">
+                              Native behavior
+                            </p>
+                            <p class="mt-2 leading-6 text-slate-600 dark:text-slate-300">
+                              Use Select when the browser dropdown is the right interaction and the
+                              option list is already known.
+                            </p>
+                          </section>
+                        </div>
+                      }
+                      @case ('radio') {
+                        <div class="grid gap-4 lg:grid-cols-2">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <ui-radio-group
+                              label="Contact preference"
+                              helperText="All choices are visible for comparison."
+                              [options]="contactOptions"
+                              [formControl]="contactPreference"
+                            />
+                          </section>
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <ui-radio-group
+                              label="Layout density"
+                              helperText="Horizontal option layout."
+                              orientation="horizontal"
+                              [options]="layoutOptions"
+                              [formControl]="layoutDensity"
+                            />
+                          </section>
+                        </div>
+                      }
+                      @case ('switch') {
+                        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <div class="flex flex-wrap items-start justify-between gap-3">
+                              <div>
+                                <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                                  Notification settings
+                                </p>
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                  Immediate independent preferences with native checkbox behavior.
+                                </p>
+                              </div>
+                              <ui-badge variant="success" size="sm">Instant</ui-badge>
+                            </div>
+                            <div class="mt-4 grid gap-3">
+                              <ui-switch
+                                label="Release notifications"
+                                helperText="Bound to a reactive FormControl."
+                                [formControl]="notifications"
+                              />
+                              <ui-switch label="Disabled switch" disabled />
+                            </div>
+                          </section>
+                          <section class="rounded-lg bg-slate-50 p-4 dark:bg-slate-900">
+                            <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                              Current value
+                            </p>
+                            <code
+                              class="mt-3 block rounded-md bg-white px-3 py-2 font-mono text-xs text-slate-700 ring-1 ring-slate-200 dark:bg-slate-950 dark:text-slate-200 dark:ring-slate-800"
+                            >
+                              {{ notifications.value ? 'enabled' : 'disabled' }}
+                            </code>
+                          </section>
+                        </div>
+                      }
+                      @case ('textarea') {
+                        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
+                          <section
+                            class="rounded-lg bg-white p-4 shadow-sm ring-1 ring-slate-200 dark:bg-slate-950 dark:ring-slate-800"
+                          >
+                            <ui-textarea
+                              label="Release notes"
+                              placeholder="Describe what changed..."
+                              helperText="Bound to a reactive FormControl with a counter."
+                              [maxLength]="280"
+                              [rows]="5"
+                              [formControl]="releaseNotes"
+                            />
+                          </section>
+                          <section class="rounded-lg bg-slate-50 p-4 text-sm dark:bg-slate-900">
+                            <p class="font-semibold text-slate-950 dark:text-slate-50">
+                              Writing state
+                            </p>
+                            <p class="mt-2 leading-6 text-slate-600 dark:text-slate-300">
+                              Long-form fields need visible labels, helpful guidance, clear error
+                              copy, and predictable resize behavior.
+                            </p>
+                          </section>
+                        </div>
+                      }
+                      @case ('alert') {
+                        <div class="grid gap-3">
+                          <ui-alert variant="info" title="Documentation ready">
+                            Each component page includes preview, usage, inputs, and outputs.
+                          </ui-alert>
+                          <ui-alert variant="success" title="Package build passed" dismissible>
+                            The npm package can be inspected with a dry-run pack command.
+                          </ui-alert>
+                          <ui-alert variant="warning" title="Release note needed">
+                            Add a changeset for public API changes before publishing.
+                          </ui-alert>
+                          <ui-alert variant="danger" title="Publish blocked">
+                            Never publish from the source project folder.
+                          </ui-alert>
+                        </div>
+                      }
+                      @case ('tabs') {
+                        <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
+                          <ui-tabs
+                            [tabs]="componentTabs"
+                            [active]="activeTab()"
+                            (activeChange)="activeTab.set($event)"
+                            ariaLabel="Component sections"
+                          >
+                            @if (activeTab() === 'overview') {
+                              <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
+                                <p class="font-semibold text-slate-950 dark:text-slate-50">
+                                  Overview panel
+                                </p>
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                  Tabs use real tablist semantics and keyboard navigation.
+                                </p>
+                              </div>
+                            } @else if (activeTab() === 'api') {
+                              <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
+                                <p class="font-semibold text-slate-950 dark:text-slate-50">
+                                  API panel
+                                </p>
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                  Pair the active value with your own projected panel content.
+                                </p>
+                              </div>
+                            } @else {
+                              <div class="rounded-md bg-slate-50 p-3 dark:bg-slate-900">
+                                <p class="text-sm text-slate-600 dark:text-slate-300">
+                                  Disabled tabs stay visible but cannot be selected.
+                                </p>
+                              </div>
+                            }
+                          </ui-tabs>
+                        </div>
+                      }
+                      @case ('spinner') {
+                        <div class="grid gap-3 sm:grid-cols-3">
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
+                          >
+                            <ui-spinner size="sm" label="Loading small preview" />
+                            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Inline</p>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
+                          >
+                            <ui-spinner label="Loading default preview" />
+                            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Section</p>
+                          </section>
+                          <section
+                            class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
+                          >
+                            <ui-button loading>Saving</ui-button>
+                            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                              Button feedback
+                            </p>
+                          </section>
+                        </div>
+                      }
                     }
-                    @case ('spinner') {
-                      <div class="grid gap-3 sm:grid-cols-3">
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
-                        >
-                          <ui-spinner size="sm" label="Loading small preview" />
-                          <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Inline</p>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
-                        >
-                          <ui-spinner label="Loading default preview" />
-                          <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">Section</p>
-                        </section>
-                        <section
-                          class="rounded-lg border border-slate-200 p-3 text-center dark:border-slate-800"
-                        >
-                          <ui-button loading>Saving</ui-button>
-                          <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
-                            Button feedback
-                          </p>
-                        </section>
-                      </div>
-                    }
-                  }
-                </app-docs-preview-canvas>
+                  </app-docs-preview-canvas>
 
-                <section id="usage" class="mt-5">
-                  <app-docs-code-block
-                    [code]="componentDoc.usage"
-                    [filename]="componentDoc.slug + '.example.html'"
-                    language="Angular template"
-                  />
-                </section>
-              </app-docs-section>
+                  <section id="usage" class="mt-5">
+                    <app-docs-code-block
+                      [code]="componentDoc.usage"
+                      [filename]="componentDoc.slug + '.example.html'"
+                      language="Angular template"
+                    />
+                  </section>
+                </app-docs-section>
+              }
 
               @if (componentDoc.slug === 'button') {
                 <app-docs-section
@@ -940,36 +1374,156 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                 </app-docs-section>
               }
 
-              @if (componentDoc.slug === 'input') {
+              @if (componentDoc.slug === 'input' && inputDocTab() === 'overview') {
                 <app-docs-section
                   sectionId="field-states"
-                  title="Field States"
-                  description="Show filled, clearable, counter, helper, and error states in the same product context."
+                  title="Variants And States"
+                  description="A premium input page must make every production state obvious: appearance, size, status, validation, disabled, readonly, clearable, password, and counter behavior."
                 >
                   <div
-                    class="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-2"
+                    class="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950"
                   >
-                    <ui-input
-                      label="Package name"
-                      helperText="Use your npm scope."
-                      clearable
-                      [maxLength]="40"
-                      [formControl]="packageName"
-                    />
-                    <ui-input
-                      label="Release name"
-                      appearance="filled"
-                      helperText="Filled appearance works well in dense forms."
-                      [formControl]="releaseName"
-                    />
-                    <ui-input
-                      label="Work email"
-                      type="email"
-                      autocomplete="email"
-                      errorText="Use an organization email address."
-                      required
-                    />
-                    <ui-input label="Disabled field" placeholder="Unavailable" disabled />
+                    <div
+                      class="grid gap-0 border-b border-slate-200 dark:border-slate-800 lg:grid-cols-[15rem_minmax(0,1fr)]"
+                    >
+                      <div class="bg-slate-50 p-4 dark:bg-slate-900">
+                        <div>
+                          <p
+                            class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                          >
+                            Appearance
+                          </p>
+                          <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                            Use outline for standard forms and filled for dense configuration
+                            surfaces.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="grid gap-4 p-4 md:grid-cols-2">
+                        <ui-input
+                          label="Repository owner"
+                          helperText="Outline is the default, high-contrast field treatment."
+                          [formControl]="packageName"
+                        />
+                        <ui-input
+                          label="Release stream"
+                          appearance="filled"
+                          helperText="Filled is calm inside configuration-heavy layouts."
+                          [formControl]="releaseName"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      class="grid gap-0 border-b border-slate-200 dark:border-slate-800 lg:grid-cols-[15rem_minmax(0,1fr)]"
+                    >
+                      <div class="bg-slate-50 p-4 dark:bg-slate-900">
+                        <p
+                          class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                        >
+                          Status
+                        </p>
+                        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                          Intent is useful before validation fails. Angular invalid state still
+                          wins.
+                        </p>
+                      </div>
+                      <div class="grid gap-4 p-4 md:grid-cols-3">
+                        <ui-input
+                          label="Package name"
+                          intent="success"
+                          helperText="Looks valid and ready to publish."
+                          [formControl]="packageName"
+                        />
+                        <ui-input
+                          label="Release channel"
+                          intent="warning"
+                          helperText="Warn before blocking the workflow."
+                        />
+                        <ui-input
+                          label="Work email"
+                          type="email"
+                          autocomplete="email"
+                          errorText="Use an organization email address."
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="grid gap-0 lg:grid-cols-[15rem_minmax(0,1fr)]">
+                      <div class="bg-slate-50 p-4 dark:bg-slate-900">
+                        <p
+                          class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                        >
+                          Built-in actions
+                        </p>
+                        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                          Clear, reveal, and counter behavior should not require a wrapper
+                          component.
+                        </p>
+                      </div>
+                      <div class="grid gap-4 p-4 md:grid-cols-3">
+                        <ui-input
+                          label="Package name"
+                          helperText="Clear button appears only when useful."
+                          clearable
+                          [maxLength]="40"
+                          [formControl]="packageName"
+                        />
+                        <ui-input
+                          label="Deploy token"
+                          type="password"
+                          labelMode="floating"
+                          helperText="Reveal is keyboard reachable."
+                          revealable
+                          [formControl]="password"
+                        />
+                        <ui-input
+                          label="Prompt summary"
+                          helperText="Soft word limits work for AI and editorial fields."
+                          counterMode="words"
+                          [counterMax]="8"
+                          clearable
+                          [formControl]="releaseName"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 grid gap-3 md:grid-cols-3">
+                    <div
+                      class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm dark:border-emerald-900 dark:bg-emerald-950/40"
+                    >
+                      <p class="font-semibold text-emerald-950 dark:text-emerald-100">
+                        Better than a thin wrapper
+                      </p>
+                      <p class="mt-1 leading-6 text-emerald-800 dark:text-emerald-200">
+                        One public component covers labels, support text, validation, actions, and
+                        Angular forms.
+                      </p>
+                    </div>
+                    <div
+                      class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-900 dark:bg-blue-950/40"
+                    >
+                      <p class="font-semibold text-blue-950 dark:text-blue-100">
+                        Copy-paste friendly
+                      </p>
+                      <p class="mt-1 leading-6 text-blue-800 dark:text-blue-200">
+                        Each example maps to a product workflow: settings, search, auth, command,
+                        and validation.
+                      </p>
+                    </div>
+                    <div
+                      class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-900"
+                    >
+                      <p class="font-semibold text-slate-950 dark:text-slate-50">
+                        Stable API surface
+                      </p>
+                      <p class="mt-1 leading-6 text-slate-600 dark:text-slate-300">
+                        Public inputs and outputs stay semver-sensitive and documented in the API
+                        table.
+                      </p>
+                    </div>
                   </div>
                   <app-docs-code-block
                     class="mt-5 block"
@@ -980,14 +1534,200 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                 </app-docs-section>
 
                 <app-docs-section
-                  sectionId="forms-cva"
-                  title="Forms And CVA"
-                  description="Input implements ControlValueAccessor, so reactive forms own value, touched, and disabled state."
+                  sectionId="input-anatomy"
+                  title="Anatomy"
+                  description="Input is intentionally one component with predictable regions: label, prefix, native input, suffix actions, support text, counter, and form state."
                 >
                   <div
-                    class="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900"
+                    class="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900 lg:grid-cols-[minmax(0,1fr)_18rem]"
                   >
-                    <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_16rem]">
+                    <div class="rounded-lg bg-white p-4 dark:bg-slate-950">
+                      <ui-input
+                        label="Repository URL"
+                        type="url"
+                        helperText="Prefix and suffix are projected; clear remains keyboard reachable."
+                        clearable
+                        [formControl]="repositoryUrl"
+                      >
+                        <span
+                          uiInputPrefix
+                          class="text-sm font-medium text-slate-500 dark:text-slate-400"
+                          >https://</span
+                        >
+                        <span uiInputSuffix class="text-sm text-slate-500 dark:text-slate-400"
+                          >.git</span
+                        >
+                      </ui-input>
+                      <div class="mt-4 grid gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <div class="flex items-center gap-2">
+                          <span class="h-2 w-2 rounded-full bg-blue-600"></span>
+                          <span>Label and helper text describe purpose and expectation.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="h-2 w-2 rounded-full bg-emerald-600"></span>
+                          <span>Prefix and suffix are content projection slots.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                          <span>Clear, reveal, and submitted events are typed outputs.</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="rounded-lg bg-white p-4 text-sm dark:bg-slate-950">
+                      <p class="font-semibold text-slate-950 dark:text-slate-50">Anatomy map</p>
+                      <dl class="mt-3 grid gap-3">
+                        <div>
+                          <dt class="font-medium text-slate-950 dark:text-slate-50">Field shell</dt>
+                          <dd class="mt-1 text-slate-600 dark:text-slate-300">
+                            Size, appearance, intent, focus ring, disabled, and invalid styles.
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="font-medium text-slate-950 dark:text-slate-50">
+                            Native input
+                          </dt>
+                          <dd class="mt-1 text-slate-600 dark:text-slate-300">
+                            Preserves browser semantics for type, autocomplete, inputmode, required,
+                            minlength, and maxlength.
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="font-medium text-slate-950 dark:text-slate-50">
+                            Assistance layer
+                          </dt>
+                          <dd class="mt-1 text-slate-600 dark:text-slate-300">
+                            Helper, error, and counter IDs are composed into aria-describedby.
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+                  <app-docs-code-block
+                    class="mt-5 block"
+                    [code]="inputAnatomyExample"
+                    filename="input-anatomy.example.html"
+                    language="Angular template"
+                  />
+                </app-docs-section>
+              }
+
+              @if (componentDoc.slug === 'input' && inputDocTab() === 'recipes') {
+                <app-docs-section
+                  sectionId="input-recipes"
+                  title="Production Recipes"
+                  description="Copy these patterns when building real product workflows. Each recipe pairs a live field with the decision that makes it production-ready."
+                >
+                  <div class="grid gap-4">
+                    <div
+                      class="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 lg:grid-cols-[15rem_minmax(0,1fr)_15rem]"
+                    >
+                      <div>
+                        <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                          Command search
+                        </p>
+                        <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                          Use for docs search, command palettes, filters, and quick navigation.
+                        </p>
+                      </div>
+                      <div class="mt-4">
+                        <ui-input
+                          label="Search components"
+                          labelMode="hidden"
+                          type="search"
+                          placeholder="Search components"
+                          clearable
+                          [formControl]="componentSearch"
+                        >
+                          <span uiInputSuffix class="text-sm text-slate-500">Ctrl K</span>
+                        </ui-input>
+                      </div>
+                      <div
+                        class="rounded-lg bg-slate-50 p-3 text-sm leading-6 text-slate-600 dark:bg-slate-900 dark:text-slate-300"
+                      >
+                        Hidden label keeps the field accessible. Enter emits
+                        <code>submitted</code> so parent search logic stays explicit.
+                      </div>
+                    </div>
+                    <div
+                      class="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 lg:grid-cols-[15rem_minmax(0,1fr)_15rem]"
+                    >
+                      <div>
+                        <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                          Secret entry
+                        </p>
+                        <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                          Use for API tokens, deploy secrets, access keys, and setup forms.
+                        </p>
+                      </div>
+                      <div class="mt-4">
+                        <ui-input
+                          label="Deploy token"
+                          type="password"
+                          labelMode="floating"
+                          revealable
+                          [formControl]="password"
+                        />
+                      </div>
+                      <div
+                        class="rounded-lg bg-slate-50 p-3 text-sm leading-6 text-slate-600 dark:bg-slate-900 dark:text-slate-300"
+                      >
+                        Reveal is opt-in, keyboard reachable, and exposes
+                        <code>passwordVisibilityChange</code> for audit flows.
+                      </div>
+                    </div>
+                    <div
+                      class="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 lg:grid-cols-[15rem_minmax(0,1fr)_15rem]"
+                    >
+                      <div>
+                        <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                          Prompt summary
+                        </p>
+                        <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                          Use for AI instructions, SEO titles, release summaries, and review text.
+                        </p>
+                      </div>
+                      <div class="mt-4">
+                        <ui-input
+                          label="Prompt summary"
+                          counterMode="words"
+                          [counterMax]="8"
+                          helperText="Keep the summary short and reviewable."
+                          [formControl]="releaseName"
+                        />
+                      </div>
+                      <div
+                        class="rounded-lg bg-slate-50 p-3 text-sm leading-6 text-slate-600 dark:bg-slate-900 dark:text-slate-300"
+                      >
+                        <code>counterMax</code> gives soft guidance without truncating user input
+                        like native <code>maxLength</code>.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-5 grid gap-5 lg:grid-cols-2">
+                    <app-docs-code-block
+                      [code]="inputSearchRecipeExample"
+                      filename="input-search.example.html"
+                      language="Angular template"
+                    />
+                    <app-docs-code-block
+                      [code]="inputPasswordRecipeExample"
+                      filename="input-password.example.html"
+                      language="Angular template"
+                    />
+                  </div>
+                </app-docs-section>
+              }
+
+              @if (componentDoc.slug === 'input' && inputDocTab() === 'forms-legacy') {
+                <app-docs-section
+                  sectionId="forms-cva"
+                  title="Forms, Validation, And Submission"
+                  description="Reactive forms own value, touched, disabled, and validation state. NgNova adds consistent helper/error UI and a typed submitted output for Enter workflows."
+                >
+                  <div
+                    class="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900 lg:grid-cols-[minmax(0,1fr)_18rem]"
+                  >
+                    <div class="grid gap-4 rounded-lg bg-white p-4 dark:bg-slate-950">
                       <ui-input
                         label="Email"
                         type="email"
@@ -995,14 +1735,26 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                         helperText="Bound to an Angular FormControl."
                         [formControl]="email"
                       />
-                      <div class="rounded-lg bg-white p-4 text-sm dark:bg-slate-950">
-                        <p class="font-semibold text-slate-950 dark:text-slate-50">Current value</p>
-                        <code
-                          class="mt-2 block rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                        >
-                          {{ email.value }}
-                        </code>
-                      </div>
+                      <ui-input
+                        label="Package scope"
+                        placeholder="@ngnova"
+                        errorText="Package scope must match your npm organization."
+                        required
+                      />
+                    </div>
+                    <div class="rounded-lg bg-white p-4 text-sm dark:bg-slate-950">
+                      <p class="font-semibold text-slate-950 dark:text-slate-50">Current value</p>
+                      <code
+                        class="mt-2 block rounded bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                      >
+                        {{ email.value }}
+                      </code>
+                      <ul class="mt-4 list-disc space-y-2 pl-5 text-slate-600 dark:text-slate-300">
+                        <li><code>writeValue</code> never emits valueChange.</li>
+                        <li><code>blur</code> marks the field as touched.</li>
+                        <li>Invalid Angular control state overrides semantic intent.</li>
+                        <li>Enter emits <code>submitted</code> without submitting a form.</li>
+                      </ul>
                     </div>
                   </div>
                   <app-docs-code-block
@@ -1398,205 +2150,211 @@ const NAVIGATION_DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               }
 
               @if (details(); as componentDetails) {
-                <div id="guide" class="grid gap-5 lg:grid-cols-2">
-                  <section
-                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                  >
-                    <div>
-                      <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
-                        Design Guidance
-                      </p>
-                      <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
-                        Overview
-                      </h3>
-                      <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                        Purpose, use cases, and component boundaries.
-                      </p>
-                    </div>
-                    <div class="mt-4 grid gap-4">
-                      <div class="space-y-2">
-                        @for (item of componentDetails.overview; track item) {
-                          <p class="text-sm leading-6 text-slate-600 dark:text-slate-300">
-                            {{ item }}
-                          </p>
+                @if (componentDoc.slug !== 'input') {
+                  <div id="guide" class="grid gap-5 lg:grid-cols-2">
+                    <section
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
+                      <div>
+                        <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
+                          Design Guidance
+                        </p>
+                        <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
+                          Overview
+                        </h3>
+                        <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                          Purpose, use cases, and component boundaries.
+                        </p>
+                      </div>
+                      <div class="mt-4 grid gap-4">
+                        <div class="space-y-2">
+                          @for (item of componentDetails.overview; track item) {
+                            <p class="text-sm leading-6 text-slate-600 dark:text-slate-300">
+                              {{ item }}
+                            </p>
+                          }
+                        </div>
+                        <div>
+                          <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                            When To Use
+                          </h4>
+                          <ul
+                            class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                          >
+                            @for (item of componentDetails.whenToUse; track item) {
+                              <li>{{ item }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                            When Not To Use
+                          </h4>
+                          <ul
+                            class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                          >
+                            @for (item of whenNotToUse(); track item) {
+                              <li>{{ item }}</li>
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section
+                      id="accessibility"
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
+                      <div>
+                        <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
+                          Inclusive UX
+                        </p>
+                        <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
+                          Accessibility
+                        </h3>
+                        <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                          Screen reader, keyboard, and semantic behavior.
+                        </p>
+                      </div>
+                      <div class="mt-4 grid gap-4">
+                        <div>
+                          <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                            Screen Reader
+                          </h4>
+                          <ul
+                            class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                          >
+                            @for (item of componentDetails.accessibility; track item) {
+                              <li>{{ item }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                            Keyboard
+                          </h4>
+                          <ul
+                            class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                          >
+                            @for (item of componentDetails.keyboard; track item) {
+                              <li>{{ item }}</li>
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+
+                  @if (componentDoc.slug !== 'input') {
+                    <section
+                      id="examples"
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
+                      <div>
+                        <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
+                          Examples
+                        </p>
+                        <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
+                          Production Examples
+                        </h3>
+                        <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                          Realistic snippets that match the public API.
+                        </p>
+                      </div>
+                      <div class="mt-4 grid gap-4">
+                        @for (example of componentDetails.examples; track example.title) {
+                          <section
+                            class="grid gap-4 rounded-lg border border-slate-200 p-3 dark:border-slate-800 lg:grid-cols-[16rem_minmax(0,1fr)]"
+                          >
+                            <div class="min-w-0">
+                              <h4 class="font-semibold text-slate-950 dark:text-slate-50">
+                                {{ example.title }}
+                              </h4>
+                              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                {{ example.description }}
+                              </p>
+                            </div>
+                            <app-docs-code-block
+                              class="min-w-0"
+                              [code]="example.code"
+                              [filename]="componentDoc.slug + '.example.ts'"
+                              language="Angular"
+                            />
+                          </section>
                         }
                       </div>
-                      <div>
-                        <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                          When To Use
-                        </h4>
-                        <ul
-                          class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          @for (item of componentDetails.whenToUse; track item) {
-                            <li>{{ item }}</li>
-                          }
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                          When Not To Use
-                        </h4>
-                        <ul
-                          class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          @for (item of whenNotToUse(); track item) {
-                            <li>{{ item }}</li>
-                          }
-                        </ul>
-                      </div>
-                    </div>
-                  </section>
+                    </section>
+                  }
 
-                  <section
-                    id="accessibility"
-                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                  >
-                    <div>
-                      <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
-                        Inclusive UX
-                      </p>
-                      <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
-                        Accessibility
-                      </h3>
-                      <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                        Screen reader, keyboard, and semantic behavior.
-                      </p>
-                    </div>
-                    <div class="mt-4 grid gap-4">
+                  <div class="grid gap-5 lg:grid-cols-3">
+                    <section
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
                       <div>
-                        <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                          Screen Reader
-                        </h4>
-                        <ul
-                          class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          @for (item of componentDetails.accessibility; track item) {
-                            <li>{{ item }}</li>
-                          }
-                        </ul>
+                        <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                          Forms And State
+                        </h3>
                       </div>
-                      <div>
-                        <h4 class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                          Keyboard
-                        </h4>
-                        <ul
-                          class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                        >
-                          @for (item of componentDetails.keyboard; track item) {
-                            <li>{{ item }}</li>
-                          }
-                        </ul>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                <section
-                  id="examples"
-                  class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                >
-                  <div>
-                    <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
-                      Examples
-                    </p>
-                    <h3 class="mt-1 text-lg font-semibold text-slate-950 dark:text-slate-50">
-                      Production Examples
-                    </h3>
-                    <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
-                      Realistic snippets that match the public API.
-                    </p>
-                  </div>
-                  <div class="mt-4 grid gap-4">
-                    @for (example of componentDetails.examples; track example.title) {
-                      <section
-                        class="grid gap-4 rounded-lg border border-slate-200 p-3 dark:border-slate-800 lg:grid-cols-[16rem_minmax(0,1fr)]"
+                      <ul
+                        class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
                       >
-                        <div class="min-w-0">
-                          <h4 class="font-semibold text-slate-950 dark:text-slate-50">
-                            {{ example.title }}
-                          </h4>
-                          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            {{ example.description }}
-                          </p>
-                        </div>
-                        <app-docs-code-block
-                          class="min-w-0"
-                          [code]="example.code"
-                          [filename]="componentDoc.slug + '.example.ts'"
-                          language="Angular"
-                        />
-                      </section>
-                    }
+                        @for (item of componentDetails.forms; track item) {
+                          <li>{{ item }}</li>
+                        }
+                      </ul>
+                    </section>
+
+                    <section
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
+                      <div>
+                        <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                          Edge Cases
+                        </h3>
+                      </div>
+                      <ul
+                        class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        @for (item of componentDetails.edgeCases; track item) {
+                          <li>{{ item }}</li>
+                        }
+                      </ul>
+                    </section>
+
+                    <section
+                      id="testing"
+                      class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                    >
+                      <div>
+                        <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                          Testing Notes
+                        </h3>
+                      </div>
+                      <ul
+                        class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
+                      >
+                        @for (item of componentDetails.testing; track item) {
+                          <li>{{ item }}</li>
+                        }
+                      </ul>
+                    </section>
                   </div>
-                </section>
-
-                <div class="grid gap-5 lg:grid-cols-3">
-                  <section
-                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                  >
-                    <div>
-                      <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
-                        Forms And State
-                      </h3>
-                    </div>
-                    <ul
-                      class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                    >
-                      @for (item of componentDetails.forms; track item) {
-                        <li>{{ item }}</li>
-                      }
-                    </ul>
-                  </section>
-
-                  <section
-                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                  >
-                    <div>
-                      <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
-                        Edge Cases
-                      </h3>
-                    </div>
-                    <ul
-                      class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                    >
-                      @for (item of componentDetails.edgeCases; track item) {
-                        <li>{{ item }}</li>
-                      }
-                    </ul>
-                  </section>
-
-                  <section
-                    id="testing"
-                    class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
-                  >
-                    <div>
-                      <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
-                        Testing Notes
-                      </h3>
-                    </div>
-                    <ul
-                      class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300"
-                    >
-                      @for (item of componentDetails.testing; track item) {
-                        <li>{{ item }}</li>
-                      }
-                    </ul>
-                  </section>
-                </div>
+                }
               }
 
-              <app-docs-section
-                sectionId="api"
-                kicker="Reference"
-                title="API"
-                [description]="'Inputs and outputs exposed by ' + componentDoc.importName + '.'"
-              >
-                <app-docs-api-table
-                  [apiInputs]="componentDoc.inputs"
-                  [apiOutputs]="componentDoc.outputs"
-                />
-              </app-docs-section>
+              @if (componentDoc.slug !== 'input') {
+                <app-docs-section
+                  sectionId="api"
+                  kicker="Reference"
+                  title="API"
+                  [description]="'Inputs and outputs exposed by ' + componentDoc.importName + '.'"
+                >
+                  <app-docs-api-table
+                    [apiInputs]="componentDoc.inputs"
+                    [apiOutputs]="componentDoc.outputs"
+                  />
+                </app-docs-section>
+              }
             </section>
           </div>
 
@@ -1724,7 +2482,12 @@ export class ComponentDocPageComponent {
   private readonly toast = inject(UiToastService);
   protected readonly email = new FormControl('developer@example.com');
   protected readonly packageName = new FormControl('@ngnova/ui');
+  protected readonly password = new FormControl('staging-token-2026');
   protected readonly releaseName = new FormControl('Aurora components');
+  protected readonly repositoryUrl = new FormControl('github.com/ngnova/ui');
+  protected readonly componentSearch = new FormControl('');
+  protected readonly lockedScope = new FormControl('@ngnova');
+  protected readonly reviewStatus = new FormControl('Security approval');
   protected readonly newsletter = new FormControl(true);
   protected readonly plan = new FormControl('pro');
   protected readonly contactPreference = new FormControl('email');
@@ -1734,6 +2497,7 @@ export class ComponentDocPageComponent {
   protected readonly modalOpen = signal(false);
   protected readonly activeSection = signal('#preview');
   protected readonly activeTab = signal('overview');
+  protected readonly inputDocTab = signal('preview');
   protected readonly tagRemoved = signal(false);
   protected readonly accordionActive = signal<readonly string[]>(['overview']);
   protected readonly selectedTableRow = signal<UiTableRow | null>(null);
@@ -1758,18 +2522,98 @@ export class ComponentDocPageComponent {
 </ui-button>`;
   protected readonly inputStatesExample = `<ui-input
   label="Package name"
-  helperText="Use your npm scope."
-  clearable
-  [maxLength]="40"
+  intent="success"
+  helperText="Looks valid and ready to publish."
   [formControl]="packageName"
-/>`;
-  protected readonly inputValidationExample = `<ui-input
+/>
+
+<ui-input
+  label="Release channel"
+  intent="warning"
+  helperText="Warn before blocking the workflow."
+/>
+
+<ui-input
   label="Work email"
   type="email"
   autocomplete="email"
   errorText="Use an organization email address."
   required
 />`;
+  protected readonly inputValidationExample = `<form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+  <ui-input
+    label="Email"
+    type="email"
+    autocomplete="email"
+    helperText="Bound to an Angular FormControl."
+    formControlName="email"
+  />
+
+  <ui-input
+    label="Package scope"
+    placeholder="@ngnova"
+    errorText="Package scope must match your npm organization."
+    required
+    formControlName="scope"
+    (submitted)="saveProfile()"
+  />
+</form>`;
+  protected readonly inputIntelligenceExample = `<ui-input
+  label="Deploy token"
+  type="password"
+  labelMode="floating"
+  helperText="Reveal is opt-in and emits passwordVisibilityChange."
+  revealable
+  [formControl]="token"
+/>
+
+<ui-input
+  label="Prompt summary"
+  helperText="Word counts are useful for AI prompts and editorial fields."
+  counterMode="words"
+  [counterMax]="8"
+  clearable
+  [formControl]="summary"
+  (submitted)="runSearch($event)"
+/>`;
+  protected readonly inputAnatomyExample = `<ui-input
+  label="Repository URL"
+  type="url"
+  helperText="Prefix and suffix are projected; clear remains keyboard reachable."
+  clearable
+  [formControl]="repositoryUrl"
+>
+  <span uiInputPrefix>https://</span>
+  <span uiInputSuffix>.git</span>
+</ui-input>`;
+  protected readonly inputSearchRecipeExample = `<ui-input
+  label="Search components"
+  labelMode="hidden"
+  type="search"
+  placeholder="Search components"
+  clearable
+  [formControl]="componentSearch"
+  (submitted)="searchComponents($event)"
+>
+  <span uiInputSuffix>Ctrl K</span>
+</ui-input>`;
+  protected readonly inputPasswordRecipeExample = `<ui-input
+  label="Deploy token"
+  type="password"
+  labelMode="floating"
+  helperText="Reveal is opt-in and emits passwordVisibilityChange."
+  revealable
+  [formControl]="token"
+  (passwordVisibilityChange)="auditVisibility($event)"
+/>`;
+  protected readonly inputImportExample = `import { ReactiveFormsModule } from '@angular/forms';
+import { UiInputComponent } from '@ngnova/ui';
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiInputComponent],
+})
+export class ProfileFormComponent {}`;
   protected readonly textareaStatesExample = `<ui-textarea
   label="Release notes"
   placeholder="Describe what changed..."
@@ -1911,6 +2755,11 @@ export class ComponentDocPageComponent {
     { label: 'API', value: 'api' },
     { label: 'Disabled', value: 'disabled', disabled: true },
   ];
+  protected readonly inputDocTabs: readonly UiTabItem[] = [
+    { label: 'Preview', value: 'preview' },
+    { label: 'Forms', value: 'forms' },
+    { label: 'API', value: 'api' },
+  ];
   protected readonly accordionItems: readonly UiAccordionItem[] = [
     {
       value: 'overview',
@@ -1937,6 +2786,10 @@ export class ComponentDocPageComponent {
     { component: 'Table', category: 'Data', status: 'New', owner: 'Data UX' },
   ];
   protected readonly sectionNav = computed<readonly SectionNavItem[]>(() => {
+    if (this.slug() === 'input') {
+      return [{ label: 'Input Docs', href: '#input-docs' }];
+    }
+
     const baseNav: SectionNavItem[] = [
       { label: 'Preview', href: '#preview' },
       { label: 'Usage', href: '#usage' },
@@ -1947,13 +2800,6 @@ export class ComponentDocPageComponent {
         { label: 'Variants', href: '#variants' },
         { label: 'Sizes', href: '#sizes' },
         { label: 'Loading', href: '#loading' },
-      );
-    }
-
-    if (this.slug() === 'input') {
-      baseNav.push(
-        { label: 'Field States', href: '#field-states' },
-        { label: 'Forms CVA', href: '#forms-cva' },
       );
     }
 
@@ -2058,6 +2904,14 @@ export class ComponentDocPageComponent {
     ];
   });
   protected readonly whenNotToUse = computed<readonly string[]>(() => {
+    if (this.slug() === 'input') {
+      return [
+        'Do not use Input for long-form writing; use Textarea when users need multiple lines, resizing, or longer counters.',
+        'Do not use type="number" for account IDs, ZIP codes, OTPs, or values that can start with zero; prefer text with inputMode.',
+        'Do not hide the label unless the field has an equivalent accessible label and a clear surrounding search or command context.',
+      ];
+    }
+
     const category = this.componentCategory();
 
     if (category === 'Forms') {
@@ -2104,7 +2958,28 @@ export class ComponentDocPageComponent {
       return 'A button is used to trigger an action or event, such as submitting a form, opening a dialog, canceling an operation, or performing a destructive action.';
     }
 
+    if (componentDoc.slug === 'input') {
+      return 'A production-grade input field for Angular forms, search, auth, command entry, validation, counters, and accessible field assistance.';
+    }
+
     return `${componentDoc.name} preview examples use the public ${componentDoc.importName} API in realistic product states.`;
+  }
+
+  protected previewTitle(componentDoc: ComponentDoc): string {
+    return componentDoc.slug === 'input' ? 'Input Lab' : 'Basic';
+  }
+
+  protected inputDocTabSummary(): string {
+    switch (this.inputDocTab()) {
+      case 'preview':
+        return 'Preview keeps the reader focused on working input patterns before they need reference detail.';
+      case 'forms':
+        return 'Forms covers ControlValueAccessor behavior, validation ownership, accessibility, keyboard expectations, and edge cases.';
+      case 'api':
+        return 'API stays separate so the dense input and output tables do not dominate the learning flow.';
+      default:
+        return 'Choose a tab to focus the Input documentation.';
+    }
   }
 
   protected showToast(): void {

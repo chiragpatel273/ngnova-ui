@@ -7,7 +7,11 @@ import type { ComponentDoc } from './docs-data';
 interface SidebarItem {
   readonly label: string;
   readonly path: string;
-  readonly category?: string;
+}
+
+interface ComponentDocGroup {
+  readonly label: string;
+  readonly slugs: readonly string[];
 }
 
 interface PrimaryNavItem {
@@ -16,17 +20,32 @@ interface PrimaryNavItem {
   readonly exact?: boolean;
 }
 
-const SIDEBAR_ITEMS: readonly SidebarItem[] = [
-  { label: 'Getting Started', path: '/get-started' },
-  { label: 'Layout', path: '/components/card', category: 'Layout' },
-  { label: 'Buttons', path: '/components/button', category: 'Buttons' },
-  { label: 'Forms', path: '/components/input', category: 'Forms' },
-  { label: 'Navigation', path: '/components/tabs', category: 'Navigation' },
+const COMPONENT_GROUPS: readonly ComponentDocGroup[] = [
+  {
+    label: 'Foundations',
+    slugs: ['button', 'badge', 'tag', 'avatar', 'alert', 'skeleton', 'spinner', 'progress-bar'],
+  },
+  {
+    label: 'Forms',
+    slugs: ['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'],
+  },
+  {
+    label: 'Layout',
+    slugs: ['card', 'table'],
+  },
+  {
+    label: 'Navigation',
+    slugs: ['tabs', 'accordion'],
+  },
+  {
+    label: 'Overlays',
+    slugs: ['modal', 'toast'],
+  },
 ];
 
 const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'API Reference', path: '/apis' },
-  { label: 'CLI Reference', path: '/get-started' },
+  { label: 'CLI Reference', path: '/guide' },
   { label: 'Style Guide', path: '/theming' },
 ];
 
@@ -40,10 +59,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
         class="sticky top-0 z-40 border-b border-red-200 bg-zinc-50/95 backdrop-blur dark:border-red-950 dark:bg-zinc-950/95"
       >
         <div class="mx-auto flex h-16 max-w-[100rem] items-center gap-8 px-6">
-          <a
-            routerLink="/get-started"
-            class="shrink-0 text-xl font-bold text-red-800 dark:text-red-300"
-          >
+          <a routerLink="/guide" class="shrink-0 text-xl font-bold text-red-800 dark:text-red-300">
             NgNova UI Docs
           </a>
 
@@ -111,14 +127,40 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
               />
             </label>
 
-            <nav class="mt-8 grid gap-2" aria-label="Core navigation">
-              @for (item of sidebarItems(); track item.label) {
+            <nav class="mt-8 grid gap-2" aria-label="Documentation start">
+              <a
+                routerLink="/guide"
+                routerLinkActive="border-l-red-800 bg-red-50 font-semibold text-red-800 dark:bg-red-950/40 dark:text-red-200"
+                class="border-l-4 border-transparent px-4 py-2.5 text-base text-zinc-800 transition hover:bg-red-50 hover:text-red-800 dark:text-zinc-200 dark:hover:bg-red-950/30"
+              >
+                Getting Started
+              </a>
+            </nav>
+
+            <nav class="mt-7 grid gap-5" aria-label="Component documentation">
+              @for (group of componentGroups(); track group.label) {
+                <section>
+                  <p class="px-4 pb-2 text-xs font-bold uppercase text-zinc-500 dark:text-zinc-500">
+                    {{ group.label }}
+                  </p>
+                  <div class="grid gap-1">
+                    @for (item of group.docs; track item.slug) {
+                      <a
+                        [routerLink]="['/components', item.slug]"
+                        routerLinkActive="border-l-red-800 bg-red-50 font-semibold text-red-800 dark:bg-red-950/40 dark:text-red-200"
+                        class="border-l-4 border-transparent px-4 py-2 text-base text-zinc-800 transition hover:bg-red-50 hover:text-red-800 dark:text-zinc-200 dark:hover:bg-red-950/30"
+                      >
+                        {{ item.name }}
+                      </a>
+                    }
+                  </div>
+                </section>
+              } @empty {
                 <a
-                  [routerLink]="item.path"
-                  routerLinkActive="border-l-red-800 bg-red-50 font-semibold text-red-800 dark:bg-red-950/40 dark:text-red-200"
+                  routerLink="/components"
                   class="border-l-4 border-transparent px-4 py-2.5 text-base text-zinc-800 transition hover:bg-red-50 hover:text-red-800 dark:text-zinc-200 dark:hover:bg-red-950/30"
                 >
-                  {{ item.label }}
+                  No matching components
                 </a>
               }
             </nav>
@@ -155,28 +197,27 @@ export class DocsLayoutComponent {
   protected readonly query = signal('');
   protected readonly darkMode = signal(false);
   protected readonly primaryNav: readonly PrimaryNavItem[] = [
-    { label: 'Guide', path: '/get-started' },
+    { label: 'Guide', path: '/guide', exact: true },
     { label: 'Components', path: '/components' },
-    { label: 'APIs', path: '/apis' },
-    { label: 'Playground', path: '/playground' },
+    { label: 'APIs', path: '/apis', exact: true },
+    { label: 'Playground', path: '/playground', exact: true },
   ];
   protected readonly referenceItems = REFERENCE_ITEMS;
-  protected readonly sidebarItems = computed<readonly SidebarItem[]>(() => {
+  protected readonly componentGroups = computed<
+    readonly {
+      readonly label: string;
+      readonly docs: readonly ComponentDoc[];
+    }[]
+  >(() => {
     const normalizedQuery = this.query().trim().toLowerCase();
 
-    if (!normalizedQuery) {
-      return SIDEBAR_ITEMS;
-    }
-
-    const matchingComponents = componentDocs
-      .filter((doc) => this.matchesQuery(doc, normalizedQuery))
-      .slice(0, 6)
-      .map((doc) => ({
-        label: doc.name,
-        path: `/components/${doc.slug}`,
-      }));
-
-    return matchingComponents.length ? matchingComponents : SIDEBAR_ITEMS;
+    return COMPONENT_GROUPS.map((group) => ({
+      label: group.label,
+      docs: group.slugs
+        .map((slug) => componentDocs.find((doc) => doc.slug === slug))
+        .filter((doc): doc is ComponentDoc => !!doc)
+        .filter((doc) => !normalizedQuery || this.matchesQuery(doc, normalizedQuery)),
+    })).filter((group) => group.docs.length > 0);
   });
 
   protected updateQuery(event: Event): void {

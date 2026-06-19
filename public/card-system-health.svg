@@ -1,0 +1,62 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 520"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">System health analytics bars</title>
+  <desc id="desc">Red and black bar chart on a dark circuit board surface.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#d7dbd6" />
+      <stop offset="0.48" stop-color="#9fa6a2" />
+      <stop offset="1" stop-color="#e7e4df" />
+    </linearGradient>
+    <linearGradient id="floor" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#111" />
+      <stop offset="0.6" stop-color="#252525" />
+      <stop offset="1" stop-color="#0d0d0d" />
+    </linearGradient>
+    <linearGradient id="redBar" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#dc2626" />
+      <stop offset="1" stop-color="#5f0505" />
+    </linearGradient>
+    <linearGradient id="blackBar" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#3f4646" />
+      <stop offset="1" stop-color="#070707" />
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="1200" height="520" fill="url(#background)" />
+  <path
+    d="M0 346 C210 306 368 328 554 306 C792 278 967 309 1200 258 L1200 520 L0 520 Z"
+    fill="url(#floor)"
+  />
+  <g fill="none" stroke="#2b2b2b" stroke-width="6" opacity="0.7">
+    <path d="M62 445 H385 L470 392 H746 L831 351 H1138" />
+    <path d="M153 490 H502 L610 428 H971" />
+    <path d="M295 401 H548 L655 337 H1068" />
+  </g>
+  <g fill="none" stroke="#b00020" stroke-width="3" opacity="0.9">
+    <path d="M74 458 H362 L462 401 H760 L846 362 H1118" />
+    <path d="M198 504 H527 L632 445 H1002" />
+  </g>
+  <g filter="url(#softShadow)">
+    <rect x="292" y="312" width="54" height="108" fill="url(#redBar)" />
+    <rect x="364" y="278" width="56" height="142" fill="url(#blackBar)" />
+    <rect x="454" y="237" width="62" height="183" fill="url(#redBar)" />
+    <rect x="542" y="199" width="64" height="221" fill="url(#blackBar)" />
+    <rect x="636" y="260" width="58" height="160" fill="url(#redBar)" />
+    <rect x="709" y="137" width="66" height="283" fill="url(#blackBar)" />
+    <rect x="807" y="95" width="70" height="325" fill="url(#redBar)" />
+    <rect x="901" y="54" width="76" height="366" fill="url(#blackBar)" />
+  </g>
+  <g fill="#dc2626">
+    <circle cx="155" cy="454" r="5" />
+    <circle cx="432" cy="397" r="4" />
+    <circle cx="720" cy="421" r="5" />
+    <circle cx="1048" cy="352" r="4" />
+  </g>
+</svg>

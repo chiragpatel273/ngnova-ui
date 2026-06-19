@@ -62,7 +62,7 @@ interface FeaturedComponent {
               usage instead of only listing props.
             </p>
             <div class="mt-8 flex flex-wrap gap-3">
-              <a routerLink="/get-started">
+              <a routerLink="/guide">
                 <ui-button>Get Started</ui-button>
               </a>
               <a routerLink="/components/button">

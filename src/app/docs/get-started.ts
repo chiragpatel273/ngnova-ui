@@ -82,7 +82,7 @@ interface GuideCard {
           <nav class="flex flex-wrap gap-8" aria-label="Guide footer">
             <a routerLink="/components">GitHub</a>
             <a routerLink="/apis">API Reference</a>
-            <a routerLink="/get-started">NPM</a>
+            <a routerLink="/guide">NPM</a>
           </nav>
         </footer>
       </article>

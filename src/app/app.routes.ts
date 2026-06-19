@@ -13,8 +13,8 @@ export const routes: Routes = [
     component: DocsLayoutComponent,
     children: [
       { path: '', pathMatch: 'full', component: DocsHomeComponent },
-      { path: 'get-started', component: GetStartedComponent },
-      { path: 'guide', redirectTo: 'get-started', pathMatch: 'full' },
+      { path: 'guide', component: GetStartedComponent },
+      { path: 'get-started', redirectTo: 'guide', pathMatch: 'full' },
       { path: 'apis', component: DocsApiReferenceComponent },
       { path: 'components', component: DocsTopicPageComponent, data: { topic: 'components' } },
       { path: 'playground', component: DocsTopicPageComponent, data: { topic: 'playground' } },

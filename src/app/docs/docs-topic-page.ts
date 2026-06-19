@@ -4,6 +4,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { UiButtonComponent } from '@ngnova/ui';
 
+import { componentDocs } from './docs-data';
+
 interface TopicSection {
   readonly title: string;
   readonly description: string;
@@ -79,7 +81,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
     summary:
       'NgNova UI uses static Tailwind classes and dark-mode variants so consumers get predictable styling and no hidden theme runtime.',
     ctaLabel: 'Open Guide',
-    ctaPath: '/get-started',
+    ctaPath: '/guide',
     sections: [
       {
         title: 'Tailwind setup',
@@ -161,29 +163,80 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
           </a>
         </header>
 
-        <section class="mt-10 grid gap-6 md:grid-cols-2">
-          @for (section of page.sections; track section.title) {
-            <article
-              class="rounded border border-red-200 bg-white p-8 dark:border-red-950 dark:bg-zinc-950"
-            >
-              <h2 class="text-2xl font-medium text-zinc-950 dark:text-zinc-50">
-                {{ section.title }}
-              </h2>
-              <p class="mt-4 text-lg leading-7 text-zinc-600 dark:text-zinc-300">
-                {{ section.description }}
-              </p>
-              <div class="mt-7 flex flex-wrap gap-3">
-                @for (item of section.items; track item) {
+        @if (slug() === 'components') {
+          <section
+            class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+            aria-label="All component docs"
+          >
+            @for (component of allComponents; track component.slug) {
+              <a
+                [routerLink]="['/components', component.slug]"
+                class="group rounded border border-red-200 bg-white p-6 transition hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-md dark:border-red-950 dark:bg-zinc-950 dark:hover:bg-red-950/30"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <span
+                      class="rounded bg-red-100 px-2 py-1 text-xs font-semibold uppercase text-red-800 dark:bg-red-950 dark:text-red-200"
+                    >
+                      {{ categoryFor(component.slug) }}
+                    </span>
+                    <h2 class="mt-5 text-2xl font-medium text-zinc-950 dark:text-zinc-50">
+                      {{ component.name }}
+                    </h2>
+                  </div>
                   <span
-                    class="rounded bg-zinc-100 px-3 py-2 text-base text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+                    class="font-mono text-sm text-zinc-400 transition group-hover:text-red-800 dark:group-hover:text-red-200"
                   >
-                    {{ item }}
+                    {{ component.selector }}
                   </span>
-                }
-              </div>
-            </article>
-          }
-        </section>
+                </div>
+                <p class="mt-4 min-h-20 text-base leading-7 text-zinc-600 dark:text-zinc-300">
+                  {{ component.summary }}
+                </p>
+                <dl
+                  class="mt-6 grid grid-cols-2 gap-3 border-t border-red-100 pt-4 text-sm dark:border-red-950/70"
+                >
+                  <div>
+                    <dt class="text-zinc-500">Inputs</dt>
+                    <dd class="font-semibold text-zinc-950 dark:text-zinc-50">
+                      {{ component.inputs.length }}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-zinc-500">Outputs</dt>
+                    <dd class="font-semibold text-zinc-950 dark:text-zinc-50">
+                      {{ component.outputs.length }}
+                    </dd>
+                  </div>
+                </dl>
+              </a>
+            }
+          </section>
+        } @else {
+          <section class="mt-10 grid gap-6 md:grid-cols-2">
+            @for (section of page.sections; track section.title) {
+              <article
+                class="rounded border border-red-200 bg-white p-8 dark:border-red-950 dark:bg-zinc-950"
+              >
+                <h2 class="text-2xl font-medium text-zinc-950 dark:text-zinc-50">
+                  {{ section.title }}
+                </h2>
+                <p class="mt-4 text-lg leading-7 text-zinc-600 dark:text-zinc-300">
+                  {{ section.description }}
+                </p>
+                <div class="mt-7 flex flex-wrap gap-3">
+                  @for (item of section.items; track item) {
+                    <span
+                      class="rounded bg-zinc-100 px-3 py-2 text-base text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+                    >
+                      {{ item }}
+                    </span>
+                  }
+                </div>
+              </article>
+            }
+          </section>
+        }
       </article>
     }
   `,
@@ -191,9 +244,30 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
 })
 export class DocsTopicPageComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly slug = toSignal(
+  protected readonly allComponents = componentDocs;
+  protected readonly slug = toSignal(
     this.route.data.pipe(map((data) => String(data['topic'] ?? 'components'))),
     { initialValue: String(this.route.snapshot.data['topic'] ?? 'components') },
   );
   protected readonly topic = computed(() => TOPICS[this.slug()] ?? TOPICS['components']);
+
+  protected categoryFor(slug: string): string {
+    if (['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'].includes(slug)) {
+      return 'Forms';
+    }
+
+    if (['card', 'table'].includes(slug)) {
+      return 'Layout';
+    }
+
+    if (['tabs', 'accordion'].includes(slug)) {
+      return 'Navigation';
+    }
+
+    if (['modal', 'toast'].includes(slug)) {
+      return 'Overlays';
+    }
+
+    return 'Foundations';
+  }
 }

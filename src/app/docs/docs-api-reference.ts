@@ -23,7 +23,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'UiButtonComponent',
     kind: 'Components',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/button',
     description:
       'A highly customizable button component supporting variants, sizes, loading, disabled, and full-width states.',
     signatures: ['@Input: variant', '@Input: size', '(pressed)'],
@@ -31,7 +31,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'UiToastService',
     kind: 'Services',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/toast',
     description:
       'Service to trigger toast messages, snackbars, and application-level feedback through a shared viewport.',
     signatures: ['success()', 'warning()', 'dismiss()'],
@@ -39,7 +39,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'uiInputPrefix',
     kind: 'Directives',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/input',
     description:
       'Projection marker that places contextual content before the native input while preserving field semantics.',
     signatures: ['selector: [uiInputPrefix]'],
@@ -47,7 +47,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'UiButtonVariant',
     kind: 'Types',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/button',
     description:
       'Literal union type defining the supported button visual treatments for product actions.',
     signatures: ["'primary'", "'secondary'", "'danger'"],
@@ -55,7 +55,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'UiSelectOption',
     kind: 'Interfaces',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/select',
     description:
       'Configuration object for select and radio style choices with labels, values, helper text, and disabled state.',
     signatures: ['label: string', 'value: string', 'disabled?: boolean'],
@@ -63,7 +63,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
   {
     name: 'UiTableComponent',
     kind: 'Components',
-    packageName: '@ngnova/ui',
+    packageName: '@ngnova/ui/table',
     description:
       'Performance-conscious data table with loading, empty, sorting, and row-selection documentation.',
     signatures: ['[columns]', '[rows]', '(sortChange)'],

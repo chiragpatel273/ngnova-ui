@@ -46,9 +46,10 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
     importName: 'UiButtonComponent',
-    usage: `<ui-button variant="primary" size="md" (pressed)="save()">Save</ui-button>
-<ui-button variant="outline" [loading]="saving" loadingLabel="Saving changes">Saving</ui-button>
-<ui-button variant="secondary" fullWidth>Continue</ui-button>`,
+    usage: `<ui-button>Primary Action</ui-button>
+<ui-button variant="secondary">Secondary</ui-button>
+<ui-button variant="outline">Outline</ui-button>
+<ui-button variant="ghost">Ghost</ui-button>`,
     inputs: [
       {
         name: 'variant',
@@ -123,10 +124,14 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-card',
     summary: 'Content container with projected header, body, and footer regions.',
     importName: 'UiCardComponent',
-    usage: `<ui-card variant="elevated" padding="lg">
-  <div uiCardHeader>Project status</div>
-  The library is ready to build.
-  <div uiCardFooter>Updated today</div>
+    usage: `<ui-card>
+  <div uiCardHeader>
+    <h3>Analytics card</h3>
+  </div>
+  <p>Projected regions keep content structure predictable.</p>
+  <div uiCardFooter>
+    <ui-button size="sm" variant="outline">Open report</ui-button>
+  </div>
 </ui-card>`,
     inputs: [
       {
@@ -152,14 +157,12 @@ export const componentDocs: ComponentDoc[] = [
       'Text input with floating labels, semantic intent, password reveal, smart counters, validation, and Angular forms support.',
     importName: 'UiInputComponent',
     usage: `<ui-input
-  label="Email"
+  label="Work email"
   type="email"
   autocomplete="email"
-  helperText="Use your organization email."
   labelMode="floating"
-  intent="success"
+  helperText="Floating label, helper text, and Angular forms support."
   clearable
-  [maxLength]="80"
   [formControl]="email"
 />`,
     inputs: [
@@ -364,8 +367,10 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-badge',
     summary: 'Compact status label for categories, states, and metadata.',
     importName: 'UiBadgeComponent',
-    usage: `<ui-badge variant="success" ariaRole="status">Active</ui-badge>
-<ui-badge variant="warning" size="sm">Pending</ui-badge>`,
+    usage: `<ui-badge>Default</ui-badge>
+<ui-badge variant="success">Stable</ui-badge>
+<ui-badge variant="warning">Review</ui-badge>
+<ui-badge variant="danger">Blocked</ui-badge>`,
     inputs: [
       {
         name: 'variant',
@@ -400,9 +405,9 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-tag',
     summary: 'Compact removable or icon-enhanced label for filters, metadata, and statuses.',
     importName: 'UiTagComponent',
-    usage: `<ui-tag icon="+">Angular</ui-tag>
+    usage: `<ui-tag>Angular</ui-tag>
 <ui-tag variant="success">Published</ui-tag>
-<ui-tag variant="warning" removable (removed)="removeFilter()">Review needed</ui-tag>`,
+<ui-tag variant="warning" removable>Needs review</ui-tag>`,
     inputs: [
       {
         name: 'variant',
@@ -456,7 +461,6 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'User or entity avatar with image, initials fallback, sizes, and shapes.',
     importName: 'UiAvatarComponent',
     usage: `<ui-avatar label="Ada Lovelace" />
-<ui-avatar src="/team/ada.png" alt="Ada Lovelace" label="Ada Lovelace" />
 <ui-avatar label="NgNova UI" shape="square" size="lg" />`,
     inputs: [
       { name: 'src', type: 'string', defaultValue: "''", description: 'Optional image source.' },
@@ -494,8 +498,9 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-skeleton',
     summary: 'Decorative loading placeholder for cards, text, avatars, and table rows.',
     importName: 'UiSkeletonComponent',
-    usage: `<ui-skeleton shape="circle" width="2.5rem" height="2.5rem" />
-<ui-skeleton shape="text" width="60%" height="0.875rem" />
+    usage: `<ui-skeleton shape="circle" width="2.75rem" height="2.75rem" />
+<ui-skeleton shape="text" width="70%" height="0.875rem" />
+<ui-skeleton shape="text" width="45%" height="0.875rem" />
 <ui-skeleton height="8rem" />`,
     inputs: [
       {
@@ -515,8 +520,7 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-progress-bar',
     summary: 'Accessible determinate or indeterminate progress indicator.',
     importName: 'UiProgressBarComponent',
-    usage: `<ui-progress-bar [value]="65" label="Build progress" />
-<ui-progress-bar [value]="90" variant="success" label="Coverage" />
+    usage: `<ui-progress-bar [value]="76" variant="success" label="Build progress" />
 <ui-progress-bar indeterminate label="Publishing package" />`,
     inputs: [
       { name: 'value', type: 'number', defaultValue: '0', description: 'Current progress value.' },
@@ -549,19 +553,22 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'Dialog overlay with focus management, header/body/footer projection, backdrop policy, and Escape handling.',
     importName: 'UiModalComponent',
-    usage: `<ui-button (pressed)="publishOpen = true">Open dialog</ui-button>
+    usage: `<ui-button (pressed)="modalOpen.set(true)">Open dialog</ui-button>
 
 <ui-modal
-  [(open)]="publishOpen"
+  [open]="modalOpen()"
+  (openChange)="modalOpen.set($event)"
   size="lg"
   descriptionId="publish-dialog-description"
   [closeOnBackdrop]="false"
 >
   <span uiModalHeader>Publish package</span>
-  <p id="publish-dialog-description">This action publishes @ngnova/ui to npm.</p>
+  <p id="publish-dialog-description">
+    Build the library, inspect dist/ui, then publish with public access.
+  </p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="publishOpen = false">Cancel</ui-button>
-    <ui-button (pressed)="publish()">Publish</ui-button>
+    <ui-button variant="outline" (pressed)="modalOpen.set(false)">Cancel</ui-button>
+    <ui-button (pressed)="modalOpen.set(false)">Publish</ui-button>
   </div>
 </ui-modal>`,
     inputs: [
@@ -649,9 +656,15 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Accessible checkbox with helper text, disabled state, and Angular forms support.',
     importName: 'UiCheckboxComponent',
     usage: `<ui-checkbox
-  label="Email updates"
-  helperText="Receive product and release news."
+  label="Email subscribers"
+  helperText="Reactive form boolean value."
   [formControl]="newsletter"
+/>
+
+<ui-checkbox
+  label="Select all packages"
+  helperText="Mixed child state."
+  indeterminate
 />`,
     inputs: [
       { name: 'label', type: 'string', defaultValue: "''", description: 'Visible checkbox label.' },
@@ -726,7 +739,7 @@ export const componentDocs: ComponentDoc[] = [
     usage: `<ui-select
   label="Plan"
   placeholder="Choose a plan"
-  helperText="You can change this later."
+  helperText="Native select behavior with NgNova styling."
   [options]="planOptions"
   [formControl]="plan"
 />`,
@@ -812,8 +825,8 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-alert',
     summary: 'Semantic feedback message with variants and an optional dismiss action.',
     importName: 'UiAlertComponent',
-    usage: `<ui-alert variant="success" title="Package ready" dismissible>
-  The library build finished and can be packed from dist/ui.
+    usage: `<ui-alert variant="success" title="Saved" dismissible>
+  Your component settings were updated.
 </ui-alert>`,
     inputs: [
       {
@@ -864,7 +877,7 @@ export const componentDocs: ComponentDoc[] = [
     importName: 'UiRadioGroupComponent',
     usage: `<ui-radio-group
   label="Contact preference"
-  helperText="Choose one option."
+  helperText="Small mutually exclusive choices stay visible."
   [options]="contactOptions"
   [formControl]="contactPreference"
 />`,
@@ -945,7 +958,7 @@ export const componentDocs: ComponentDoc[] = [
     importName: 'UiSwitchComponent',
     usage: `<ui-switch
   label="Release notifications"
-  helperText="Email me when a release is published."
+  helperText="Immediate setting state owned by the parent form."
   [formControl]="notifications"
 />`,
     inputs: [
@@ -1009,8 +1022,9 @@ export const componentDocs: ComponentDoc[] = [
     importName: 'UiTextareaComponent',
     usage: `<ui-textarea
   label="Release notes"
-  placeholder="Describe what changed..."
-  helperText="Markdown is supported in your app."
+  helperText="Counter, resize, and validation-ready field state."
+  [maxLength]="280"
+  [rows]="5"
   [formControl]="releaseNotes"
 />`,
     inputs: [
@@ -1137,11 +1151,17 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-tabs',
     summary: 'Keyboard-friendly tablist for switching between related sections.',
     importName: 'UiTabsComponent',
-    usage: `<ui-tabs [tabs]="tabs" [(active)]="activeTab" ariaLabel="Package docs">
-  @if (activeTab === 'overview') {
-    Overview content
+    usage: `<ui-tabs
+  [tabs]="componentTabs"
+  [active]="activeTab()"
+  (activeChange)="activeTab.set($event)"
+  ariaLabel="Component documentation tabs preview"
+  fullWidth
+>
+  @if (activeTab() === 'overview') {
+    Overview panel content stays associated with the selected tab.
   } @else {
-    API content
+    API panel content can hold reference tables, forms, or related content.
   }
 </ui-tabs>`,
     inputs: [
@@ -1191,9 +1211,9 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Accessible disclosure list for dense related content sections.',
     importName: 'UiAccordionComponent',
     usage: `<ui-accordion
-  [items]="items"
-  [active]="activeSections"
-  (activeChange)="activeSections = $event"
+  [items]="accordionItems"
+  [active]="accordionActive()"
+  (activeChange)="accordionActive.set($event)"
 />`,
     inputs: [
       { name: 'id', type: 'string', defaultValue: "'ui-accordion'", description: 'Base ARIA ID.' },
@@ -1232,13 +1252,10 @@ export const componentDocs: ComponentDoc[] = [
       'Responsive data table with columns, loading/empty states, row selection, and sort events.',
     importName: 'UiTableComponent',
     usage: `<ui-table
-  [columns]="columns"
-  [rows]="components"
+  [columns]="tableColumns"
+  [rows]="tableRows"
   selectable
-  emptyText="No components match your filters."
-  loadingText="Loading components..."
-  (rowSelected)="openComponent($event)"
-  (sortChange)="sortComponents($event)"
+  (rowSelected)="selectedTableRow.set($event)"
 />`,
     inputs: [
       {
@@ -1297,16 +1314,8 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-toast',
     summary: 'Application notification viewport powered by UiToastService.',
     importName: 'UiToastComponent, UiToastService',
-    usage: `import { inject } from '@angular/core';
-import { UiToastService } from '@ngnova/ui';
-
-<ui-toast />
-
-private readonly toast = inject(UiToastService);
-
-save(): void {
-  this.toast.success('Saved', 'Your settings are ready.');
-}`,
+    usage: `<ui-button (pressed)="showToast()">Show toast</ui-button>
+<ui-toast />`,
     inputs: [
       {
         name: 'position',
@@ -1323,8 +1332,8 @@ save(): void {
     selector: 'ui-spinner',
     summary: 'Lightweight loading indicator with accessible status text.',
     importName: 'UiSpinnerComponent',
-    usage: `<ui-spinner label="Loading components" />
-<ui-spinner size="sm" decorative />`,
+    usage: `<ui-spinner label="Loading invoices" />
+<span>Loading invoices...</span>`,
     inputs: [
       {
         name: 'size',

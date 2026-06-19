@@ -174,7 +174,7 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
             </div>
 
             <div
-              class="grid overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950 lg:grid-cols-[minmax(0,1fr)_24rem]"
+              class="grid overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950 xl:grid-cols-[minmax(0,1fr)_28rem]"
             >
               <div class="min-h-64 p-6 sm:p-8">
                 <div
@@ -389,7 +389,7 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               </div>
 
               <app-docs-code-block
-                class="block min-w-0 border-t border-red-200 dark:border-red-950 lg:border-l lg:border-t-0"
+                class="block min-w-0 border-t border-red-200 dark:border-red-950 xl:border-l xl:border-t-0"
                 [code]="componentDoc.usage"
                 [filename]="componentDoc.selector + '.example.html'"
                 language="Angular template"

@@ -60,8 +60,10 @@ Tailwind v4 ignores `node_modules` by default, so the `@source` line is required
 
 ## Import Example
 
+Use per-component entry points in application code so imports stay explicit and easy to tree-shake:
+
 ```ts
-import { UiButtonComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui/button';
 
 @Component({
   standalone: true,
@@ -70,6 +72,8 @@ import { UiButtonComponent } from '@ngnova/ui';
 })
 export class SaveButtonExample {}
 ```
+
+The root `@ngnova/ui` entry point still re-exports every component for convenience.
 
 ## Component Test Harnesses
 

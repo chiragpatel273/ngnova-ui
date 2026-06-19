@@ -23,8 +23,10 @@ Tailwind ignores `node_modules` by default. Add the package as an explicit sourc
 
 ## Usage
 
+Use per-component entry points in application code:
+
 ```ts
-import { UiButtonComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui/button';
 
 @Component({
   standalone: true,
@@ -33,6 +35,8 @@ import { UiButtonComponent } from '@ngnova/ui';
 })
 export class ExampleComponent {}
 ```
+
+The root `@ngnova/ui` entry point also re-exports the public components.
 
 ## Testing
 

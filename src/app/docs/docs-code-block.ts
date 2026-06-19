@@ -25,13 +25,13 @@ import { UiButtonComponent } from '@ngnova/ui';
           {{ copiedLabel() }}
         </ui-button>
       </figcaption>
-      <div class="grid max-h-96 grid-cols-[3.25rem_minmax(0,1fr)] overflow-auto">
+      <div class="grid max-h-96 grid-cols-[3.25rem_minmax(0,1fr)] overflow-y-auto">
         <pre
           class="select-none border-r border-[#3c3c3c] bg-[#1b1b1b] px-4 py-5 text-right font-mono text-sm leading-7 text-[#858585]"
           >{{ lineNumbers() }}</pre
         >
         <pre
-          class="min-w-0 bg-[#1e1e1e] px-5 py-5 font-mono text-sm leading-7 text-[#d4d4d4]"
+          class="min-w-0 whitespace-pre-wrap break-words bg-[#1e1e1e] px-5 py-5 font-mono text-sm leading-7 text-[#d4d4d4] [overflow-wrap:anywhere]"
         ><code [innerHTML]="highlightedCode()"></code></pre>
       </div>
     </figure>

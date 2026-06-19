@@ -1,6 +1,7 @@
 import type { Routes } from '@angular/router';
 
 import { ComponentDocPageComponent } from './docs/component-doc-page';
+import { DocsApiReferenceComponent } from './docs/docs-api-reference';
 import { DocsLayoutComponent } from './docs/docs-layout';
 import { DocsHomeComponent } from './docs/docs-home';
 import { DocsTopicPageComponent } from './docs/docs-topic-page';
@@ -13,7 +14,10 @@ export const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', component: DocsHomeComponent },
       { path: 'get-started', component: GetStartedComponent },
+      { path: 'guide', redirectTo: 'get-started', pathMatch: 'full' },
+      { path: 'apis', component: DocsApiReferenceComponent },
       { path: 'components', component: DocsTopicPageComponent, data: { topic: 'components' } },
+      { path: 'playground', component: DocsTopicPageComponent, data: { topic: 'playground' } },
       {
         path: 'accessibility',
         component: DocsTopicPageComponent,

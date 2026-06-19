@@ -423,6 +423,12 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Optional leading icon text.',
       },
       {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label for icon-heavy or visually compact tags.',
+      },
+      {
         name: 'removable',
         type: 'boolean',
         defaultValue: 'false',
@@ -460,6 +466,12 @@ export const componentDocs: ComponentDoc[] = [
         type: 'string',
         defaultValue: "''",
         description: 'Accessible label and initials source.',
+      },
+      {
+        name: 'ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label override for avatar images or generated initials.',
       },
       {
         name: 'size',

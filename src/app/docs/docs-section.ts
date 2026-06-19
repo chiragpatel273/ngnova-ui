@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@an
       @if (!hideHeader()) {
         <div class="max-w-3xl">
           @if (kicker()) {
-            <p class="text-xs font-semibold uppercase text-blue-700 dark:text-blue-300">
+            <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-300">
               {{ kicker() }}
             </p>
           }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { UiBadgeComponent, UiButtonComponent, UiCardComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui';
 
 interface TopicSection {
   readonly title: string;
@@ -22,31 +22,34 @@ interface DocsTopic {
 const TOPICS: Readonly<Record<string, DocsTopic>> = {
   components: {
     badge: 'Component Catalog',
-    title: 'Explore NgNova UI Components',
+    title: 'Explore Core Components',
     summary:
-      'Browse the current production component surface and use each page as the source of truth for imports, usage, accessibility, API, and testing guidance.',
+      'Browse the production component surface and use each page as the source of truth for imports, usage, accessibility, API, and testing guidance.',
     ctaLabel: 'Open Button Docs',
     ctaPath: '/components/button',
     sections: [
       {
-        title: 'How component pages are structured',
+        title: 'Layout',
         description:
-          'Each finished component page follows the same pattern so teams can scan quickly and compare APIs with confidence.',
-        items: [
-          'Hero metadata: selector, import name, category, maturity, inputs, and outputs.',
-          'Preview and usage snippets rendered from the public @ngnova/ui package.',
-          'Guidance, examples, accessibility, keyboard behavior, API reference, and testing notes.',
-        ],
+          'Composition surfaces for dashboards, pages, cards, and structured product data.',
+        items: ['Card', 'Table', 'Progress Bar'],
       },
       {
-        title: 'Documentation quality bar',
+        title: 'Buttons',
         description:
-          'A component is considered documentation-ready only when the page helps consumers ship it in a real product.',
-        items: [
-          'Examples cover realistic application states instead of isolated prop toggles only.',
-          'API tables include stable public names, types, defaults, and practical descriptions.',
-          'Forms components document ControlValueAccessor behavior and validation wiring.',
-        ],
+          'Action controls with semantic outputs, loading states, and accessible labels.',
+        items: ['Button', 'Tag', 'Badge'],
+      },
+      {
+        title: 'Forms',
+        description:
+          'Angular forms-ready controls with labels, validation, helper text, and keyboard behavior.',
+        items: ['Input', 'Textarea', 'Checkbox', 'Radio', 'Switch', 'Select'],
+      },
+      {
+        title: 'Navigation',
+        description: 'Page and panel navigation primitives for dense application experiences.',
+        items: ['Tabs', 'Accordion'],
       },
     ],
   },
@@ -63,49 +66,29 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         description:
           'Components preserve native semantics first, then add ARIA only where the pattern needs it.',
         items: [
-          'Interactive controls support keyboard activation, focus-visible states, and disabled semantics.',
-          'Form controls connect labels, helper text, errors, aria-invalid, and aria-describedby.',
-          'Dialog and overlay patterns document Escape, backdrop behavior, focus management, and restore rules.',
-        ],
-      },
-      {
-        title: 'Author responsibilities',
-        description:
-          'The library provides accessible primitives, but product teams still own meaningful content and workflow validation.',
-        items: [
-          'Use visible labels or ariaLabel for label-less controls.',
-          'Keep status text specific enough for screen reader users.',
-          'Test keyboard-only flows before shipping complex forms, tables, and overlays.',
+          'Keyboard activation and visible focus states',
+          'Associated labels, helper text, and errors',
+          'Documented focus handling for overlays',
         ],
       },
     ],
   },
   theming: {
-    badge: 'Theming',
+    badge: 'Style Guide',
     title: 'Theme With Tailwind And Dark Mode',
     summary:
-      'NgNova UI uses static Tailwind classes and dark-mode variants so consumers get predictable styling, tree-shakable templates, and no hidden global theme runtime.',
-    ctaLabel: 'Open Get Started',
+      'NgNova UI uses static Tailwind classes and dark-mode variants so consumers get predictable styling and no hidden theme runtime.',
+    ctaLabel: 'Open Guide',
     ctaPath: '/get-started',
     sections: [
       {
         title: 'Tailwind setup',
         description:
-          'Consumer apps need Tailwind to scan the package so utility classes used by NgNova UI are generated.',
+          'Consumer apps need Tailwind to scan the package so utility classes are generated.',
         items: [
-          'Add @source "../node_modules/@ngnova/ui" beside the Tailwind import.',
-          'Use dark mode at the app shell level so component dark: classes activate consistently.',
-          'Avoid depending on internal class names as public API.',
-        ],
-      },
-      {
-        title: 'Design tokens direction',
-        description:
-          'The current milestone favors stable component APIs and static utilities before introducing a broader token system.',
-        items: [
-          'Keep semantic variants small and literal-union typed.',
-          'Prefer component inputs for documented variants instead of undocumented CSS hooks.',
-          'Document any future CSS entry point as a semver-sensitive public surface.',
+          'Add @source "../node_modules/@ngnova/ui"',
+          'Use dark mode at the app shell',
+          'Avoid undocumented internal class hooks',
         ],
       },
     ],
@@ -114,29 +97,41 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
     badge: 'Roadmap',
     title: 'NgNova UI Roadmap',
     summary:
-      'The roadmap keeps the component library honest: finish quality before breadth, then expand toward harnesses, theming tokens, and richer enterprise patterns.',
+      'The roadmap keeps the component library honest: finish quality before breadth, then expand toward harnesses, theming tokens, and enterprise patterns.',
     ctaLabel: 'Browse Components',
     ctaPath: '/components/button',
     sections: [
       {
         title: 'Current milestone',
         description:
-          'The first milestone focuses on a dependable component foundation and documentation that feels production-ready.',
+          'The first milestone focuses on a dependable component foundation and production-ready docs.',
         items: [
-          'Finalize the prioritized components with complete docs and verification.',
-          'Polish responsive documentation layout, previews, API tables, and navigation.',
-          'Keep build, test, demo, and package dry-run checks green before release.',
+          'Finalize prioritized components',
+          'Polish responsive documentation',
+          'Keep release checks green',
         ],
       },
+    ],
+  },
+  playground: {
+    badge: 'Playground',
+    title: 'Experiment With Components',
+    summary:
+      'Use the playground as a focused space for trying combinations before they become documented recipes.',
+    ctaLabel: 'Start With Button',
+    ctaPath: '/components/button',
+    sections: [
       {
-        title: 'Next quality investments',
+        title: 'Try interactions',
         description:
-          'After the initial docs surface is stable, the library can add deeper testing and system-level capabilities.',
-        items: [
-          'Add CDK component harnesses through the @ngnova/ui/testing entry point.',
-          'Document design tokens or CSS entry points if the theming model expands.',
-          'Add more data, overlay, and navigation patterns once existing APIs are settled.',
-        ],
+          'Validate component states, dark mode, forms behavior, and density before production use.',
+        items: ['Variant experiments', 'Form states', 'Overlay workflows'],
+      },
+      {
+        title: 'Promote recipes',
+        description:
+          'When a pattern proves useful, move it into the component docs as a real product example.',
+        items: ['Usage snippet', 'Accessibility note', 'API alignment'],
       },
     ],
   },
@@ -145,53 +140,48 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
 @Component({
   selector: 'app-docs-topic-page',
   standalone: true,
-  imports: [RouterLink, UiBadgeComponent, UiButtonComponent, UiCardComponent],
+  imports: [RouterLink, UiButtonComponent],
   template: `
     @if (topic(); as page) {
-      <article class="mx-auto max-w-6xl">
-        <header
-          class="border-b border-slate-200 pb-8 dark:border-slate-800 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-8"
-        >
-          <div>
-            <div class="flex flex-wrap gap-2">
-              <ui-badge variant="info" size="sm">{{ page.badge }}</ui-badge>
-              <ui-badge variant="success" size="sm">Production Docs</ui-badge>
-            </div>
-            <h1
-              class="mt-5 max-w-4xl text-4xl font-semibold text-slate-950 dark:text-slate-50 lg:text-5xl"
-            >
-              {{ page.title }}
-            </h1>
-            <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-              {{ page.summary }}
-            </p>
-          </div>
-          <div class="mt-6 lg:mt-0 lg:self-end">
-            <a [routerLink]="page.ctaPath">
-              <ui-button>{{ page.ctaLabel }}</ui-button>
-            </a>
-          </div>
+      <article class="mx-auto max-w-[73rem] pb-20">
+        <header class="pt-5">
+          <span
+            class="rounded bg-red-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-red-800 dark:bg-red-950 dark:text-red-200"
+          >
+            {{ page.badge }}
+          </span>
+          <h1 class="mt-7 text-5xl font-bold leading-tight text-zinc-950 dark:text-zinc-50">
+            {{ page.title }}
+          </h1>
+          <p class="mt-5 max-w-4xl text-xl leading-9 text-zinc-600 dark:text-zinc-300">
+            {{ page.summary }}
+          </p>
+          <a [routerLink]="page.ctaPath" class="mt-8 inline-block">
+            <ui-button>{{ page.ctaLabel }}</ui-button>
+          </a>
         </header>
 
-        <section class="mt-8 grid gap-5">
+        <section class="mt-10 grid gap-6 md:grid-cols-2">
           @for (section of page.sections; track section.title) {
-            <ui-card>
-              <div uiCardHeader>
-                <h2 class="text-xl font-semibold text-slate-950 dark:text-slate-50">
-                  {{ section.title }}
-                </h2>
-                <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
-                  {{ section.description }}
-                </p>
-              </div>
-              <ul class="grid gap-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+            <article
+              class="rounded border border-red-200 bg-white p-8 dark:border-red-950 dark:bg-zinc-950"
+            >
+              <h2 class="text-2xl font-medium text-zinc-950 dark:text-zinc-50">
+                {{ section.title }}
+              </h2>
+              <p class="mt-4 text-lg leading-7 text-zinc-600 dark:text-zinc-300">
+                {{ section.description }}
+              </p>
+              <div class="mt-7 flex flex-wrap gap-3">
                 @for (item of section.items; track item) {
-                  <li class="rounded-md border border-slate-200 p-4 dark:border-slate-800">
+                  <span
+                    class="rounded bg-zinc-100 px-3 py-2 text-base text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+                  >
                     {{ item }}
-                  </li>
+                  </span>
                 }
-              </ul>
-            </ui-card>
+              </div>
+            </article>
           }
         </section>
       </article>

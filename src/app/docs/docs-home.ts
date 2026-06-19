@@ -42,7 +42,7 @@ interface FeaturedComponent {
   template: `
     <article class="mx-auto max-w-7xl">
       <section
-        class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950"
+        class="overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950"
       >
         <div class="grid gap-10 px-6 py-10 lg:grid-cols-[minmax(0,1fr)_25rem] lg:px-10 lg:py-14">
           <div>
@@ -52,11 +52,11 @@ interface FeaturedComponent {
               <ui-badge size="sm">Tailwind CSS</ui-badge>
             </div>
             <h1
-              class="mt-6 max-w-4xl text-5xl font-semibold text-slate-950 dark:text-slate-50 lg:text-6xl"
+              class="mt-6 max-w-4xl text-5xl font-bold text-zinc-950 dark:text-zinc-50 lg:text-6xl"
             >
               Build Angular products with a library that feels intentional.
             </h1>
-            <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+            <p class="mt-6 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
               NgNova UI is a modern Angular component library focused on clean public APIs,
               accessibility, dark mode, forms support, and documentation that teaches production
               usage instead of only listing props.
@@ -72,7 +72,7 @@ interface FeaturedComponent {
           </div>
 
           <div
-            class="rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900"
+            class="rounded border border-red-200 bg-zinc-100 p-5 dark:border-red-950 dark:bg-zinc-900"
           >
             <div class="flex items-center justify-between gap-3">
               <div>
@@ -97,7 +97,7 @@ interface FeaturedComponent {
               <div>
                 <div class="mb-2 flex justify-between text-sm">
                   <span class="text-slate-600 dark:text-slate-300">Library tests</span>
-                  <span class="font-medium text-slate-950 dark:text-slate-50">66 passing</span>
+                  <span class="font-medium text-slate-950 dark:text-slate-50">71 passing</span>
                 </div>
                 <ui-progress-bar [value]="100" label="Library test status" />
               </div>
@@ -140,7 +140,7 @@ interface FeaturedComponent {
       <section class="mt-8">
         <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p class="text-sm font-semibold uppercase text-blue-700 dark:text-blue-300">
+            <p class="text-sm font-semibold uppercase text-red-800 dark:text-red-300">
               Component System
             </p>
             <h2 class="mt-1 text-2xl font-semibold text-slate-950 dark:text-slate-50">
@@ -149,7 +149,7 @@ interface FeaturedComponent {
           </div>
           <a
             routerLink="/components/button"
-            class="text-sm font-medium text-blue-700 hover:text-blue-800 dark:text-blue-300"
+            class="text-sm font-medium text-red-800 hover:text-red-900 dark:text-red-300"
           >
             Explore all components
           </a>
@@ -159,7 +159,7 @@ interface FeaturedComponent {
           @for (component of featuredComponents(); track component.slug) {
             <a
               [routerLink]="['/components', component.slug]"
-              class="group rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-950 dark:hover:border-blue-900"
+              class="group rounded border border-red-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-md dark:border-red-950 dark:bg-zinc-950 dark:hover:bg-red-950/30"
             >
               <div class="flex items-start justify-between gap-4">
                 <div>
@@ -169,7 +169,7 @@ interface FeaturedComponent {
                   </h3>
                 </div>
                 <span
-                  class="text-slate-300 transition group-hover:text-blue-600 dark:text-slate-700"
+                  class="text-slate-300 transition group-hover:text-red-700 dark:text-slate-700 dark:group-hover:text-red-300"
                   >/</span
                 >
               </div>
@@ -191,7 +191,7 @@ export class DocsHomeComponent {
       value: String(componentDocs.length),
       description: 'Finished docs pages',
     },
-    { label: 'Tests', value: '66', description: 'Library specs passing' },
+    { label: 'Tests', value: '71', description: 'Library specs passing' },
     { label: 'Builds', value: '2', description: 'Library and demo' },
     { label: 'Modes', value: '2', description: 'Light and dark' },
   ];

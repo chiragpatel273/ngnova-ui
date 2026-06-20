@@ -1,4 +1,12 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, Input, output } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  output,
+} from '@angular/core';
 
 import { uiClassNames } from '../../shared/class-names';
 
@@ -57,6 +65,8 @@ const SIZE_CLASSES: Record<UiButtonSize, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiButtonComponent {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() variant: UiButtonVariant = 'primary';
   @Input() size: UiButtonSize = 'md';
   @Input({ transform: booleanAttribute }) disabled = false;
@@ -88,10 +98,20 @@ export class UiButtonComponent {
   }
 
   protected emitFocused(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'focus');
     this.focused.emit(event);
   }
 
   protected emitBlurred(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 }

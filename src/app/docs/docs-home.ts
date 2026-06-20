@@ -21,6 +21,12 @@ interface HomePrinciple {
   readonly description: string;
 }
 
+interface HomeAdvantage {
+  readonly title: string;
+  readonly description: string;
+  readonly proof: string;
+}
+
 interface FeaturedComponent {
   readonly name: string;
   readonly slug: string;
@@ -137,6 +143,38 @@ interface FeaturedComponent {
         }
       </section>
 
+      <section
+        class="mt-8 rounded border border-red-200 bg-white p-6 dark:border-red-950 dark:bg-zinc-950 lg:p-8"
+      >
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold uppercase text-red-800 dark:text-red-300">Why NgNova</p>
+            <h2 class="mt-1 text-2xl font-semibold text-slate-950 dark:text-slate-50">
+              Built for teams that want Angular clarity without theme lock-in.
+            </h2>
+          </div>
+          <ui-tag variant="info">First release focus</ui-tag>
+        </div>
+
+        <div class="mt-6 grid gap-4 md:grid-cols-3">
+          @for (advantage of advantages; track advantage.title) {
+            <section
+              class="rounded border border-red-100 bg-zinc-50 p-5 dark:border-red-950/70 dark:bg-zinc-900"
+            >
+              <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-50">
+                {{ advantage.title }}
+              </h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {{ advantage.description }}
+              </p>
+              <p class="mt-4 font-mono text-xs text-red-800 dark:text-red-200">
+                {{ advantage.proof }}
+              </p>
+            </section>
+          }
+        </div>
+      </section>
+
       <section class="mt-8">
         <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -211,6 +249,27 @@ export class DocsHomeComponent {
       title: 'Production documentation',
       description:
         'Every finished component includes live previews, realistic snippets, API tables, forms notes, testing notes, and usage guidance.',
+    },
+  ];
+
+  protected readonly advantages: readonly HomeAdvantage[] = [
+    {
+      title: 'Per-component imports',
+      description:
+        'Every public component has a focused package path that mirrors how developers expect modern Angular libraries to scale.',
+      proof: "import { UiButtonComponent } from '@ngnova/ui/button'",
+    },
+    {
+      title: 'Tailwind-native styling',
+      description:
+        'Components use static utility classes and dark-mode variants, so teams can adopt the library without a separate theme runtime.',
+      proof: '@source "../node_modules/@ngnova/ui"',
+    },
+    {
+      title: 'Docs as product recipes',
+      description:
+        'Component pages pair live previews with matching snippets, API tables, accessibility notes, and testing guidance.',
+      proof: `${componentDocs.length} documented components`,
     },
   ];
 

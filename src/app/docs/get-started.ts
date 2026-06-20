@@ -25,31 +25,33 @@ interface GuideCard {
           >
             Comprehensive Guides
           </span>
-          <p class="mt-6 text-lg text-zinc-950 dark:text-zinc-50">Documentation Guides</p>
-          <p class="mt-5 max-w-4xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
+          <h1 class="mt-6 text-4xl font-bold tracking-normal text-zinc-950 dark:text-zinc-50">
+            Documentation Guides
+          </h1>
+          <p class="mt-5 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
             Everything you need to build high-quality Angular applications. From initial setup to
             advanced theme customization and accessibility standards.
           </p>
         </header>
 
-        <section class="mt-10 grid auto-rows-[minmax(13rem,auto)] gap-6 md:grid-cols-3">
+        <section class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           @for (card of guideCards; track card.title) {
             <article [class]="cardClasses(card)">
               <div>
                 <p class="text-sm font-semibold uppercase text-red-800 dark:text-red-300">
                   {{ card.eyebrow }}
                 </p>
-                <h2 class="mt-5 text-xl font-medium text-zinc-950 dark:text-zinc-50">
+                <h2 class="mt-4 text-xl font-semibold text-zinc-950 dark:text-zinc-50">
                   {{ card.title }}
                 </h2>
-                <p class="mt-4 text-lg leading-7 text-zinc-600 dark:text-zinc-300">
+                <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">
                   {{ card.description }}
                 </p>
               </div>
 
               @if (card.code) {
                 <pre
-                  class="mt-6 max-w-44 overflow-auto rounded bg-zinc-900 p-4 font-mono text-base leading-6 text-white"
+                  class="mt-5 overflow-x-auto whitespace-nowrap rounded bg-zinc-950 p-4 font-mono text-sm leading-6 text-zinc-50 shadow-sm dark:bg-black"
                 ><code>{{ card.code }}</code></pre>
               }
 
@@ -67,7 +69,7 @@ interface GuideCard {
               }
 
               @if (card.title === 'Getting Started') {
-                <a routerLink="/components/button" class="mt-7 inline-block">
+                <a routerLink="/components/button" class="mt-6 inline-block">
                   <ui-button>Start Journey</ui-button>
                 </a>
               }
@@ -78,7 +80,7 @@ interface GuideCard {
         <footer
           class="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-red-200 pt-8 text-base text-zinc-600 dark:border-red-950 dark:text-zinc-300"
         >
-          <p>© 2024 NgNova UI. Built for developers by developers.</p>
+          <p>&copy; 2024 NgNova UI. Built for developers by developers.</p>
           <nav class="flex flex-wrap gap-8" aria-label="Guide footer">
             <a routerLink="/components">GitHub</a>
             <a routerLink="/apis">API Reference</a>
@@ -141,17 +143,16 @@ export class GetStartedComponent {
       description:
         'Learn the fundamental concepts of NgNova UI and how to integrate it into your existing Angular projects. Covers workspace setup and basic component usage.',
       tone: 'default',
-      size: 'wide',
+      size: 'normal',
     },
     {
       eyebrow: 'Install',
       title: 'Installation',
       description:
-        'Quick start with CLI, npm, or yarn. Step-by-step commands to get the library running in seconds.',
+        'Install the package, configure Tailwind scanning, and import only the component entry points your app uses.',
       tone: 'default',
       size: 'normal',
-      code: `npm install
-@ngnova/ui`,
+      code: `npm install @ngnova/ui`,
     },
     {
       eyebrow: 'A11y',
@@ -172,9 +173,9 @@ export class GetStartedComponent {
     },
     {
       eyebrow: 'Tools',
-      title: 'Schematics',
+      title: 'Release Workflow',
       description:
-        'Automate your workflow with generators that scaffold components, services, and modules with best practices already baked in.',
+        'Use build, test, lint, and package dry-run checks before publishing or adopting a new component version.',
       tone: 'default',
       size: 'normal',
     },
@@ -197,10 +198,11 @@ export class GetStartedComponent {
   ];
 
   protected cardClasses(card: GuideCard): string {
-    const base = 'rounded border border-red-200 p-8 dark:border-red-950';
+    const base =
+      'flex min-h-72 flex-col justify-between rounded border border-red-200 p-6 dark:border-red-950';
     const size: Record<GuideCard['size'], string> = {
       normal: '',
-      tall: 'md:row-span-2',
+      tall: '',
       wide: 'md:col-span-2',
     };
     const tone: Record<GuideCard['tone'], string> = {

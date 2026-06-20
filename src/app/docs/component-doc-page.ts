@@ -35,7 +35,12 @@ import type {
   UiTabItem,
 } from '@ngnova/ui';
 
-import { componentDocDetailsBySlug, componentDocs, docsBySlug } from './docs-data';
+import {
+  componentDocDetailsBySlug,
+  componentDocs,
+  docsBySlug,
+  getComponentImportPath,
+} from './docs-data';
 import type { ComponentDoc, ComponentExample } from './docs-data';
 import { CardDocPlaygroundComponent } from './card-doc-playground';
 import { DocsApiTableComponent } from './docs-api-table';
@@ -115,7 +120,7 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               </span>
             </div>
 
-            <div class="mt-3 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-end">
+            <div class="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start">
               <div>
                 <h1 class="text-5xl font-bold leading-tight text-zinc-950 dark:text-zinc-50">
                   {{ componentDoc.name }}
@@ -123,6 +128,16 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                 <p class="mt-4 max-w-3xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
                   {{ componentDoc.summary }}
                 </p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                  @for (stat of qualityStats; track stat.label) {
+                    <span
+                      class="inline-flex items-center gap-1.5 rounded-full bg-zinc-200 px-3 py-1.5 text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
+                    >
+                      <span class="size-1.5 rounded-full bg-red-700" aria-hidden="true"></span>
+                      {{ stat.value }} {{ stat.label }}
+                    </span>
+                  }
+                </div>
               </div>
 
               <dl
@@ -142,18 +157,85 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                 }
               </dl>
             </div>
-
-            <div class="mt-6 flex flex-wrap gap-2">
-              @for (stat of qualityStats; track stat.label) {
-                <span
-                  class="inline-flex items-center gap-1.5 rounded-full bg-zinc-200 px-3 py-1.5 text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
-                >
-                  <span class="size-1.5 rounded-full bg-red-700" aria-hidden="true"></span>
-                  {{ stat.value }} {{ stat.label }}
-                </span>
-              }
-            </div>
           </header>
+
+          <section id="setup" class="border-b border-red-200 py-8 dark:border-red-950/70">
+            <div
+              class="overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950"
+            >
+              <div class="grid gap-0 lg:grid-cols-[18rem_minmax(0,1fr)]">
+                <div
+                  class="border-b border-red-100 bg-red-50/60 p-5 dark:border-red-950/70 dark:bg-red-950/20 lg:border-b-0 lg:border-r"
+                >
+                  <p
+                    class="text-xs font-semibold uppercase tracking-normal text-red-800 dark:text-red-200"
+                  >
+                    Setup
+                  </p>
+                  <h2 class="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+                    Install & import
+                  </h2>
+                  <p class="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+                    Install the package once, then import only the standalone component entry point
+                    your Angular app needs.
+                  </p>
+                  <div class="mt-5 flex flex-wrap gap-2">
+                    <span
+                      class="rounded-full bg-white px-3 py-1 text-xs font-medium text-red-800 ring-1 ring-red-200 dark:bg-zinc-950 dark:text-red-200 dark:ring-red-900"
+                    >
+                      Standalone
+                    </span>
+                    <span
+                      class="rounded-full bg-white px-3 py-1 text-xs font-medium text-red-800 ring-1 ring-red-200 dark:bg-zinc-950 dark:text-red-200 dark:ring-red-900"
+                    >
+                      Tailwind v4
+                    </span>
+                  </div>
+                </div>
+
+                <div class="grid gap-3 p-5">
+                  <div
+                    class="grid gap-2 rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+                  >
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <p class="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Install</p>
+                      <span class="text-xs text-zinc-500 dark:text-zinc-400">npm</span>
+                    </div>
+                    <pre
+                      class="overflow-x-auto whitespace-nowrap rounded bg-zinc-950 px-4 py-3 font-mono text-sm leading-6 text-zinc-50"
+                    ><code>npm install @ngnova/ui</code></pre>
+                  </div>
+
+                  <div
+                    class="grid gap-2 rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+                  >
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <p class="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                        Component import
+                      </p>
+                      <span class="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                        {{ componentImportPath() }}
+                      </span>
+                    </div>
+                    <pre
+                      class="overflow-x-auto whitespace-pre rounded bg-zinc-950 px-4 py-3 font-mono text-sm leading-6 text-zinc-50"
+                    ><code>{{ importStatement() }}</code></pre>
+                  </div>
+
+                  <div
+                    class="flex flex-wrap items-center justify-between gap-3 rounded border border-red-100 bg-red-50 px-4 py-3 text-sm dark:border-red-950/70 dark:bg-red-950/20"
+                  >
+                    <span class="font-medium text-zinc-800 dark:text-zinc-100">
+                      Tailwind apps should scan NgNova UI classes.
+                    </span>
+                    <code class="font-mono text-red-800 dark:text-red-200">
+                      @source "../node_modules/&#64;ngnova/ui";
+                    </code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
           <section id="usage" class="py-10">
             <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
@@ -257,7 +339,7 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                     }
                     @case ('modal') {
                       <div class="text-center">
-                        <ui-button (pressed)="modalOpen.set(true)">Open dialog</ui-button>
+                        <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
                         <p class="mt-3 text-sm text-zinc-500">
                           Escape, backdrop policy, and focus restore are documented below.
                         </p>
@@ -265,7 +347,7 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                     }
                     @case ('toast') {
                       <div class="text-center">
-                        <ui-button (pressed)="showToast()">Show toast</ui-button>
+                        <ui-button (click)="showToast()">Show toast</ui-button>
                         <ui-toast />
                       </div>
                     }
@@ -534,8 +616,8 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               Build the library, inspect <code>dist/ui</code>, then publish with public access.
             </p>
             <div uiModalFooter class="flex gap-3">
-              <ui-button variant="outline" (pressed)="modalOpen.set(false)">Cancel</ui-button>
-              <ui-button (pressed)="modalOpen.set(false)">Publish</ui-button>
+              <ui-button variant="outline" (click)="modalOpen.set(false)">Cancel</ui-button>
+              <ui-button (click)="modalOpen.set(false)">Publish</ui-button>
             </div>
           </ui-modal>
         </article>
@@ -657,9 +739,24 @@ export class ComponentDocPageComponent {
     return [
       { label: 'Selector', value: currentDoc.selector },
       { label: 'Import', value: currentDoc.importName },
+      { label: 'Package', value: getComponentImportPath(currentDoc.slug) },
       { label: 'Inputs', value: String(currentDoc.inputs.length) },
       { label: 'Outputs', value: String(currentDoc.outputs.length) },
     ];
+  });
+  protected readonly importStatement = computed(() => {
+    const currentDoc = this.doc();
+
+    if (!currentDoc) {
+      return '';
+    }
+
+    return `import { ${currentDoc.importName} } from '${getComponentImportPath(currentDoc.slug)}';`;
+  });
+  protected readonly componentImportPath = computed(() => {
+    const currentDoc = this.doc();
+
+    return currentDoc ? getComponentImportPath(currentDoc.slug) : '';
   });
   protected readonly guidanceCards = computed<readonly GuidanceCard[]>(() => {
     const detail = this.details();

@@ -51,7 +51,7 @@ describe('UiCheckboxComponent', () => {
     checkboxFixture.componentInstance.valueChange.subscribe((nextValue) => {
       value = nextValue;
     });
-    checkboxFixture.componentInstance.focused.subscribe(() => {
+    checkboxFixture.nativeElement.addEventListener('focus', () => {
       focused = true;
     });
     checkboxFixture.detectChanges();

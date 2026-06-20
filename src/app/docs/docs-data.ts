@@ -102,18 +102,18 @@ export const componentDocs: ComponentDoc[] = [
     ],
     outputs: [
       {
-        name: 'pressed',
-        type: 'OutputEmitterRef<MouseEvent>',
+        name: 'click',
+        type: 'MouseEvent',
         description: 'Emits when the enabled button is clicked or activated.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the native button receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the native button loses focus.',
       },
     ],
@@ -335,13 +335,13 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the current value on input.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the input receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the input loses focus.',
       },
       {
@@ -553,7 +553,7 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'Dialog overlay with focus management, header/body/footer projection, backdrop policy, and Escape handling.',
     importName: 'UiModalComponent',
-    usage: `<ui-button (pressed)="modalOpen.set(true)">Open dialog</ui-button>
+    usage: `<ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
 
 <ui-modal
   [open]="modalOpen()"
@@ -567,8 +567,8 @@ export const componentDocs: ComponentDoc[] = [
     Build the library, inspect dist/ui, then publish with public access.
   </p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="modalOpen.set(false)">Cancel</ui-button>
-    <ui-button (pressed)="modalOpen.set(false)">Publish</ui-button>
+    <ui-button variant="outline" (click)="modalOpen.set(false)">Cancel</ui-button>
+    <ui-button (click)="modalOpen.set(false)">Publish</ui-button>
   </div>
 </ui-modal>`,
     inputs: [
@@ -719,13 +719,13 @@ export const componentDocs: ComponentDoc[] = [
           'Supports two-way binding when the mixed state is cleared by user interaction.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the native checkbox receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the native checkbox loses focus.',
       },
     ],
@@ -808,13 +808,13 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the selected value after user interaction.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the native select receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the native select loses focus.',
       },
     ],
@@ -939,13 +939,13 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the selected value after user interaction.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when a radio receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when a radio loses focus.',
       },
     ],
@@ -1002,13 +1002,13 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the checked value after user interaction.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the switch receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the switch loses focus.',
       },
     ],
@@ -1134,13 +1134,13 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the current value on input.',
       },
       {
-        name: 'focused',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'focus',
+        type: 'FocusEvent',
         description: 'Emits when the textarea receives focus.',
       },
       {
-        name: 'blurred',
-        type: 'OutputEmitterRef<FocusEvent>',
+        name: 'blur',
+        type: 'FocusEvent',
         description: 'Emits when the textarea loses focus.',
       },
     ],
@@ -1314,7 +1314,7 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-toast',
     summary: 'Application notification viewport powered by UiToastService.',
     importName: 'UiToastComponent, UiToastService',
-    usage: `<ui-button (pressed)="showToast()">Show toast</ui-button>
+    usage: `<ui-button (click)="showToast()">Show toast</ui-button>
 <ui-toast />`,
     inputs: [
       {
@@ -1360,6 +1360,10 @@ export const componentDocs: ComponentDoc[] = [
 
 export const docsBySlug = new Map(componentDocs.map((doc) => [doc.slug, doc]));
 
+export function getComponentImportPath(slug: string): string {
+  return `@ngnova/ui/${slug}`;
+}
+
 export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
   [
     'button',
@@ -1377,24 +1381,28 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
           title: 'Release footer',
           description: 'A page footer with safe, secondary, and primary actions.',
           code: `<div class="flex flex-wrap justify-end gap-2">
-  <ui-button variant="outline" (pressed)="cancel()">Cancel</ui-button>
-  <ui-button variant="secondary" (pressed)="saveDraft()">Save draft</ui-button>
-  <ui-button [loading]="publishing" loadingLabel="Publishing release" (pressed)="publish()">
+  <ui-button variant="outline" (click)="cancel()">Cancel</ui-button>
+  <ui-button variant="secondary" (click)="saveDraft()">Save draft</ui-button>
+  <ui-button [loading]="publishing" loadingLabel="Publishing release" (click)="publish()">
     Publish
   </ui-button>
 </div>`,
         },
         {
-          title: 'Destructive confirmation action',
-          description: 'Use danger only for irreversible or high-risk actions.',
+          title: 'Button events',
+          description:
+            'Use HTML-friendly component events for app handlers while the component re-emits the inner native button event.',
           code: `<ui-button
-  variant="danger"
-  [loading]="deleting"
-  loadingLabel="Deleting package"
-  (pressed)="deletePackage()"
+  (click)="saveChanges($event)"
+  (focus)="buttonFocused.set(true)"
+  (blur)="buttonFocused.set(false)"
 >
-  Delete package
-</ui-button>`,
+  Save changes
+</ui-button>
+
+<p aria-live="polite">
+  {{ buttonFocused() ? 'Save action focused' : 'Ready to save' }}
+</p>`,
         },
       ],
       accessibility: [
@@ -1755,8 +1763,8 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
   <span uiModalHeader>Publish package</span>
   <p id="publish-description">This publishes the package to npm.</p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="publishOpen = false">Cancel</ui-button>
-    <ui-button (pressed)="publish()">Publish</ui-button>
+    <ui-button variant="outline" (click)="publishOpen = false">Cancel</ui-button>
+    <ui-button (click)="publish()">Publish</ui-button>
   </div>
 </ui-modal>`,
         },
@@ -1771,8 +1779,8 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 >
   <p>This action cannot be undone.</p>
   <div uiModalFooter>
-    <ui-button variant="outline" (pressed)="deleteOpen = false">Keep package</ui-button>
-    <ui-button variant="danger" (pressed)="deletePackage()">Delete</ui-button>
+    <ui-button variant="outline" (click)="deleteOpen = false">Keep package</ui-button>
+    <ui-button variant="danger" (click)="deletePackage()">Delete</ui-button>
   </div>
 </ui-modal>`,
         },

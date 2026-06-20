@@ -58,7 +58,7 @@ const RADIO_OPTIONS: readonly UiRadioOption[] = [
     UiTextareaComponent,
   ],
   template: `
-    <ui-button type="submit" (pressed)="pressed = true">Save</ui-button>
+    <ui-button type="submit" (click)="pressed = true">Save</ui-button>
     <ui-input label="Email" [formControl]="email" />
     <ui-checkbox label="Newsletter" [formControl]="newsletter" />
     <ui-select label="Plan" [options]="planOptions" [formControl]="plan" />

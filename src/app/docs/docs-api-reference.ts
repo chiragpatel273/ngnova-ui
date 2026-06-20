@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
+import { componentDocs, getComponentImportPath } from './docs-data';
+
 interface ApiEntry {
   readonly name: string;
   readonly kind: ApiKind;
@@ -8,26 +10,27 @@ interface ApiEntry {
   readonly signatures: readonly string[];
 }
 
-type ApiKind = 'All' | 'Components' | 'Directives' | 'Services' | 'Types' | 'Interfaces';
+type ApiKind = 'All' | 'Components' | 'Slots' | 'Services' | 'Types' | 'Interfaces';
 
 const API_FILTERS: readonly ApiKind[] = [
   'All',
   'Components',
-  'Directives',
+  'Slots',
   'Services',
   'Types',
   'Interfaces',
 ];
 
 const API_ENTRIES: readonly ApiEntry[] = [
-  {
-    name: 'UiButtonComponent',
-    kind: 'Components',
-    packageName: '@ngnova/ui/button',
-    description:
-      'A highly customizable button component supporting variants, sizes, loading, disabled, and full-width states.',
-    signatures: ['@Input: variant', '@Input: size', '(pressed)'],
-  },
+  ...componentDocs.map(
+    (doc): ApiEntry => ({
+      name: doc.importName.split(',')[0].trim(),
+      kind: 'Components',
+      packageName: getComponentImportPath(doc.slug),
+      description: doc.summary,
+      signatures: [doc.selector, `${doc.inputs.length} inputs`, `${doc.outputs.length} outputs`],
+    }),
+  ),
   {
     name: 'UiToastService',
     kind: 'Services',
@@ -37,12 +40,36 @@ const API_ENTRIES: readonly ApiEntry[] = [
     signatures: ['success()', 'warning()', 'dismiss()'],
   },
   {
+    name: 'uiCardHeader / uiCardFooter',
+    kind: 'Slots',
+    packageName: '@ngnova/ui/card',
+    description:
+      'Projection marker attributes for placing card header and footer content without adding extra wrapper APIs.',
+    signatures: ['selector: [uiCardHeader]', 'selector: [uiCardFooter]'],
+  },
+  {
     name: 'uiInputPrefix',
-    kind: 'Directives',
+    kind: 'Slots',
     packageName: '@ngnova/ui/input',
     description:
       'Projection marker that places contextual content before the native input while preserving field semantics.',
     signatures: ['selector: [uiInputPrefix]'],
+  },
+  {
+    name: 'uiInputSuffix',
+    kind: 'Slots',
+    packageName: '@ngnova/ui/input',
+    description:
+      'Projection marker that places actions, badges, or supporting content after the native input.',
+    signatures: ['selector: [uiInputSuffix]'],
+  },
+  {
+    name: 'uiModalHeader / uiModalFooter',
+    kind: 'Slots',
+    packageName: '@ngnova/ui/modal',
+    description:
+      'Projection markers for dialog title and action regions while preserving the modal accessibility contract.',
+    signatures: ['selector: [uiModalHeader]', 'selector: [uiModalFooter]'],
   },
   {
     name: 'UiButtonVariant',
@@ -53,6 +80,20 @@ const API_ENTRIES: readonly ApiEntry[] = [
     signatures: ["'primary'", "'secondary'", "'danger'"],
   },
   {
+    name: 'UiInputAppearance',
+    kind: 'Types',
+    packageName: '@ngnova/ui/input',
+    description: 'Literal union for outline and filled input appearances.',
+    signatures: ["'outline'", "'filled'"],
+  },
+  {
+    name: 'UiTableSortDirection',
+    kind: 'Types',
+    packageName: '@ngnova/ui/table',
+    description: 'Literal union for table sort state emitted by sortable column headers.',
+    signatures: ["'asc'", "'desc'"],
+  },
+  {
     name: 'UiSelectOption',
     kind: 'Interfaces',
     packageName: '@ngnova/ui/select',
@@ -61,12 +102,12 @@ const API_ENTRIES: readonly ApiEntry[] = [
     signatures: ['label: string', 'value: string', 'disabled?: boolean'],
   },
   {
-    name: 'UiTableComponent',
-    kind: 'Components',
+    name: 'UiTableColumn',
+    kind: 'Interfaces',
     packageName: '@ngnova/ui/table',
     description:
-      'Performance-conscious data table with loading, empty, sorting, and row-selection documentation.',
-    signatures: ['[columns]', '[rows]', '(sortChange)'],
+      'Column configuration object for header labels, alignment, and sortable table fields.',
+    signatures: ['key: string', 'header: string', 'sortable?: boolean'],
   },
 ];
 
@@ -81,7 +122,7 @@ const API_ENTRIES: readonly ApiEntry[] = [
         </h1>
         <p class="mt-7 max-w-4xl text-2xl leading-10 text-zinc-600 dark:text-zinc-300">
           Comprehensive documentation for all NgNova UI modules. Browse and filter through
-          components, directives, services, and core types used across the library.
+          components, projection slots, services, and core types used across the library.
         </p>
       </header>
 
@@ -166,12 +207,9 @@ const API_ENTRIES: readonly ApiEntry[] = [
       </section>
 
       <div class="mt-20 border-t border-red-200 pt-10 text-center dark:border-red-950">
-        <button
-          type="button"
-          class="rounded border border-red-200 bg-white px-12 py-5 text-xl text-zinc-950 transition hover:bg-red-50 dark:border-red-950 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:bg-red-950/30"
-        >
-          Load More APIs
-        </button>
+        <p class="text-lg text-zinc-600 dark:text-zinc-300">
+          Showing {{ filteredEntries().length }} of {{ apiEntries.length }} public API entries.
+        </p>
       </div>
     </article>
   `,
@@ -179,19 +217,22 @@ const API_ENTRIES: readonly ApiEntry[] = [
 })
 export class DocsApiReferenceComponent {
   protected readonly filters = API_FILTERS;
+  protected readonly apiEntries = API_ENTRIES;
   protected readonly query = signal('');
   protected readonly activeFilter = signal<ApiKind>('All');
   protected readonly filteredEntries = computed<readonly ApiEntry[]>(() => {
     const normalizedQuery = this.query().trim().toLowerCase();
     const filter = this.activeFilter();
 
-    return API_ENTRIES.filter((entry) => filter === 'All' || entry.kind === filter).filter(
-      (entry) =>
-        !normalizedQuery ||
-        [entry.name, entry.description, entry.packageName, ...entry.signatures].some((value) =>
-          value.toLowerCase().includes(normalizedQuery),
-        ),
-    );
+    return this.apiEntries
+      .filter((entry) => filter === 'All' || entry.kind === filter)
+      .filter(
+        (entry) =>
+          !normalizedQuery ||
+          [entry.name, entry.description, entry.packageName, ...entry.signatures].some((value) =>
+            value.toLowerCase().includes(normalizedQuery),
+          ),
+      );
   });
 
   protected updateQuery(event: Event): void {
@@ -217,7 +258,7 @@ export class DocsApiReferenceComponent {
     const colors: Record<ApiKind, string> = {
       All: 'bg-zinc-200 text-zinc-800',
       Components: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200',
-      Directives: 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200',
+      Slots: 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200',
       Services: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200',
       Types: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200',
       Interfaces: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200',

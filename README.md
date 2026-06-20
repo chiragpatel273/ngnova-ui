@@ -42,6 +42,14 @@ See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md)
 - `UiTabsComponent`: keyboard-friendly tablist with two-way active state and disabled tabs.
 - `UiSpinnerComponent`: accessible loading indicator with sizes and decorative mode.
 
+## Why NgNova UI
+
+- **Angular 22 standalone first:** component imports are explicit and work without NgModules.
+- **Per-component package paths:** import from paths such as `@ngnova/ui/button`, `@ngnova/ui/input`, and `@ngnova/ui/toast`.
+- **Tailwind-native styling:** components use static Tailwind utility classes and support dark mode without a separate theme runtime.
+- **Docs as implementation recipes:** each component page pairs a live preview with matching snippets, API tables, accessibility notes, and testing guidance.
+- **Testing surface included:** reusable Angular CDK harnesses ship from `@ngnova/ui/testing`.
+
 ## Install In A Consumer App
 
 ```bash

@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  ElementRef,
   forwardRef,
   Input,
+  inject,
   output,
 } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
@@ -52,7 +54,7 @@ let nextRadioGroupId = 0;
               [disabled]="disabled || !!option.disabled"
               [required]="required"
               (change)="selectOption(option)"
-              (focus)="focused.emit($event)"
+              (focus)="emitFocused($event)"
               (blur)="markTouched($event)"
             />
             <span class="min-w-0">
@@ -83,6 +85,8 @@ let nextRadioGroupId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiRadioGroupComponent implements ControlValueAccessor {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() label = '';
   @Input() helperText = '';
   @Input() errorText = '';
@@ -150,8 +154,22 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
     this.valueChange.emit(option.value);
   }
 
+  protected emitFocused(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'focus');
+    this.focused.emit(event);
+  }
+
   protected markTouched(event: FocusEvent): void {
     this.onTouched();
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 }

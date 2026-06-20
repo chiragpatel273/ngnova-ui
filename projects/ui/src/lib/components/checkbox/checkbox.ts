@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  ElementRef,
   forwardRef,
   Input,
+  inject,
   output,
   signal,
 } from '@angular/core';
@@ -39,7 +41,7 @@ let nextCheckboxId = 0;
         [attr.aria-describedby]="descriptionId"
         [class]="checkboxClasses"
         (change)="onChangeEvent($event)"
-        (focus)="focused.emit($event)"
+        (focus)="emitFocused($event)"
         (blur)="markTouched($event)"
       />
 
@@ -65,6 +67,8 @@ let nextCheckboxId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() label = '';
   @Input() helperText = '';
   @Input() inputId = `ui-checkbox-${++nextCheckboxId}`;
@@ -132,8 +136,22 @@ export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
     this.valueChange.emit(checked);
   }
 
+  protected emitFocused(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'focus');
+    this.focused.emit(event);
+  }
+
   protected markTouched(event: FocusEvent): void {
     this.onTouched();
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 }

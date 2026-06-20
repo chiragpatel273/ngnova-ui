@@ -2,6 +2,13 @@
 
 NgNova UI is a small Angular component library built with standalone components and Tailwind CSS utility classes.
 
+## Why NgNova UI
+
+- Angular 22 standalone components with explicit per-component imports.
+- Tailwind-native styling with static classes and dark-mode support.
+- Production docs with live previews, matching snippets, API tables, accessibility notes, and testing guidance.
+- Angular CDK harnesses from `@ngnova/ui/testing`.
+
 ## Install
 
 ```bash

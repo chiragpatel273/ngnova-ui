@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  ElementRef,
   Input,
   inject,
   numberAttribute,
@@ -64,7 +65,7 @@ let nextTextareaId = 0;
         [required]="required"
         [class]="textareaClasses"
         (input)="onInput($event)"
-        (focus)="focused.emit($event)"
+        (focus)="emitFocused($event)"
         (blur)="markTouched($event)"
       ></textarea>
 
@@ -92,6 +93,7 @@ let nextTextareaId = 0;
 })
 export class UiTextareaComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @Input() label = '';
   @Input() placeholder = '';
@@ -201,9 +203,23 @@ export class UiTextareaComponent implements ControlValueAccessor {
     this.valueChange.emit(value);
   }
 
+  protected emitFocused(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'focus');
+    this.focused.emit(event);
+  }
+
   protected markTouched(event: FocusEvent): void {
     this.onTouched();
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 
   private get controlInvalid(): boolean {

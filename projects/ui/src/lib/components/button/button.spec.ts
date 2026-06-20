@@ -7,7 +7,7 @@ import { UiButtonComponent } from './button';
 @Component({
   standalone: true,
   imports: [UiButtonComponent],
-  template: `<ui-button [loading]="loading" (pressed)="clicked = true">Save</ui-button>`,
+  template: `<ui-button [loading]="loading" (click)="clicked = true">Save</ui-button>`,
 })
 class HostComponent {
   loading = false;
@@ -26,7 +26,7 @@ describe('UiButtonComponent', () => {
     fixture.detectChanges();
   });
 
-  it('emits pressed when enabled', () => {
+  it('emits click when enabled', () => {
     fixture.nativeElement.querySelector('button').click();
 
     expect(fixture.componentInstance.clicked).toBe(true);
@@ -47,7 +47,7 @@ describe('UiButtonComponent', () => {
     const buttonFixture = TestBed.createComponent(UiButtonComponent);
     buttonFixture.componentInstance.loading = true;
     let emitted = false;
-    buttonFixture.componentInstance.pressed.subscribe(() => {
+    buttonFixture.nativeElement.addEventListener('click', () => {
       emitted = true;
     });
     buttonFixture.detectChanges();

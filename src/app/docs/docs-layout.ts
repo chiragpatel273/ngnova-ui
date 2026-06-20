@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { componentDocs } from './docs-data';
+import { componentDocs, getComponentImportPath } from './docs-data';
 import type { ComponentDoc } from './docs-data';
 
 interface SidebarItem {
@@ -225,8 +225,12 @@ export class DocsLayoutComponent {
   }
 
   private matchesQuery(doc: ComponentDoc, query: string): boolean {
-    return [doc.name, doc.selector, doc.summary, doc.importName].some((value) =>
-      value.toLowerCase().includes(query),
-    );
+    return [
+      doc.name,
+      doc.selector,
+      doc.summary,
+      doc.importName,
+      getComponentImportPath(doc.slug),
+    ].some((value) => value.toLowerCase().includes(query));
   }
 }

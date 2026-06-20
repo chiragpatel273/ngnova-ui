@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  ElementRef,
   forwardRef,
   Input,
+  inject,
   output,
 } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
@@ -50,7 +52,7 @@ let nextSelectId = 0;
         [attr.aria-describedby]="descriptionId"
         [class]="selectClasses"
         (change)="onSelect($event)"
-        (focus)="focused.emit($event)"
+        (focus)="emitFocused($event)"
         (blur)="markTouched($event)"
       >
         @if (placeholder) {
@@ -83,6 +85,8 @@ let nextSelectId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiSelectComponent implements ControlValueAccessor {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() label = '';
   @Input() placeholder = '';
   @Input() helperText = '';
@@ -147,8 +151,22 @@ export class UiSelectComponent implements ControlValueAccessor {
     this.valueChange.emit(value);
   }
 
+  protected emitFocused(event: FocusEvent): void {
+    this.dispatchHostFocusEvent(event, 'focus');
+    this.focused.emit(event);
+  }
+
   protected markTouched(event: FocusEvent): void {
     this.onTouched();
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 }

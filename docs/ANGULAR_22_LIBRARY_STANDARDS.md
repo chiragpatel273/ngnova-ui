@@ -70,16 +70,17 @@ Use this checklist whenever adding, reviewing, or refactoring NgNova UI componen
 ## Input And Output Naming
 
 - Do not prefix outputs with `ui`.
-- Do not name outputs after native DOM events such as `click`, `focus`, or `blur`.
+- Prefer HTML-friendly host DOM events such as `click`, `focus`, and `blur` when the component intentionally forwards an inner native control event.
+- Do not alias Angular outputs to native DOM event names. Forward native events on the host instead, and keep semantic output fields only when needed for backward compatibility.
 - Do not prefix inputs with `ui`.
 - Do not choose input names that collide with native HTMLElement properties unless the behavior intentionally mirrors the native property.
 - Use input aliases rarely. Prefer stable, clear public names from the start.
 - Use required inputs only when a component cannot function without that value.
 - Prefer signal-based `input()` for new components when it improves local reactivity and derived state.
 - Decorator-based `@Input()` remains acceptable when it keeps the public API simpler or aligns with existing component patterns.
-- Use event names that describe component meaning:
-  - Button: `pressed`, `focused`, `blurred`
-  - Input: `valueChange`, `focused`, `blurred`
+- Use event names that describe component meaning, or HTML-friendly aliases when mirroring native control events:
+  - Button: `click`, `focus`, `blur`
+  - Input and form controls: `valueChange`, `focus`, `blur`
   - Modal: `openChange`, `opened`, `closed`, `backdropClick`, `escapeKeyDown`
 - Use camelCase output names.
 - Use boolean transforms for boolean inputs: `@Input({ transform: booleanAttribute })`.

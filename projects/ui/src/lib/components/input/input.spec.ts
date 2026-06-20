@@ -94,10 +94,10 @@ describe('UiInputComponent', () => {
     const inputFixture = TestBed.createComponent(UiInputComponent);
     let focused = false;
     let blurred = false;
-    inputFixture.componentInstance.focused.subscribe(() => {
+    inputFixture.nativeElement.addEventListener('focus', () => {
       focused = true;
     });
-    inputFixture.componentInstance.blurred.subscribe(() => {
+    inputFixture.nativeElement.addEventListener('blur', () => {
       blurred = true;
     });
     inputFixture.detectChanges();

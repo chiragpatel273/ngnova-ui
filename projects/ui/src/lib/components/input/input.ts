@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  ElementRef,
   Input,
   inject,
   numberAttribute,
@@ -157,6 +158,7 @@ let nextInputId = 0;
 })
 export class UiInputComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @Input() label = '';
   @Input() placeholder = '';
@@ -337,13 +339,23 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected emitFocused(event: FocusEvent): void {
     this.focusedState.set(true);
+    this.dispatchHostFocusEvent(event, 'focus');
     this.focused.emit(event);
   }
 
   protected markTouched(event: FocusEvent): void {
     this.focusedState.set(false);
     this.onTouched();
+    this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
+  }
+
+  private dispatchHostFocusEvent(event: FocusEvent, type: 'focus' | 'blur'): void {
+    this.host.nativeElement.dispatchEvent(
+      new FocusEvent(type, {
+        relatedTarget: event.relatedTarget,
+      }),
+    );
   }
 
   protected clearValue(): void {

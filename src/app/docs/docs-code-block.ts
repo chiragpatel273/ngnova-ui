@@ -21,7 +21,7 @@ import { UiButtonComponent } from '@ngnova/ui';
             {{ language() }}
           </span>
         </div>
-        <ui-button variant="secondary" size="sm" (pressed)="copy()">
+        <ui-button variant="secondary" size="sm" (click)="copy()">
           {{ copiedLabel() }}
         </ui-button>
       </figcaption>

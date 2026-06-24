@@ -4,6 +4,7 @@ import { ComponentDocPageComponent } from './docs/component-doc-page';
 import { DocsApiReferenceComponent } from './docs/docs-api-reference';
 import { DocsLayoutComponent } from './docs/docs-layout';
 import { DocsHomeComponent } from './docs/docs-home';
+import { DocsTemplatesComponent } from './docs/docs-templates';
 import { DocsTopicPageComponent } from './docs/docs-topic-page';
 import { GetStartedComponent } from './docs/get-started';
 
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: 'get-started', redirectTo: 'guide', pathMatch: 'full' },
       { path: 'apis', component: DocsApiReferenceComponent },
       { path: 'components', component: DocsTopicPageComponent, data: { topic: 'components' } },
+      { path: 'templates', component: DocsTemplatesComponent },
       { path: 'playground', component: DocsTopicPageComponent, data: { topic: 'playground' } },
       {
         path: 'accessibility',

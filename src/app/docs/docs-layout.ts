@@ -45,6 +45,7 @@ const COMPONENT_GROUPS: readonly ComponentDocGroup[] = [
 
 const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'API Reference', path: '/apis' },
+  { label: 'Templates', path: '/templates' },
   { label: 'CLI Reference', path: '/guide' },
   { label: 'Style Guide', path: '/theming' },
 ];
@@ -90,10 +91,11 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             <button
               type="button"
               class="h-10 rounded px-3 text-base font-medium text-zinc-800 transition hover:bg-red-50 hover:text-red-800 dark:text-zinc-200 dark:hover:bg-red-950/40"
-              aria-label="Toggle theme"
-              (click)="darkMode.set(!darkMode())"
+              [attr.aria-label]="themeToggleLabel()"
+              [attr.aria-pressed]="darkMode()"
+              (click)="toggleTheme()"
             >
-              Theme
+              {{ themeLabel() }}
             </button>
             <a
               routerLink="/apis"
@@ -196,9 +198,14 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
 export class DocsLayoutComponent {
   protected readonly query = signal('');
   protected readonly darkMode = signal(false);
+  protected readonly themeLabel = computed(() => (this.darkMode() ? 'Light mode' : 'Dark mode'));
+  protected readonly themeToggleLabel = computed(() =>
+    this.darkMode() ? 'Switch to light mode' : 'Switch to dark mode',
+  );
   protected readonly primaryNav: readonly PrimaryNavItem[] = [
     { label: 'Guide', path: '/guide', exact: true },
     { label: 'Components', path: '/components' },
+    { label: 'Templates', path: '/templates', exact: true },
     { label: 'APIs', path: '/apis', exact: true },
     { label: 'Playground', path: '/playground', exact: true },
   ];
@@ -222,6 +229,10 @@ export class DocsLayoutComponent {
 
   protected updateQuery(event: Event): void {
     this.query.set((event.target as HTMLInputElement).value);
+  }
+
+  protected toggleTheme(): void {
+    this.darkMode.update((enabled) => !enabled);
   }
 
   private matchesQuery(doc: ComponentDoc, query: string): boolean {

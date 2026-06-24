@@ -15,7 +15,7 @@ export type UiButtonSize = 'sm' | 'md' | 'lg';
 export type UiButtonType = 'button' | 'submit' | 'reset';
 
 const BASE_CLASSES =
-  'inline-flex shrink-0 items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60';
+  'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60';
 
 const VARIANT_CLASSES: Record<UiButtonVariant, string> = {
   primary:

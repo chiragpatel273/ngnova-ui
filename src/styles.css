@@ -2,12 +2,15 @@
 
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../projects/ui/src";
 
 html {
   color-scheme: light;
 }
 
-html.dark {
+html.dark,
+.dark {
   color-scheme: dark;
 }

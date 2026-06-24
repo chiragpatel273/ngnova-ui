@@ -61,9 +61,59 @@ interface GuidanceCard {
   readonly body: string;
 }
 
+interface ButtonUsageExample {
+  readonly id: 'variants' | 'sizes' | 'states' | 'events';
+  readonly title: string;
+  readonly description: string;
+  readonly filename: string;
+  readonly code: string;
+}
+
 const FORM_SLUGS = ['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'] as const;
 const OVERLAY_SLUGS = ['modal', 'toast'] as const;
 const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
+
+const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
+  {
+    id: 'variants',
+    title: 'Variants',
+    description:
+      'Use visual weight to separate primary, secondary, quiet, and destructive actions.',
+    filename: 'button-variants.example.html',
+    code: `<ui-button>Primary Action</ui-button>
+<ui-button variant="secondary">Secondary</ui-button>
+<ui-button variant="outline">Outline</ui-button>
+<ui-button variant="ghost">Ghost</ui-button>
+<ui-button variant="danger">Delete</ui-button>`,
+  },
+  {
+    id: 'sizes',
+    title: 'Sizes',
+    description:
+      'Match button density to the surrounding surface without changing the component API.',
+    filename: 'button-sizes.example.html',
+    code: `<ui-button size="sm">Small</ui-button>
+<ui-button size="md">Medium</ui-button>
+<ui-button size="lg">Large</ui-button>`,
+  },
+  {
+    id: 'states',
+    title: 'States',
+    description: 'Show pending work, disabled actions, and full-width mobile layouts explicitly.',
+    filename: 'button-states.example.html',
+    code: `<ui-button loading loadingLabel="Saving changes">Saving</ui-button>
+<ui-button disabled>Disabled</ui-button>
+<ui-button fullWidth>Continue</ui-button>`,
+  },
+  {
+    id: 'events',
+    title: 'Events',
+    description: 'Handle native-friendly events the same way you would with a standard button.',
+    filename: 'button-events.example.html',
+    code: `<ui-button (click)="recordButtonClick()">Track click</ui-button>
+<p aria-live="polite">Click events handled: {{ buttonEventCount() }}</p>`,
+  },
+];
 
 @Component({
   selector: 'app-component-doc-page',
@@ -141,12 +191,10 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               </div>
 
               <dl
-                class="grid grid-cols-2 gap-0 overflow-hidden rounded border border-red-200 bg-white text-sm dark:border-red-950 dark:bg-zinc-950"
+                class="grid gap-0 overflow-hidden rounded border border-red-200 bg-white text-sm dark:border-red-950 dark:bg-zinc-950"
               >
                 @for (item of summaryItems(); track item.label) {
-                  <div
-                    class="border-b border-r border-red-100 p-3 last:border-r-0 dark:border-red-950/70"
-                  >
+                  <div class="border-b border-red-100 p-3 last:border-b-0 dark:border-red-950/70">
                     <dt class="text-xs font-medium uppercase text-zinc-500 dark:text-zinc-500">
                       {{ item.label }}
                     </dt>
@@ -173,11 +221,11 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                     Setup
                   </p>
                   <h2 class="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
-                    Install & import
+                    Use this component
                   </h2>
                   <p class="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
-                    Install the package once, then import only the standalone component entry point
-                    your Angular app needs.
+                    Import the standalone entry point in the Angular component that renders this UI
+                    primitive.
                   </p>
                   <div class="mt-5 flex flex-wrap gap-2">
                     <span
@@ -193,44 +241,23 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
                   </div>
                 </div>
 
-                <div class="grid gap-3 p-5">
+                <div class="grid content-center p-4 sm:p-5">
                   <div
-                    class="grid gap-2 rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
+                    class="grid gap-3 rounded border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:p-4"
                   >
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                      <p class="text-sm font-semibold text-zinc-950 dark:text-zinc-50">Install</p>
-                      <span class="text-xs text-zinc-500 dark:text-zinc-400">npm</span>
+                    <div class="flex items-center justify-between gap-3">
+                      <div class="min-w-0">
+                        <p class="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
+                          Component import
+                        </p>
+                      </div>
+                      <ui-button variant="secondary" size="sm" (click)="copyImportStatement()">
+                        {{ copiedImportStatement() ? 'Copied' : 'Copy' }}
+                      </ui-button>
                     </div>
                     <pre
-                      class="overflow-x-auto whitespace-nowrap rounded bg-zinc-950 px-4 py-3 font-mono text-sm leading-6 text-zinc-50"
-                    ><code>npm install @ngnova/ui</code></pre>
-                  </div>
-
-                  <div
-                    class="grid gap-2 rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900"
-                  >
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                      <p class="text-sm font-semibold text-zinc-950 dark:text-zinc-50">
-                        Component import
-                      </p>
-                      <span class="font-mono text-xs text-zinc-500 dark:text-zinc-400">
-                        {{ componentImportPath() }}
-                      </span>
-                    </div>
-                    <pre
-                      class="overflow-x-auto whitespace-pre rounded bg-zinc-950 px-4 py-3 font-mono text-sm leading-6 text-zinc-50"
+                      class="overflow-x-auto whitespace-pre rounded bg-zinc-950 px-4 py-2.5 font-mono text-sm leading-6 text-zinc-50"
                     ><code>{{ importStatement() }}</code></pre>
-                  </div>
-
-                  <div
-                    class="flex flex-wrap items-center justify-between gap-3 rounded border border-red-100 bg-red-50 px-4 py-3 text-sm dark:border-red-950/70 dark:bg-red-950/20"
-                  >
-                    <span class="font-medium text-zinc-800 dark:text-zinc-100">
-                      Tailwind apps should scan NgNova UI classes.
-                    </span>
-                    <code class="font-mono text-red-800 dark:text-red-200">
-                      @source "../node_modules/&#64;ngnova/ui";
-                    </code>
                   </div>
                 </div>
               </div>
@@ -255,228 +282,291 @@ const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
               </a>
             </div>
 
-            <div
-              class="grid overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950 xl:grid-cols-[minmax(0,1fr)_28rem]"
-            >
-              <div class="min-h-64 p-6 sm:p-8">
-                <div
-                  class="flex min-h-52 items-center justify-center rounded bg-zinc-50 p-6 dark:bg-zinc-900"
-                >
-                  @switch (componentDoc.slug) {
-                    @case ('button') {
-                      <div class="flex flex-wrap items-center justify-center gap-3">
-                        <ui-button>Primary Action</ui-button>
-                        <ui-button variant="secondary">Secondary</ui-button>
-                        <ui-button variant="outline">Outline</ui-button>
-                        <ui-button variant="ghost">Ghost</ui-button>
-                      </div>
-                    }
-                    @case ('input') {
-                      <div class="w-full max-w-sm">
-                        <ui-input
-                          label="Work email"
-                          type="email"
-                          autocomplete="email"
-                          labelMode="floating"
-                          helperText="Floating label, helper text, and Angular forms support."
-                          clearable
-                          [formControl]="email"
-                        />
-                      </div>
-                    }
-                    @case ('textarea') {
-                      <div class="w-full max-w-md">
-                        <ui-textarea
-                          label="Release notes"
-                          helperText="Counter, resize, and validation-ready field state."
-                          [maxLength]="280"
-                          [rows]="5"
-                          [formControl]="releaseNotes"
-                        />
-                      </div>
-                    }
-                    @case ('checkbox') {
-                      <div class="grid gap-4">
-                        <ui-checkbox
-                          label="Email subscribers"
-                          helperText="Reactive form boolean value."
-                          [formControl]="newsletter"
-                        />
-                        <ui-checkbox
-                          label="Select all packages"
-                          helperText="Mixed child state."
-                          indeterminate
-                        />
-                      </div>
-                    }
-                    @case ('radio') {
-                      <div class="w-full max-w-md">
-                        <ui-radio-group
-                          label="Contact preference"
-                          helperText="Small mutually exclusive choices stay visible."
-                          [options]="contactOptions"
-                          [formControl]="contactPreference"
-                        />
-                      </div>
-                    }
-                    @case ('switch') {
-                      <ui-switch
-                        label="Release notifications"
-                        helperText="Immediate setting state owned by the parent form."
-                        [formControl]="notifications"
-                      />
-                    }
-                    @case ('select') {
-                      <div class="w-full max-w-sm">
-                        <ui-select
-                          label="Plan"
-                          placeholder="Choose a plan"
-                          helperText="Native select behavior with NgNova styling."
-                          [options]="planOptions"
-                          [formControl]="plan"
-                        />
-                      </div>
-                    }
-                    @case ('modal') {
-                      <div class="text-center">
-                        <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
-                        <p class="mt-3 text-sm text-zinc-500">
-                          Escape, backdrop policy, and focus restore are documented below.
-                        </p>
-                      </div>
-                    }
-                    @case ('toast') {
-                      <div class="text-center">
-                        <ui-button (click)="showToast()">Show toast</ui-button>
-                        <ui-toast />
-                      </div>
-                    }
-                    @case ('table') {
-                      <div class="w-full overflow-x-auto">
-                        <ui-table
-                          [columns]="tableColumns"
-                          [rows]="tableRows"
-                          selectable
-                          (rowSelected)="selectedTableRow.set($event)"
-                        />
-                      </div>
-                    }
-                    @case ('tabs') {
-                      <div class="w-full max-w-md">
-                        <ui-tabs
-                          [tabs]="componentTabs"
-                          [active]="activeTab()"
-                          (activeChange)="activeTab.set($event)"
-                          ariaLabel="Component documentation tabs preview"
-                          fullWidth
-                        >
-                          @if (activeTab() === 'overview') {
-                            <p
-                              class="rounded bg-white p-4 text-sm text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300"
-                            >
-                              Overview panel content stays associated with the selected tab.
-                            </p>
-                          } @else {
-                            <p
-                              class="rounded bg-white p-4 text-sm text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300"
-                            >
-                              API panel content can hold reference tables, forms, or related
-                              content.
-                            </p>
-                          }
-                        </ui-tabs>
-                      </div>
-                    }
-                    @case ('accordion') {
-                      <div class="w-full max-w-md">
-                        <ui-accordion
-                          [items]="accordionItems"
-                          [active]="accordionActive()"
-                          (activeChange)="accordionActive.set($event)"
-                        />
-                      </div>
-                    }
-                    @case ('card') {
-                      <ui-card>
-                        <div uiCardHeader>
-                          <h3 class="font-semibold">Analytics card</h3>
+            @if (componentDoc.slug === 'button') {
+              <div class="grid gap-5">
+                @for (example of buttonUsageExamples; track example.id) {
+                  <section
+                    class="overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950"
+                  >
+                    <div class="grid lg:grid-cols-[minmax(0,1fr)_minmax(20rem,28rem)]">
+                      <div class="grid gap-4 p-5 sm:p-6">
+                        <div>
+                          <h3 class="text-xl font-bold text-zinc-950 dark:text-zinc-50">
+                            {{ example.title }}
+                          </h3>
+                          <p class="mt-1 max-w-xl leading-7 text-zinc-600 dark:text-zinc-400">
+                            {{ example.description }}
+                          </p>
                         </div>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                          Projected regions keep content structure predictable.
-                        </p>
-                        <div uiCardFooter>
-                          <ui-button size="sm" variant="outline">Open report</ui-button>
-                        </div>
-                      </ui-card>
-                    }
-                    @case ('badge') {
-                      <div class="flex flex-wrap items-center justify-center gap-2">
-                        <ui-badge>Default</ui-badge>
-                        <ui-badge variant="success">Stable</ui-badge>
-                        <ui-badge variant="warning">Review</ui-badge>
-                        <ui-badge variant="danger">Blocked</ui-badge>
-                      </div>
-                    }
-                    @case ('tag') {
-                      <div class="flex flex-wrap items-center justify-center gap-2">
-                        <ui-tag>Angular</ui-tag>
-                        <ui-tag variant="success">Published</ui-tag>
-                        <ui-tag variant="warning" removable>Needs review</ui-tag>
-                      </div>
-                    }
-                    @case ('avatar') {
-                      <div class="flex items-center justify-center gap-3">
-                        <ui-avatar label="Ada Lovelace" />
-                        <ui-avatar label="NgNova UI" shape="square" size="lg" />
-                      </div>
-                    }
-                    @case ('alert') {
-                      <div class="w-full max-w-lg">
-                        <ui-alert variant="success" title="Saved" dismissible>
-                          Your component settings were updated.
-                        </ui-alert>
-                      </div>
-                    }
-                    @case ('progress-bar') {
-                      <div class="grid w-full max-w-md gap-4">
-                        <ui-progress-bar [value]="76" variant="success" label="Build progress" />
-                        <ui-progress-bar indeterminate label="Publishing package" />
-                      </div>
-                    }
-                    @case ('skeleton') {
-                      <div class="grid w-full max-w-md gap-4">
-                        <div class="flex items-center gap-3">
-                          <ui-skeleton shape="circle" width="2.75rem" height="2.75rem" />
-                          <div class="grid flex-1 gap-2">
-                            <ui-skeleton shape="text" width="70%" height="0.875rem" />
-                            <ui-skeleton shape="text" width="45%" height="0.875rem" />
-                          </div>
-                        </div>
-                        <ui-skeleton height="8rem" />
-                      </div>
-                    }
-                    @case ('spinner') {
-                      <div class="flex items-center justify-center gap-4">
-                        <ui-spinner label="Loading invoices" />
-                        <span class="text-sm text-zinc-600 dark:text-zinc-300"
-                          >Loading invoices...</span
-                        >
-                      </div>
-                    }
-                    @default {
-                      <ui-badge variant="info">Preview ready</ui-badge>
-                    }
-                  }
-                </div>
-              </div>
 
-              <app-docs-code-block
-                class="block min-w-0 border-t border-red-200 dark:border-red-950 xl:border-l xl:border-t-0"
-                [code]="componentDoc.usage"
-                [filename]="componentDoc.selector + '.example.html'"
-                language="Angular template"
-              />
-            </div>
+                        <div
+                          class="flex min-h-40 items-center justify-center rounded bg-zinc-50 p-5 dark:bg-zinc-900"
+                        >
+                          @switch (example.id) {
+                            @case ('variants') {
+                              <div class="flex flex-wrap items-center justify-center gap-3">
+                                <ui-button>Primary Action</ui-button>
+                                <ui-button variant="secondary">Secondary</ui-button>
+                                <ui-button variant="outline">Outline</ui-button>
+                                <ui-button variant="ghost">Ghost</ui-button>
+                                <ui-button variant="danger">Delete</ui-button>
+                              </div>
+                            }
+                            @case ('sizes') {
+                              <div class="flex flex-wrap items-center justify-center gap-3">
+                                <ui-button size="sm">Small</ui-button>
+                                <ui-button size="md">Medium</ui-button>
+                                <ui-button size="lg">Large</ui-button>
+                              </div>
+                            }
+                            @case ('states') {
+                              <div class="grid w-full max-w-sm gap-3">
+                                <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
+                                <ui-button disabled>Disabled</ui-button>
+                                <ui-button fullWidth>Continue</ui-button>
+                              </div>
+                            }
+                            @case ('events') {
+                              <div class="grid gap-3 text-center">
+                                <ui-button (click)="recordButtonClick()">Track click</ui-button>
+                                <p
+                                  class="text-sm font-medium text-zinc-600 dark:text-zinc-400"
+                                  aria-live="polite"
+                                >
+                                  Click events handled: {{ buttonEventCount() }}
+                                </p>
+                              </div>
+                            }
+                          }
+                        </div>
+                      </div>
+
+                      <app-docs-code-block
+                        class="block min-w-0 border-t border-red-200 dark:border-red-950 lg:border-l lg:border-t-0"
+                        [code]="example.code"
+                        [filename]="example.filename"
+                        language="Angular template"
+                      />
+                    </div>
+                  </section>
+                }
+              </div>
+            } @else {
+              <div
+                class="grid overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950 xl:grid-cols-[minmax(0,1fr)_28rem]"
+              >
+                <div class="min-h-64 p-6 sm:p-8">
+                  <div
+                    class="flex min-h-52 items-center justify-center rounded bg-zinc-50 p-6 dark:bg-zinc-900"
+                  >
+                    @switch (componentDoc.slug) {
+                      @case ('input') {
+                        <div class="w-full max-w-sm">
+                          <ui-input
+                            label="Work email"
+                            type="email"
+                            autocomplete="email"
+                            labelMode="floating"
+                            helperText="Floating label, helper text, and Angular forms support."
+                            clearable
+                            [formControl]="email"
+                          />
+                        </div>
+                      }
+                      @case ('textarea') {
+                        <div class="w-full max-w-md">
+                          <ui-textarea
+                            label="Release notes"
+                            helperText="Counter, resize, and validation-ready field state."
+                            [maxLength]="280"
+                            [rows]="5"
+                            [formControl]="releaseNotes"
+                          />
+                        </div>
+                      }
+                      @case ('checkbox') {
+                        <div class="grid gap-4">
+                          <ui-checkbox
+                            label="Email subscribers"
+                            helperText="Reactive form boolean value."
+                            [formControl]="newsletter"
+                          />
+                          <ui-checkbox
+                            label="Select all packages"
+                            helperText="Mixed child state."
+                            indeterminate
+                          />
+                        </div>
+                      }
+                      @case ('radio') {
+                        <div class="w-full max-w-md">
+                          <ui-radio-group
+                            label="Contact preference"
+                            helperText="Small mutually exclusive choices stay visible."
+                            [options]="contactOptions"
+                            [formControl]="contactPreference"
+                          />
+                        </div>
+                      }
+                      @case ('switch') {
+                        <ui-switch
+                          label="Release notifications"
+                          helperText="Immediate setting state owned by the parent form."
+                          [formControl]="notifications"
+                        />
+                      }
+                      @case ('select') {
+                        <div class="w-full max-w-sm">
+                          <ui-select
+                            label="Plan"
+                            placeholder="Choose a plan"
+                            helperText="Native select behavior with NgNova styling."
+                            [options]="planOptions"
+                            [formControl]="plan"
+                          />
+                        </div>
+                      }
+                      @case ('modal') {
+                        <div class="text-center">
+                          <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
+                          <p class="mt-3 text-sm text-zinc-500">
+                            Escape, backdrop policy, and focus restore are documented below.
+                          </p>
+                        </div>
+                      }
+                      @case ('toast') {
+                        <div class="text-center">
+                          <ui-button (click)="showToast()">Show toast</ui-button>
+                          <ui-toast />
+                        </div>
+                      }
+                      @case ('table') {
+                        <div class="w-full overflow-x-auto">
+                          <ui-table
+                            [columns]="tableColumns"
+                            [rows]="tableRows"
+                            selectable
+                            (rowSelected)="selectedTableRow.set($event)"
+                          />
+                        </div>
+                      }
+                      @case ('tabs') {
+                        <div class="w-full max-w-md">
+                          <ui-tabs
+                            [tabs]="componentTabs"
+                            [active]="activeTab()"
+                            (activeChange)="activeTab.set($event)"
+                            ariaLabel="Component documentation tabs preview"
+                            fullWidth
+                          >
+                            @if (activeTab() === 'overview') {
+                              <p
+                                class="rounded bg-white p-4 text-sm text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300"
+                              >
+                                Overview panel content stays associated with the selected tab.
+                              </p>
+                            } @else {
+                              <p
+                                class="rounded bg-white p-4 text-sm text-zinc-600 dark:bg-zinc-950 dark:text-zinc-300"
+                              >
+                                API panel content can hold reference tables, forms, or related
+                                content.
+                              </p>
+                            }
+                          </ui-tabs>
+                        </div>
+                      }
+                      @case ('accordion') {
+                        <div class="w-full max-w-md">
+                          <ui-accordion
+                            [items]="accordionItems"
+                            [active]="accordionActive()"
+                            (activeChange)="accordionActive.set($event)"
+                          />
+                        </div>
+                      }
+                      @case ('card') {
+                        <ui-card>
+                          <div uiCardHeader>
+                            <h3 class="font-semibold">Analytics card</h3>
+                          </div>
+                          <p class="text-sm text-zinc-600 dark:text-zinc-300">
+                            Projected regions keep content structure predictable.
+                          </p>
+                          <div uiCardFooter>
+                            <ui-button size="sm" variant="outline">Open report</ui-button>
+                          </div>
+                        </ui-card>
+                      }
+                      @case ('badge') {
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                          <ui-badge>Default</ui-badge>
+                          <ui-badge variant="success">Stable</ui-badge>
+                          <ui-badge variant="warning">Review</ui-badge>
+                          <ui-badge variant="danger">Blocked</ui-badge>
+                        </div>
+                      }
+                      @case ('tag') {
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                          <ui-tag>Angular</ui-tag>
+                          <ui-tag variant="success">Published</ui-tag>
+                          <ui-tag variant="warning" removable>Needs review</ui-tag>
+                        </div>
+                      }
+                      @case ('avatar') {
+                        <div class="flex items-center justify-center gap-3">
+                          <ui-avatar label="Ada Lovelace" />
+                          <ui-avatar label="NgNova UI" shape="square" size="lg" />
+                        </div>
+                      }
+                      @case ('alert') {
+                        <div class="w-full max-w-lg">
+                          <ui-alert variant="success" title="Saved" dismissible>
+                            Your component settings were updated.
+                          </ui-alert>
+                        </div>
+                      }
+                      @case ('progress-bar') {
+                        <div class="grid w-full max-w-md gap-4">
+                          <ui-progress-bar [value]="76" variant="success" label="Build progress" />
+                          <ui-progress-bar indeterminate label="Publishing package" />
+                        </div>
+                      }
+                      @case ('skeleton') {
+                        <div class="grid w-full max-w-md gap-4">
+                          <div class="flex items-center gap-3">
+                            <ui-skeleton shape="circle" width="2.75rem" height="2.75rem" />
+                            <div class="grid flex-1 gap-2">
+                              <ui-skeleton shape="text" width="70%" height="0.875rem" />
+                              <ui-skeleton shape="text" width="45%" height="0.875rem" />
+                            </div>
+                          </div>
+                          <ui-skeleton height="8rem" />
+                        </div>
+                      }
+                      @case ('spinner') {
+                        <div class="flex items-center justify-center gap-4">
+                          <ui-spinner label="Loading invoices" />
+                          <span class="text-sm text-zinc-600 dark:text-zinc-300"
+                            >Loading invoices...</span
+                          >
+                        </div>
+                      }
+                      @default {
+                        <ui-badge variant="info">Preview ready</ui-badge>
+                      }
+                    }
+                  </div>
+                </div>
+
+                <app-docs-code-block
+                  class="block min-w-0 border-t border-red-200 dark:border-red-950 xl:border-l xl:border-t-0"
+                  [code]="componentDoc.usage"
+                  [filename]="componentDoc.selector + '.example.html'"
+                  language="Angular template"
+                />
+              </div>
+            }
           </section>
 
           <section
@@ -654,6 +744,9 @@ export class ComponentDocPageComponent {
   protected readonly contactPreference = new FormControl('email');
   protected readonly notifications = new FormControl(false);
   protected readonly plan = new FormControl('pro');
+  protected readonly buttonUsageExamples = BUTTON_USAGE_EXAMPLES;
+  protected readonly buttonEventCount = signal(0);
+  protected readonly copiedImportStatement = signal(false);
   protected readonly modalOpen = signal(false);
   protected readonly activeTab = signal('overview');
   protected readonly accordionActive = signal<readonly string[]>(['overview']);
@@ -740,8 +833,6 @@ export class ComponentDocPageComponent {
       { label: 'Selector', value: currentDoc.selector },
       { label: 'Import', value: currentDoc.importName },
       { label: 'Package', value: getComponentImportPath(currentDoc.slug) },
-      { label: 'Inputs', value: String(currentDoc.inputs.length) },
-      { label: 'Outputs', value: String(currentDoc.outputs.length) },
     ];
   });
   protected readonly importStatement = computed(() => {
@@ -752,11 +843,6 @@ export class ComponentDocPageComponent {
     }
 
     return `import { ${currentDoc.importName} } from '${getComponentImportPath(currentDoc.slug)}';`;
-  });
-  protected readonly componentImportPath = computed(() => {
-    const currentDoc = this.doc();
-
-    return currentDoc ? getComponentImportPath(currentDoc.slug) : '';
   });
   protected readonly guidanceCards = computed<readonly GuidanceCard[]>(() => {
     const detail = this.details();
@@ -788,6 +874,20 @@ export class ComponentDocPageComponent {
 
   protected showToast(): void {
     this.toast.success('Package saved', 'The toast service is ready for application feedback.');
+  }
+
+  protected recordButtonClick(): void {
+    this.buttonEventCount.update((count) => count + 1);
+  }
+
+  protected async copyImportStatement(): Promise<void> {
+    await navigator.clipboard.writeText(this.importStatement());
+    this.copiedImportStatement.set(true);
+    window.setTimeout(() => {
+      if (this.copiedImportStatement()) {
+        this.copiedImportStatement.set(false);
+      }
+    }, 1500);
   }
 
   private categoryFor(slug: string): string {

@@ -65,6 +65,15 @@ describe('UiButtonComponent', () => {
     expect(buttonFixture.nativeElement.querySelector('button').className).toContain('w-full');
   });
 
+  it('uses a pointer cursor for enabled buttons', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.detectChanges();
+
+    expect(buttonFixture.nativeElement.querySelector('button').className).toContain(
+      'cursor-pointer',
+    );
+  });
+
   it('only sets aria-busy while loading', () => {
     const buttonFixture = TestBed.createComponent(UiButtonComponent);
     buttonFixture.detectChanges();

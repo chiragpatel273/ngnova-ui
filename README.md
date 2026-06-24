@@ -61,10 +61,12 @@ In the consumer app stylesheet:
 
 ```css
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";
 ```
 
 Tailwind v4 ignores `node_modules` by default, so the `@source` line is required for consumers unless you later ship prebuilt CSS.
+The `@custom-variant` line makes Tailwind's `dark:` utilities respond to a `.dark` class on the application shell or `html` element.
 
 ## Import Example
 

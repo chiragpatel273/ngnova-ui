@@ -10,18 +10,17 @@ import { UiButtonComponent } from '@ngnova/ui';
       class="overflow-hidden rounded border border-[#3c3c3c] bg-[#1e1e1e] shadow-xl shadow-zinc-300/40 dark:shadow-black/30"
     >
       <figcaption
-        class="flex flex-wrap items-center justify-between gap-3 border-b border-[#3c3c3c] bg-[#252526] px-4 py-3 text-xs text-[#cccccc]"
+        class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-[#3c3c3c] bg-[#252526] px-4 py-3 text-xs text-[#cccccc]"
       >
-        <div class="flex min-w-0 flex-wrap items-center gap-2.5">
+        <div class="flex min-w-0 items-center gap-2.5 overflow-hidden">
           <span class="size-3 rounded-full bg-[#ff5f57]" aria-hidden="true"></span>
           <span class="size-3 rounded-full bg-[#ffbd2e]" aria-hidden="true"></span>
           <span class="size-3 rounded-full bg-[#28c840]" aria-hidden="true"></span>
-          <span class="ml-2 truncate font-mono font-semibold text-[#d4d4d4]">{{ filename() }}</span>
-          <span class="rounded bg-[#333333] px-2 py-1 font-mono text-[#9cdcfe]">
+          <span class="ml-2 shrink-0 rounded bg-[#333333] px-2 py-1 font-mono text-[#9cdcfe]">
             {{ language() }}
           </span>
         </div>
-        <ui-button variant="secondary" size="sm" (click)="copy()">
+        <ui-button class="justify-self-end" variant="secondary" size="sm" (click)="copy()">
           {{ copiedLabel() }}
         </ui-button>
       </figcaption>

@@ -46,10 +46,31 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
     importName: 'UiButtonComponent',
-    usage: `<ui-button>Primary Action</ui-button>
-<ui-button variant="secondary">Secondary</ui-button>
-<ui-button variant="outline">Outline</ui-button>
-<ui-button variant="ghost">Ghost</ui-button>`,
+    usage: `<section aria-label="Button variants">
+  <div class="flex flex-wrap items-center gap-3">
+    <ui-button>Primary Action</ui-button>
+    <ui-button variant="secondary">Secondary</ui-button>
+    <ui-button variant="outline">Outline</ui-button>
+    <ui-button variant="ghost">Ghost</ui-button>
+    <ui-button variant="danger">Delete</ui-button>
+  </div>
+</section>
+
+<section aria-label="Button sizes">
+  <ui-button size="sm">Small</ui-button>
+  <ui-button size="md">Medium</ui-button>
+  <ui-button size="lg">Large</ui-button>
+</section>
+
+<section aria-label="Button states">
+  <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
+  <ui-button disabled>Disabled</ui-button>
+</section>
+
+<section aria-label="Button event handling">
+  <ui-button fullWidth (click)="recordButtonClick()">Track click</ui-button>
+  <p aria-live="polite">Click events handled: {{ buttonEventCount() }}</p>
+</section>`,
     inputs: [
       {
         name: 'variant',

@@ -6,6 +6,10 @@ Before making code changes, read and follow:
 
 - `docs/ANGULAR_22_LIBRARY_STANDARDS.md`
 
+For broad component-library improvement, release-readiness, or continuous agent work, also follow:
+
+- `docs/NGNOVA_WORLD_CLASS_AGENT.md`
+
 ## Core Rules
 
 - Use Angular 22 standalone components.

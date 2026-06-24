@@ -28,7 +28,7 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Build Angular products with a library that feels intentional.',
+      'Build faster with NgNova UI Docs',
     );
 
     await router.navigateByUrl('/components/button');
@@ -45,6 +45,35 @@ describe('App', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
       'Accessible Angular Components',
     );
+  });
+
+  it('toggles the docs theme from the header control', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const layout = compiled.querySelector('app-docs-layout');
+    const toggle = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-label="Switch to dark mode"]',
+    );
+
+    expect(layout?.classList.contains('dark')).toBe(false);
+    expect(toggle).toBeTruthy();
+    expect(toggle?.textContent?.trim()).toBe('Dark mode');
+
+    toggle?.click();
+    fixture.detectChanges();
+
+    const lightToggle = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-label="Switch to light mode"]',
+    );
+    expect(layout?.classList.contains('dark')).toBe(true);
+    expect(lightToggle?.getAttribute('aria-pressed')).toBe('true');
+    expect(lightToggle?.textContent?.trim()).toBe('Light mode');
   });
 
   it('has route-ready docs and detail content for every component', () => {
@@ -80,15 +109,8 @@ describe('App', () => {
       );
       expect(new Set(sectionIds).size).toBe(sectionIds.length);
 
-      const sectionLinks = Array.from(
-        compiled.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Page sections"] a[href]'),
-      );
-      expect(sectionLinks.length).toBeGreaterThan(0);
-
-      for (const link of sectionLinks) {
-        const hash = link.getAttribute('href')?.split('#')[1];
-        expect(hash).toBeTruthy();
-        expect(compiled.querySelector(`#${hash}`)).toBeTruthy();
+      for (const expectedId of ['setup', 'usage', 'guide', 'api', 'accessibility']) {
+        expect(compiled.querySelector(`#${expectedId}`)).toBeTruthy();
       }
 
       expect(compiled.querySelectorAll('app-docs-code-block figure').length).toBeGreaterThan(0);

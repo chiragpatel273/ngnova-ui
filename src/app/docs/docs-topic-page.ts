@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { UiButtonComponent } from '@ngnova/ui';
 
+import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';
 
 interface TopicSection {
@@ -88,8 +89,9 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         description:
           'Consumer apps need Tailwind to scan the package so utility classes are generated.',
         items: [
+          'Add @custom-variant dark (&:where(.dark, .dark *)) for class-based dark mode',
           'Add @source "../node_modules/@ngnova/ui"',
-          'Use dark mode at the app shell',
+          'Toggle the dark class on html or the app shell',
           'Avoid undocumented internal class hooks',
         ],
       },
@@ -139,10 +141,39 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
   },
 };
 
+const THEME_STYLESHEET_CODE = `@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+@source "../node_modules/@ngnova/ui";`;
+
+const THEME_TOGGLE_CODE = `import { DOCUMENT } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-theme-toggle',
+  standalone: true,
+  template: \`
+    <button type="button" (click)="toggleTheme()">
+      {{ darkMode() ? 'Light mode' : 'Dark mode' }}
+    </button>
+  \`,
+})
+export class ThemeToggleComponent {
+  private readonly document = inject(DOCUMENT);
+  readonly darkMode = signal(false);
+
+  toggleTheme(): void {
+    this.darkMode.update((enabled) => {
+      const next = !enabled;
+      this.document.documentElement.classList.toggle('dark', next);
+      return next;
+    });
+  }
+}`;
+
 @Component({
   selector: 'app-docs-topic-page',
   standalone: true,
-  imports: [RouterLink, UiButtonComponent],
+  imports: [RouterLink, UiButtonComponent, DocsCodeBlockComponent],
   template: `
     @if (topic(); as page) {
       <article class="mx-auto max-w-[73rem] pb-20">
@@ -212,6 +243,97 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
               </a>
             }
           </section>
+        } @else if (slug() === 'theming') {
+          <section class="mt-10 grid gap-6">
+            <article
+              class="grid overflow-hidden rounded border border-red-200 bg-white dark:border-red-950 dark:bg-zinc-950 lg:grid-cols-[20rem_minmax(0,1fr)]"
+            >
+              <div
+                class="border-b border-red-100 bg-red-50/60 p-6 dark:border-red-950/70 dark:bg-red-950/20 lg:border-b-0 lg:border-r"
+              >
+                <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-200">
+                  Required setup
+                </p>
+                <h2 class="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+                  Tailwind stylesheet
+                </h2>
+                <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">
+                  NgNova UI ships static Tailwind utility classes. Consumer apps must let Tailwind
+                  scan the package and opt into class-based dark mode.
+                </p>
+              </div>
+              <div class="min-w-0 p-5">
+                <app-docs-code-block [code]="themeStylesheetCode" language="CSS" />
+              </div>
+            </article>
+
+            <article
+              class="grid overflow-hidden rounded border border-red-200 bg-white dark:border-red-950 dark:bg-zinc-950 lg:grid-cols-[20rem_minmax(0,1fr)]"
+            >
+              <div
+                class="border-b border-red-100 bg-red-50/60 p-6 dark:border-red-950/70 dark:bg-red-950/20 lg:border-b-0 lg:border-r"
+              >
+                <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-200">
+                  App shell
+                </p>
+                <h2 class="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+                  Toggle the dark class
+                </h2>
+                <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">
+                  Put the <code class="font-mono">dark</code> class on
+                  <code class="font-mono">html</code> or a parent app shell. Components respond
+                  automatically through their built-in <code class="font-mono">dark:</code>
+                  variants.
+                </p>
+              </div>
+              <div class="min-w-0 p-5">
+                <app-docs-code-block [code]="themeToggleCode" language="TypeScript" />
+              </div>
+            </article>
+
+            <section class="grid gap-5 md:grid-cols-3" aria-label="Theme support details">
+              <article
+                class="rounded border border-red-200 bg-white p-6 dark:border-red-950 dark:bg-zinc-950"
+              >
+                <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-200">
+                  Supported now
+                </p>
+                <h2 class="mt-3 text-xl font-bold text-zinc-950 dark:text-zinc-50">
+                  Light and dark modes
+                </h2>
+                <p class="mt-3 leading-7 text-zinc-600 dark:text-zinc-300">
+                  Every public component includes light styles plus dark-mode variants for surfaces,
+                  text, borders, focus rings, and common state colors.
+                </p>
+              </article>
+              <article
+                class="rounded border border-red-200 bg-white p-6 dark:border-red-950 dark:bg-zinc-950"
+              >
+                <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-200">
+                  Customization
+                </p>
+                <h2 class="mt-3 text-xl font-bold text-zinc-950 dark:text-zinc-50">
+                  Compose with app styles
+                </h2>
+                <p class="mt-3 leading-7 text-zinc-600 dark:text-zinc-300">
+                  Use component inputs for variants and sizes, then compose spacing and layout in
+                  your app. Avoid relying on private internal class hooks.
+                </p>
+              </article>
+              <article
+                class="rounded border border-red-200 bg-white p-6 dark:border-red-950 dark:bg-zinc-950"
+              >
+                <p class="text-xs font-semibold uppercase text-red-800 dark:text-red-200">
+                  Not yet
+                </p>
+                <h2 class="mt-3 text-xl font-bold text-zinc-950 dark:text-zinc-50">Theme tokens</h2>
+                <p class="mt-3 leading-7 text-zinc-600 dark:text-zinc-300">
+                  NgNova UI does not yet expose Material-style theme providers, brand palettes, or
+                  CSS variable token APIs. That should be a planned post-foundation feature.
+                </p>
+              </article>
+            </section>
+          </section>
         } @else {
           <section class="mt-10 grid gap-6 md:grid-cols-2">
             @for (section of page.sections; track section.title) {
@@ -245,6 +367,8 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
 export class DocsTopicPageComponent {
   private readonly route = inject(ActivatedRoute);
   protected readonly allComponents = componentDocs;
+  protected readonly themeStylesheetCode = THEME_STYLESHEET_CODE;
+  protected readonly themeToggleCode = THEME_TOGGLE_CODE;
   protected readonly slug = toSignal(
     this.route.data.pipe(map((data) => String(data['topic'] ?? 'components'))),
     { initialValue: String(this.route.snapshot.data['topic'] ?? 'components') },

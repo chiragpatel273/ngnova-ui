@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -56,12 +56,28 @@ class PremiumHostComponent {
   submittedValue = '';
 }
 
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiInputComponent],
+  template: `
+    <ui-input
+      label="Search"
+      [formControl]="control"
+      (valueChange)="valueChanges.set(valueChanges() + 1)"
+    />
+  `,
+})
+class ValueChangeHostComponent {
+  control = new FormControl('initial', { nonNullable: true });
+  readonly valueChanges = signal(0);
+}
+
 describe('UiInputComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HostComponent, RichHostComponent, PremiumHostComponent],
+      imports: [HostComponent, RichHostComponent, PremiumHostComponent, ValueChangeHostComponent],
     }).compileComponents();
     fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
@@ -75,6 +91,37 @@ describe('UiInputComponent', () => {
     input.dispatchEvent(new Event('input'));
 
     expect(fixture.componentInstance.control.value).toBe('team@example.com');
+  });
+
+  it('does not emit valueChange from reactive form writes, but emits for user input', () => {
+    const valueChangeFixture = TestBed.createComponent(ValueChangeHostComponent);
+    valueChangeFixture.detectChanges();
+
+    valueChangeFixture.componentInstance.control.setValue('programmatic');
+    valueChangeFixture.detectChanges();
+
+    expect(valueChangeFixture.componentInstance.valueChanges()).toBe(0);
+
+    const input = valueChangeFixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = 'typed';
+    input.dispatchEvent(new Event('input'));
+    valueChangeFixture.detectChanges();
+
+    expect(valueChangeFixture.componentInstance.control.value).toBe('typed');
+    expect(valueChangeFixture.componentInstance.valueChanges()).toBe(1);
+  });
+
+  it('syncs disabled state from Angular forms to the native input', () => {
+    fixture.componentInstance.control.disable();
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.disabled).toBe(true);
+
+    fixture.componentInstance.control.enable();
+    fixture.detectChanges();
+
+    expect(input.disabled).toBe(false);
   });
 
   it('keeps aria-describedby aligned with a custom input id', () => {

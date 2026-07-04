@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -161,6 +162,7 @@ let nextInputId = 0;
 export class UiInputComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() placeholder = '';
@@ -333,6 +335,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+    this.changeDetectorRef.markForCheck();
   }
 
   protected onInput(event: Event): void {

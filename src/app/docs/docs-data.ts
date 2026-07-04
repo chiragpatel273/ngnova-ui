@@ -356,14 +356,16 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the current value on input.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the input receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the input receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the input loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the input loses focus. The host also forwards a native blur event.',
       },
       {
         name: 'cleared',
@@ -1599,6 +1601,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       keyboard: [
         'Tab moves focus to the native input.',
         'Typing updates the value and emits valueChange.',
+        'Focus and blur are available as focused and blurred Angular outputs, with native focus and blur events forwarded on the host for HTML-friendly listeners.',
         'The clear button is reachable by Tab when visible.',
         'Enter emits submitted with the current string value.',
         'Password reveal is keyboard reachable and exposes aria-pressed.',
@@ -1618,7 +1621,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         'Avoid placing interactive controls in projected suffix content until the component exposes a formal action-slot pattern.',
       ],
       testing: [
-        'Assert CVA writeValue, valueChange, touched state, disabled state, validation message, clear button, prefix/suffix projection, and counter behavior.',
+        'Assert CVA writeValue does not emit valueChange, typing does emit valueChange, touched state, disabled state, validation message, clear button, prefix/suffix projection, and counter behavior.',
         'For premium behavior, test floating labels, intent classes, passwordVisibilityChange, word counters, and submitted output.',
         'Docs route tests should verify every Input page anchor resolves and every recipe has a code block.',
       ],

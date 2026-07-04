@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiSkeletonComponent } from './skeleton';
+import { UiSkeletonComponent } from '../../../../skeleton/src/skeleton';
 
 describe('UiSkeletonComponent', () => {
   it('marks skeletons as decorative loading placeholders', async () => {

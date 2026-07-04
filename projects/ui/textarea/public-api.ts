@@ -1,2 +1,2 @@
-export { UiTextareaComponent } from '@ngnova/ui';
-export type { UiTextareaAppearance, UiTextareaResize, UiTextareaSize } from '@ngnova/ui';
+export { UiTextareaComponent } from './src/textarea';
+export type { UiTextareaAppearance, UiTextareaResize, UiTextareaSize } from './src/textarea';

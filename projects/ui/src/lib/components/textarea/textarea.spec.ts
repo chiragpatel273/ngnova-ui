@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { UiTextareaComponent } from './textarea';
+import { UiTextareaComponent } from '../../../../textarea/src/textarea';
 
 @Component({
   standalone: true,

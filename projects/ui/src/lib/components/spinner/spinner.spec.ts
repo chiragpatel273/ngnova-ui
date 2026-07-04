@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiSpinnerComponent } from './spinner';
+import { UiSpinnerComponent } from '../../../../spinner/src/spinner';
 
 describe('UiSpinnerComponent', () => {
   it('exposes status semantics by default', () => {

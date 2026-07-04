@@ -3,8 +3,8 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { UiRadioGroupComponent } from './radio';
-import type { UiRadioOption } from './radio';
+import { UiRadioGroupComponent } from '../../../../radio/src/radio';
+import type { UiRadioOption } from '../../../../radio/src/radio';
 
 const OPTIONS: readonly UiRadioOption[] = [
   { label: 'Email', value: 'email' },

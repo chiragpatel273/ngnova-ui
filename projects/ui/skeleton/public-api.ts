@@ -1,2 +1,2 @@
-export { UiSkeletonComponent } from '@ngnova/ui';
-export type { UiSkeletonShape } from '@ngnova/ui';
+export { UiSkeletonComponent } from './src/skeleton';
+export type { UiSkeletonShape } from './src/skeleton';

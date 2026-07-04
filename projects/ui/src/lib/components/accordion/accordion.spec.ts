@@ -2,8 +2,8 @@ import { Component, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import type { UiAccordionItem } from './accordion';
-import { UiAccordionComponent } from './accordion';
+import type { UiAccordionItem } from '../../../../accordion/src/accordion';
+import { UiAccordionComponent } from '../../../../accordion/src/accordion';
 
 @Component({
   standalone: true,

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UiButtonComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui/button';
 
 interface GuideCard {
   readonly eyebrow: string;

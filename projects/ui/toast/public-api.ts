@@ -1,2 +1,2 @@
-export { UiToastComponent, UiToastService } from '@ngnova/ui';
-export type { UiToastInput, UiToastMessage, UiToastVariant } from '@ngnova/ui';
+export { UiToastComponent, UiToastService } from './src/toast';
+export type { UiToastInput, UiToastMessage, UiToastVariant } from './src/toast';

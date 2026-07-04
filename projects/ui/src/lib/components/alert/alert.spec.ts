@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiAlertComponent } from './alert';
+import { UiAlertComponent } from '../../../../alert/src/alert';
 
 describe('UiAlertComponent', () => {
   it('renders projected content and default status role', () => {

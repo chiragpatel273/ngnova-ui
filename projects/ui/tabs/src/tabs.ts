@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, booleanAttribute, Component, Input, output } from '@angular/core';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export interface UiTabItem {
   readonly label: string;

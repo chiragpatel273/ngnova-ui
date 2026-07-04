@@ -1,2 +1,2 @@
-export { UiAvatarComponent } from '@ngnova/ui';
-export type { UiAvatarShape, UiAvatarSize } from '@ngnova/ui';
+export { UiAvatarComponent } from './src/avatar';
+export type { UiAvatarShape, UiAvatarSize } from './src/avatar';

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiProgressBarComponent } from './progress-bar';
+import { UiProgressBarComponent } from '../../../../progress-bar/src/progress-bar';
 
 describe('UiProgressBarComponent', () => {
   it('exposes determinate progress semantics', async () => {

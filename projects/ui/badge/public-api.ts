@@ -1,2 +1,2 @@
-export { UiBadgeComponent } from '@ngnova/ui';
-export type { UiBadgeSize, UiBadgeVariant } from '@ngnova/ui';
+export { UiBadgeComponent } from './src/badge';
+export type { UiBadgeSize, UiBadgeVariant } from './src/badge';

@@ -83,7 +83,8 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 export class SaveButtonExample {}
 ```
 
-The root `@ngnova/ui` entry point still re-exports every component for convenience.
+The root `@ngnova/ui` entry point is intentionally minimal. Import components from their
+focused package paths, such as `@ngnova/ui/button` or `@ngnova/ui/input`.
 
 ## Component Test Harnesses
 

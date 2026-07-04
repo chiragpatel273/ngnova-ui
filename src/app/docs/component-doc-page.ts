@@ -3,37 +3,31 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import {
-  UiAccordionComponent,
-  UiAlertComponent,
-  UiAvatarComponent,
-  UiBadgeComponent,
-  UiButtonComponent,
-  UiCardComponent,
-  UiCheckboxComponent,
-  UiInputComponent,
-  UiModalComponent,
-  UiProgressBarComponent,
-  UiRadioGroupComponent,
-  UiSelectComponent,
-  UiSkeletonComponent,
-  UiSpinnerComponent,
-  UiSwitchComponent,
-  UiTabsComponent,
-  UiTableComponent,
-  UiTagComponent,
-  UiTextareaComponent,
-  UiToastComponent,
-  UiToastService,
-} from '@ngnova/ui';
-import type {
-  UiAccordionItem,
-  UiRadioOption,
-  UiSelectOption,
-  UiTableColumn,
-  UiTableRow,
-  UiTabItem,
-} from '@ngnova/ui';
+import { UiAccordionComponent } from '@ngnova/ui/accordion';
+import type { UiAccordionItem } from '@ngnova/ui/accordion';
+import { UiAlertComponent } from '@ngnova/ui/alert';
+import { UiAvatarComponent } from '@ngnova/ui/avatar';
+import { UiBadgeComponent } from '@ngnova/ui/badge';
+import { UiButtonComponent } from '@ngnova/ui/button';
+import { UiCardComponent } from '@ngnova/ui/card';
+import { UiCheckboxComponent } from '@ngnova/ui/checkbox';
+import { UiInputComponent } from '@ngnova/ui/input';
+import { UiModalComponent } from '@ngnova/ui/modal';
+import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
+import { UiRadioGroupComponent } from '@ngnova/ui/radio';
+import type { UiRadioOption } from '@ngnova/ui/radio';
+import { UiSelectComponent } from '@ngnova/ui/select';
+import type { UiSelectOption } from '@ngnova/ui/select';
+import { UiSkeletonComponent } from '@ngnova/ui/skeleton';
+import { UiSpinnerComponent } from '@ngnova/ui/spinner';
+import { UiSwitchComponent } from '@ngnova/ui/switch';
+import { UiTabsComponent } from '@ngnova/ui/tabs';
+import type { UiTabItem } from '@ngnova/ui/tabs';
+import { UiTableComponent } from '@ngnova/ui/table';
+import type { UiTableColumn, UiTableRow } from '@ngnova/ui/table';
+import { UiTagComponent } from '@ngnova/ui/tag';
+import { UiTextareaComponent } from '@ngnova/ui/textarea';
+import { UiToastComponent, UiToastService } from '@ngnova/ui/toast';
 
 import {
   componentDocDetailsBySlug,

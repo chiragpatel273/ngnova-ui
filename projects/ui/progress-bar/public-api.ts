@@ -1,2 +1,2 @@
-export { UiProgressBarComponent } from '@ngnova/ui';
-export type { UiProgressBarVariant } from '@ngnova/ui';
+export { UiProgressBarComponent } from './src/progress-bar';
+export type { UiProgressBarVariant } from './src/progress-bar';

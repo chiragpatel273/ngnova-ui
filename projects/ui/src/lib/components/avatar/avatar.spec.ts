@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiAvatarComponent } from './avatar';
+import { UiAvatarComponent } from '../../../../avatar/src/avatar';
 
 describe('UiAvatarComponent', () => {
   it('derives initials from the label fallback', async () => {

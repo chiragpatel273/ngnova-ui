@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { UiSwitchComponent } from './switch';
+import { UiSwitchComponent } from '../../../../switch/src/switch';
 
 @Component({
   standalone: true,

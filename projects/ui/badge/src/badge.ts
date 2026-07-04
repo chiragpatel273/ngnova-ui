@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export type UiBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
 export type UiBadgeSize = 'sm' | 'md';

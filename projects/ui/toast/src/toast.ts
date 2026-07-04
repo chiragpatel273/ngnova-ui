@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 import { signal } from '@angular/core';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export type UiToastVariant = 'info' | 'success' | 'warning' | 'danger';
 

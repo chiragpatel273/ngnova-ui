@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { UiButtonComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui/button';
 
 import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';

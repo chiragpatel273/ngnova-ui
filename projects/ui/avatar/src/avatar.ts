@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export type UiAvatarSize = 'sm' | 'md' | 'lg';
 export type UiAvatarShape = 'circle' | 'square';

@@ -1,2 +1,2 @@
-export { UiAccordionComponent } from '@ngnova/ui';
-export type { UiAccordionItem } from '@ngnova/ui';
+export { UiAccordionComponent } from './src/accordion';
+export type { UiAccordionItem } from './src/accordion';

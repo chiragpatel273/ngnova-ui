@@ -3,8 +3,8 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { UiSelectComponent } from './select';
-import type { UiSelectOption } from './select';
+import { UiSelectComponent } from '../../../../select/src/select';
+import type { UiSelectOption } from '../../../../select/src/select';
 
 const OPTIONS: readonly UiSelectOption[] = [
   { label: 'Starter', value: 'starter' },

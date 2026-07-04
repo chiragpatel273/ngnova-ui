@@ -13,7 +13,9 @@ import type { OnChanges, SimpleChanges } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 let nextCheckboxId = 0;
 

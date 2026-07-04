@@ -1,1 +1,1 @@
-export { UiSwitchComponent } from '@ngnova/ui';
+export { UiSwitchComponent } from './src/switch';

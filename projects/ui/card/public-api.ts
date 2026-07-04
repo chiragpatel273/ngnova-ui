@@ -1,2 +1,2 @@
-export { UiCardComponent } from '@ngnova/ui';
-export type { UiCardPadding, UiCardVariant } from '@ngnova/ui';
+export { UiCardComponent } from './src/card';
+export type { UiCardPadding, UiCardVariant } from './src/card';

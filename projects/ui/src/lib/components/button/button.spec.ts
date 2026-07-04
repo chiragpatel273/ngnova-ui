@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { UiButtonComponent } from './button';
+import { UiButtonComponent } from '../../../../button/src/button';
 
 @Component({
   standalone: true,

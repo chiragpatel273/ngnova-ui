@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import type { UiTableColumn, UiTableRow } from './table';
-import { UiTableComponent } from './table';
+import type { UiTableColumn, UiTableRow } from '../../../../table/src/table';
+import { UiTableComponent } from '../../../../table/src/table';
 
 describe('UiTableComponent', () => {
   const columns: readonly UiTableColumn[] = [

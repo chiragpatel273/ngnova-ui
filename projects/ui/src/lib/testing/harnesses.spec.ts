@@ -4,18 +4,18 @@ import { TestBed } from '@angular/core/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import {
-  UiButtonComponent,
-  UiCheckboxComponent,
-  UiInputComponent,
-  UiModalComponent,
-  UiRadioGroupComponent,
-  UiSelectComponent,
-  UiTabsComponent,
-  UiSwitchComponent,
-  UiTextareaComponent,
-} from '../../public-api';
-import type { UiRadioOption, UiSelectOption, UiTabItem } from '../../public-api';
+import { UiButtonComponent } from '../../../button/src/button';
+import { UiCheckboxComponent } from '../../../checkbox/src/checkbox';
+import { UiInputComponent } from '../../../input/src/input';
+import { UiModalComponent } from '../../../modal/src/modal';
+import { UiRadioGroupComponent } from '../../../radio/src/radio';
+import type { UiRadioOption } from '../../../radio/src/radio';
+import { UiSelectComponent } from '../../../select/src/select';
+import type { UiSelectOption } from '../../../select/src/select';
+import { UiSwitchComponent } from '../../../switch/src/switch';
+import { UiTabsComponent } from '../../../tabs/src/tabs';
+import type { UiTabItem } from '../../../tabs/src/tabs';
+import { UiTextareaComponent } from '../../../textarea/src/textarea';
 import {
   UiButtonHarness,
   UiCheckboxHarness,

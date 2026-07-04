@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { UiCardComponent } from './card';
+import { UiCardComponent } from '../../../../card/src/card';
 
 @Component({
   standalone: true,

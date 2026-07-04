@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { UiButtonComponent } from '@ngnova/ui';
+import { UiButtonComponent } from '@ngnova/ui/button';
 
 @Component({
   selector: 'app-docs-code-block',

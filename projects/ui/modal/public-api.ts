@@ -1,2 +1,2 @@
-export { UiModalComponent } from '@ngnova/ui';
-export type { UiModalSize } from '@ngnova/ui';
+export { UiModalComponent } from './src/modal';
+export type { UiModalSize } from './src/modal';

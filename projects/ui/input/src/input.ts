@@ -12,7 +12,9 @@ import {
 import type { ControlValueAccessor, ValidationErrors } from '@angular/forms';
 import { NgControl } from '@angular/forms';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export type UiInputType = 'text' | 'email' | 'password' | 'number' | 'search' | 'tel' | 'url';
 export type UiInputSize = 'sm' | 'md' | 'lg';

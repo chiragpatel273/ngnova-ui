@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { UiInputComponent } from './input';
+import { UiInputComponent } from '../../../../input/src/input';
 
 @Component({
   standalone: true,

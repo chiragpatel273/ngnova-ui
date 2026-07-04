@@ -1,4 +1,4 @@
-export { UiInputComponent } from '@ngnova/ui';
+export { UiInputComponent } from './src/input';
 export type {
   UiInputAppearance,
   UiInputCounterMode,
@@ -6,4 +6,4 @@ export type {
   UiInputLabelMode,
   UiInputSize,
   UiInputType,
-} from '@ngnova/ui';
+} from './src/input';

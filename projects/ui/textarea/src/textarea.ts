@@ -11,7 +11,9 @@ import {
 import type { ControlValueAccessor, ValidationErrors } from '@angular/forms';
 import { NgControl } from '@angular/forms';
 
-import { uiClassNames } from '../../shared/class-names';
+function uiClassNames(...classes: (string | false | null | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export type UiTextareaSize = 'sm' | 'md' | 'lg';
 export type UiTextareaResize = 'none' | 'vertical' | 'horizontal' | 'both';

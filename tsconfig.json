@@ -15,7 +15,8 @@
     "target": "ES2022",
     "module": "preserve",
     "paths": {
-      "@ngnova/ui": ["./dist/ui"]
+      "@ngnova/ui": ["./dist/ui"],
+      "@ngnova/ui/*": ["./dist/ui/*"]
     }
   },
   "angularCompilerOptions": {

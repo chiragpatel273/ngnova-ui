@@ -1,7 +1,7 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { UiBadgeComponent } from './badge';
+import { UiBadgeComponent } from '../../../../badge/src/badge';
 
 describe('UiBadgeComponent', () => {
   let fixture: ComponentFixture<UiBadgeComponent>;

@@ -1,1 +1,1 @@
-export { UiCheckboxComponent } from '@ngnova/ui';
+export { UiCheckboxComponent } from './src/checkbox';

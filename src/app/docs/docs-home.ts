@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UiBadgeComponent, UiButtonComponent, UiTagComponent } from '@ngnova/ui';
+import { UiBadgeComponent } from '@ngnova/ui/badge';
+import { UiButtonComponent } from '@ngnova/ui/button';
+import { UiTagComponent } from '@ngnova/ui/tag';
 
 import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';

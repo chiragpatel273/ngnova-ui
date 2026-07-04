@@ -1,2 +1,2 @@
-export { UiAlertComponent } from '@ngnova/ui';
-export type { UiAlertVariant } from '@ngnova/ui';
+export { UiAlertComponent } from './src/alert';
+export type { UiAlertVariant } from './src/alert';

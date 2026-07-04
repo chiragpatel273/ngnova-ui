@@ -25,6 +25,7 @@ Tailwind ignores `node_modules` by default. Add the package as an explicit sourc
 
 ```css
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";
 ```
 
@@ -43,7 +44,7 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 export class ExampleComponent {}
 ```
 
-The root `@ngnova/ui` entry point also re-exports the public components.
+The root `@ngnova/ui` entry point is intentionally minimal. Import components from their focused package paths, such as `@ngnova/ui/button` or `@ngnova/ui/input`.
 
 ## Testing
 

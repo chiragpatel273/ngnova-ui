@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import {
-  UiAlertComponent,
-  UiBadgeComponent,
-  UiButtonComponent,
-  UiCardComponent,
-  UiInputComponent,
-  UiProgressBarComponent,
-  UiSelectComponent,
-  UiSwitchComponent,
-  UiTableComponent,
-  UiTabsComponent,
-  UiTagComponent,
-} from '@ngnova/ui';
-import type { UiSelectOption, UiTableColumn, UiTableRow, UiTabItem } from '@ngnova/ui';
+import { UiAlertComponent } from '@ngnova/ui/alert';
+import { UiBadgeComponent } from '@ngnova/ui/badge';
+import { UiButtonComponent } from '@ngnova/ui/button';
+import { UiCardComponent } from '@ngnova/ui/card';
+import { UiInputComponent } from '@ngnova/ui/input';
+import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
+import { UiSelectComponent } from '@ngnova/ui/select';
+import type { UiSelectOption } from '@ngnova/ui/select';
+import { UiSwitchComponent } from '@ngnova/ui/switch';
+import { UiTabsComponent } from '@ngnova/ui/tabs';
+import type { UiTabItem } from '@ngnova/ui/tabs';
+import { UiTableComponent } from '@ngnova/ui/table';
+import type { UiTableColumn, UiTableRow } from '@ngnova/ui/table';
+import { UiTagComponent } from '@ngnova/ui/tag';
 
 import { DocsCodeBlockComponent } from './docs-code-block';
 

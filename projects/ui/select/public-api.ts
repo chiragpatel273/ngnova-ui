@@ -1,2 +1,2 @@
-export { UiSelectComponent } from '@ngnova/ui';
-export type { UiSelectOption, UiSelectSize } from '@ngnova/ui';
+export { UiSelectComponent } from './src/select';
+export type { UiSelectOption, UiSelectSize } from './src/select';

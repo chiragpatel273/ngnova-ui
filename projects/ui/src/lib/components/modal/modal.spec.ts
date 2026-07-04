@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { UiModalComponent } from './modal';
+import { UiModalComponent } from '../../../../modal/src/modal';
 
 @Component({
   standalone: true,

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { UiTabsComponent } from './tabs';
-import type { UiTabItem } from './tabs';
+import { UiTabsComponent } from '../../../../tabs/src/tabs';
+import type { UiTabItem } from '../../../../tabs/src/tabs';
 
 const TABS: readonly UiTabItem[] = [
   { label: 'Overview', value: 'overview' },

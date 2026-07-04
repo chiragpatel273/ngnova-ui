@@ -1,8 +1,8 @@
-export { UiTableComponent } from '@ngnova/ui';
+export { UiTableComponent } from './src/table';
 export type {
   UiTableAlign,
   UiTableColumn,
   UiTableRow,
   UiTableSort,
   UiTableSortDirection,
-} from '@ngnova/ui';
+} from './src/table';

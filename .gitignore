@@ -3,11 +3,13 @@
 # Compiled output
 /dist
 /tmp
+/.tmp
 /out-tsc
 /bazel-out
 
 # Node
 /node_modules
+/.npm-cache
 npm-debug.log
 yarn-error.log
 

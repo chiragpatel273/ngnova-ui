@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UiToastComponent, UiToastService } from './toast';
+import { UiToastComponent, UiToastService } from '../../../../toast/src/toast';
 
 describe('UiToastComponent', () => {
   it('renders and dismisses service messages', async () => {

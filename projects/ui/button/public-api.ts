@@ -1,2 +1,2 @@
-export { UiButtonComponent } from '@ngnova/ui';
-export type { UiButtonSize, UiButtonType, UiButtonVariant } from '@ngnova/ui';
+export { UiButtonComponent } from './src/button';
+export type { UiButtonSize, UiButtonType, UiButtonVariant } from './src/button';

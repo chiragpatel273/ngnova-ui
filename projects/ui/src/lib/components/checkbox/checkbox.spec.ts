@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { UiCheckboxComponent } from './checkbox';
+import { UiCheckboxComponent } from '../../../../checkbox/src/checkbox';
 
 @Component({
   standalone: true,

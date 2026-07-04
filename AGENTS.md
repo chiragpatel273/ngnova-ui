@@ -10,6 +10,10 @@ For broad component-library improvement, release-readiness, or continuous agent 
 
 - `docs/NGNOVA_WORLD_CLASS_AGENT.md`
 
+For GitHub Issue driven cloud work, also follow:
+
+- `docs/CODEX_GITHUB_ISSUE_WORKFLOW.md`
+
 ## Core Rules
 
 - Use Angular 22 standalone components.

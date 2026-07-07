@@ -1,5 +1,6 @@
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const root = process.cwd();
@@ -35,6 +36,16 @@ function versionFor(name) {
   return rootPackage.dependencies?.[name] ?? rootPackage.devDependencies?.[name];
 }
 
+function dependencySpecFor(name) {
+  const installedPackage = join(root, 'node_modules', ...name.split('/'), 'package.json');
+
+  if (existsSync(installedPackage)) {
+    return pathToFileURL(join(root, 'node_modules', ...name.split('/'))).href;
+  }
+
+  return versionFor(name);
+}
+
 rmSync(workspace, { recursive: true, force: true });
 mkdirSync(join(workspace, 'src'), { recursive: true });
 
@@ -59,22 +70,22 @@ writeFileSync(
         build: 'ng build',
       },
       dependencies: {
-        '@angular/common': versionFor('@angular/common'),
-        '@angular/compiler': versionFor('@angular/compiler'),
-        '@angular/core': versionFor('@angular/core'),
-        '@angular/forms': versionFor('@angular/forms'),
-        '@angular/platform-browser': versionFor('@angular/platform-browser'),
+        '@angular/common': dependencySpecFor('@angular/common'),
+        '@angular/compiler': dependencySpecFor('@angular/compiler'),
+        '@angular/core': dependencySpecFor('@angular/core'),
+        '@angular/forms': dependencySpecFor('@angular/forms'),
+        '@angular/platform-browser': dependencySpecFor('@angular/platform-browser'),
         '@ngnova/ui': 'file:./ngnova-ui-0.1.0.tgz',
-        rxjs: versionFor('rxjs'),
-        tslib: versionFor('tslib'),
+        rxjs: dependencySpecFor('rxjs'),
+        tslib: dependencySpecFor('tslib'),
       },
       devDependencies: {
-        '@angular/build': versionFor('@angular/build'),
-        '@angular/cli': versionFor('@angular/cli'),
-        '@angular/compiler-cli': versionFor('@angular/compiler-cli'),
-        '@tailwindcss/postcss': versionFor('@tailwindcss/postcss'),
-        tailwindcss: versionFor('tailwindcss'),
-        typescript: versionFor('typescript'),
+        '@angular/build': dependencySpecFor('@angular/build'),
+        '@angular/cli': dependencySpecFor('@angular/cli'),
+        '@angular/compiler-cli': dependencySpecFor('@angular/compiler-cli'),
+        '@tailwindcss/postcss': dependencySpecFor('@tailwindcss/postcss'),
+        tailwindcss: dependencySpecFor('tailwindcss'),
+        typescript: dependencySpecFor('typescript'),
       },
     },
     null,

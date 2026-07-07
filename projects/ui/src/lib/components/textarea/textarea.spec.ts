@@ -1,17 +1,45 @@
 import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { UiTextareaComponent } from '../../../../textarea/src/textarea';
 
 @Component({
   standalone: true,
   imports: [ReactiveFormsModule, UiTextareaComponent],
-  template: `<ui-textarea label="Message" helperText="Keep it short" [formControl]="control" />`,
+  template: `
+    <ui-textarea
+      label="Message"
+      helperText="Keep it short"
+      [maxLength]="20"
+      [formControl]="control"
+      (valueChange)="valueChanges.push($event)"
+      (focused)="focusedEvents.push($event)"
+      (blurred)="blurredEvents.push($event)"
+    />
+  `,
 })
 class HostComponent {
-  control = new FormControl('Hello');
+  control = new FormControl('Hello', { nonNullable: true, validators: Validators.required });
+  valueChanges: string[] = [];
+  focusedEvents: FocusEvent[] = [];
+  blurredEvents: FocusEvent[] = [];
+}
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiTextareaComponent],
+  template: `
+    <ui-textarea
+      label="Summary"
+      [formControl]="control"
+      [validationMessages]="validationMessages"
+    />
+  `,
+})
+class CustomValidationHostComponent {
+  control = new FormControl('', { nonNullable: true, validators: Validators.required });
+  validationMessages: Record<string, string> = { required: 'Write a summary before publishing.' };
 }
 
 describe('UiTextareaComponent', () => {
@@ -23,7 +51,7 @@ describe('UiTextareaComponent', () => {
     fixture.detectChanges();
   });
 
-  it('works as a ControlValueAccessor', () => {
+  it('works as a ControlValueAccessor for user input', () => {
     const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
     expect(textarea.value).toBe('Hello');
 
@@ -31,22 +59,90 @@ describe('UiTextareaComponent', () => {
     textarea.dispatchEvent(new Event('input'));
 
     expect(fixture.componentInstance.control.value).toBe('Updated');
+    expect(fixture.componentInstance.valueChanges).toEqual(['Updated']);
   });
 
-  it('keeps helper text connected with aria-describedby', () => {
+  it('updates from reactive form writes without emitting valueChange', () => {
+    fixture.componentInstance.control.setValue('Programmatic update');
+    fixture.detectChanges();
+
     const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
-    const helper = fixture.nativeElement.querySelector('p') as HTMLParagraphElement;
 
-    expect(textarea.getAttribute('aria-describedby')).toBe(helper.id);
+    expect(textarea.value).toBe('Programmatic update');
+    expect(fixture.componentInstance.valueChanges).toEqual([]);
   });
 
-  it('applies resize classes', () => {
+  it('keeps disabled state synced from the ControlValueAccessor API', () => {
+    fixture.componentInstance.control.disable();
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+
+    expect(textarea.disabled).toBe(true);
+  });
+
+  it('marks the control touched on blur and emits focus events without native-name output collisions', () => {
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+
+    textarea.dispatchEvent(new FocusEvent('focus'));
+    textarea.dispatchEvent(new FocusEvent('blur'));
+
+    expect(fixture.componentInstance.control.touched).toBe(true);
+    expect(fixture.componentInstance.focusedEvents.length).toBe(1);
+    expect(fixture.componentInstance.blurredEvents.length).toBe(1);
+  });
+
+  it('connects helper text and counter with aria-describedby', () => {
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    const descriptions = Array.from(
+      fixture.nativeElement.querySelectorAll('p'),
+    ) as HTMLParagraphElement[];
+
+    expect(textarea.getAttribute('aria-describedby')).toBe(
+      descriptions.map((description) => description.id).join(' '),
+    );
+    expect(descriptions[1].textContent?.trim()).toBe('5 / 20');
+  });
+
+  it('shows validation messages and aria-invalid after the control is touched', () => {
+    fixture.componentInstance.control.setValue('');
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    const message = fixture.nativeElement.querySelector('p') as HTMLParagraphElement;
+
+    expect(textarea.getAttribute('aria-invalid')).toBe('true');
+    expect(message.getAttribute('role')).toBe('alert');
+    expect(message.textContent?.trim()).toBe('This field is required.');
+  });
+
+  it('supports custom validation messages', () => {
+    const textareaFixture = TestBed.createComponent(CustomValidationHostComponent);
+    textareaFixture.componentInstance.control.markAsTouched();
+    textareaFixture.detectChanges();
+
+    const textarea = textareaFixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    const message = textareaFixture.nativeElement.querySelector('p') as HTMLParagraphElement;
+
+    expect(textarea.getAttribute('aria-invalid')).toBe('true');
+    expect(message.getAttribute('role')).toBe('alert');
+    expect(message.textContent?.trim()).toBe('Write a summary before publishing.');
+  });
+
+  it('applies resize, appearance, size, and dark-mode ready classes', () => {
     const textareaFixture = TestBed.createComponent(UiTextareaComponent);
     textareaFixture.componentRef.setInput('resize', 'none');
+    textareaFixture.componentRef.setInput('appearance', 'filled');
+    textareaFixture.componentRef.setInput('size', 'lg');
     textareaFixture.detectChanges();
 
     const textarea = textareaFixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
 
     expect(textarea.className).toContain('resize-none');
+    expect(textarea.className).toContain('dark:bg-slate-900');
+    expect(textarea.className).toContain('px-4');
+    expect(textarea.className).toContain('py-2.5');
+    expect(textarea.className).toContain('text-base');
   });
 });

@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -96,6 +97,7 @@ let nextTextareaId = 0;
 export class UiTextareaComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() placeholder = '';
@@ -184,6 +186,7 @@ export class UiTextareaComponent implements ControlValueAccessor {
 
   writeValue(value: string | null): void {
     this.value = value ?? '';
+    this.changeDetectorRef.markForCheck();
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -196,6 +199,7 @@ export class UiTextareaComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+    this.changeDetectorRef.markForCheck();
   }
 
   protected onInput(event: Event): void {
@@ -212,6 +216,7 @@ export class UiTextareaComponent implements ControlValueAccessor {
 
   protected markTouched(event: FocusEvent): void {
     this.onTouched();
+    this.changeDetectorRef.markForCheck();
     this.dispatchHostFocusEvent(event, 'blur');
     this.blurred.emit(event);
   }

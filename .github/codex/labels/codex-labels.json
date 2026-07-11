@@ -1,0 +1,82 @@
+[
+  {
+    "name": "codex-ready",
+    "color": "0E8A16",
+    "description": "Ready for Codex to pick up from the issue queue."
+  },
+  {
+    "name": "codex-working",
+    "color": "1D76DB",
+    "description": "Codex has started work on this issue."
+  },
+  {
+    "name": "codex-pr-opened",
+    "color": "5319E7",
+    "description": "Codex opened a pull request for this issue."
+  },
+  {
+    "name": "codex-blocked",
+    "color": "B60205",
+    "description": "Codex could not complete the issue without maintainer input."
+  },
+  {
+    "name": "release-audit",
+    "color": "FBCA04",
+    "description": "First-release hardening, audit, or publish-readiness work."
+  },
+  {
+    "name": "priority:p1",
+    "color": "D93F0B",
+    "description": "Highest priority release work."
+  },
+  {
+    "name": "priority:p2",
+    "color": "FBCA04",
+    "description": "Important but not first in the Codex queue."
+  },
+  {
+    "name": "component:button",
+    "color": "C5DEF5",
+    "description": "Button component work."
+  },
+  {
+    "name": "component:input",
+    "color": "C5DEF5",
+    "description": "Input component work."
+  },
+  {
+    "name": "component:textarea",
+    "color": "C5DEF5",
+    "description": "Textarea component work."
+  },
+  {
+    "name": "component:modal",
+    "color": "C5DEF5",
+    "description": "Modal component work."
+  },
+  {
+    "name": "component:checkbox",
+    "color": "C5DEF5",
+    "description": "Checkbox component work."
+  },
+  {
+    "name": "component:radio",
+    "color": "C5DEF5",
+    "description": "Radio component work."
+  },
+  {
+    "name": "docs",
+    "color": "0075CA",
+    "description": "Documentation work."
+  },
+  {
+    "name": "release:package",
+    "color": "BFDADC",
+    "description": "Package metadata, npm contents, or publishing workflow work."
+  },
+  {
+    "name": "release:ci",
+    "color": "BFDADC",
+    "description": "Release gate, CI, and verification workflow work."
+  }
+]

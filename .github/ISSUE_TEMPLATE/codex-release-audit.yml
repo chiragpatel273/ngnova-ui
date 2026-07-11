@@ -1,0 +1,62 @@
+name: Codex release audit task
+description: Create a focused issue that Codex can complete as one pull request.
+title: '[Release audit]: '
+labels:
+  - codex-ready
+  - release-audit
+  - priority:p1
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for self-contained release-readiness work. Keep one component or one release concern per issue.
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Component or release area, such as component:textarea or release:package.
+      placeholder: component:textarea
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What needs to be fixed, improved, documented, or verified?
+      placeholder: Describe the release-readiness gap.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What files, components, docs, or tests should Codex focus on?
+      placeholder: Keep this narrow enough for one pull request.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List concrete outcomes Codex must satisfy before opening a pull request.
+      value: |
+        - [ ] Public API matches the Angular 22 library standards.
+        - [ ] Docs and examples match the implemented behavior.
+        - [ ] Tests cover the important public states or interactions.
+        - [ ] `docs/FIRST_RELEASE_TRACKER.md` is updated if release status changes.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Required verification
+      description: Keep these checks unless this issue explicitly documents a narrower reason.
+      value: |
+        - [ ] `npm.cmd run format:check`
+        - [ ] `npm.cmd run lint`
+        - [ ] `npm.cmd run test:lib`
+        - [ ] `npm.cmd run build:lib`
+        - [ ] `npm.cmd run build:demo`
+        - [ ] `npm.cmd pack --dry-run`
+    validations:
+      required: true

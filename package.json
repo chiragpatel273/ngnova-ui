@@ -22,6 +22,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "audit:package": "node scripts/audit-package.mjs",
+    "github:setup-codex-labels": "node scripts/setup-codex-labels.mjs",
     "smoke:consumer": "node scripts/consumer-smoke.mjs",
     "release:check": "node scripts/release-check.mjs",
     "changeset": "changeset",

@@ -1157,14 +1157,16 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the current value on input.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the textarea receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the textarea receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the textarea loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the textarea loses focus. The host also forwards a native blur event.',
       },
     ],
   },
@@ -2075,14 +2077,21 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 />`,
         },
       ],
-      accessibility: ['Labels and helper/error/counter text are wired to the native textarea.'],
-      keyboard: ['Uses native textarea behavior including multiline typing.'],
+      accessibility: [
+        'Labels use the native textarea id, and helper, error, and counter text are included in aria-describedby.',
+        'Invalid states set aria-invalid and announce visible error text with role="alert".',
+      ],
+      keyboard: [
+        'Uses native textarea behavior including multiline typing, Tab focus, and Shift+Tab navigation.',
+      ],
       forms: [
         'Implements ControlValueAccessor for string values.',
         'writeValue updates text without emitting valueChange, and blur marks the control touched.',
       ],
       edgeCases: [
         'Use resize="none" only when layout requires fixed height.',
+        'Use hideCounter when maxLength is set but a separate product counter is already present.',
+        'Dark-mode classes are built into the textarea, label, helper text, error text, and counter styles.',
         'Provide ariaLabel if no visible label exists.',
         'Hide the counter only when another character-limit affordance is already visible.',
       ],

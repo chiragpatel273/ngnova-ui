@@ -190,6 +190,8 @@ describe('UiTextareaComponent', () => {
     expect(descriptions.length).toBe(1);
     expect(descriptions[0].textContent?.trim()).toBe('Visible helper text.');
     expect(textarea.getAttribute('aria-describedby')).toBe(descriptions[0].id);
+  });
+
   it('passes through native textarea attributes and can hide the counter', () => {
     const textareaFixture = TestBed.createComponent(NativeAttributesHostComponent);
     textareaFixture.detectChanges();

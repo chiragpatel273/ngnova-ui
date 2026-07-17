@@ -90,4 +90,5 @@ Completed checks:
 - Verified labels, helper text, error text, generated IDs, counters, `aria-describedby`, `aria-invalid`, native textarea attributes, resize classes, and dark-mode classes align with the implementation.
 - Corrected Textarea docs to list the actual `focused` and `blurred` Angular outputs while noting native host focus/blur forwarding.
 - Added regression coverage for CVA user input, programmatic writes without `valueChange`, disabled state sync, blur touched state, focus/blur outputs, validation messaging, counter ARIA wiring, resize, appearance, size, and dark-mode-ready classes.
+- Issue #5 follow-up omits false `aria-required` and `aria-invalid` states from the native textarea and adds regression coverage for required/error ARIA states, `ariaLabel`, `name`, `minLength`, `maxLength`, `rows`, `readonly`, and `hideCounter` behavior.
 - Re-audited for Issue #5 on 2026-07-12: tightened appearance and resize classes into typed `Record` maps, verified docs still match the public API, and added native attribute, read-only, required, explicit error, and hidden-counter coverage.

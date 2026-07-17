@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
+import type { UiButtonAppearance, UiButtonIntent } from '../../../../button/src/button';
 import { UiButtonComponent } from '../../../../button/src/button';
 
 @Component({
@@ -72,6 +73,51 @@ describe('UiButtonComponent', () => {
     expect(buttonFixture.nativeElement.querySelector('button').className).toContain(
       'cursor-pointer',
     );
+  });
+
+  it('supports intent and appearance combinations while preserving legacy variants', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('intent', 'success');
+    buttonFixture.componentRef.setInput('appearance', 'outline');
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.className).toContain('border-emerald-300');
+    expect(button.className).toContain('dark:text-emerald-300');
+
+    const legacyFixture = TestBed.createComponent(UiButtonComponent);
+    legacyFixture.componentRef.setInput('variant', 'danger');
+    legacyFixture.detectChanges();
+
+    const legacyButton = legacyFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(legacyButton.className).toContain('bg-red-600');
+  });
+
+  it('covers all current appearance and intent class map entries', () => {
+    const appearances: UiButtonAppearance[] = ['solid', 'outline', 'ghost', 'text', 'tonal'];
+    const intents: UiButtonIntent[] = [
+      'primary',
+      'secondary',
+      'success',
+      'warning',
+      'danger',
+      'neutral',
+    ];
+
+    for (const appearance of appearances) {
+      for (const intent of intents) {
+        const buttonFixture = TestBed.createComponent(UiButtonComponent);
+        buttonFixture.componentRef.setInput('appearance', appearance);
+        buttonFixture.componentRef.setInput('intent', intent);
+        buttonFixture.detectChanges();
+
+        const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+        expect(button.className).toContain('dark:');
+      }
+    }
   });
 
   it('only sets aria-busy while loading', () => {

@@ -76,7 +76,20 @@ export const componentDocs: ComponentDoc[] = [
         name: 'variant',
         type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
         defaultValue: "'primary'",
-        description: 'Visual emphasis style.',
+        description:
+          'Legacy visual emphasis style. Prefer intent and appearance for new combinations.',
+      },
+      {
+        name: 'intent',
+        type: "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral' | null",
+        defaultValue: 'null',
+        description: 'Semantic color intent used with appearance.',
+      },
+      {
+        name: 'appearance',
+        type: "'solid' | 'outline' | 'ghost' | 'text' | 'tonal' | null",
+        defaultValue: 'null',
+        description: 'Visual treatment used with intent.',
       },
       {
         name: 'size',
@@ -1398,7 +1411,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         'It wraps a native button so keyboard activation, disabled behavior, form submission, and focus semantics stay predictable.',
       ],
       whenToUse: [
-        'Use primary for the main page action, secondary for safe alternatives, outline for low-emphasis actions, ghost for toolbar actions, and danger for destructive work.',
+        'Use intent for semantic color and appearance for visual treatment; variant remains supported for existing simple buttons.',
         'Use loading when an action has started and should not be triggered twice.',
       ],
       examples: [
@@ -1412,6 +1425,15 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
     Publish
   </ui-button>
 </div>`,
+        },
+        {
+          title: 'Intent and appearance',
+          description:
+            'Use intent and appearance for semantic combinations while variant remains supported for existing buttons.',
+          code: `<ui-button intent="success">Approve</ui-button>
+<ui-button intent="warning" appearance="tonal">Needs review</ui-button>
+<ui-button intent="danger" appearance="outline">Delete</ui-button>
+<ui-button intent="neutral" appearance="text">View details</ui-button>`,
         },
         {
           title: 'Button events',
@@ -1449,6 +1471,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       testing: [
         'Assert pressed emits only when enabled.',
         'Assert aria-busy appears only during loading.',
+        'Assert representative intent and appearance combinations plus all visual class map entries.',
       ],
     },
   ],

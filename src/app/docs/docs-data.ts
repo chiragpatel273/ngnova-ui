@@ -46,7 +46,7 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
     importName:
-      'UiButtonComponent, UiButtonGroupComponent, UiButtonIconStartDirective, UiButtonIconEndDirective',
+      'UiButtonComponent, UiButtonDirective, UiButtonGroupComponent, UiButtonIconStartDirective, UiButtonIconEndDirective',
     usage: `<section aria-label="Button variants">
   <div class="flex flex-wrap items-center gap-3">
     <ui-button>Primary Action</ui-button>
@@ -66,6 +66,10 @@ export const componentDocs: ComponentDoc[] = [
 <section aria-label="Button states">
   <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
   <ui-button disabled>Disabled</ui-button>
+</section>
+
+<section aria-label="Button links">
+  <a uiButton href="/reports">View reports</a>
 </section>
 
 <section aria-label="Button icons">
@@ -159,6 +163,13 @@ export const componentDocs: ComponentDoc[] = [
         type: "'button' | 'submit' | 'reset'",
         defaultValue: "'button'",
         description: 'Native button type.',
+      },
+      {
+        name: 'uiButton',
+        type: 'directive',
+        defaultValue: 'n/a',
+        description:
+          'Applies button styling and disabled-anchor handling to native button or anchor elements.',
       },
       {
         name: 'ui-button-group ariaLabel',
@@ -1513,6 +1524,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       forms: [
         'Set type="submit" for form submission; the default type is button to avoid accidental submits.',
+        'Use the uiButton directive on anchors or router links for navigation instead of nesting ui-button inside a link.',
       ],
       edgeCases: [
         'Disabled and loading buttons do not emit pressed.',
@@ -1524,6 +1536,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         'Assert aria-busy appears only during loading, loadingLabel renders screen-reader text, and all variants, sizes, fullWidth, ariaLabel, and type passthrough behavior remain covered.',
         'Assert representative intent and appearance combinations plus all visual class map entries.',
         'Assert icon-only sizing, icon marker directives, and accessible labels.',
+        'Assert uiButton directive styling and disabled-anchor behavior.',
         'Assert grouped buttons render role="group", aria labels, projected buttons, and full-width classes.',
       ],
     },

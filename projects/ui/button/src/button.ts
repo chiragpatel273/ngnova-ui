@@ -2,6 +2,7 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  Directive,
   ElementRef,
   inject,
   Input,
@@ -113,6 +114,32 @@ const SIZE_CLASSES: Record<UiButtonSize, string> = {
   lg: 'h-12 px-5 text-base',
 };
 
+const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
+  sm: 'size-8 p-0 text-sm',
+  md: 'size-10 p-0 text-sm',
+  lg: 'size-12 p-0 text-base',
+};
+
+@Directive({
+  selector: '[uiButtonIconStart]',
+  standalone: true,
+  host: {
+    class: 'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center',
+    'aria-hidden': 'true',
+  },
+})
+export class UiButtonIconStartDirective {}
+
+@Directive({
+  selector: '[uiButtonIconEnd]',
+  standalone: true,
+  host: {
+    class: 'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center',
+    'aria-hidden': 'true',
+  },
+})
+export class UiButtonIconEndDirective {}
+
 @Component({
   selector: 'ui-button-group',
   standalone: true,
@@ -173,6 +200,7 @@ export class UiButtonComponent {
   @Input({ transform: booleanAttribute }) disabled = false;
   @Input({ transform: booleanAttribute }) loading = false;
   @Input({ transform: booleanAttribute }) fullWidth = false;
+  @Input({ transform: booleanAttribute }) iconOnly = false;
   @Input() ariaLabel = '';
   @Input() loadingLabel = 'Loading';
   @Input() type: UiButtonType = 'button';
@@ -184,8 +212,8 @@ export class UiButtonComponent {
     return uiClassNames(
       BASE_CLASSES,
       this.visualClasses,
-      SIZE_CLASSES[this.size],
-      this.fullWidth && 'w-full',
+      this.iconOnly ? ICON_ONLY_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
+      this.fullWidth && !this.iconOnly && 'w-full',
     );
   }
 

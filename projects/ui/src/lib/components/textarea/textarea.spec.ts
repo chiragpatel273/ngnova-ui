@@ -105,11 +105,14 @@ describe('UiTextareaComponent', () => {
   });
 
   it('shows validation messages and aria-invalid after the control is touched', () => {
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+
+    expect(textarea.getAttribute('aria-invalid')).toBeNull();
+
     fixture.componentInstance.control.setValue('');
     fixture.componentInstance.control.markAsTouched();
     fixture.detectChanges();
 
-    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
     const message = fixture.nativeElement.querySelector('p') as HTMLParagraphElement;
 
     expect(textarea.getAttribute('aria-invalid')).toBe('true');
@@ -128,6 +131,45 @@ describe('UiTextareaComponent', () => {
     expect(textarea.getAttribute('aria-invalid')).toBe('true');
     expect(message.getAttribute('role')).toBe('alert');
     expect(message.textContent?.trim()).toBe('Write a summary before publishing.');
+  });
+
+  it('passes through native textarea attributes and omits false ARIA states', () => {
+    const textareaFixture = TestBed.createComponent(UiTextareaComponent);
+    textareaFixture.componentRef.setInput('ariaLabel', 'Internal note');
+    textareaFixture.componentRef.setInput('name', 'internal-note');
+    textareaFixture.componentRef.setInput('minLength', 8);
+    textareaFixture.componentRef.setInput('maxLength', 120);
+    textareaFixture.componentRef.setInput('rows', 6);
+    textareaFixture.componentRef.setInput('readonly', true);
+    textareaFixture.detectChanges();
+
+    const textarea = textareaFixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+
+    expect(textarea.getAttribute('aria-label')).toBe('Internal note');
+    expect(textarea.getAttribute('aria-required')).toBeNull();
+    expect(textarea.getAttribute('aria-invalid')).toBeNull();
+    expect(textarea.name).toBe('internal-note');
+    expect(textarea.minLength).toBe(8);
+    expect(textarea.maxLength).toBe(120);
+    expect(textarea.rows).toBe(6);
+    expect(textarea.readOnly).toBe(true);
+  });
+
+  it('hides the counter when requested while preserving helper text description', () => {
+    const textareaFixture = TestBed.createComponent(UiTextareaComponent);
+    textareaFixture.componentRef.setInput('helperText', 'Visible helper text.');
+    textareaFixture.componentRef.setInput('maxLength', 120);
+    textareaFixture.componentRef.setInput('hideCounter', true);
+    textareaFixture.detectChanges();
+
+    const textarea = textareaFixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    const descriptions = Array.from(
+      textareaFixture.nativeElement.querySelectorAll('p'),
+    ) as HTMLParagraphElement[];
+
+    expect(descriptions.length).toBe(1);
+    expect(descriptions[0].textContent?.trim()).toBe('Visible helper text.');
+    expect(textarea.getAttribute('aria-describedby')).toBe(descriptions[0].id);
   });
 
   it('applies resize, appearance, size, and dark-mode ready classes', () => {

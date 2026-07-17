@@ -45,7 +45,8 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Button',
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
-    importName: 'UiButtonComponent, UiButtonGroupComponent',
+    importName:
+      'UiButtonComponent, UiButtonGroupComponent, UiButtonIconStartDirective, UiButtonIconEndDirective',
     usage: `<section aria-label="Button variants">
   <div class="flex flex-wrap items-center gap-3">
     <ui-button>Primary Action</ui-button>
@@ -65,6 +66,17 @@ export const componentDocs: ComponentDoc[] = [
 <section aria-label="Button states">
   <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
   <ui-button disabled>Disabled</ui-button>
+</section>
+
+<section aria-label="Button icons">
+  <ui-button ariaLabel="Create item" iconOnly>
+    <span uiButtonIconStart>+</span>
+  </ui-button>
+  <ui-button>
+    <span uiButtonIconStart>+</span>
+    Create
+    <span uiButtonIconEnd>→</span>
+  </ui-button>
 </section>
 
 <section aria-label="Button group">
@@ -122,6 +134,13 @@ export const componentDocs: ComponentDoc[] = [
         type: 'boolean',
         defaultValue: 'false',
         description: 'Expands the button to the full width of its container.',
+      },
+      {
+        name: 'iconOnly',
+        type: 'boolean',
+        defaultValue: 'false',
+        description:
+          'Applies square sizing for icon-only buttons and suppresses full-width expansion.',
       },
       {
         name: 'ariaLabel',
@@ -1486,7 +1505,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         'Uses a native button element.',
         'ui-button-group renders role="group" and should include ariaLabel when grouping related controls.',
         'The loading state sets aria-busy and disables activation.',
-        'Icon-only buttons must provide ariaLabel.',
+        'Icon-only buttons must provide ariaLabel, and uiButtonIconStart/uiButtonIconEnd mark decorative icons aria-hidden.',
       ],
       keyboard: [
         'Enter and Space activate the native button.',
@@ -1504,6 +1523,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         'Assert pressed emits only when enabled.',
         'Assert aria-busy appears only during loading, loadingLabel renders screen-reader text, and all variants, sizes, fullWidth, ariaLabel, and type passthrough behavior remain covered.',
         'Assert representative intent and appearance combinations plus all visual class map entries.',
+        'Assert icon-only sizing, icon marker directives, and accessible labels.',
         'Assert grouped buttons render role="group", aria labels, projected buttons, and full-width classes.',
       ],
     },

@@ -9,7 +9,12 @@ import type {
   UiButtonType,
   UiButtonVariant,
 } from '../../../../button/src/button';
-import { UiButtonComponent, UiButtonGroupComponent } from '../../../../button/src/button';
+import {
+  UiButtonComponent,
+  UiButtonGroupComponent,
+  UiButtonIconEndDirective,
+  UiButtonIconStartDirective,
+} from '../../../../button/src/button';
 
 @Component({
   standalone: true,
@@ -46,6 +51,19 @@ class HostComponent {
   `,
 })
 class ButtonGroupHostComponent {}
+
+@Component({
+  standalone: true,
+  imports: [UiButtonComponent, UiButtonIconEndDirective, UiButtonIconStartDirective],
+  template: `
+    <ui-button>
+      <span uiButtonIconStart>+</span>
+      Create
+      <span uiButtonIconEnd>→</span>
+    </ui-button>
+  `,
+})
+class ButtonIconHostComponent {}
 
 describe('UiButtonComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
@@ -259,6 +277,37 @@ describe('UiButtonComponent', () => {
       for (const expectedClass of expectedClasses) {
         expect(className).toContain(expectedClass);
       }
+    }
+  });
+
+  it('supports icon-only sizing without full-width expansion', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('iconOnly', true);
+    buttonFixture.componentRef.setInput('fullWidth', true);
+    buttonFixture.componentRef.setInput('ariaLabel', 'Create item');
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.className).toContain('size-10');
+    expect(button.className).toContain('p-0');
+    expect(button.className).not.toContain('w-full');
+    expect(button.getAttribute('aria-label')).toBe('Create item');
+  });
+
+  it('marks start and end icon content as decorative', () => {
+    const buttonFixture = TestBed.createComponent(ButtonIconHostComponent);
+    buttonFixture.detectChanges();
+
+    const icons = Array.from(
+      buttonFixture.nativeElement.querySelectorAll('[uiButtonIconStart], [uiButtonIconEnd]'),
+    ) as HTMLElement[];
+
+    expect(icons.length).toBe(2);
+    for (const icon of icons) {
+      expect(icon.getAttribute('aria-hidden')).toBe('true');
+      expect(icon.className).toContain('pointer-events-none');
+      expect(icon.className).toContain('size-4');
     }
   });
 

@@ -2,12 +2,17 @@ import { readFile } from 'node:fs/promises';
 
 const labelsPath = new URL('../.github/codex/labels/codex-labels.json', import.meta.url);
 const packagePath = new URL('../package.json', import.meta.url);
+const envPath = new URL('../.env', import.meta.url);
 
 const args = new Set(process.argv.slice(2));
 const dryRun = args.has('--dry-run');
 
-const token = process.env.GITHUB_TOKEN;
-const repository = process.env.GITHUB_REPOSITORY ?? (await readRepositoryFromPackageJson());
+const dotEnv = await readDotEnv();
+const token = process.env.GITHUB_TOKEN ?? dotEnv.GITHUB_TOKEN;
+const repository =
+  process.env.GITHUB_REPOSITORY ??
+  dotEnv.GITHUB_REPOSITORY ??
+  (await readRepositoryFromPackageJson());
 
 if (!repository) {
   throw new Error('Set GITHUB_REPOSITORY or add a GitHub repository URL to package.json.');
@@ -42,6 +47,59 @@ async function readRepositoryFromPackageJson() {
 
   const match = rawUrl.match(/github\.com[:/](?<owner>[^/]+)\/(?<repo>[^/.]+)(?:\.git)?$/);
   return match?.groups ? `${match.groups.owner}/${match.groups.repo}` : undefined;
+}
+
+async function readDotEnv() {
+  try {
+    const contents = await readFile(envPath, 'utf8');
+    return parseDotEnv(contents);
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      return {};
+    }
+
+    throw error;
+  }
+}
+
+function parseDotEnv(contents) {
+  const values = {};
+
+  for (const line of contents.split(/\r?\n/)) {
+    const trimmed = line.trim();
+
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf('=');
+
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const rawValue = trimmed.slice(separatorIndex + 1).trim();
+
+    if (!key) {
+      continue;
+    }
+
+    values[key] = unquoteDotEnvValue(rawValue);
+  }
+
+  return values;
+}
+
+function unquoteDotEnvValue(value) {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  return value;
 }
 
 function validateLabel(label) {

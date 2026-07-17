@@ -8,7 +8,7 @@ import type { UiAccordionItem } from '@ngnova/ui/accordion';
 import { UiAlertComponent } from '@ngnova/ui/alert';
 import { UiAvatarComponent } from '@ngnova/ui/avatar';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
-import { UiButtonComponent } from '@ngnova/ui/button';
+import { UiButtonComponent, UiButtonGroupComponent } from '@ngnova/ui/button';
 import { UiCardComponent } from '@ngnova/ui/card';
 import { UiCheckboxComponent } from '@ngnova/ui/checkbox';
 import { UiInputComponent } from '@ngnova/ui/input';
@@ -56,7 +56,7 @@ interface GuidanceCard {
 }
 
 interface ButtonUsageExample {
-  readonly id: 'variants' | 'sizes' | 'states' | 'events';
+  readonly id: 'variants' | 'sizes' | 'states' | 'group' | 'events';
   readonly title: string;
   readonly description: string;
   readonly filename: string;
@@ -100,6 +100,17 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
 <ui-button fullWidth>Continue</ui-button>`,
   },
   {
+    id: 'group',
+    title: 'Group',
+    description: 'Group related actions with connected edges and shared semantics.',
+    filename: 'button-group.example.html',
+    code: `<ui-button-group ariaLabel="View density">
+  <ui-button variant="outline">Compact</ui-button>
+  <ui-button variant="outline">Comfortable</ui-button>
+  <ui-button variant="outline">Spacious</ui-button>
+</ui-button-group>`,
+  },
+  {
     id: 'events',
     title: 'Events',
     description: 'Handle native-friendly events the same way you would with a standard button.',
@@ -120,6 +131,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     UiAvatarComponent,
     UiBadgeComponent,
     UiButtonComponent,
+    UiButtonGroupComponent,
     UiCardComponent,
     UiCheckboxComponent,
     UiInputComponent,
@@ -319,6 +331,13 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                                 <ui-button disabled>Disabled</ui-button>
                                 <ui-button fullWidth>Continue</ui-button>
                               </div>
+                            }
+                            @case ('group') {
+                              <ui-button-group ariaLabel="View density">
+                                <ui-button variant="outline">Compact</ui-button>
+                                <ui-button variant="outline">Comfortable</ui-button>
+                                <ui-button variant="outline">Spacious</ui-button>
+                              </ui-button-group>
                             }
                             @case ('events') {
                               <div class="grid gap-3 text-center">

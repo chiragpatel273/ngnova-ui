@@ -34,11 +34,11 @@ Tailwind ignores `node_modules` by default. Add the package as an explicit sourc
 Use per-component entry points in application code:
 
 ```ts
-import { UiButtonComponent } from '@ngnova/ui/button';
+import { UiButtonComponent, UiButtonGroupComponent } from '@ngnova/ui/button';
 
 @Component({
   standalone: true,
-  imports: [UiButtonComponent],
+  imports: [UiButtonComponent, UiButtonGroupComponent],
   template: `<ui-button variant="primary">Save</ui-button>`,
 })
 export class ExampleComponent {}
@@ -78,6 +78,11 @@ Available harnesses:
 <ui-button variant="danger" size="lg" [loading]="saving" loadingLabel="Deleting item">
   Delete
 </ui-button>
+
+<ui-button-group ariaLabel="View density">
+  <ui-button variant="outline">Compact</ui-button>
+  <ui-button variant="outline">Comfortable</ui-button>
+</ui-button-group>
 
 <ui-card variant="elevated" padding="lg">
   <div uiCardHeader>Settings</div>

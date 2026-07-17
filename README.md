@@ -28,7 +28,7 @@ See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md)
 
 ## Components
 
-- `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; sizes `sm`, `md`, `lg`; disabled/loading states; `pressed`, `focused`, and `blurred` outputs.
+- `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; sizes `sm`, `md`, `lg`; disabled/loading states; button groups; `pressed`, `focused`, and `blurred` outputs.
 - `UiCardComponent`: header/body/footer content projection, outline/elevated variants, and body padding sizes.
 - `UiInputComponent`: label, placeholder, helper/error text, prefix/suffix slots, clear button, character counter, outline/filled appearance, size variants, validation message mapping, native input attributes, disabled/read-only/required states, focus/blur outputs, and Angular forms support through `ControlValueAccessor`.
 - `UiBadgeComponent`: variants `default`, `success`, `warning`, `danger`, `info`; sizes `sm`, `md`; optional ARIA role/label.

@@ -11,6 +11,7 @@ import type {
 } from '../../../../button/src/button';
 import {
   UiButtonComponent,
+  UiButtonDirective,
   UiButtonGroupComponent,
   UiButtonIconEndDirective,
   UiButtonIconStartDirective,
@@ -64,6 +65,19 @@ class ButtonGroupHostComponent {}
   `,
 })
 class ButtonIconHostComponent {}
+
+@Component({
+  standalone: true,
+  imports: [UiButtonDirective],
+  template: `
+    <a uiButton href="/reports" variant="outline">Reports</a>
+    <a uiButton href="/settings" disabled>Settings</a>
+    <button uiButton type="button" disabled>Disabled action</button>
+  `,
+})
+class ButtonDirectiveHostComponent {
+  prevented = false;
+}
 
 describe('UiButtonComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
@@ -321,6 +335,42 @@ describe('UiButtonComponent', () => {
 
     expect(className).toContain('w-full');
     expect(className).toContain('cursor-pointer');
+  });
+
+  it('styles anchors and buttons with the uiButton directive', () => {
+    const directiveFixture = TestBed.createComponent(ButtonDirectiveHostComponent);
+    directiveFixture.detectChanges();
+
+    const anchor = directiveFixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    const nativeButton = directiveFixture.nativeElement.querySelector(
+      'button',
+    ) as HTMLButtonElement;
+
+    expect(anchor.className).toContain('inline-flex');
+    expect(anchor.className).toContain('border');
+    expect(nativeButton.disabled).toBe(true);
+    expect(nativeButton.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('prevents disabled anchor activation with the uiButton directive', () => {
+    const directiveFixture = TestBed.createComponent(ButtonDirectiveHostComponent);
+    directiveFixture.detectChanges();
+
+    const disabledAnchor = directiveFixture.nativeElement.querySelectorAll(
+      'a',
+    )[1] as HTMLAnchorElement;
+    let clicked = false;
+    disabledAnchor.addEventListener('click', () => {
+      clicked = true;
+    });
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const dispatched = disabledAnchor.dispatchEvent(event);
+
+    expect(dispatched).toBe(false);
+    expect(clicked).toBe(false);
+    expect(disabledAnchor.getAttribute('aria-disabled')).toBe('true');
+    expect(disabledAnchor.getAttribute('tabindex')).toBe('-1');
   });
 
   it('groups projected ui-button actions with accessible group semantics', () => {

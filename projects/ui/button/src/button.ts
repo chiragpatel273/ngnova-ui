@@ -8,6 +8,7 @@ import {
   Input,
   output,
 } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -139,6 +140,63 @@ export class UiButtonIconStartDirective {}
   },
 })
 export class UiButtonIconEndDirective {}
+
+@Directive({
+  selector: '[uiButton]',
+  standalone: true,
+  host: {
+    '[class]': 'classes',
+    '[attr.aria-disabled]': "disabled ? 'true' : null",
+    '[attr.tabindex]': 'disabled ? -1 : null',
+    '[attr.disabled]': 'buttonHost && disabled ? true : null',
+  },
+})
+export class UiButtonDirective implements OnInit, OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private removeCaptureClickListener: (() => void) | null = null;
+
+  @Input() variant: UiButtonVariant = 'primary';
+  @Input() size: UiButtonSize = 'md';
+  @Input({ transform: booleanAttribute }) disabled = false;
+  @Input({ transform: booleanAttribute }) fullWidth = false;
+
+  protected get buttonHost(): boolean {
+    return this.host.nativeElement.tagName.toLowerCase() === 'button';
+  }
+
+  ngOnInit(): void {
+    const element = this.host.nativeElement;
+    const listener = (event: MouseEvent): void => this.onClick(event);
+    element.addEventListener('click', listener, { capture: true });
+    this.removeCaptureClickListener = () => {
+      element.removeEventListener('click', listener, { capture: true });
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.removeCaptureClickListener?.();
+    this.removeCaptureClickListener = null;
+  }
+
+  protected get classes(): string {
+    return uiClassNames(
+      BASE_CLASSES,
+      VARIANT_CLASSES[this.variant],
+      SIZE_CLASSES[this.size],
+      this.fullWidth && 'w-full',
+      this.disabled && 'pointer-events-none',
+    );
+  }
+
+  private onClick(event: MouseEvent): void {
+    if (!this.disabled) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}
 
 @Component({
   selector: 'ui-button-group',

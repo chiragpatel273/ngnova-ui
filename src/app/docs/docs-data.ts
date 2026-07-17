@@ -1486,6 +1486,8 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 <ui-button intent="warning" appearance="tonal">Needs review</ui-button>
 <ui-button intent="danger" appearance="outline">Delete</ui-button>
 <ui-button intent="neutral" appearance="text">View details</ui-button>`,
+        },
+        {
           title: 'Button group',
           description:
             'Group related actions with a shared accessible label and connected button edges.',

@@ -3,7 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import type { UiButtonAppearance, UiButtonIntent } from '../../../../button/src/button';
-import { UiButtonComponent } from '../../../../button/src/button';
+import { UiButtonComponent, UiButtonGroupComponent } from '../../../../button/src/button';
 
 @Component({
   standalone: true,
@@ -14,6 +14,19 @@ class HostComponent {
   loading = false;
   clicked = false;
 }
+
+@Component({
+  standalone: true,
+  imports: [UiButtonComponent, UiButtonGroupComponent],
+  template: `
+    <ui-button-group ariaLabel="Table density">
+      <ui-button variant="outline">Compact</ui-button>
+      <ui-button variant="outline">Comfortable</ui-button>
+      <ui-button variant="outline">Spacious</ui-button>
+    </ui-button-group>
+  `,
+})
+class ButtonGroupHostComponent {}
 
 describe('UiButtonComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
@@ -118,6 +131,28 @@ describe('UiButtonComponent', () => {
         expect(button.className).toContain('dark:');
       }
     }
+  it('groups projected ui-button actions with accessible group semantics', () => {
+    const groupFixture = TestBed.createComponent(ButtonGroupHostComponent);
+    groupFixture.detectChanges();
+
+    const group = groupFixture.nativeElement.querySelector('[role="group"]') as HTMLElement;
+    const buttons = groupFixture.nativeElement.querySelectorAll('ui-button');
+
+    expect(group.getAttribute('aria-label')).toBe('Table density');
+    expect(group.className).toContain('inline-flex');
+    expect(group.className).toContain('overflow-hidden');
+    expect(buttons.length).toBe(3);
+  });
+
+  it('supports full-width grouped actions', () => {
+    const groupFixture = TestBed.createComponent(UiButtonGroupComponent);
+    groupFixture.componentRef.setInput('fullWidth', true);
+    groupFixture.detectChanges();
+
+    const group = groupFixture.nativeElement.querySelector('[role="group"]') as HTMLElement;
+
+    expect(group.className).toContain('w-full');
+    expect(group.className).toContain('[&_ui-button_button]:w-full');
   });
 
   it('only sets aria-busy while loading', () => {

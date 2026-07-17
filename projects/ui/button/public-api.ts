@@ -1,4 +1,3 @@
-export { UiButtonComponent } from './src/button';
 export type {
   UiButtonAppearance,
   UiButtonIntent,
@@ -6,3 +5,4 @@ export type {
   UiButtonType,
   UiButtonVariant,
 } from './src/button';
+export { UiButtonComponent, UiButtonGroupComponent } from './src/button';

@@ -76,8 +76,8 @@ export const componentDocs: ComponentDoc[] = [
 </section>
 
 <section aria-label="Button event handling">
-  <ui-button fullWidth (click)="recordButtonClick()">Track click</ui-button>
-  <p aria-live="polite">Click events handled: {{ buttonEventCount() }}</p>
+  <ui-button fullWidth (pressed)="recordButtonPress()">Track press</ui-button>
+  <p aria-live="polite">Button presses handled: {{ buttonPressCount() }}</p>
 </section>`,
     inputs: [
       {
@@ -156,19 +156,21 @@ export const componentDocs: ComponentDoc[] = [
     ],
     outputs: [
       {
-        name: 'click',
-        type: 'MouseEvent',
+        name: 'pressed',
+        type: 'OutputEmitterRef<MouseEvent>',
         description: 'Emits when the enabled button is clicked or activated.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the native button receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native button receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the native button loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native button loses focus. The host also forwards a native blur event.',
       },
     ],
   },
@@ -1439,9 +1441,9 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
           title: 'Release footer',
           description: 'A page footer with safe, secondary, and primary actions.',
           code: `<div class="flex flex-wrap justify-end gap-2">
-  <ui-button variant="outline" (click)="cancel()">Cancel</ui-button>
-  <ui-button variant="secondary" (click)="saveDraft()">Save draft</ui-button>
-  <ui-button [loading]="publishing" loadingLabel="Publishing release" (click)="publish()">
+  <ui-button variant="outline" (pressed)="cancel()">Cancel</ui-button>
+  <ui-button variant="secondary" (pressed)="saveDraft()">Save draft</ui-button>
+  <ui-button [loading]="publishing" loadingLabel="Publishing release" (pressed)="publish()">
     Publish
   </ui-button>
 </div>`,
@@ -1466,11 +1468,11 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         {
           title: 'Button events',
           description:
-            'Use HTML-friendly component events for app handlers while the component re-emits the inner native button event.',
+            'Use semantic outputs for app handlers while the host still forwards native focus and blur events.',
           code: `<ui-button
-  (click)="saveChanges($event)"
-  (focus)="buttonFocused.set(true)"
-  (blur)="buttonFocused.set(false)"
+  (pressed)="saveChanges($event)"
+  (focused)="buttonFocused.set(true)"
+  (blurred)="buttonFocused.set(false)"
 >
   Save changes
 </ui-button>
@@ -1500,7 +1502,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       testing: [
         'Assert pressed emits only when enabled.',
-        'Assert aria-busy appears only during loading.',
+        'Assert aria-busy appears only during loading, loadingLabel renders screen-reader text, and all variants, sizes, fullWidth, ariaLabel, and type passthrough behavior remain covered.',
         'Assert representative intent and appearance combinations plus all visual class map entries.',
         'Assert grouped buttons render role="group", aria labels, projected buttons, and full-width classes.',
       ],
@@ -1844,7 +1846,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
   <p id="publish-description">This publishes the package to npm.</p>
   <div uiModalFooter>
     <ui-button variant="outline" (click)="publishOpen = false">Cancel</ui-button>
-    <ui-button (click)="publish()">Publish</ui-button>
+    <ui-button (pressed)="publish()">Publish</ui-button>
   </div>
 </ui-modal>`,
         },

@@ -2,17 +2,36 @@ import { Component } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
-import type { UiButtonAppearance, UiButtonIntent } from '../../../../button/src/button';
+import type {
+  UiButtonAppearance,
+  UiButtonIntent,
+  UiButtonSize,
+  UiButtonType,
+  UiButtonVariant,
+} from '../../../../button/src/button';
 import { UiButtonComponent, UiButtonGroupComponent } from '../../../../button/src/button';
 
 @Component({
   standalone: true,
   imports: [UiButtonComponent],
-  template: `<ui-button [loading]="loading" (click)="clicked = true">Save</ui-button>`,
+  template: `
+    <ui-button
+      [disabled]="disabled"
+      [loading]="loading"
+      (pressed)="pressedEvents.push($event)"
+      (focused)="focusedEvents.push($event)"
+      (blurred)="blurredEvents.push($event)"
+    >
+      Save
+    </ui-button>
+  `,
 })
 class HostComponent {
+  disabled = false;
   loading = false;
-  clicked = false;
+  pressedEvents: MouseEvent[] = [];
+  focusedEvents: FocusEvent[] = [];
+  blurredEvents: FocusEvent[] = [];
 }
 
 @Component({
@@ -40,10 +59,10 @@ describe('UiButtonComponent', () => {
     fixture.detectChanges();
   });
 
-  it('emits click when enabled', () => {
+  it('emits pressed when enabled', () => {
     fixture.nativeElement.querySelector('button').click();
 
-    expect(fixture.componentInstance.clicked).toBe(true);
+    expect(fixture.componentInstance.pressedEvents.length).toBe(1);
   });
 
   it('lets native click events bubble for DOM-aligned behavior', () => {
@@ -57,35 +76,95 @@ describe('UiButtonComponent', () => {
     expect(bubbled).toBe(true);
   });
 
-  it('disables clicks while loading', () => {
-    const buttonFixture = TestBed.createComponent(UiButtonComponent);
-    buttonFixture.componentInstance.loading = true;
-    let emitted = false;
-    buttonFixture.nativeElement.addEventListener('click', () => {
-      emitted = true;
-    });
-    buttonFixture.detectChanges();
+  it('emits focused and blurred while forwarding native focus events from the host', () => {
+    const host = fixture.nativeElement.querySelector('ui-button') as HTMLElement;
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const hostFocusEvents: string[] = [];
 
-    buttonFixture.nativeElement.querySelector('button').click();
+    host.addEventListener('focus', () => hostFocusEvents.push('focus'));
+    host.addEventListener('blur', () => hostFocusEvents.push('blur'));
 
-    expect(emitted).toBe(false);
+    button.dispatchEvent(new FocusEvent('focus'));
+    button.dispatchEvent(new FocusEvent('blur'));
+
+    expect(fixture.componentInstance.focusedEvents.length).toBe(1);
+    expect(fixture.componentInstance.blurredEvents.length).toBe(1);
+    expect(hostFocusEvents).toEqual(['focus', 'blur']);
   });
 
-  it('supports full width layout', () => {
-    const buttonFixture = TestBed.createComponent(UiButtonComponent);
-    buttonFixture.componentInstance.fullWidth = true;
-    buttonFixture.detectChanges();
+  it('passes through supported native button types', () => {
+    const supportedTypes: UiButtonType[] = ['button', 'submit', 'reset'];
 
-    expect(buttonFixture.nativeElement.querySelector('button').className).toContain('w-full');
+    for (const type of supportedTypes) {
+      const buttonFixture = TestBed.createComponent(UiButtonComponent);
+      buttonFixture.componentRef.setInput('type', type);
+      buttonFixture.detectChanges();
+
+      const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+      expect(button.getAttribute('type')).toBe(type);
+    }
   });
 
-  it('uses a pointer cursor for enabled buttons', () => {
+  it('passes through ariaLabel for accessible icon-only labels', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('ariaLabel', 'Save release notes');
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(button.getAttribute('aria-label')).toBe('Save release notes');
+  });
+
+  it('disables activation when disabled or loading', () => {
+    fixture.componentInstance.disabled = true;
+    fixture.detectChanges();
+
+    const disabledButton = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    disabledButton.click();
+
+    fixture.componentInstance.disabled = false;
+    fixture.componentInstance.loading = true;
+    fixture.componentInstance.pressedEvents = [];
+    fixture.detectChanges();
+
+    const loadingButton = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    loadingButton.click();
+
+    expect(disabledButton.disabled).toBe(true);
+    expect(loadingButton.disabled).toBe(true);
+    expect(fixture.componentInstance.pressedEvents).toEqual([]);
+  });
+
+  it('renders loading state with aria-busy, disabled state, spinner, and screen-reader text', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.componentRef.setInput('loadingLabel', 'Publishing release');
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const spinner = buttonFixture.nativeElement.querySelector(
+      '[aria-hidden="true"]',
+    ) as HTMLElement;
+    const srText = buttonFixture.nativeElement.querySelector('.sr-only') as HTMLElement;
+
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute('aria-busy')).toBe('true');
+    expect(spinner.className).toContain('animate-spin');
+    expect(srText.textContent?.trim()).toBe('Publishing release');
+  });
+
+  it('only sets aria-busy while loading', () => {
     const buttonFixture = TestBed.createComponent(UiButtonComponent);
     buttonFixture.detectChanges();
 
-    expect(buttonFixture.nativeElement.querySelector('button').className).toContain(
-      'cursor-pointer',
-    );
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    expect(button.getAttribute('aria-busy')).toBeNull();
+
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.detectChanges();
+
+    expect(button.getAttribute('aria-busy')).toBe('true');
   });
 
   it('supports intent and appearance combinations while preserving legacy variants', () => {
@@ -131,6 +210,70 @@ describe('UiButtonComponent', () => {
         expect(button.className).toContain('dark:');
       }
     }
+  });
+
+  it('applies every current variant with dark-mode-ready classes', () => {
+    const variants: Record<UiButtonVariant, readonly string[]> = {
+      primary: ['bg-blue-600', 'dark:bg-blue-500', 'dark:hover:bg-blue-400'],
+      secondary: ['bg-slate-100', 'dark:bg-slate-800', 'dark:hover:bg-slate-700'],
+      outline: ['border', 'dark:border-slate-700', 'dark:bg-slate-950'],
+      ghost: ['bg-transparent', 'dark:text-slate-200', 'dark:hover:bg-slate-800'],
+      danger: ['bg-red-600', 'dark:bg-red-500', 'dark:hover:bg-red-400'],
+    };
+
+    for (const [variant, expectedClasses] of Object.entries(variants) as [
+      UiButtonVariant,
+      readonly string[],
+    ][]) {
+      const buttonFixture = TestBed.createComponent(UiButtonComponent);
+      buttonFixture.componentRef.setInput('variant', variant);
+      buttonFixture.detectChanges();
+
+      const className = (buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement)
+        .className;
+
+      for (const expectedClass of expectedClasses) {
+        expect(className).toContain(expectedClass);
+      }
+    }
+  });
+
+  it('applies every current size', () => {
+    const sizes: Record<UiButtonSize, readonly string[]> = {
+      sm: ['h-8', 'px-3', 'text-sm'],
+      md: ['h-10', 'px-4', 'text-sm'],
+      lg: ['h-12', 'px-5', 'text-base'],
+    };
+
+    for (const [size, expectedClasses] of Object.entries(sizes) as [
+      UiButtonSize,
+      readonly string[],
+    ][]) {
+      const buttonFixture = TestBed.createComponent(UiButtonComponent);
+      buttonFixture.componentRef.setInput('size', size);
+      buttonFixture.detectChanges();
+
+      const className = (buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement)
+        .className;
+
+      for (const expectedClass of expectedClasses) {
+        expect(className).toContain(expectedClass);
+      }
+    }
+  });
+
+  it('supports full width layout and keeps enabled pointer affordance', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('fullWidth', true);
+    buttonFixture.detectChanges();
+
+    const className = (buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement)
+      .className;
+
+    expect(className).toContain('w-full');
+    expect(className).toContain('cursor-pointer');
+  });
+
   it('groups projected ui-button actions with accessible group semantics', () => {
     const groupFixture = TestBed.createComponent(ButtonGroupHostComponent);
     groupFixture.detectChanges();
@@ -153,18 +296,5 @@ describe('UiButtonComponent', () => {
 
     expect(group.className).toContain('w-full');
     expect(group.className).toContain('[&_ui-button_button]:w-full');
-  });
-
-  it('only sets aria-busy while loading', () => {
-    const buttonFixture = TestBed.createComponent(UiButtonComponent);
-    buttonFixture.detectChanges();
-
-    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
-    expect(button.getAttribute('aria-busy')).toBeNull();
-
-    buttonFixture.componentRef.setInput('loading', true);
-    buttonFixture.detectChanges();
-
-    expect(button.getAttribute('aria-busy')).toBe('true');
   });
 });

@@ -26,6 +26,18 @@ const SIZE_CLASSES: Record<UiTextareaSize, string> = {
   lg: 'px-4 py-2.5 text-base',
 };
 
+const RESIZE_CLASSES: Record<UiTextareaResize, string> = {
+  none: 'resize-none',
+  vertical: 'resize-y',
+  horizontal: 'resize-x',
+  both: 'resize',
+};
+
+const APPEARANCE_CLASSES: Record<UiTextareaAppearance, string> = {
+  outline: 'bg-white dark:bg-slate-950',
+  filled: 'bg-slate-100 dark:bg-slate-900',
+};
+
 const DEFAULT_VALIDATION_MESSAGES: Record<string, string> = {
   required: 'This field is required.',
   minlength: 'The value is too short.',
@@ -165,13 +177,8 @@ export class UiTextareaComponent implements ControlValueAccessor {
     return uiClassNames(
       'block w-full rounded-md border text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500 dark:disabled:bg-slate-900',
       SIZE_CLASSES[this.size],
-      this.appearance === 'filled'
-        ? 'bg-slate-100 dark:bg-slate-900'
-        : 'bg-white dark:bg-slate-950',
-      this.resize === 'none' && 'resize-none',
-      this.resize === 'vertical' && 'resize-y',
-      this.resize === 'horizontal' && 'resize-x',
-      this.resize === 'both' && 'resize',
+      APPEARANCE_CLASSES[this.appearance],
+      RESIZE_CLASSES[this.resize],
       this.isInvalid
         ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30 dark:border-red-400'
         : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500/30 dark:border-slate-700 dark:focus:border-blue-400',

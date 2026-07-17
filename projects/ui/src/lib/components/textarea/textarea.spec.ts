@@ -42,6 +42,26 @@ class CustomValidationHostComponent {
   validationMessages: Record<string, string> = { required: 'Write a summary before publishing.' };
 }
 
+@Component({
+  standalone: true,
+  imports: [UiTextareaComponent],
+  template: `
+    <ui-textarea
+      inputId="audit-notes"
+      name="auditNotes"
+      ariaLabel="Audit notes"
+      errorText="Resolve the blocking issue."
+      [rows]="6"
+      [minLength]="10"
+      [maxLength]="40"
+      readonly
+      required
+      hideCounter
+    />
+  `,
+})
+class NativeAttributesHostComponent {}
+
 describe('UiTextareaComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
 
@@ -170,6 +190,25 @@ describe('UiTextareaComponent', () => {
     expect(descriptions.length).toBe(1);
     expect(descriptions[0].textContent?.trim()).toBe('Visible helper text.');
     expect(textarea.getAttribute('aria-describedby')).toBe(descriptions[0].id);
+  it('passes through native textarea attributes and can hide the counter', () => {
+    const textareaFixture = TestBed.createComponent(NativeAttributesHostComponent);
+    textareaFixture.detectChanges();
+
+    const textarea = textareaFixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    const descriptions = textareaFixture.nativeElement.querySelectorAll('p');
+
+    expect(textarea.id).toBe('audit-notes');
+    expect(textarea.name).toBe('auditNotes');
+    expect(textarea.getAttribute('aria-label')).toBe('Audit notes');
+    expect(textarea.getAttribute('rows')).toBe('6');
+    expect(textarea.getAttribute('minlength')).toBe('10');
+    expect(textarea.getAttribute('maxlength')).toBe('40');
+    expect(textarea.readOnly).toBe(true);
+    expect(textarea.required).toBe(true);
+    expect(textarea.getAttribute('aria-invalid')).toBe('true');
+    expect(textarea.getAttribute('aria-describedby')).toBe('audit-notes-message');
+    expect(descriptions.length).toBe(1);
+    expect(descriptions[0].textContent?.trim()).toBe('Resolve the blocking issue.');
   });
 
   it('applies resize, appearance, size, and dark-mode ready classes', () => {

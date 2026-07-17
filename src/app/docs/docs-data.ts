@@ -45,7 +45,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Button',
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
-    importName: 'UiButtonComponent',
+    importName: 'UiButtonComponent, UiButtonGroupComponent',
     usage: `<section aria-label="Button variants">
   <div class="flex flex-wrap items-center gap-3">
     <ui-button>Primary Action</ui-button>
@@ -65,6 +65,14 @@ export const componentDocs: ComponentDoc[] = [
 <section aria-label="Button states">
   <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
   <ui-button disabled>Disabled</ui-button>
+</section>
+
+<section aria-label="Button group">
+  <ui-button-group ariaLabel="View density">
+    <ui-button variant="outline">Compact</ui-button>
+    <ui-button variant="outline">Comfortable</ui-button>
+    <ui-button variant="outline">Spacious</ui-button>
+  </ui-button-group>
 </section>
 
 <section aria-label="Button event handling">
@@ -119,6 +127,18 @@ export const componentDocs: ComponentDoc[] = [
         type: "'button' | 'submit' | 'reset'",
         defaultValue: "'button'",
         description: 'Native button type.',
+      },
+      {
+        name: 'ui-button-group ariaLabel',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Accessible label for a grouped set of related buttons.',
+      },
+      {
+        name: 'ui-button-group fullWidth',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Stretches grouped buttons across the available width.',
       },
     ],
     outputs: [
@@ -1414,6 +1434,16 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 </div>`,
         },
         {
+          title: 'Button group',
+          description:
+            'Group related actions with a shared accessible label and connected button edges.',
+          code: `<ui-button-group ariaLabel="View density">
+  <ui-button variant="outline">Compact</ui-button>
+  <ui-button variant="outline">Comfortable</ui-button>
+  <ui-button variant="outline">Spacious</ui-button>
+</ui-button-group>`,
+        },
+        {
           title: 'Button events',
           description:
             'Use HTML-friendly component events for app handlers while the component re-emits the inner native button event.',
@@ -1432,6 +1462,7 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       accessibility: [
         'Uses a native button element.',
+        'ui-button-group renders role="group" and should include ariaLabel when grouping related controls.',
         'The loading state sets aria-busy and disables activation.',
         'Icon-only buttons must provide ariaLabel.',
       ],
@@ -1445,10 +1476,12 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       edgeCases: [
         'Disabled and loading buttons do not emit pressed.',
         'Use fullWidth in narrow mobile layouts.',
+        'Use ui-button-group only for closely related actions, not unrelated page actions.',
       ],
       testing: [
         'Assert pressed emits only when enabled.',
         'Assert aria-busy appears only during loading.',
+        'Assert grouped buttons render role="group", aria labels, projected buttons, and full-width classes.',
       ],
     },
   ],

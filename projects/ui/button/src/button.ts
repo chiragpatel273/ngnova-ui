@@ -39,6 +39,28 @@ const SIZE_CLASSES: Record<UiButtonSize, string> = {
 };
 
 @Component({
+  selector: 'ui-button-group',
+  standalone: true,
+  template: `
+    <div role="group" [attr.aria-label]="ariaLabel || null" [class]="classes">
+      <ng-content />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UiButtonGroupComponent {
+  @Input() ariaLabel = '';
+  @Input({ transform: booleanAttribute }) fullWidth = false;
+
+  protected get classes(): string {
+    return uiClassNames(
+      'inline-flex items-stretch overflow-hidden rounded-md shadow-sm [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
+      this.fullWidth && 'flex w-full [&_ui-button]:flex-1 [&_ui-button_button]:w-full',
+    );
+  }
+}
+
+@Component({
   selector: 'ui-button',
   standalone: true,
   template: `

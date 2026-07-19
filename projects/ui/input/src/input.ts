@@ -115,7 +115,7 @@ let nextInputId = 0;
         @if (clearable && value() && !disabled && !readonly) {
           <button
             type="button"
-            class="rounded px-1.5 py-0.5 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            class="rounded-md px-1.5 py-0.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
             [attr.aria-label]="clearLabel"
             (click)="clearValue()"
           >
@@ -125,7 +125,7 @@ let nextInputId = 0;
         @if (type === 'password' && revealable) {
           <button
             type="button"
-            class="rounded px-1.5 py-0.5 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            class="rounded-md px-1.5 py-0.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
             [attr.aria-label]="passwordVisible() ? hidePasswordLabel : showPasswordLabel"
             [attr.aria-pressed]="passwordVisible()"
             [disabled]="disabled"
@@ -243,7 +243,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected get controlFrameClasses(): string {
     return uiClassNames(
-      'relative flex w-full items-center gap-2 rounded-md border shadow-sm transition-colors focus-within:ring-2',
+      'relative flex w-full items-center gap-2 rounded-lg border shadow-sm transition-colors focus-within:ring-2',
       this.labelMode === 'floating' ? FLOATING_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
       this.appearance === 'filled'
         ? 'bg-slate-100 dark:bg-slate-900'

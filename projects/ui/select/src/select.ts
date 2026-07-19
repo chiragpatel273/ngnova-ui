@@ -119,7 +119,7 @@ export class UiSelectComponent implements ControlValueAccessor {
 
   protected get selectClasses(): string {
     return uiClassNames(
-      'block w-full appearance-none rounded-md border bg-white text-slate-900 shadow-sm transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:disabled:bg-slate-900',
+      'block w-full appearance-none rounded-lg border bg-white text-slate-900 shadow-sm transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:disabled:bg-slate-900',
       'bg-[right_0.75rem_center] bg-no-repeat pr-10',
       this.size === 'sm' && 'h-8 px-2.5 py-1.5 text-sm',
       this.size === 'md' && 'h-10 px-3 py-2 text-sm',

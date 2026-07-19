@@ -12,13 +12,13 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
   template: `
     <article class="mx-auto max-w-[70rem] pb-20">
       <header class="pt-6">
-        <p class="text-base text-zinc-900 dark:text-zinc-200">
+        <p class="text-base text-slate-900 dark:text-slate-200">
           Components / <strong>{{ doc().name }} Component</strong>
         </p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-normal text-zinc-950 dark:text-zinc-50">
+        <h1 class="mt-4 text-4xl font-semibold tracking-normal text-slate-950 dark:text-slate-50">
           {{ doc().name }} Component
         </h1>
-        <p class="mt-5 max-w-4xl text-xl leading-9 text-red-950/85 dark:text-red-100/80">
+        <p class="mt-5 max-w-4xl text-xl leading-9 text-blue-950/85 dark:text-blue-100/80">
           The Card component is a flexible container for grouping content like text, images, and
           data visualizations. Use this playground to customize visual parameters and export the
           resulting Angular template.
@@ -27,24 +27,24 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
       <section class="mt-12 grid gap-8 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
         <aside
-          class="h-max rounded border border-red-200 bg-white p-6 dark:border-red-950 dark:bg-zinc-950"
+          class="h-max rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
           aria-label="Card properties"
         >
-          <div class="flex items-center gap-3 border-b border-red-200 pb-5 dark:border-red-950">
-            <span class="font-mono text-xl text-red-800 dark:text-red-200" aria-hidden="true"
+          <div class="flex items-center gap-3 border-b border-blue-200 pb-5 dark:border-blue-950">
+            <span class="font-mono text-xl text-blue-800 dark:text-blue-200" aria-hidden="true"
               >::</span
             >
-            <h2 class="font-semibold text-zinc-950 dark:text-zinc-50">Properties</h2>
+            <h2 class="font-semibold text-slate-950 dark:text-slate-50">Properties</h2>
           </div>
 
           <div class="mt-7">
-            <p class="text-sm uppercase tracking-wide text-red-950/80 dark:text-red-100/80">
+            <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
               Appearance
             </p>
             <div class="mt-5 grid gap-4">
               @for (control of toggleControls; track control.key) {
                 <div class="flex items-center justify-between gap-4">
-                  <span class="text-base text-zinc-950 dark:text-zinc-100">{{
+                  <span class="text-base text-slate-950 dark:text-slate-100">{{
                     control.label
                   }}</span>
                   <button
@@ -62,13 +62,15 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
           </div>
 
           <div class="mt-8">
-            <p class="text-sm uppercase tracking-wide text-red-950/80 dark:text-red-100/80">
+            <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
               Spacing & Radius
             </p>
-            <label class="mt-5 grid gap-3 text-base text-zinc-950 dark:text-zinc-100">
+            <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
               <span class="flex items-center justify-between">
                 Padding
-                <strong class="text-sm text-red-800 dark:text-red-200">{{ paddingPx() }}px</strong>
+                <strong class="text-sm text-blue-800 dark:text-blue-200"
+                  >{{ paddingPx() }}px</strong
+                >
               </span>
               <input
                 type="range"
@@ -80,10 +82,10 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
                 class="accent-red-800"
               />
             </label>
-            <label class="mt-5 grid gap-3 text-base text-zinc-950 dark:text-zinc-100">
+            <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
               <span class="flex items-center justify-between">
                 Corner Radius
-                <strong class="text-sm text-red-800 dark:text-red-200">{{ radiusPx() }}px</strong>
+                <strong class="text-sm text-blue-800 dark:text-blue-200">{{ radiusPx() }}px</strong>
               </span>
               <input
                 type="range"
@@ -99,7 +101,7 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
           <button
             type="button"
-            class="mt-8 w-full rounded bg-red-800 px-4 py-4 text-base font-semibold text-white transition hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 dark:bg-red-700 dark:hover:bg-red-600"
+            class="mt-8 w-full rounded bg-blue-800 px-4 py-4 text-base font-semibold text-white transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
             (click)="resetAll()"
           >
             Reset All
@@ -108,13 +110,13 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
         <div class="grid gap-8">
           <section
-            class="overflow-hidden rounded border border-red-200 bg-white dark:border-red-950 dark:bg-zinc-950"
+            class="overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950"
             aria-label="Card preview"
           >
             <div
-              class="flex items-center justify-between border-b border-red-200 px-6 py-5 dark:border-red-950"
+              class="flex items-center justify-between border-b border-blue-200 px-6 py-5 dark:border-blue-950"
             >
-              <h2 class="font-semibold text-zinc-950 dark:text-zinc-50">Preview</h2>
+              <h2 class="font-semibold text-slate-950 dark:text-slate-50">Preview</h2>
               <div class="flex items-center gap-3" aria-label="Preview device">
                 @for (device of devices; track device.value) {
                   <button
@@ -147,38 +149,38 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
                     </div>
                   }
 
-                  <div class="relative bg-white dark:bg-zinc-950" [style.padding.px]="paddingPx()">
+                  <div class="relative bg-white dark:bg-slate-950" [style.padding.px]="paddingPx()">
                     @if (accentMarker()) {
                       <span
-                        class="absolute bottom-0 left-0 top-0 w-1.5 bg-red-800"
+                        class="absolute bottom-0 left-0 top-0 w-1.5 bg-blue-800"
                         aria-hidden="true"
                       ></span>
                     }
                     <div class="flex items-center justify-between gap-4">
                       <span
-                        class="bg-zinc-100 px-2 py-1 text-sm text-red-950 dark:bg-zinc-900 dark:text-red-100"
+                        class="bg-slate-100 px-2 py-1 text-sm text-blue-950 dark:bg-slate-900 dark:text-blue-100"
                       >
                         Live Metrics
                       </span>
-                      <span class="text-sm font-semibold text-red-800 dark:text-red-200">
+                      <span class="text-sm font-semibold text-blue-800 dark:text-blue-200">
                         Active
                       </span>
                     </div>
-                    <p class="mt-5 text-base leading-7 text-red-950/90 dark:text-red-100/80">
+                    <p class="mt-5 text-base leading-7 text-blue-950/90 dark:text-blue-100/80">
                       Overall server cluster performance is operating within optimal parameters.
                       Network latency decreased by 12% in the last session.
                     </p>
-                    <div class="mt-7 border-t border-red-200 pt-5 dark:border-red-950">
+                    <div class="mt-7 border-t border-blue-200 pt-5 dark:border-blue-950">
                       <div class="flex gap-3">
                         <button
                           type="button"
-                          class="rounded bg-red-800 px-5 py-3 text-sm font-semibold text-white"
+                          class="rounded bg-blue-800 px-5 py-3 text-sm font-semibold text-white"
                         >
                           Details
                         </button>
                         <button
                           type="button"
-                          class="rounded px-5 py-3 text-sm font-semibold text-zinc-700 dark:text-zinc-200"
+                          class="rounded px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200"
                         >
                           Analytics
                         </button>
@@ -252,7 +254,7 @@ export class CardDocPlaygroundComponent {
     const media = this.mediaHeader()
       ? `\n  <div uiCardHeader>\n    <img src="/card-system-health.svg" alt="System health analytics bars" />\n  </div>`
       : '';
-    const accentClass = this.accentMarker() ? ' class="border-l-4 border-red-800"' : '';
+    const accentClass = this.accentMarker() ? ' class="border-l-4 border-blue-800"' : '';
 
     return `<ui-card variant="${variant}" padding="${padding}"${accentClass}>${media}
   <h3>System Health</h3>
@@ -278,10 +280,10 @@ export class CardDocPlaygroundComponent {
   }
 
   protected previewCardClasses(): string {
-    const classes = ['overflow-hidden bg-white dark:bg-zinc-950'];
+    const classes = ['overflow-hidden bg-white dark:bg-slate-950'];
 
     if (this.border()) {
-      classes.push('border border-red-200 dark:border-red-950');
+      classes.push('border border-blue-200 dark:border-blue-950');
     }
 
     if (this.shadow()) {
@@ -293,8 +295,8 @@ export class CardDocPlaygroundComponent {
 
   protected switchClasses(checked: boolean): string {
     return [
-      'relative h-6 w-11 rounded-full transition focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2',
-      checked ? 'bg-red-800' : 'bg-zinc-200 dark:bg-zinc-800',
+      'relative h-6 w-11 rounded-full transition focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2',
+      checked ? 'bg-blue-800' : 'bg-slate-200 dark:bg-slate-800',
     ].join(' ');
   }
 
@@ -311,8 +313,8 @@ export class CardDocPlaygroundComponent {
     return [
       'rounded border px-3 py-1 text-xs font-semibold transition',
       active
-        ? 'border-red-800 bg-red-800 text-white'
-        : 'border-transparent text-red-950 hover:border-red-200 dark:text-red-100',
+        ? 'border-blue-800 bg-blue-800 text-white'
+        : 'border-transparent text-blue-950 hover:border-blue-200 dark:text-blue-100',
     ].join(' ');
   }
 

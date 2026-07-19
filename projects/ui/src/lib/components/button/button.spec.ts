@@ -272,9 +272,9 @@ describe('UiButtonComponent', () => {
 
   it('applies every current size', () => {
     const sizes: Record<UiButtonSize, readonly string[]> = {
-      sm: ['h-8', 'px-3', 'text-sm'],
-      md: ['h-10', 'px-4', 'text-sm'],
-      lg: ['h-12', 'px-5', 'text-base'],
+      sm: ['h-8', 'gap-1.5', 'px-3', 'text-sm', 'leading-5'],
+      md: ['h-10', 'gap-2', 'px-4', 'text-sm', 'leading-5'],
+      lg: ['h-12', 'gap-2.5', 'px-5', 'text-base', 'leading-6'],
     };
 
     for (const [size, expectedClasses] of Object.entries(sizes) as [
@@ -305,6 +305,7 @@ describe('UiButtonComponent', () => {
 
     expect(button.className).toContain('size-10');
     expect(button.className).toContain('p-0');
+    expect(button.className).toContain('[--ui-button-icon-size:1.125rem]');
     expect(button.className).not.toContain('w-full');
     expect(button.getAttribute('aria-label')).toBe('Create item');
   });
@@ -321,8 +322,52 @@ describe('UiButtonComponent', () => {
     for (const icon of icons) {
       expect(icon.getAttribute('aria-hidden')).toBe('true');
       expect(icon.className).toContain('pointer-events-none');
-      expect(icon.className).toContain('size-4');
+      expect(icon.className).toContain('size-[var(--ui-button-icon-size,1rem)]');
+      expect(icon.className).toContain('[--ng-icon__stroke-width:2]');
     }
+  });
+
+  it('scales icon-only glyphs with the button size', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('iconOnly', true);
+    buttonFixture.componentRef.setInput('ariaLabel', 'Create item');
+
+    const expectedGlyphSizes = {
+      sm: '[--ui-button-icon-size:1rem]',
+      md: '[--ui-button-icon-size:1.125rem]',
+      lg: '[--ui-button-icon-size:1.25rem]',
+    } as const;
+
+    for (const [size, expectedClass] of Object.entries(expectedGlyphSizes)) {
+      buttonFixture.componentRef.setInput('size', size);
+      buttonFixture.detectChanges();
+
+      const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      expect(button.className).toContain(expectedClass);
+    }
+  });
+
+  it('projects leading icons, labels, and trailing icons in visual order', () => {
+    const buttonFixture = TestBed.createComponent(ButtonIconHostComponent);
+    buttonFixture.detectChanges();
+
+    const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const visibleChildren = Array.from(button.children) as HTMLElement[];
+
+    expect(visibleChildren[0].hasAttribute('uiButtonIconStart')).toBe(true);
+    expect(visibleChildren[1].textContent?.trim()).toBe('Create');
+    expect(visibleChildren[2].hasAttribute('uiButtonIconEnd')).toBe(true);
+  });
+
+  it('removes the empty label wrapper from icon-only layout spacing', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('iconOnly', true);
+    buttonFixture.componentRef.setInput('ariaLabel', 'Create item');
+    buttonFixture.detectChanges();
+
+    const labelWrapper = buttonFixture.nativeElement.querySelector('button > span') as HTMLElement;
+
+    expect(labelWrapper.className).toContain('hidden');
   });
 
   it('supports full width layout and keeps enabled pointer affordance', () => {

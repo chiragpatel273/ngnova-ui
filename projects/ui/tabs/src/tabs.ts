@@ -19,7 +19,7 @@ let nextTabsId = 0;
     <div
       role="tablist"
       [attr.aria-label]="ariaLabel || null"
-      class="inline-flex rounded-md bg-slate-100 p-1 dark:bg-slate-900"
+      class="inline-flex rounded-lg bg-slate-100 p-1 dark:bg-slate-900"
       [class.w-full]="fullWidth"
       tabindex="-1"
       (keydown)="onKeydown($event)"
@@ -79,7 +79,7 @@ export class UiTabsComponent {
 
   protected tabClasses(tab: UiTabItem): string {
     return uiClassNames(
-      'inline-flex items-center justify-center rounded px-3 py-1.5 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-50',
+      'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950',
       this.fullWidth && 'flex-1',
       tab.value === this.active
         ? 'bg-white text-slate-950 shadow-sm dark:bg-slate-800 dark:text-slate-50'

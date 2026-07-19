@@ -57,10 +57,17 @@ export const componentDocs: ComponentDoc[] = [
   </div>
 </section>
 
+<section aria-label="Button intent and appearance">
+  <ui-button intent="success">Approve</ui-button>
+  <ui-button intent="warning" appearance="tonal">Needs review</ui-button>
+  <ui-button intent="danger" appearance="outline">Delete</ui-button>
+  <ui-button intent="neutral" appearance="text">View details</ui-button>
+</section>
+
 <section aria-label="Button sizes">
-  <ui-button size="sm">Small</ui-button>
-  <ui-button size="md">Medium</ui-button>
-  <ui-button size="lg">Large</ui-button>
+  <ui-button size="sm">Button</ui-button>
+  <ui-button size="md">Button</ui-button>
+  <ui-button size="lg">Button</ui-button>
 </section>
 
 <section aria-label="Button states">
@@ -69,17 +76,18 @@ export const componentDocs: ComponentDoc[] = [
 </section>
 
 <section aria-label="Button links">
-  <a uiButton href="/reports">View reports</a>
+  <a uiButton routerLink="/components/input" variant="outline">Open Input docs</a>
+  <a uiButton href="/reports" disabled>Reports unavailable</a>
 </section>
 
 <section aria-label="Button icons">
   <ui-button ariaLabel="Create item" iconOnly>
-    <span uiButtonIconStart>+</span>
+    <ng-icon uiButtonIconStart name="heroPlus" />
   </ui-button>
   <ui-button>
-    <span uiButtonIconStart>+</span>
+    <ng-icon uiButtonIconStart name="heroPlus" />
     Create
-    <span uiButtonIconEnd>→</span>
+    <ng-icon uiButtonIconEnd name="heroArrowRight" />
   </ui-button>
 </section>
 
@@ -89,6 +97,12 @@ export const componentDocs: ComponentDoc[] = [
     <ui-button variant="outline">Comfortable</ui-button>
     <ui-button variant="outline">Spacious</ui-button>
   </ui-button-group>
+</section>
+
+<section aria-label="Button form submission">
+  <form (submit)="saveProfile($event)">
+    <ui-button type="submit">Save profile</ui-button>
+  </form>
 </section>
 
 <section aria-label="Button event handling">
@@ -101,7 +115,7 @@ export const componentDocs: ComponentDoc[] = [
         type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
         defaultValue: "'primary'",
         description:
-          'Legacy visual emphasis style. Prefer intent and appearance for new combinations.',
+          'Legacy visual emphasis style. Prefer intent and appearance for new combinations; either modern input takes precedence when supplied.',
       },
       {
         name: 'intent',
@@ -169,7 +183,44 @@ export const componentDocs: ComponentDoc[] = [
         type: 'directive',
         defaultValue: 'n/a',
         description:
-          'Applies button styling and disabled-anchor handling to native button or anchor elements.',
+          'Applies button styling and disabled-anchor handling to native buttons, anchors, and router links.',
+      },
+      {
+        name: '[uiButton] variant',
+        type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
+        defaultValue: "'primary'",
+        description: 'Visual style for native buttons, anchors, and router links.',
+      },
+      {
+        name: '[uiButton] size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Height, padding, and text scale for the directive host.',
+      },
+      {
+        name: '[uiButton] disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description:
+          'Disables native buttons and prevents disabled anchors or router links from activating.',
+      },
+      {
+        name: '[uiButton] fullWidth',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Expands the directive host to the full width of its container.',
+      },
+      {
+        name: 'uiButtonIconStart',
+        type: 'directive',
+        defaultValue: 'n/a',
+        description: 'Marks a decorative leading icon and removes it from the accessibility tree.',
+      },
+      {
+        name: 'uiButtonIconEnd',
+        type: 'directive',
+        defaultValue: 'n/a',
+        description: 'Marks a decorative trailing icon and removes it from the accessibility tree.',
       },
       {
         name: 'ui-button-group ariaLabel',
@@ -1479,6 +1530,21 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 </div>`,
         },
         {
+          title: 'Testing with the button harness',
+          description:
+            'Use the testing entry point to locate buttons by text and inspect public behavior without depending on DOM structure.',
+          code: `import { UiButtonHarness } from '@ngnova/ui/testing';
+
+const button = await loader.getHarness(UiButtonHarness.with({ text: 'Save' }));
+
+expect(await button.getText()).toBe('Save');
+expect(await button.isDisabled()).toBe(false);
+expect(await button.isLoading()).toBe(false);
+expect(await button.getType()).toBe('button');
+
+await button.click();`,
+        },
+        {
           title: 'Intent and appearance',
           description:
             'Use intent and appearance for semantic combinations while variant remains supported for existing buttons.',
@@ -1515,10 +1581,11 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
         },
       ],
       accessibility: [
-        'Uses a native button element.',
+        'UiButtonComponent renders a native button, so Enter and Space activation and disabled semantics remain predictable.',
+        'Icon-only buttons must provide ariaLabel; uiButtonIconStart and uiButtonIconEnd mark decorative icons aria-hidden.',
+        'The loading state sets aria-busy, includes loadingLabel for screen readers, and disables repeated activation.',
+        'Disabled anchors and router links receive aria-disabled="true", leave the tab order, and cannot navigate.',
         'ui-button-group renders role="group" and should include ariaLabel when grouping related controls.',
-        'The loading state sets aria-busy and disables activation.',
-        'Icon-only buttons must provide ariaLabel, and uiButtonIconStart/uiButtonIconEnd mark decorative icons aria-hidden.',
       ],
       keyboard: [
         'Enter and Space activate the native button.',
@@ -1530,15 +1597,18 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
       ],
       edgeCases: [
         'Disabled and loading buttons do not emit pressed.',
+        'When intent or appearance is provided, the modern visual API takes precedence over variant; a missing intent defaults to primary and a missing appearance defaults to solid.',
         'Use fullWidth in narrow mobile layouts.',
         'Use ui-button-group only for closely related actions, not unrelated page actions.',
       ],
       testing: [
-        'Assert pressed emits only when enabled.',
+        'Import UiButtonHarness from @ngnova/ui/testing and filter with UiButtonHarness.with({ text }).',
+        'The harness supports click(), getText(), isDisabled(), isLoading(), and getType().',
+        'Assert pressed emits only when enabled and focused or blurred fire around focus changes.',
         'Assert aria-busy appears only during loading, loadingLabel renders screen-reader text, and all variants, sizes, fullWidth, ariaLabel, and type passthrough behavior remain covered.',
         'Assert representative intent and appearance combinations plus all visual class map entries.',
         'Assert icon-only sizing, icon marker directives, and accessible labels.',
-        'Assert uiButton directive styling and disabled-anchor behavior.',
+        'Assert uiButton directive styling, router-link usage, and disabled-anchor behavior.',
         'Assert grouped buttons render role="group", aria labels, projected buttons, and full-width classes.',
       ],
     },

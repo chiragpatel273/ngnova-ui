@@ -13,29 +13,29 @@ import type { ApiInput, ApiOutput } from './docs-data';
             Inputs
           </h3>
           <div
-            class="overflow-hidden rounded border border-red-200 bg-white dark:border-red-950 dark:bg-zinc-950"
+            class="overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950"
           >
-            <div class="grid divide-y divide-red-100 dark:divide-red-950/70 md:hidden">
+            <div class="grid divide-y divide-blue-100 dark:divide-blue-950/70 md:hidden">
               @for (apiInput of apiInputs(); track apiInput.name) {
                 <article class="grid gap-3 p-4">
                   <div class="flex flex-wrap items-center justify-between gap-3">
                     <code
-                      class="rounded bg-red-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-red-800 dark:bg-red-950/70 dark:text-red-200"
+                      class="rounded bg-blue-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-blue-800 dark:bg-blue-950/70 dark:text-blue-200"
                     >
                       {{ apiInput.name }}
                     </code>
                     <code
-                      class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                      class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
                     >
                       {{ apiInput.defaultValue }}
                     </code>
                   </div>
                   <code
-                    class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-zinc-700 dark:text-zinc-300 [overflow-wrap:anywhere]"
+                    class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-700 dark:text-slate-300 [overflow-wrap:anywhere]"
                   >
                     {{ apiInput.type }}
                   </code>
-                  <p class="text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                  <p class="text-sm leading-6 text-slate-700 dark:text-slate-300">
                     {{ apiInput.description }}
                   </p>
                 </article>
@@ -44,7 +44,7 @@ import type { ApiInput, ApiOutput } from './docs-data';
             <div class="hidden md:block">
               <table class="w-full table-fixed text-left text-sm">
                 <thead
-                  class="sticky top-0 z-10 border-b border-red-200 bg-zinc-200 text-zinc-900 dark:border-red-950 dark:bg-zinc-800 dark:text-zinc-100"
+                  class="sticky top-0 z-10 border-b border-blue-200 bg-slate-200 text-slate-900 dark:border-blue-950 dark:bg-slate-800 dark:text-slate-100"
                 >
                   <tr>
                     <th class="w-1/5 px-3 py-2.5 font-medium">Name</th>
@@ -53,31 +53,33 @@ import type { ApiInput, ApiOutput } from './docs-data';
                     <th class="px-3 py-2.5 font-medium">Description</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-red-100 dark:divide-red-950/70">
+                <tbody class="divide-y divide-blue-100 dark:divide-blue-950/70">
                   @for (apiInput of apiInputs(); track apiInput.name) {
                     <tr>
                       <td class="px-3 py-2.5 align-top">
                         <code
-                          class="rounded bg-red-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-red-800 dark:bg-red-950/70 dark:text-red-200"
+                          class="rounded bg-blue-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-blue-800 dark:bg-blue-950/70 dark:text-blue-200"
                         >
                           {{ apiInput.name }}
                         </code>
                       </td>
                       <td class="px-3 py-2.5 align-top">
                         <code
-                          class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-zinc-700 dark:text-zinc-300 [overflow-wrap:anywhere]"
+                          class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-700 dark:text-slate-300 [overflow-wrap:anywhere]"
                         >
                           {{ apiInput.type }}
                         </code>
                       </td>
                       <td class="px-3 py-2.5 align-top">
                         <code
-                          class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                          class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
                         >
                           {{ apiInput.defaultValue }}
                         </code>
                       </td>
-                      <td class="px-3 py-2.5 align-top leading-6 text-zinc-700 dark:text-zinc-300">
+                      <td
+                        class="px-3 py-2.5 align-top leading-6 text-slate-700 dark:text-slate-300"
+                      >
                         {{ apiInput.description }}
                       </td>
                     </tr>
@@ -99,22 +101,22 @@ import type { ApiInput, ApiOutput } from './docs-data';
             Outputs
           </h3>
           <div
-            class="overflow-hidden rounded border border-red-200 bg-white dark:border-red-950 dark:bg-zinc-950"
+            class="overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950"
           >
-            <div class="grid divide-y divide-red-100 dark:divide-red-950/70 md:hidden">
+            <div class="grid divide-y divide-blue-100 dark:divide-blue-950/70 md:hidden">
               @for (apiOutput of apiOutputs(); track apiOutput.name) {
                 <article class="grid gap-3 p-4">
                   <code
-                    class="w-max rounded bg-red-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-red-800 dark:bg-red-950/70 dark:text-red-200"
+                    class="w-max rounded bg-blue-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-blue-800 dark:bg-blue-950/70 dark:text-blue-200"
                   >
                     {{ apiOutput.name }}
                   </code>
                   <code
-                    class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-zinc-700 dark:text-zinc-300 [overflow-wrap:anywhere]"
+                    class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-700 dark:text-slate-300 [overflow-wrap:anywhere]"
                   >
                     {{ apiOutput.type }}
                   </code>
-                  <p class="text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                  <p class="text-sm leading-6 text-slate-700 dark:text-slate-300">
                     {{ apiOutput.description }}
                   </p>
                 </article>
@@ -123,7 +125,7 @@ import type { ApiInput, ApiOutput } from './docs-data';
             <div class="hidden md:block">
               <table class="w-full table-fixed text-left text-sm">
                 <thead
-                  class="sticky top-0 z-10 border-b border-red-200 bg-zinc-200 text-zinc-900 dark:border-red-950 dark:bg-zinc-800 dark:text-zinc-100"
+                  class="sticky top-0 z-10 border-b border-blue-200 bg-slate-200 text-slate-900 dark:border-blue-950 dark:bg-slate-800 dark:text-slate-100"
                 >
                   <tr>
                     <th class="w-1/4 px-3 py-2.5 font-medium">Name</th>
@@ -131,24 +133,26 @@ import type { ApiInput, ApiOutput } from './docs-data';
                     <th class="px-3 py-2.5 font-medium">Description</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-red-100 dark:divide-red-950/70">
+                <tbody class="divide-y divide-blue-100 dark:divide-blue-950/70">
                   @for (apiOutput of apiOutputs(); track apiOutput.name) {
                     <tr>
                       <td class="px-3 py-2.5 align-top">
                         <code
-                          class="rounded bg-red-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-red-800 dark:bg-red-950/70 dark:text-red-200"
+                          class="rounded bg-blue-50 px-1.5 py-0.5 font-mono text-xs font-semibold text-blue-800 dark:bg-blue-950/70 dark:text-blue-200"
                         >
                           {{ apiOutput.name }}
                         </code>
                       </td>
                       <td class="px-3 py-2.5 align-top">
                         <code
-                          class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-zinc-700 dark:text-zinc-300 [overflow-wrap:anywhere]"
+                          class="whitespace-pre-wrap break-words font-mono text-xs leading-5 text-slate-700 dark:text-slate-300 [overflow-wrap:anywhere]"
                         >
                           {{ apiOutput.type }}
                         </code>
                       </td>
-                      <td class="px-3 py-2.5 align-top leading-6 text-zinc-700 dark:text-zinc-300">
+                      <td
+                        class="px-3 py-2.5 align-top leading-6 text-slate-700 dark:text-slate-300"
+                      >
                         {{ apiOutput.description }}
                       </td>
                     </tr>

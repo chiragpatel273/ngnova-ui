@@ -65,8 +65,8 @@ interface FeaturedComponent {
     UiTagComponent,
   ],
   template: `
-    <article class="mx-auto max-w-6xl bg-zinc-100 dark:bg-zinc-950">
-      <section class="border-b border-red-100 bg-zinc-50 dark:border-red-950 dark:bg-zinc-950">
+    <article class="mx-auto max-w-6xl bg-slate-100 dark:bg-slate-950">
+      <section class="border-b border-blue-100 bg-slate-50 dark:border-blue-950 dark:bg-slate-950">
         <div class="grid gap-10 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_31rem] lg:px-6 lg:py-12">
           <div class="min-w-0 self-center">
             <div class="flex flex-wrap items-center gap-2">
@@ -75,12 +75,12 @@ interface FeaturedComponent {
             </div>
 
             <h1
-              class="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-normal text-zinc-950 dark:text-zinc-50 lg:text-5xl"
+              class="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-normal text-slate-950 dark:text-slate-50 lg:text-5xl"
             >
               Build faster with NgNova UI Docs
             </h1>
 
-            <p class="mt-5 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
+            <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
               The enterprise-scale Angular component library for high-performance teams. Build
               resilient, accessible, and themeable applications with focused standalone imports and
               production-ready documentation.
@@ -96,9 +96,10 @@ interface FeaturedComponent {
             </div>
 
             <p
-              class="mt-7 border-t border-red-100 pt-5 text-sm text-zinc-500 dark:border-red-950 dark:text-zinc-400"
+              class="mt-7 border-t border-blue-100 pt-5 text-sm text-slate-500 dark:border-blue-950 dark:text-slate-400"
             >
-              Trusted by <span class="font-semibold text-zinc-950 dark:text-zinc-100">2,500+</span>
+              Trusted by
+              <span class="font-semibold text-slate-950 dark:text-slate-100">2,500+</span>
               engineering teams building Angular product systems.
             </p>
           </div>
@@ -114,37 +115,37 @@ interface FeaturedComponent {
       </section>
 
       <section
-        class="border-b border-red-100 bg-white px-5 py-7 dark:border-red-950 dark:bg-zinc-950 lg:px-6"
+        class="border-b border-blue-100 bg-white px-5 py-7 dark:border-blue-950 dark:bg-slate-950 lg:px-6"
       >
         <div
-          class="grid items-center gap-5 rounded bg-zinc-100 p-5 dark:bg-zinc-900 md:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]"
+          class="grid items-center gap-5 rounded bg-slate-100 p-5 dark:bg-slate-900 md:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]"
         >
           <div>
-            <h2 class="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Quick Start</h2>
-            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            <h2 class="text-xl font-semibold text-slate-950 dark:text-slate-50">Quick Start</h2>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Install the package, then import only the component entry point your Angular screen
               needs.
             </p>
           </div>
           <div
-            class="flex min-w-0 items-center justify-between gap-4 rounded bg-zinc-950 px-4 py-3 font-mono text-sm text-zinc-100"
+            class="flex min-w-0 items-center justify-between gap-4 rounded bg-slate-950 px-4 py-3 font-mono text-sm text-slate-100"
           >
             <code class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
               npm install &#64;ngnova/ui
             </code>
-            <span class="shrink-0 text-zinc-500">copy</span>
+            <span class="shrink-0 text-slate-500">copy</span>
           </div>
         </div>
       </section>
 
       <section
-        class="border-b border-red-100 bg-white px-5 py-8 text-center dark:border-red-950 dark:bg-zinc-950 lg:px-6"
+        class="border-b border-blue-100 bg-white px-5 py-8 text-center dark:border-blue-950 dark:bg-slate-950 lg:px-6"
       >
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           Trusted by leading teams
         </p>
         <div
-          class="mt-5 grid gap-4 text-sm font-semibold uppercase text-zinc-400 sm:grid-cols-3 lg:grid-cols-6"
+          class="mt-5 grid gap-4 text-sm font-semibold uppercase text-slate-400 sm:grid-cols-3 lg:grid-cols-6"
         >
           @for (team of trustedTeams; track team) {
             <span>{{ team }}</span>
@@ -152,12 +153,12 @@ interface FeaturedComponent {
         </div>
       </section>
 
-      <section class="bg-zinc-100 px-5 py-10 dark:bg-zinc-950 lg:px-6">
+      <section class="bg-slate-100 px-5 py-10 dark:bg-slate-950 lg:px-6">
         <div class="mx-auto max-w-3xl text-center">
-          <h2 class="text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
+          <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
             Powering Enterprise Workflows
           </h2>
-          <p class="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
             A practical component system for modern, scalable Angular engineering.
           </p>
         </div>
@@ -165,17 +166,17 @@ interface FeaturedComponent {
         <div class="mt-8 grid gap-5 md:grid-cols-3">
           @for (principle of principles; track principle.title) {
             <section
-              class="rounded border border-red-100 bg-white p-6 dark:border-red-950 dark:bg-zinc-950"
+              class="rounded border border-blue-100 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
             >
               <span
-                class="inline-flex rounded bg-red-50 px-3 py-2 text-sm font-semibold text-red-800 dark:bg-red-950/50 dark:text-red-200"
+                class="inline-flex rounded bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
               >
                 {{ principle.short }}
               </span>
-              <h3 class="mt-5 text-xl font-semibold text-zinc-950 dark:text-zinc-50">
+              <h3 class="mt-5 text-xl font-semibold text-slate-950 dark:text-slate-50">
                 {{ principle.title }}
               </h3>
-              <p class="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 {{ principle.description }}
               </p>
             </section>
@@ -184,36 +185,36 @@ interface FeaturedComponent {
       </section>
 
       <section
-        class="grid gap-8 bg-zinc-50 px-5 py-10 dark:bg-zinc-950 lg:grid-cols-[minmax(0,1fr)_29rem] lg:px-6"
+        class="grid gap-8 bg-slate-50 px-5 py-10 dark:bg-slate-950 lg:grid-cols-[minmax(0,1fr)_29rem] lg:px-6"
       >
         <div>
-          <h2 class="text-3xl font-semibold text-zinc-950 dark:text-zinc-50">
+          <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
             Analytics Card Component
           </h2>
           <div class="mt-5 grid gap-3">
             @for (item of analyticsHighlights; track item) {
-              <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                <span class="mr-2 font-semibold text-red-800 dark:text-red-300">Check</span
+              <p class="text-sm text-slate-600 dark:text-slate-300">
+                <span class="mr-2 font-semibold text-blue-800 dark:text-blue-300">Check</span
                 >{{ item }}
               </p>
             }
           </div>
 
           <div
-            class="mt-7 rounded border border-red-100 bg-white p-5 dark:border-red-950 dark:bg-zinc-950"
+            class="mt-7 rounded border border-blue-100 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
           >
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold uppercase text-zinc-500">Weekly growth</p>
-                <p class="mt-1 text-4xl font-bold text-zinc-950 dark:text-zinc-50">24.8%</p>
+                <p class="text-xs font-semibold uppercase text-slate-500">Weekly growth</p>
+                <p class="mt-1 text-4xl font-bold text-slate-950 dark:text-slate-50">24.8%</p>
               </div>
               <ui-tag variant="success">+2.4%</ui-tag>
             </div>
             <div class="mt-6 flex h-28 items-end gap-3">
               @for (bar of chartBars; track $index) {
                 <span
-                  class="flex-1 bg-red-100 dark:bg-red-950/70"
-                  [class.bg-red-700]="$last"
+                  class="flex-1 bg-blue-100 dark:bg-blue-950/70"
+                  [class.bg-blue-700]="$last"
                   [style.height.%]="bar"
                 ></span>
               }
@@ -236,16 +237,16 @@ interface FeaturedComponent {
       </section>
 
       <section
-        class="border-y border-red-100 bg-zinc-200/60 px-5 py-10 dark:border-red-950 dark:bg-zinc-900 lg:px-6"
+        class="border-y border-blue-100 bg-slate-200/60 px-5 py-10 dark:border-blue-950 dark:bg-slate-900 lg:px-6"
       >
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 class="text-3xl font-semibold text-zinc-950 dark:text-zinc-50">What's New</h2>
-            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+            <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">What's New</h2>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Stay up to date with the latest component and documentation work.
             </p>
           </div>
-          <a routerLink="/guide" class="text-sm font-semibold text-red-800 dark:text-red-300">
+          <a routerLink="/guide" class="text-sm font-semibold text-blue-800 dark:text-blue-300">
             View full changelog
           </a>
         </div>
@@ -253,30 +254,30 @@ interface FeaturedComponent {
         <div class="mt-7 grid gap-5 md:grid-cols-2">
           @for (update of updates; track update.title) {
             <section
-              class="grid gap-4 rounded border border-red-100 bg-white p-5 dark:border-red-950 dark:bg-zinc-950 sm:grid-cols-[3rem_minmax(0,1fr)]"
+              class="grid gap-4 rounded border border-blue-100 bg-white p-5 dark:border-blue-950 dark:bg-slate-950 sm:grid-cols-[3rem_minmax(0,1fr)]"
             >
               <span
-                class="flex size-12 items-center justify-center rounded bg-red-50 text-sm font-semibold text-red-800 dark:bg-red-950/50 dark:text-red-200"
+                class="flex size-12 items-center justify-center rounded bg-blue-50 text-sm font-semibold text-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
               >
                 {{ update.version }}
               </span>
               <div>
-                <h3 class="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
+                <h3 class="text-xl font-semibold text-slate-950 dark:text-slate-50">
                   {{ update.title }}
                 </h3>
-                <p class="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+                <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                   {{ update.description }}
                 </p>
-                <p class="mt-3 text-xs text-zinc-500">{{ update.meta }}</p>
+                <p class="mt-3 text-xs text-slate-500">{{ update.meta }}</p>
               </div>
             </section>
           }
         </div>
       </section>
 
-      <section class="bg-zinc-900 px-5 py-14 text-center text-white lg:px-6">
+      <section class="bg-slate-900 px-5 py-14 text-center text-white lg:px-6">
         <h2 class="text-4xl font-bold tracking-normal">Ready to optimize your workflow?</h2>
-        <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-zinc-300">
+        <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-300">
           Join developers building scalable, reliable Angular applications with a component suite
           designed for product teams.
         </p>

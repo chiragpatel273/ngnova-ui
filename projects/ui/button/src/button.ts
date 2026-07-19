@@ -21,7 +21,32 @@ export type UiButtonIntent = 'primary' | 'secondary' | 'success' | 'warning' | '
 export type UiButtonAppearance = 'solid' | 'outline' | 'ghost' | 'text' | 'tonal';
 
 const BASE_CLASSES =
-  'inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60';
+  'relative isolate inline-flex shrink-0 cursor-pointer select-none items-center justify-center rounded-lg font-medium tracking-[-0.006em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-150 ease-out focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:translate-y-px active:shadow-none active:duration-75 motion-reduce:transform-none motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:transform-none dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950';
+
+const RAISED_FINISH_CLASSES =
+  'shadow-sm shadow-slate-950/10 ring-1 ring-inset ring-white/10 hover:shadow-md hover:shadow-slate-950/15';
+const OUTLINED_FINISH_CLASSES =
+  'shadow-sm shadow-slate-950/5 hover:shadow-md hover:shadow-slate-950/10';
+const TONAL_FINISH_CLASSES = 'ring-1 ring-inset ring-slate-900/5 dark:ring-white/10';
+
+function getFinishClasses(
+  variant: UiButtonVariant,
+  appearance?: UiButtonAppearance | null,
+): string {
+  if (appearance === 'outline' || (!appearance && variant === 'outline')) {
+    return OUTLINED_FINISH_CLASSES;
+  }
+
+  if (appearance === 'tonal' || (!appearance && variant === 'secondary')) {
+    return TONAL_FINISH_CLASSES;
+  }
+
+  if (!appearance || appearance === 'solid') {
+    return RAISED_FINISH_CLASSES;
+  }
+
+  return '';
+}
 
 const VARIANT_CLASSES: Record<UiButtonVariant, string> = {
   primary:
@@ -110,9 +135,9 @@ const APPEARANCE_INTENT_CLASSES: Record<UiButtonAppearance, Record<UiButtonInten
 };
 
 const SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-5 text-base',
+  sm: 'h-8 gap-1.5 px-3 text-sm leading-5',
+  md: 'h-10 gap-2 px-4 text-sm leading-5',
+  lg: 'h-12 gap-2.5 px-5 text-base leading-6',
 };
 
 const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
@@ -121,11 +146,18 @@ const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
   lg: 'size-12 p-0 text-base',
 };
 
+const ICON_ONLY_GLYPH_SIZE_CLASSES: Record<UiButtonSize, string> = {
+  sm: '[--ui-button-icon-size:1rem]',
+  md: '[--ui-button-icon-size:1.125rem]',
+  lg: '[--ui-button-icon-size:1.25rem]',
+};
+
 @Directive({
   selector: '[uiButtonIconStart]',
   standalone: true,
   host: {
-    class: 'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center',
+    class:
+      'pointer-events-none inline-flex size-[var(--ui-button-icon-size,1rem)] shrink-0 items-center justify-center leading-none [--ng-icon__stroke-width:2] [&_svg]:block [&_svg]:size-full',
     'aria-hidden': 'true',
   },
 })
@@ -135,7 +167,8 @@ export class UiButtonIconStartDirective {}
   selector: '[uiButtonIconEnd]',
   standalone: true,
   host: {
-    class: 'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center',
+    class:
+      'pointer-events-none inline-flex size-[var(--ui-button-icon-size,1rem)] shrink-0 items-center justify-center leading-none [--ng-icon__stroke-width:2] [&_svg]:block [&_svg]:size-full',
     'aria-hidden': 'true',
   },
 })
@@ -182,6 +215,7 @@ export class UiButtonDirective implements OnInit, OnDestroy {
     return uiClassNames(
       BASE_CLASSES,
       VARIANT_CLASSES[this.variant],
+      getFinishClasses(this.variant),
       SIZE_CLASSES[this.size],
       this.fullWidth && 'w-full',
       this.disabled && 'pointer-events-none',
@@ -214,7 +248,7 @@ export class UiButtonGroupComponent {
 
   protected get classes(): string {
     return uiClassNames(
-      'inline-flex items-stretch overflow-hidden rounded-md shadow-sm [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
+      'inline-flex items-stretch overflow-hidden rounded-lg shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
       this.fullWidth && 'flex w-full [&_ui-button]:flex-1 [&_ui-button_button]:w-full',
     );
   }
@@ -236,14 +270,18 @@ export class UiButtonGroupComponent {
     >
       @if (loading) {
         <span
-          class="size-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+          class="size-4 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
           aria-hidden="true"
         ></span>
         @if (loadingLabel) {
           <span class="sr-only">{{ loadingLabel }}</span>
         }
       }
-      <span><ng-content /></span>
+      <ng-content select="[uiButtonIconStart]" />
+      <span class="inline-flex min-w-0 items-center justify-center" [class.hidden]="iconOnly"
+        ><ng-content
+      /></span>
+      <ng-content select="[uiButtonIconEnd]" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -270,7 +308,12 @@ export class UiButtonComponent {
     return uiClassNames(
       BASE_CLASSES,
       this.visualClasses,
+      getFinishClasses(this.variant, this.appearance),
       this.iconOnly ? ICON_ONLY_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
+      this.iconOnly && ICON_ONLY_GLYPH_SIZE_CLASSES[this.size],
+      this.iconOnly && '[&>span]:hidden',
+      this.loading &&
+        '[&_[uiButtonIconStart]]:hidden [&_[uiButtonIconEnd]]:hidden [&>[aria-hidden=true]]:m-0',
       this.fullWidth && !this.iconOnly && 'w-full',
     );
   }

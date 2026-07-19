@@ -24,7 +24,7 @@ const ADMIN_DASHBOARD_TEMPLATE = `<main class="grid min-h-screen bg-slate-100 te
     </div>
 
     <nav class="mt-8 grid gap-1">
-      <a class="rounded bg-red-50 px-3 py-2 font-medium text-red-800">Overview</a>
+      <a class="rounded bg-blue-50 px-3 py-2 font-medium text-blue-800">Overview</a>
       <a class="rounded px-3 py-2 text-slate-600">Customers</a>
       <a class="rounded px-3 py-2 text-slate-600">Billing</a>
       <a class="rounded px-3 py-2 text-slate-600">Settings</a>
@@ -163,16 +163,16 @@ const ADMIN_DASHBOARD_TEMPLATE = `<main class="grid min-h-screen bg-slate-100 te
   ],
   template: `
     <article class="mx-auto max-w-[90rem] pb-20">
-      <header class="border-b border-red-200 pb-8 pt-5 dark:border-red-950/70">
+      <header class="border-b border-blue-200 pb-8 pt-5 dark:border-blue-950/70">
         <span
-          class="rounded bg-red-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-red-800 dark:bg-red-950 dark:text-red-200"
+          class="rounded bg-blue-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
         >
           Templates
         </span>
-        <h1 class="mt-7 text-5xl font-bold leading-tight text-zinc-950 dark:text-zinc-50">
+        <h1 class="mt-7 text-5xl font-bold leading-tight text-slate-950 dark:text-slate-50">
           Admin Dashboard Template
         </h1>
-        <p class="mt-5 max-w-4xl text-xl leading-9 text-zinc-600 dark:text-zinc-300">
+        <p class="mt-5 max-w-4xl text-xl leading-9 text-slate-600 dark:text-slate-300">
           A realistic SaaS admin layout composed from today&apos;s NgNova UI primitives. Use it as a
           copyable product pattern now, and as evidence for which navigation and layout primitives
           should become first-class components later.
@@ -181,15 +181,15 @@ const ADMIN_DASHBOARD_TEMPLATE = `<main class="grid min-h-screen bg-slate-100 te
 
       <section class="grid gap-6 py-8">
         <div
-          class="overflow-hidden rounded border border-red-200 bg-white shadow-sm dark:border-red-950 dark:bg-zinc-950"
+          class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
         >
-          <div class="border-b border-red-100 p-5 dark:border-red-950/70 sm:p-6">
+          <div class="border-b border-blue-100 p-5 dark:border-blue-950/70 sm:p-6">
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <h2 class="text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+                <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">
                   SaaS Operations Console
                 </h2>
-                <p class="mt-2 max-w-3xl leading-7 text-zinc-600 dark:text-zinc-400">
+                <p class="mt-2 max-w-3xl leading-7 text-slate-600 dark:text-slate-400">
                   Includes a sidebar, dashboard header, KPI cards, alert state, data table, workflow
                   settings, and recent activity.
                 </p>
@@ -202,7 +202,7 @@ const ADMIN_DASHBOARD_TEMPLATE = `<main class="grid min-h-screen bg-slate-100 te
             </div>
           </div>
 
-          <div class="bg-zinc-100 p-4 dark:bg-zinc-900 sm:p-6">
+          <div class="bg-slate-100 p-4 dark:bg-slate-900 sm:p-6">
             <main
               class="grid min-h-[48rem] overflow-hidden rounded border border-slate-200 bg-slate-100 text-slate-950 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50 lg:grid-cols-[14rem_minmax(0,1fr)]"
             >
@@ -220,8 +220,8 @@ const ADMIN_DASHBOARD_TEMPLATE = `<main class="grid min-h-screen bg-slate-100 te
                   @for (item of navigationItems; track item) {
                     <a
                       class="rounded px-3 py-2 transition"
-                      [class.bg-red-50]="item === 'Overview'"
-                      [class.text-red-800]="item === 'Overview'"
+                      [class.bg-blue-50]="item === 'Overview'"
+                      [class.text-blue-800]="item === 'Overview'"
                       [class.font-medium]="item === 'Overview'"
                       [class.text-slate-600]="item !== 'Overview'"
                       [class.dark:text-slate-300]="item !== 'Overview'"

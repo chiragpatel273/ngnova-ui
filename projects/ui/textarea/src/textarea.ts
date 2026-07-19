@@ -175,7 +175,7 @@ export class UiTextareaComponent implements ControlValueAccessor {
 
   protected get textareaClasses(): string {
     return uiClassNames(
-      'block w-full rounded-md border text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500 dark:disabled:bg-slate-900',
+      'block w-full rounded-lg border text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:text-slate-100 dark:placeholder:text-slate-500 dark:disabled:bg-slate-900',
       SIZE_CLASSES[this.size],
       APPEARANCE_CLASSES[this.appearance],
       RESIZE_CLASSES[this.resize],

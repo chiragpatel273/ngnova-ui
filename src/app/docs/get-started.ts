@@ -21,14 +21,14 @@ interface GuideCard {
       <article class="pb-16">
         <header class="pt-5">
           <span
-            class="inline-flex rounded bg-red-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-red-800 dark:bg-red-950 dark:text-red-200"
+            class="inline-flex rounded bg-blue-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
           >
             Comprehensive Guides
           </span>
-          <h1 class="mt-6 text-4xl font-bold tracking-normal text-zinc-950 dark:text-zinc-50">
+          <h1 class="mt-6 text-4xl font-bold tracking-normal text-slate-950 dark:text-slate-50">
             Documentation Guides
           </h1>
-          <p class="mt-5 max-w-3xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
+          <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
             Everything you need to build high-quality Angular applications. From initial setup to
             advanced theme customization and accessibility standards.
           </p>
@@ -38,20 +38,20 @@ interface GuideCard {
           @for (card of guideCards; track card.title) {
             <article [class]="cardClasses(card)">
               <div>
-                <p class="text-sm font-semibold uppercase text-red-800 dark:text-red-300">
+                <p class="text-sm font-semibold uppercase text-blue-800 dark:text-blue-300">
                   {{ card.eyebrow }}
                 </p>
-                <h2 class="mt-4 text-xl font-semibold text-zinc-950 dark:text-zinc-50">
+                <h2 class="mt-4 text-xl font-semibold text-slate-950 dark:text-slate-50">
                   {{ card.title }}
                 </h2>
-                <p class="mt-3 text-base leading-7 text-zinc-600 dark:text-zinc-300">
+                <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
                   {{ card.description }}
                 </p>
               </div>
 
               @if (card.code) {
                 <pre
-                  class="mt-5 overflow-x-auto whitespace-nowrap rounded bg-zinc-950 p-4 font-mono text-sm leading-6 text-zinc-50 shadow-sm dark:bg-black"
+                  class="mt-5 overflow-x-auto whitespace-nowrap rounded bg-slate-950 p-4 font-mono text-sm leading-6 text-slate-50 shadow-sm dark:bg-black"
                 ><code>{{ card.code }}</code></pre>
               }
 
@@ -60,7 +60,7 @@ interface GuideCard {
                   @for (action of card.actions; track action) {
                     <button
                       type="button"
-                      class="rounded border border-red-200 bg-white px-4 py-3 text-base text-zinc-950 transition hover:bg-red-50 dark:border-red-950 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:bg-red-950/30"
+                      class="rounded border border-blue-200 bg-white px-4 py-3 text-base text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
                     >
                       {{ action }}
                     </button>
@@ -78,7 +78,7 @@ interface GuideCard {
         </section>
 
         <footer
-          class="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-red-200 pt-8 text-base text-zinc-600 dark:border-red-950 dark:text-zinc-300"
+          class="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-blue-200 pt-8 text-base text-slate-600 dark:border-blue-950 dark:text-slate-300"
         >
           <p>&copy; 2024 NgNova UI. Built for developers by developers.</p>
           <nav class="flex flex-wrap gap-8" aria-label="Guide footer">
@@ -89,13 +89,13 @@ interface GuideCard {
         </footer>
       </article>
 
-      <aside class="hidden border-l border-red-200 pl-6 dark:border-red-950 xl:block">
+      <aside class="hidden border-l border-blue-200 pl-6 dark:border-blue-950 xl:block">
         <div class="sticky top-24">
-          <p class="text-sm font-bold uppercase tracking-wide text-zinc-950 dark:text-zinc-50">
+          <p class="text-sm font-bold uppercase tracking-wide text-slate-950 dark:text-slate-50">
             On This Page
           </p>
           <nav
-            class="mt-5 grid gap-4 text-base text-zinc-600 dark:text-zinc-400"
+            class="mt-5 grid gap-4 text-base text-slate-600 dark:text-slate-400"
             aria-label="On this page"
           >
             @for (item of onThisPage; track item) {
@@ -103,8 +103,8 @@ interface GuideCard {
                 href="#"
                 [class]="
                   item === 'Getting Started'
-                    ? 'font-medium text-red-800 dark:text-red-200'
-                    : 'hover:text-red-800 dark:hover:text-red-200'
+                    ? 'font-medium text-blue-800 dark:text-blue-200'
+                    : 'hover:text-blue-800 dark:hover:text-blue-200'
                 "
               >
                 {{ item }}
@@ -112,11 +112,11 @@ interface GuideCard {
             }
           </nav>
 
-          <div class="mt-12 rounded bg-zinc-200 p-5 dark:bg-zinc-900">
-            <p class="text-base text-zinc-600 dark:text-zinc-300">Need help?</p>
+          <div class="mt-12 rounded bg-slate-200 p-5 dark:bg-slate-900">
+            <p class="text-base text-slate-600 dark:text-slate-300">Need help?</p>
             <a
               routerLink="/apis"
-              class="mt-3 block border border-red-200 bg-white px-4 py-3 text-center text-base text-zinc-950 transition hover:bg-red-50 dark:border-red-950 dark:bg-zinc-950 dark:text-zinc-50 dark:hover:bg-red-950/30"
+              class="mt-3 block border border-blue-200 bg-white px-4 py-3 text-center text-base text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
             >
               Contact Support
             </a>
@@ -199,16 +199,16 @@ export class GetStartedComponent {
 
   protected cardClasses(card: GuideCard): string {
     const base =
-      'flex min-h-72 flex-col justify-between rounded border border-red-200 p-6 dark:border-red-950';
+      'flex min-h-72 flex-col justify-between rounded border border-blue-200 p-6 dark:border-blue-950';
     const size: Record<GuideCard['size'], string> = {
       normal: '',
       tall: '',
       wide: 'md:col-span-2',
     };
     const tone: Record<GuideCard['tone'], string> = {
-      default: 'bg-white dark:bg-zinc-950',
-      muted: 'bg-zinc-200 dark:bg-zinc-900',
-      solid: 'bg-red-800 text-white dark:bg-red-900 [&_*]:text-white',
+      default: 'bg-white dark:bg-slate-950',
+      muted: 'bg-slate-200 dark:bg-slate-900',
+      solid: 'bg-blue-800 text-white dark:bg-blue-900 [&_*]:text-white',
     };
 
     return `${base} ${size[card.size]} ${tone[card.tone]}`;

@@ -125,7 +125,7 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
 
   protected optionClasses(option: UiRadioOption): string {
     return uiClassNames(
-      'flex items-start gap-3 rounded-md',
+      'flex items-start gap-3 rounded-lg',
       this.disabled || option.disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer',
     );
   }

@@ -48,6 +48,7 @@ import type { ComponentDoc, ComponentExample } from './docs-data';
 import { CardDocPlaygroundComponent } from './card-doc-playground';
 import { DocsApiTableComponent } from './docs-api-table';
 import { DocsCodeBlockComponent } from './docs-code-block';
+import { DocsPreviewCanvasComponent } from './docs-preview-canvas';
 
 interface ComponentSummaryItem {
   readonly label: string;
@@ -80,8 +81,6 @@ interface ButtonUsageExample {
   readonly filename: string;
   readonly code: string;
 }
-
-type ButtonExampleView = 'preview' | 'code';
 
 const FORM_SLUGS = ['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'] as const;
 const OVERLAY_SLUGS = ['modal', 'toast'] as const;
@@ -259,709 +258,636 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     CardDocPlaygroundComponent,
     DocsApiTableComponent,
     DocsCodeBlockComponent,
+    DocsPreviewCanvasComponent,
   ],
   providers: [provideIcons({ heroArrowRight, heroPlus })],
   template: `
     @if (doc(); as componentDoc) {
-      @if (componentDoc.slug === 'card') {
-        <app-card-doc-playground [doc]="componentDoc" />
-      } @else {
-        <article class="mx-auto max-w-[64rem] pb-20">
-          <header class="border-b border-blue-200 pb-8 pt-4 dark:border-blue-950/70">
-            <div class="flex flex-wrap items-center gap-2">
-              <span
-                class="rounded bg-blue-100 px-2 py-1 text-xs font-semibold uppercase tracking-normal text-blue-800 dark:bg-blue-950 dark:text-blue-200"
-              >
-                Component
-              </span>
-              <span
-                class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
-              >
-                v0.1.0
-              </span>
-              <span
-                class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
-              >
-                {{ componentCategory() }}
-              </span>
-            </div>
-
-            <div class="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start">
-              <div>
-                <h1 class="text-5xl font-bold leading-tight text-slate-950 dark:text-slate-50">
-                  {{ componentDoc.name }}
-                </h1>
-                <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-300">
-                  {{ componentDoc.summary }}
-                </p>
-                <div class="mt-6 flex flex-wrap gap-2">
-                  @for (stat of qualityStats; track stat.label) {
-                    <span
-                      class="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-3 py-1.5 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                    >
-                      <span class="size-1.5 rounded-full bg-blue-700" aria-hidden="true"></span>
-                      {{ stat.value }} {{ stat.label }}
-                    </span>
-                  }
-                </div>
-              </div>
-
-              <dl
-                class="grid gap-0 overflow-hidden rounded border border-blue-200 bg-white text-sm dark:border-blue-950 dark:bg-slate-950"
-              >
-                @for (item of summaryItems(); track item.label) {
-                  <div class="border-b border-blue-100 p-3 last:border-b-0 dark:border-blue-950/70">
-                    <dt class="text-xs font-medium uppercase text-slate-500 dark:text-slate-500">
-                      {{ item.label }}
-                    </dt>
-                    <dd class="mt-1 truncate font-mono text-xs text-slate-950 dark:text-slate-100">
-                      {{ item.value }}
-                    </dd>
-                  </div>
-                }
-              </dl>
-            </div>
-          </header>
-
-          <section id="setup" class="border-b border-blue-200 py-8 dark:border-blue-950/70">
-            <div
-              class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
+      <article class="mx-auto max-w-[64rem] pb-20">
+        <header class="border-b border-blue-200 pb-8 pt-4 dark:border-blue-950/70">
+          <div class="flex flex-wrap items-center gap-2">
+            <span
+              class="rounded bg-blue-100 px-2 py-1 text-xs font-semibold uppercase tracking-normal text-blue-800 dark:bg-blue-950 dark:text-blue-200"
             >
-              <div class="grid gap-0 lg:grid-cols-[18rem_minmax(0,1fr)]">
-                <div
-                  class="border-b border-blue-100 bg-blue-50/60 p-5 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
-                >
-                  <p
-                    class="text-xs font-semibold uppercase tracking-normal text-blue-800 dark:text-blue-200"
+              Component
+            </span>
+            <span
+              class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            >
+              v0.1.0
+            </span>
+            <span
+              class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+            >
+              {{ componentCategory() }}
+            </span>
+          </div>
+
+          <div class="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start">
+            <div>
+              <h1 class="text-5xl font-bold leading-tight text-slate-950 dark:text-slate-50">
+                {{ componentDoc.name }}
+              </h1>
+              <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-300">
+                {{ componentDoc.summary }}
+              </p>
+              <div class="mt-6 flex flex-wrap gap-2">
+                @for (stat of qualityStats; track stat.label) {
+                  <span
+                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-3 py-1.5 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-200"
                   >
-                    Setup
-                  </p>
-                  <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-50">
-                    Use this component
-                  </h2>
-                  <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    Import the standalone entry point in the Angular component that renders this UI
-                    primitive.
-                  </p>
-                  <div class="mt-5 flex flex-wrap gap-2">
-                    <span
-                      class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
-                    >
-                      Standalone
-                    </span>
-                    <span
-                      class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
-                    >
-                      Tailwind v4
-                    </span>
-                  </div>
-                </div>
-
-                <div class="grid content-center p-4 sm:p-5">
-                  <div
-                    class="grid gap-3 rounded border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4"
-                  >
-                    <div class="flex items-center justify-between gap-3">
-                      <div class="min-w-0">
-                        <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                          Component import
-                        </p>
-                      </div>
-                      <ui-button variant="secondary" size="sm" (click)="copyImportStatement()">
-                        {{ copiedImportStatement() ? 'Copied' : 'Copy' }}
-                      </ui-button>
-                    </div>
-                    <pre
-                      class="overflow-x-auto whitespace-pre rounded bg-slate-950 px-4 py-2.5 font-mono text-sm leading-6 text-slate-50"
-                    ><code>{{ importStatement() }}</code></pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="usage" class="py-10">
-            <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">
-                  Usage & variants
-                </h2>
-                <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
-                  Live examples use the public
-                  <code class="font-mono">{{ componentDoc.selector }}</code>
-                  API, paired with the exact snippet a product team would paste into an Angular app.
-                </p>
-              </div>
-              <a
-                href="#api"
-                class="rounded border border-blue-300 px-4 py-2 text-sm font-semibold text-blue-800 transition hover:bg-blue-50 dark:border-blue-900 dark:text-blue-200 dark:hover:bg-blue-950/50"
-              >
-                API Reference
-              </a>
-            </div>
-
-            @if (componentDoc.slug === 'button') {
-              <div class="grid gap-5">
-                @for (example of buttonUsageExamples; track example.id) {
-                  <section
-                    class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
-                  >
-                    <div
-                      class="flex flex-wrap items-start justify-between gap-4 border-b border-blue-200 p-5 dark:border-blue-950 sm:p-6"
-                    >
-                      <div>
-                        <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
-                          {{ example.title }}
-                        </h3>
-                        <p class="mt-1 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
-                          {{ example.description }}
-                        </p>
-                      </div>
-
-                      <div
-                        class="inline-flex rounded bg-slate-100 p-1 dark:bg-slate-900"
-                        [attr.aria-label]="example.title + ' view'"
-                      >
-                        <button
-                          type="button"
-                          class="rounded px-3 py-1.5 text-sm font-semibold transition"
-                          [class.bg-white]="buttonExampleView(example.id) === 'preview'"
-                          [class.text-blue-800]="buttonExampleView(example.id) === 'preview'"
-                          [class.shadow-sm]="buttonExampleView(example.id) === 'preview'"
-                          [class.text-slate-600]="buttonExampleView(example.id) !== 'preview'"
-                          [class.dark:bg-slate-800]="buttonExampleView(example.id) === 'preview'"
-                          [class.dark:text-blue-200]="buttonExampleView(example.id) === 'preview'"
-                          [class.dark:text-slate-400]="buttonExampleView(example.id) !== 'preview'"
-                          [attr.aria-pressed]="buttonExampleView(example.id) === 'preview'"
-                          (click)="setButtonExampleView(example.id, 'preview')"
-                        >
-                          Preview
-                        </button>
-                        <button
-                          type="button"
-                          class="rounded px-3 py-1.5 text-sm font-semibold transition"
-                          [class.bg-white]="buttonExampleView(example.id) === 'code'"
-                          [class.text-blue-800]="buttonExampleView(example.id) === 'code'"
-                          [class.shadow-sm]="buttonExampleView(example.id) === 'code'"
-                          [class.text-slate-600]="buttonExampleView(example.id) !== 'code'"
-                          [class.dark:bg-slate-800]="buttonExampleView(example.id) === 'code'"
-                          [class.dark:text-blue-200]="buttonExampleView(example.id) === 'code'"
-                          [class.dark:text-slate-400]="buttonExampleView(example.id) !== 'code'"
-                          [attr.aria-pressed]="buttonExampleView(example.id) === 'code'"
-                          (click)="setButtonExampleView(example.id, 'code')"
-                        >
-                          Code
-                        </button>
-                      </div>
-                    </div>
-
-                    @if (buttonExampleView(example.id) === 'preview') {
-                      <div class="p-5 sm:p-6">
-                        <div
-                          class="flex min-h-40 items-center justify-center rounded bg-slate-50 p-5 dark:bg-slate-900"
-                        >
-                          @switch (example.id) {
-                            @case ('variants') {
-                              <div class="flex flex-wrap items-center justify-center gap-3">
-                                <ui-button>Primary Action</ui-button>
-                                <ui-button variant="secondary">Secondary</ui-button>
-                                <ui-button variant="outline">Outline</ui-button>
-                                <ui-button variant="ghost">Ghost</ui-button>
-                                <ui-button variant="danger">Delete</ui-button>
-                              </div>
-                            }
-                            @case ('sizes') {
-                              <div class="flex flex-wrap items-end justify-center gap-5">
-                                <div class="grid justify-items-center gap-2">
-                                  <ui-button size="sm">Button</ui-button>
-                                  <span class="text-xs text-slate-500 dark:text-slate-400"
-                                    >Small · 32px</span
-                                  >
-                                </div>
-                                <div class="grid justify-items-center gap-2">
-                                  <ui-button size="md">Button</ui-button>
-                                  <span class="text-xs text-slate-500 dark:text-slate-400"
-                                    >Medium · 40px</span
-                                  >
-                                </div>
-                                <div class="grid justify-items-center gap-2">
-                                  <ui-button size="lg">Button</ui-button>
-                                  <span class="text-xs text-slate-500 dark:text-slate-400"
-                                    >Large · 48px</span
-                                  >
-                                </div>
-                              </div>
-                            }
-                            @case ('visual-api') {
-                              <div class="grid w-full gap-4">
-                                @for (appearance of buttonAppearances; track appearance) {
-                                  <section
-                                    class="grid gap-2 sm:grid-cols-[5rem_minmax(0,1fr)] sm:items-center"
-                                    [attr.aria-label]="appearance + ' buttons'"
-                                  >
-                                    <h4
-                                      class="font-mono text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
-                                    >
-                                      {{ appearance }}
-                                    </h4>
-                                    <div class="flex flex-wrap items-center gap-2">
-                                      @for (intent of buttonIntents; track intent) {
-                                        <ui-button
-                                          size="sm"
-                                          [appearance]="appearance"
-                                          [intent]="intent"
-                                        >
-                                          {{ intent }}
-                                        </ui-button>
-                                      }
-                                    </div>
-                                  </section>
-                                }
-                              </div>
-                            }
-                            @case ('states') {
-                              <div class="grid w-full max-w-sm gap-3">
-                                <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
-                                <ui-button disabled>Disabled</ui-button>
-                                <ui-button fullWidth>Continue</ui-button>
-                              </div>
-                            }
-                            @case ('icons') {
-                              <div class="flex flex-wrap items-center justify-center gap-3">
-                                <ui-button>
-                                  <ng-icon uiButtonIconStart name="heroPlus" />
-                                  Create
-                                </ui-button>
-                                <ui-button variant="outline">
-                                  Continue
-                                  <ng-icon uiButtonIconEnd name="heroArrowRight" />
-                                </ui-button>
-                                <ui-button iconOnly ariaLabel="Create item">
-                                  <ng-icon uiButtonIconStart name="heroPlus" />
-                                </ui-button>
-                              </div>
-                            }
-                            @case ('links') {
-                              <div class="flex flex-wrap items-center justify-center gap-3">
-                                <a uiButton routerLink="/components/input" variant="outline">
-                                  Open Input docs
-                                </a>
-                                <a uiButton href="/reports" disabled>Reports unavailable</a>
-                              </div>
-                            }
-                            @case ('group') {
-                              <ui-button-group ariaLabel="View density">
-                                <ui-button variant="outline">Compact</ui-button>
-                                <ui-button variant="outline">Comfortable</ui-button>
-                                <ui-button variant="outline">Spacious</ui-button>
-                              </ui-button-group>
-                            }
-                            @case ('forms') {
-                              <div class="grid gap-3 text-center">
-                                <form (submit)="recordButtonSubmit($event)">
-                                  <ui-button type="submit">Save profile</ui-button>
-                                </form>
-                                <p
-                                  class="text-sm font-medium text-slate-600 dark:text-slate-400"
-                                  aria-live="polite"
-                                >
-                                  Form submissions: {{ buttonSubmitCount() }}
-                                </p>
-                              </div>
-                            }
-                            @case ('events') {
-                              <div class="grid gap-3 text-center">
-                                <ui-button
-                                  (pressed)="recordButtonPress()"
-                                  (focused)="buttonFocused.set(true)"
-                                  (blurred)="buttonFocused.set(false)"
-                                >
-                                  Track press
-                                </ui-button>
-                                <p
-                                  class="text-sm font-medium text-slate-600 dark:text-slate-400"
-                                  aria-live="polite"
-                                >
-                                  Presses: {{ buttonPressCount() }} ·
-                                  {{ buttonFocused() ? 'Focused' : 'Ready' }}
-                                </p>
-                              </div>
-                            }
-                          }
-                        </div>
-                      </div>
-                    } @else {
-                      <app-docs-code-block
-                        class="block min-w-0"
-                        [code]="example.code"
-                        [filename]="example.filename"
-                        language="Angular template"
-                      />
-                    }
-                  </section>
+                    <span class="size-1.5 rounded-full bg-blue-700" aria-hidden="true"></span>
+                    {{ stat.value }} {{ stat.label }}
+                  </span>
                 }
               </div>
-            } @else {
-              <div
-                class="grid overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950 xl:grid-cols-[minmax(0,1fr)_28rem]"
-              >
-                <div class="min-h-64 p-6 sm:p-8">
-                  <div
-                    class="flex min-h-52 items-center justify-center rounded bg-slate-50 p-6 dark:bg-slate-900"
-                  >
-                    @switch (componentDoc.slug) {
-                      @case ('input') {
-                        <div class="w-full max-w-sm">
-                          <ui-input
-                            label="Work email"
-                            type="email"
-                            autocomplete="email"
-                            labelMode="floating"
-                            helperText="Floating label, helper text, and Angular forms support."
-                            clearable
-                            [formControl]="email"
-                          />
-                        </div>
-                      }
-                      @case ('textarea') {
-                        <div class="w-full max-w-md">
-                          <ui-textarea
-                            label="Release notes"
-                            helperText="Counter, resize, and validation-ready field state."
-                            [maxLength]="280"
-                            [rows]="5"
-                            [formControl]="releaseNotes"
-                          />
-                        </div>
-                      }
-                      @case ('checkbox') {
-                        <div class="grid gap-4">
-                          <ui-checkbox
-                            label="Email subscribers"
-                            helperText="Reactive form boolean value."
-                            [formControl]="newsletter"
-                          />
-                          <ui-checkbox
-                            label="Select all packages"
-                            helperText="Mixed child state."
-                            indeterminate
-                          />
-                        </div>
-                      }
-                      @case ('radio') {
-                        <div class="w-full max-w-md">
-                          <ui-radio-group
-                            label="Contact preference"
-                            helperText="Small mutually exclusive choices stay visible."
-                            [options]="contactOptions"
-                            [formControl]="contactPreference"
-                          />
-                        </div>
-                      }
-                      @case ('switch') {
-                        <ui-switch
-                          label="Release notifications"
-                          helperText="Immediate setting state owned by the parent form."
-                          [formControl]="notifications"
-                        />
-                      }
-                      @case ('select') {
-                        <div class="w-full max-w-sm">
-                          <ui-select
-                            label="Plan"
-                            placeholder="Choose a plan"
-                            helperText="Native select behavior with NgNova styling."
-                            [options]="planOptions"
-                            [formControl]="plan"
-                          />
-                        </div>
-                      }
-                      @case ('modal') {
-                        <div class="text-center">
-                          <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
-                          <p class="mt-3 text-sm text-slate-500">
-                            Escape, backdrop policy, and focus restore are documented below.
-                          </p>
-                        </div>
-                      }
-                      @case ('toast') {
-                        <div class="text-center">
-                          <ui-button (click)="showToast()">Show toast</ui-button>
-                          <ui-toast />
-                        </div>
-                      }
-                      @case ('table') {
-                        <div class="w-full overflow-x-auto">
-                          <ui-table
-                            [columns]="tableColumns"
-                            [rows]="tableRows"
-                            selectable
-                            (rowSelected)="selectedTableRow.set($event)"
-                          />
-                        </div>
-                      }
-                      @case ('tabs') {
-                        <div class="w-full max-w-md">
-                          <ui-tabs
-                            [tabs]="componentTabs"
-                            [active]="activeTab()"
-                            (activeChange)="activeTab.set($event)"
-                            ariaLabel="Component documentation tabs preview"
-                            fullWidth
-                          >
-                            @if (activeTab() === 'overview') {
-                              <p
-                                class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
-                              >
-                                Overview panel content stays associated with the selected tab.
-                              </p>
-                            } @else {
-                              <p
-                                class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
-                              >
-                                API panel content can hold reference tables, forms, or related
-                                content.
-                              </p>
-                            }
-                          </ui-tabs>
-                        </div>
-                      }
-                      @case ('accordion') {
-                        <div class="w-full max-w-md">
-                          <ui-accordion
-                            [items]="accordionItems"
-                            [active]="accordionActive()"
-                            (activeChange)="accordionActive.set($event)"
-                          />
-                        </div>
-                      }
-                      @case ('card') {
-                        <ui-card>
-                          <div uiCardHeader>
-                            <h3 class="font-semibold">Analytics card</h3>
-                          </div>
-                          <p class="text-sm text-slate-600 dark:text-slate-300">
-                            Projected regions keep content structure predictable.
-                          </p>
-                          <div uiCardFooter>
-                            <ui-button size="sm" variant="outline">Open report</ui-button>
-                          </div>
-                        </ui-card>
-                      }
-                      @case ('badge') {
-                        <div class="flex flex-wrap items-center justify-center gap-2">
-                          <ui-badge>Default</ui-badge>
-                          <ui-badge variant="success">Stable</ui-badge>
-                          <ui-badge variant="warning">Review</ui-badge>
-                          <ui-badge variant="danger">Blocked</ui-badge>
-                        </div>
-                      }
-                      @case ('tag') {
-                        <div class="flex flex-wrap items-center justify-center gap-2">
-                          <ui-tag>Angular</ui-tag>
-                          <ui-tag variant="success">Published</ui-tag>
-                          <ui-tag variant="warning" removable>Needs review</ui-tag>
-                        </div>
-                      }
-                      @case ('avatar') {
-                        <div class="flex items-center justify-center gap-3">
-                          <ui-avatar label="Ada Lovelace" />
-                          <ui-avatar label="NgNova UI" shape="square" size="lg" />
-                        </div>
-                      }
-                      @case ('alert') {
-                        <div class="w-full max-w-lg">
-                          <ui-alert variant="success" title="Saved" dismissible>
-                            Your component settings were updated.
-                          </ui-alert>
-                        </div>
-                      }
-                      @case ('progress-bar') {
-                        <div class="grid w-full max-w-md gap-4">
-                          <ui-progress-bar [value]="76" variant="success" label="Build progress" />
-                          <ui-progress-bar indeterminate label="Publishing package" />
-                        </div>
-                      }
-                      @case ('skeleton') {
-                        <div class="grid w-full max-w-md gap-4">
-                          <div class="flex items-center gap-3">
-                            <ui-skeleton shape="circle" width="2.75rem" height="2.75rem" />
-                            <div class="grid flex-1 gap-2">
-                              <ui-skeleton shape="text" width="70%" height="0.875rem" />
-                              <ui-skeleton shape="text" width="45%" height="0.875rem" />
-                            </div>
-                          </div>
-                          <ui-skeleton height="8rem" />
-                        </div>
-                      }
-                      @case ('spinner') {
-                        <div class="flex items-center justify-center gap-4">
-                          <ui-spinner label="Loading invoices" />
-                          <span class="text-sm text-slate-600 dark:text-slate-300"
-                            >Loading invoices...</span
-                          >
-                        </div>
-                      }
-                      @default {
-                        <ui-badge variant="info">Preview ready</ui-badge>
-                      }
-                    }
-                  </div>
+            </div>
+
+            <dl
+              class="grid gap-0 overflow-hidden rounded border border-blue-200 bg-white text-sm dark:border-blue-950 dark:bg-slate-950"
+            >
+              @for (item of summaryItems(); track item.label) {
+                <div class="border-b border-blue-100 p-3 last:border-b-0 dark:border-blue-950/70">
+                  <dt class="text-xs font-medium uppercase text-slate-500 dark:text-slate-500">
+                    {{ item.label }}
+                  </dt>
+                  <dd class="mt-1 truncate font-mono text-xs text-slate-950 dark:text-slate-100">
+                    {{ item.value }}
+                  </dd>
                 </div>
+              }
+            </dl>
+          </div>
+        </header>
 
-                <app-docs-code-block
-                  class="block min-w-0 border-t border-blue-200 dark:border-blue-950 xl:border-l xl:border-t-0"
-                  [code]="componentDoc.usage"
-                  [filename]="componentDoc.selector + '.example.html'"
-                  language="Angular template"
-                />
-              </div>
-            }
-          </section>
-
-          <section
-            id="guide"
-            class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70"
+        <section id="setup" class="border-b border-blue-200 py-8 dark:border-blue-950/70">
+          <div
+            class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
           >
+            <div class="grid gap-0 lg:grid-cols-[18rem_minmax(0,1fr)]">
+              <div
+                class="border-b border-blue-100 bg-blue-50/60 p-5 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
+              >
+                <p
+                  class="text-xs font-semibold uppercase tracking-normal text-blue-800 dark:text-blue-200"
+                >
+                  Setup
+                </p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                  Use this component
+                </h2>
+                <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  Import the standalone entry point in the Angular component that renders this UI
+                  primitive.
+                </p>
+                <div class="mt-5 flex flex-wrap gap-2">
+                  <span
+                    class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
+                  >
+                    Standalone
+                  </span>
+                  <span
+                    class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
+                  >
+                    Tailwind v4
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid content-center p-4 sm:p-5">
+                <div
+                  class="grid gap-3 rounded border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4"
+                >
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                      <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
+                        Component import
+                      </p>
+                    </div>
+                    <ui-button variant="secondary" size="sm" (click)="copyImportStatement()">
+                      {{ copiedImportStatement() ? 'Copied' : 'Copy' }}
+                    </ui-button>
+                  </div>
+                  <pre
+                    class="overflow-x-auto whitespace-pre rounded bg-slate-950 px-4 py-2.5 font-mono text-sm leading-6 text-slate-50"
+                  ><code>{{ importStatement() }}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="usage" class="py-10">
+          <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">
-                Production guidance
-              </h2>
+              <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">Usage & variants</h2>
               <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
-                Use these notes to decide when the component belongs in a product workflow and what
-                to verify before shipping.
+                Live examples use the public
+                <code class="font-mono">{{ componentDoc.selector }}</code>
+                API, paired with the exact snippet a product team would paste into an Angular app.
               </p>
             </div>
+            <a
+              href="#api"
+              class="rounded border border-blue-300 px-4 py-2 text-sm font-semibold text-blue-800 transition hover:bg-blue-50 dark:border-blue-900 dark:text-blue-200 dark:hover:bg-blue-950/50"
+            >
+              API Reference
+            </a>
+          </div>
 
-            <div class="grid gap-4 md:grid-cols-2">
-              @for (card of guidanceCards(); track card.title) {
-                <section
-                  class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+          @if (componentDoc.slug === 'card') {
+            <app-card-doc-playground [doc]="componentDoc" />
+          } @else if (componentDoc.slug === 'button') {
+            <div class="grid gap-5">
+              @for (example of buttonUsageExamples; track example.id) {
+                <app-docs-preview-canvas
+                  [title]="example.title"
+                  [description]="example.description"
+                  [code]="example.code"
+                  [filename]="example.filename"
+                  language="Angular template"
                 >
-                  <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
-                    {{ card.title }}
-                  </h3>
-                  <p class="mt-2 leading-7 text-slate-700 dark:text-slate-300">{{ card.body }}</p>
+                  <div class="flex w-full min-w-0 items-center justify-center">
+                    @switch (example.id) {
+                      @case ('variants') {
+                        <div class="flex flex-wrap items-center justify-center gap-3">
+                          <ui-button>Primary Action</ui-button>
+                          <ui-button variant="secondary">Secondary</ui-button>
+                          <ui-button variant="outline">Outline</ui-button>
+                          <ui-button variant="ghost">Ghost</ui-button>
+                          <ui-button variant="danger">Delete</ui-button>
+                        </div>
+                      }
+                      @case ('sizes') {
+                        <div class="flex flex-wrap items-end justify-center gap-5">
+                          <div class="grid justify-items-center gap-2">
+                            <ui-button size="sm">Button</ui-button>
+                            <span class="text-xs text-slate-500 dark:text-slate-400"
+                              >Small · 32px</span
+                            >
+                          </div>
+                          <div class="grid justify-items-center gap-2">
+                            <ui-button size="md">Button</ui-button>
+                            <span class="text-xs text-slate-500 dark:text-slate-400"
+                              >Medium · 40px</span
+                            >
+                          </div>
+                          <div class="grid justify-items-center gap-2">
+                            <ui-button size="lg">Button</ui-button>
+                            <span class="text-xs text-slate-500 dark:text-slate-400"
+                              >Large · 48px</span
+                            >
+                          </div>
+                        </div>
+                      }
+                      @case ('visual-api') {
+                        <div class="grid w-full gap-4">
+                          @for (appearance of buttonAppearances; track appearance) {
+                            <section
+                              class="grid gap-2 sm:grid-cols-[5rem_minmax(0,1fr)] sm:items-center"
+                              [attr.aria-label]="appearance + ' buttons'"
+                            >
+                              <h4
+                                class="font-mono text-xs font-semibold uppercase text-slate-500 dark:text-slate-400"
+                              >
+                                {{ appearance }}
+                              </h4>
+                              <div class="flex flex-wrap items-center gap-2">
+                                @for (intent of buttonIntents; track intent) {
+                                  <ui-button size="sm" [appearance]="appearance" [intent]="intent">
+                                    {{ intent }}
+                                  </ui-button>
+                                }
+                              </div>
+                            </section>
+                          }
+                        </div>
+                      }
+                      @case ('states') {
+                        <div class="grid w-full max-w-sm gap-3">
+                          <ui-button loading loadingLabel="Saving changes">Saving</ui-button>
+                          <ui-button disabled>Disabled</ui-button>
+                          <ui-button fullWidth>Continue</ui-button>
+                        </div>
+                      }
+                      @case ('icons') {
+                        <div class="flex flex-wrap items-center justify-center gap-3">
+                          <ui-button>
+                            <ng-icon uiButtonIconStart name="heroPlus" />
+                            Create
+                          </ui-button>
+                          <ui-button variant="outline">
+                            Continue
+                            <ng-icon uiButtonIconEnd name="heroArrowRight" />
+                          </ui-button>
+                          <ui-button iconOnly ariaLabel="Create item">
+                            <ng-icon uiButtonIconStart name="heroPlus" />
+                          </ui-button>
+                        </div>
+                      }
+                      @case ('links') {
+                        <div class="flex flex-wrap items-center justify-center gap-3">
+                          <a uiButton routerLink="/components/input" variant="outline">
+                            Open Input docs
+                          </a>
+                          <a uiButton href="/reports" disabled>Reports unavailable</a>
+                        </div>
+                      }
+                      @case ('group') {
+                        <ui-button-group ariaLabel="View density">
+                          <ui-button variant="outline">Compact</ui-button>
+                          <ui-button variant="outline">Comfortable</ui-button>
+                          <ui-button variant="outline">Spacious</ui-button>
+                        </ui-button-group>
+                      }
+                      @case ('forms') {
+                        <div class="grid gap-3 text-center">
+                          <form (submit)="recordButtonSubmit($event)">
+                            <ui-button type="submit">Save profile</ui-button>
+                          </form>
+                          <p
+                            class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                            aria-live="polite"
+                          >
+                            Form submissions: {{ buttonSubmitCount() }}
+                          </p>
+                        </div>
+                      }
+                      @case ('events') {
+                        <div class="grid gap-3 text-center">
+                          <ui-button
+                            (pressed)="recordButtonPress()"
+                            (focused)="buttonFocused.set(true)"
+                            (blurred)="buttonFocused.set(false)"
+                          >
+                            Track press
+                          </ui-button>
+                          <p
+                            class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                            aria-live="polite"
+                          >
+                            Presses: {{ buttonPressCount() }} ·
+                            {{ buttonFocused() ? 'Focused' : 'Ready' }}
+                          </p>
+                        </div>
+                      }
+                    }
+                  </div>
+                </app-docs-preview-canvas>
+              }
+            </div>
+          } @else {
+            <app-docs-preview-canvas
+              [title]="componentDoc.name + ' interactive example'"
+              [description]="componentDoc.summary"
+              [code]="componentDoc.usage"
+              [filename]="componentDoc.selector + '.example.html'"
+              language="Angular template"
+            >
+              <div class="flex w-full min-w-0 items-center justify-center">
+                @switch (componentDoc.slug) {
+                  @case ('input') {
+                    <div class="w-full max-w-sm">
+                      <ui-input
+                        label="Work email"
+                        type="email"
+                        autocomplete="email"
+                        labelMode="floating"
+                        helperText="Floating label, helper text, and Angular forms support."
+                        clearable
+                        [formControl]="email"
+                      />
+                    </div>
+                  }
+                  @case ('textarea') {
+                    <div class="w-full max-w-md">
+                      <ui-textarea
+                        label="Release notes"
+                        helperText="Counter, resize, and validation-ready field state."
+                        [maxLength]="280"
+                        [rows]="5"
+                        [formControl]="releaseNotes"
+                      />
+                    </div>
+                  }
+                  @case ('checkbox') {
+                    <div class="grid gap-4">
+                      <ui-checkbox
+                        label="Email subscribers"
+                        helperText="Reactive form boolean value."
+                        [formControl]="newsletter"
+                      />
+                      <ui-checkbox
+                        label="Select all packages"
+                        helperText="Mixed child state."
+                        indeterminate
+                      />
+                    </div>
+                  }
+                  @case ('radio') {
+                    <div class="w-full max-w-md">
+                      <ui-radio-group
+                        label="Contact preference"
+                        helperText="Small mutually exclusive choices stay visible."
+                        [options]="contactOptions"
+                        [formControl]="contactPreference"
+                      />
+                    </div>
+                  }
+                  @case ('switch') {
+                    <ui-switch
+                      label="Release notifications"
+                      helperText="Immediate setting state owned by the parent form."
+                      [formControl]="notifications"
+                    />
+                  }
+                  @case ('select') {
+                    <div class="w-full max-w-sm">
+                      <ui-select
+                        label="Plan"
+                        placeholder="Choose a plan"
+                        helperText="Native select behavior with NgNova styling."
+                        [options]="planOptions"
+                        [formControl]="plan"
+                      />
+                    </div>
+                  }
+                  @case ('modal') {
+                    <div class="text-center">
+                      <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
+                      <p class="mt-3 text-sm text-slate-500">
+                        Escape, backdrop policy, and focus restore are documented below.
+                      </p>
+                    </div>
+                  }
+                  @case ('toast') {
+                    <div class="text-center">
+                      <ui-button (click)="showToast()">Show toast</ui-button>
+                      <ui-toast />
+                    </div>
+                  }
+                  @case ('table') {
+                    <div class="w-full overflow-x-auto">
+                      <ui-table
+                        [columns]="tableColumns"
+                        [rows]="tableRows"
+                        selectable
+                        (rowSelected)="selectedTableRow.set($event)"
+                      />
+                    </div>
+                  }
+                  @case ('tabs') {
+                    <div class="w-full max-w-md">
+                      <ui-tabs
+                        [tabs]="componentTabs"
+                        [active]="activeTab()"
+                        (activeChange)="activeTab.set($event)"
+                        ariaLabel="Component documentation tabs preview"
+                        fullWidth
+                      >
+                        @if (activeTab() === 'overview') {
+                          <p
+                            class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
+                          >
+                            Overview panel content stays associated with the selected tab.
+                          </p>
+                        } @else {
+                          <p
+                            class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
+                          >
+                            API panel content can hold reference tables, forms, or related content.
+                          </p>
+                        }
+                      </ui-tabs>
+                    </div>
+                  }
+                  @case ('accordion') {
+                    <div class="w-full max-w-md">
+                      <ui-accordion
+                        [items]="accordionItems"
+                        [active]="accordionActive()"
+                        (activeChange)="accordionActive.set($event)"
+                      />
+                    </div>
+                  }
+                  @case ('card') {
+                    <ui-card>
+                      <div uiCardHeader>
+                        <h3 class="font-semibold">Analytics card</h3>
+                      </div>
+                      <p class="text-sm text-slate-600 dark:text-slate-300">
+                        Projected regions keep content structure predictable.
+                      </p>
+                      <div uiCardFooter>
+                        <ui-button size="sm" variant="outline">Open report</ui-button>
+                      </div>
+                    </ui-card>
+                  }
+                  @case ('badge') {
+                    <div class="flex flex-wrap items-center justify-center gap-2">
+                      <ui-badge>Default</ui-badge>
+                      <ui-badge variant="success">Stable</ui-badge>
+                      <ui-badge variant="warning">Review</ui-badge>
+                      <ui-badge variant="danger">Blocked</ui-badge>
+                    </div>
+                  }
+                  @case ('tag') {
+                    <div class="flex flex-wrap items-center justify-center gap-2">
+                      <ui-tag>Angular</ui-tag>
+                      <ui-tag variant="success">Published</ui-tag>
+                      <ui-tag variant="warning" removable>Needs review</ui-tag>
+                    </div>
+                  }
+                  @case ('avatar') {
+                    <div class="flex items-center justify-center gap-3">
+                      <ui-avatar label="Ada Lovelace" />
+                      <ui-avatar label="NgNova UI" shape="square" size="lg" />
+                    </div>
+                  }
+                  @case ('alert') {
+                    <div class="w-full max-w-lg">
+                      <ui-alert variant="success" title="Saved" dismissible>
+                        Your component settings were updated.
+                      </ui-alert>
+                    </div>
+                  }
+                  @case ('progress-bar') {
+                    <div class="grid w-full max-w-md gap-4">
+                      <ui-progress-bar [value]="76" variant="success" label="Build progress" />
+                      <ui-progress-bar indeterminate label="Publishing package" />
+                    </div>
+                  }
+                  @case ('skeleton') {
+                    <div class="grid w-full max-w-md gap-4">
+                      <div class="flex items-center gap-3">
+                        <ui-skeleton shape="circle" width="2.75rem" height="2.75rem" />
+                        <div class="grid flex-1 gap-2">
+                          <ui-skeleton shape="text" width="70%" height="0.875rem" />
+                          <ui-skeleton shape="text" width="45%" height="0.875rem" />
+                        </div>
+                      </div>
+                      <ui-skeleton height="8rem" />
+                    </div>
+                  }
+                  @case ('spinner') {
+                    <div class="flex items-center justify-center gap-4">
+                      <ui-spinner label="Loading invoices" />
+                      <span class="text-sm text-slate-600 dark:text-slate-300"
+                        >Loading invoices...</span
+                      >
+                    </div>
+                  }
+                  @default {
+                    <ui-badge variant="info">Preview ready</ui-badge>
+                  }
+                }
+              </div>
+            </app-docs-preview-canvas>
+          }
+        </section>
+
+        <section
+          id="guide"
+          class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70"
+        >
+          <div>
+            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">
+              Production guidance
+            </h2>
+            <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
+              Use these notes to decide when the component belongs in a product workflow and what to
+              verify before shipping.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2">
+            @for (card of guidanceCards(); track card.title) {
+              <section
+                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+              >
+                <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
+                  {{ card.title }}
+                </h3>
+                <p class="mt-2 leading-7 text-slate-700 dark:text-slate-300">{{ card.body }}</p>
+              </section>
+            }
+          </div>
+        </section>
+
+        @if (examples().length) {
+          <section id="examples" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
+            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">Examples</h2>
+            <div class="mt-6 grid gap-5">
+              @for (example of examples(); track example.title) {
+                <section
+                  class="grid gap-4 rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+                >
+                  <div>
+                    <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
+                      {{ example.title }}
+                    </h3>
+                    <p class="mt-2 leading-7 text-slate-600 dark:text-slate-400">
+                      {{ example.description }}
+                    </p>
+                  </div>
+                  <app-docs-code-block
+                    [code]="example.code"
+                    [filename]="componentDoc.selector + '-recipe.example.html'"
+                    language="Angular template"
+                  />
                 </section>
               }
             </div>
           </section>
+        }
 
-          @if (examples().length) {
-            <section id="examples" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
-              <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">Examples</h2>
-              <div class="mt-6 grid gap-5">
-                @for (example of examples(); track example.title) {
-                  <section
-                    class="grid gap-4 rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
-                  >
-                    <div>
-                      <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
-                        {{ example.title }}
-                      </h3>
-                      <p class="mt-2 leading-7 text-slate-600 dark:text-slate-400">
-                        {{ example.description }}
-                      </p>
-                    </div>
-                    <app-docs-code-block
-                      [code]="example.code"
-                      [filename]="componentDoc.selector + '-recipe.example.html'"
-                      language="Angular template"
-                    />
-                  </section>
-                }
-              </div>
-            </section>
-          }
-
-          <section id="api" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
-            <div class="mb-6">
-              <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">API Reference</h2>
-              <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
-                Inputs and outputs are semver-sensitive public API. Keep examples aligned with this
-                table.
-              </p>
-            </div>
-            <app-docs-api-table
-              [apiInputs]="componentDoc.inputs"
-              [apiOutputs]="componentDoc.outputs"
-            />
-          </section>
-
-          <section
-            id="accessibility"
-            class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70 md:grid-cols-2"
-          >
-            <div class="rounded bg-blue-100 p-6 dark:bg-blue-950/60">
-              <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">
-                Accessibility matters
-              </h2>
-              <ul class="mt-4 grid gap-2 leading-7 text-slate-800 dark:text-slate-200">
-                @for (item of accessibilityNotes(); track item) {
-                  <li>{{ item }}</li>
-                }
-              </ul>
-            </div>
-            <div
-              class="rounded border border-blue-200 bg-slate-200 p-6 dark:border-blue-950 dark:bg-slate-900"
-            >
-              <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">Fast to verify</h2>
-              <ul class="mt-4 grid gap-2 leading-7 text-slate-700 dark:text-slate-300">
-                @for (item of testingNotes(); track item) {
-                  <li>{{ item }}</li>
-                }
-              </ul>
-            </div>
-          </section>
-
-          <nav
-            class="mt-4 grid gap-4 border-t border-blue-200 pt-8 dark:border-blue-950/70 sm:grid-cols-2"
-            aria-label="Component pagination"
-          >
-            @if (previousDoc(); as previous) {
-              <a
-                [routerLink]="['/components', previous.slug]"
-                class="rounded border border-blue-200 bg-white p-4 text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
-              >
-                <span class="text-slate-500">Previous</span>
-                <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
-                  previous.name
-                }}</strong>
-              </a>
-            } @else {
-              <span></span>
-            }
-            @if (nextDoc(); as next) {
-              <a
-                [routerLink]="['/components', next.slug]"
-                class="rounded border border-blue-200 bg-white p-4 text-right text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
-              >
-                <span class="text-slate-500">Next</span>
-                <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
-                  next.name
-                }}</strong>
-              </a>
-            }
-          </nav>
-
-          <ui-modal
-            [open]="modalOpen()"
-            (openChange)="modalOpen.set($event)"
-            size="lg"
-            descriptionId="publish-dialog-description"
-            [closeOnBackdrop]="false"
-          >
-            <span uiModalHeader>Publish package</span>
-            <p id="publish-dialog-description">
-              Build the library, inspect <code>dist/ui</code>, then publish with public access.
+        <section id="api" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
+          <div class="mb-6">
+            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">API Reference</h2>
+            <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
+              Inputs and outputs are semver-sensitive public API. Keep examples aligned with this
+              table.
             </p>
-            <div uiModalFooter class="flex gap-3">
-              <ui-button variant="outline" (click)="modalOpen.set(false)">Cancel</ui-button>
-              <ui-button (click)="modalOpen.set(false)">Publish</ui-button>
-            </div>
-          </ui-modal>
-        </article>
-      }
+          </div>
+          <app-docs-api-table
+            [apiInputs]="componentDoc.inputs"
+            [apiOutputs]="componentDoc.outputs"
+          />
+        </section>
+
+        <section
+          id="accessibility"
+          class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70 md:grid-cols-2"
+        >
+          <div class="rounded bg-blue-100 p-6 dark:bg-blue-950/60">
+            <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">
+              Accessibility matters
+            </h2>
+            <ul class="mt-4 grid gap-2 leading-7 text-slate-800 dark:text-slate-200">
+              @for (item of accessibilityNotes(); track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+          <div
+            class="rounded border border-blue-200 bg-slate-200 p-6 dark:border-blue-950 dark:bg-slate-900"
+          >
+            <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">Fast to verify</h2>
+            <ul class="mt-4 grid gap-2 leading-7 text-slate-700 dark:text-slate-300">
+              @for (item of testingNotes(); track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+        </section>
+
+        <nav
+          class="mt-4 grid gap-4 border-t border-blue-200 pt-8 dark:border-blue-950/70 sm:grid-cols-2"
+          aria-label="Component pagination"
+        >
+          @if (previousDoc(); as previous) {
+            <a
+              [routerLink]="['/components', previous.slug]"
+              class="rounded border border-blue-200 bg-white p-4 text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
+            >
+              <span class="text-slate-500">Previous</span>
+              <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
+                previous.name
+              }}</strong>
+            </a>
+          } @else {
+            <span></span>
+          }
+          @if (nextDoc(); as next) {
+            <a
+              [routerLink]="['/components', next.slug]"
+              class="rounded border border-blue-200 bg-white p-4 text-right text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
+            >
+              <span class="text-slate-500">Next</span>
+              <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
+                next.name
+              }}</strong>
+            </a>
+          }
+        </nav>
+
+        <ui-modal
+          [open]="modalOpen()"
+          (openChange)="modalOpen.set($event)"
+          size="lg"
+          descriptionId="publish-dialog-description"
+          [closeOnBackdrop]="false"
+        >
+          <span uiModalHeader>Publish package</span>
+          <p id="publish-dialog-description">
+            Build the library, inspect <code>dist/ui</code>, then publish with public access.
+          </p>
+          <div uiModalFooter class="flex gap-3">
+            <ui-button variant="outline" (click)="modalOpen.set(false)">Cancel</ui-button>
+            <ui-button (click)="modalOpen.set(false)">Publish</ui-button>
+          </div>
+        </ui-modal>
+      </article>
     } @else {
       <section class="mx-auto max-w-3xl py-20 text-center">
         <p class="text-sm font-semibold uppercase text-blue-800 dark:text-blue-300">
@@ -997,9 +923,6 @@ export class ComponentDocPageComponent {
   protected readonly buttonUsageExamples = BUTTON_USAGE_EXAMPLES;
   protected readonly buttonAppearances = BUTTON_APPEARANCES;
   protected readonly buttonIntents = BUTTON_INTENTS;
-  private readonly buttonExampleViews = signal<
-    Partial<Record<ButtonUsageExample['id'], ButtonExampleView>>
-  >({});
   protected readonly buttonPressCount = signal(0);
   protected readonly buttonSubmitCount = signal(0);
   protected readonly buttonFocused = signal(false);
@@ -1135,14 +1058,6 @@ export class ComponentDocPageComponent {
 
   protected recordButtonPress(): void {
     this.buttonPressCount.update((count) => count + 1);
-  }
-
-  protected buttonExampleView(id: ButtonUsageExample['id']): ButtonExampleView {
-    return this.buttonExampleViews()[id] ?? 'preview';
-  }
-
-  protected setButtonExampleView(id: ButtonUsageExample['id'], view: ButtonExampleView): void {
-    this.buttonExampleViews.update((views) => ({ ...views, [id]: view }));
   }
 
   protected recordButtonSubmit(event: Event): void {

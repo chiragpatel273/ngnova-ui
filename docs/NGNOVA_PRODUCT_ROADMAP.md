@@ -357,19 +357,19 @@ Ready from code inspection alone; package and consumer evidence are required.
 
 Create and execute these issues in order:
 
-1. Decide and document the cross-component focus/blur event contract.
-2. Fix Checkbox, Radio, Select, and Switch API documentation from that decision.
-3. Add automated docs/API consistency validation.
-4. Replace mobile component navigation with an accessible drawer.
-5. Build the shared responsive Preview/Code primitive and migrate all generic pages.
-6. Integrate the Card playground into the shared documentation layout.
-7. Replace all improvised glyph icons with the shared icon contract.
-8. Implement and test the common focus-visible token contract.
-9. Fix Button Group focus clipping.
-10. Add Toast viewport offset and safe-area support.
-11. Replace unverified trust claims and synchronize the design-system document.
-12. Resolve the documentation bundle-budget warning.
-13. Begin the remaining component release audits in the Phase 1 order.
+- [x] Decide and document the cross-component focus/blur event contract.
+- [x] Fix Checkbox, Radio, Select, and Switch API documentation from that decision.
+- [x] Add automated docs/API consistency validation.
+- [x] Replace mobile component navigation with an accessible drawer.
+- [x] Build the shared responsive Preview/Code primitive and migrate all generic pages.
+- [x] Integrate the Card playground into the shared documentation layout.
+- [ ] Replace all improvised glyph icons with the shared icon contract.
+- [ ] Implement and test the common focus-visible token contract.
+- [ ] Fix Button Group focus clipping.
+- [ ] Add Toast viewport offset and safe-area support.
+- [ ] Replace unverified trust claims and synchronize the design-system document.
+- [ ] Resolve the documentation bundle-budget warning.
+- [ ] Begin the remaining component release audits in the Phase 1 order.
 
 ## Roadmap Governance
 

@@ -1,5 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
+import type { ElementRef } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroBars3, heroXMark } from '@ng-icons/heroicons/outline';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 
 import { componentDocs, getComponentImportPath } from './docs-data';
 import type { ComponentDoc } from './docs-data';
@@ -53,18 +69,32 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
 @Component({
   selector: 'app-docs-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CdkTrapFocus, NgIcon, NgTemplateOutlet, RouterLink, RouterLinkActive, RouterOutlet],
+  providers: [provideIcons({ heroBars3, heroXMark })],
   template: `
     <main class="min-h-dvh bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       <header
         class="sticky top-0 z-40 border-b border-blue-200 bg-slate-50/95 backdrop-blur dark:border-blue-950 dark:bg-slate-950/95"
       >
-        <div class="mx-auto flex h-16 max-w-[100rem] items-center gap-8 px-6">
+        <div class="mx-auto flex h-16 max-w-[100rem] items-center gap-3 px-4 sm:px-6 lg:gap-8">
+          <button
+            #mobileNavigationTrigger
+            type="button"
+            class="inline-flex size-10 shrink-0 items-center justify-center rounded-lg text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 lg:hidden dark:text-slate-200 dark:hover:bg-blue-950/40 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+            aria-label="Open component navigation"
+            aria-controls="docs-mobile-navigation"
+            [attr.aria-expanded]="mobileNavigationOpen()"
+            (click)="openMobileNavigation()"
+          >
+            <ng-icon name="heroBars3" class="size-6" aria-hidden="true" />
+          </button>
+
           <a
             routerLink="/guide"
-            class="shrink-0 text-xl font-bold text-blue-800 dark:text-blue-300"
+            class="shrink-0 text-lg font-bold text-blue-800 sm:text-xl dark:text-blue-300"
           >
-            NgNova UI Docs
+            <span class="sm:hidden">NgNova UI</span>
+            <span class="hidden sm:inline">NgNova UI Docs</span>
           </a>
 
           <nav class="hidden items-center gap-8 text-lg md:flex" aria-label="Primary documentation">
@@ -102,7 +132,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             </button>
             <a
               routerLink="/apis"
-              class="h-10 rounded px-3 py-2 font-mono text-sm text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/40"
+              class="hidden h-10 rounded px-3 py-2 font-mono text-sm text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 sm:inline-flex dark:text-slate-200 dark:hover:bg-blue-950/40"
               aria-label="Open API reference"
             >
               CLI
@@ -111,82 +141,126 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
         </div>
       </header>
 
+      <ng-template #navigationContent>
+        <div class="px-5 py-7">
+          <div class="px-1">
+            <p class="text-xl font-bold text-slate-950 dark:text-slate-50">Core Components</p>
+            <p class="mt-1 text-base text-slate-600 dark:text-slate-400">v0.1.0</p>
+          </div>
+
+          <label class="mt-6 block lg:hidden">
+            <span class="sr-only">Search documentation</span>
+            <input
+              type="search"
+              placeholder="Search documentation..."
+              [value]="query()"
+              (input)="updateQuery($event)"
+              class="h-10 w-full rounded-lg border border-blue-200 bg-white px-3 text-sm outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-blue-950 dark:bg-slate-900 dark:focus-visible:border-blue-400"
+            />
+          </label>
+
+          <nav class="mt-8 grid gap-2" aria-label="Documentation start">
+            <a
+              routerLink="/guide"
+              routerLinkActive="border-l-blue-800 bg-blue-50 font-semibold text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
+              class="border-l-4 border-transparent px-4 py-2.5 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
+              (click)="closeMobileNavigation(false)"
+            >
+              Getting Started
+            </a>
+          </nav>
+
+          <nav class="mt-7 grid gap-5" aria-label="Component documentation">
+            @for (group of componentGroups(); track group.label) {
+              <section>
+                <p class="px-4 pb-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-500">
+                  {{ group.label }}
+                </p>
+                <div class="grid gap-1">
+                  @for (item of group.docs; track item.slug) {
+                    <a
+                      [routerLink]="['/components', item.slug]"
+                      routerLinkActive="border-l-blue-800 bg-blue-50 font-semibold text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
+                      class="border-l-4 border-transparent px-4 py-2 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
+                      (click)="closeMobileNavigation(false)"
+                    >
+                      {{ item.name }}
+                    </a>
+                  }
+                </div>
+              </section>
+            } @empty {
+              <a
+                routerLink="/components"
+                class="border-l-4 border-transparent px-4 py-2.5 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
+                (click)="closeMobileNavigation(false)"
+              >
+                No matching components
+              </a>
+            }
+          </nav>
+
+          <nav class="mt-10 grid gap-1" aria-label="Reference navigation">
+            <p class="px-4 pb-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-500">
+              Reference
+            </p>
+            @for (item of referenceItems; track item.label) {
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="border-l-blue-800 bg-blue-50 text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
+                class="border-l-4 border-transparent px-4 py-2 text-base text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-300 dark:hover:bg-blue-950/30"
+                (click)="closeMobileNavigation(false)"
+              >
+                {{ item.label }}
+              </a>
+            }
+          </nav>
+        </div>
+      </ng-template>
+
+      @if (mobileNavigationOpen()) {
+        <div class="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            class="absolute inset-0 bg-slate-950/45 backdrop-blur-[1px]"
+            aria-label="Close component navigation"
+            (click)="closeMobileNavigation()"
+          ></button>
+
+          <aside
+            id="docs-mobile-navigation"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Component navigation"
+            tabindex="-1"
+            cdkTrapFocus
+            [cdkTrapFocusAutoCapture]="true"
+            class="relative h-dvh w-[min(22rem,calc(100vw-3rem))] overflow-y-auto border-r border-blue-200 bg-slate-100 shadow-2xl outline-none dark:border-blue-950 dark:bg-slate-950"
+            (keydown.escape)="closeMobileNavigation()"
+          >
+            <div
+              class="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-blue-200 bg-slate-100/95 px-5 backdrop-blur dark:border-blue-950 dark:bg-slate-950/95"
+            >
+              <p class="font-semibold text-slate-950 dark:text-slate-50">Browse documentation</p>
+              <button
+                type="button"
+                class="inline-flex size-10 items-center justify-center rounded-lg text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:text-slate-200 dark:hover:bg-blue-950/40 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                aria-label="Close component navigation"
+                (click)="closeMobileNavigation()"
+              >
+                <ng-icon name="heroXMark" class="size-6" aria-hidden="true" />
+              </button>
+            </div>
+            <ng-container [ngTemplateOutlet]="navigationContent" />
+          </aside>
+        </div>
+      }
+
       <div class="mx-auto grid max-w-[100rem] lg:grid-cols-[17.5rem_minmax(0,1fr)]">
         <aside
-          class="border-b border-blue-200 bg-slate-100 dark:border-blue-950 dark:bg-slate-950 lg:sticky lg:top-16 lg:h-[calc(100dvh-4rem)] lg:overflow-y-auto lg:border-b-0 lg:border-r"
+          class="sticky top-16 hidden h-[calc(100dvh-4rem)] overflow-y-auto border-r border-blue-200 bg-slate-100 dark:border-blue-950 dark:bg-slate-950 lg:block"
         >
-          <div class="px-5 py-7">
-            <div class="px-1">
-              <p class="text-xl font-bold text-slate-950 dark:text-slate-50">Core Components</p>
-              <p class="mt-1 text-base text-slate-600 dark:text-slate-400">v0.1.0</p>
-            </div>
-
-            <label class="mt-6 block lg:hidden">
-              <span class="sr-only">Search documentation</span>
-              <input
-                type="search"
-                placeholder="Search documentation..."
-                [value]="query()"
-                (input)="updateQuery($event)"
-                class="h-10 w-full rounded border border-blue-200 bg-white px-3 text-sm outline-none dark:border-blue-950 dark:bg-slate-900"
-              />
-            </label>
-
-            <nav class="mt-8 grid gap-2" aria-label="Documentation start">
-              <a
-                routerLink="/guide"
-                routerLinkActive="border-l-blue-800 bg-blue-50 font-semibold text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
-                class="border-l-4 border-transparent px-4 py-2.5 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
-              >
-                Getting Started
-              </a>
-            </nav>
-
-            <nav class="mt-7 grid gap-5" aria-label="Component documentation">
-              @for (group of componentGroups(); track group.label) {
-                <section>
-                  <p
-                    class="px-4 pb-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-500"
-                  >
-                    {{ group.label }}
-                  </p>
-                  <div class="grid gap-1">
-                    @for (item of group.docs; track item.slug) {
-                      <a
-                        [routerLink]="['/components', item.slug]"
-                        routerLinkActive="border-l-blue-800 bg-blue-50 font-semibold text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
-                        class="border-l-4 border-transparent px-4 py-2 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
-                      >
-                        {{ item.name }}
-                      </a>
-                    }
-                  </div>
-                </section>
-              } @empty {
-                <a
-                  routerLink="/components"
-                  class="border-l-4 border-transparent px-4 py-2.5 text-base text-slate-800 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-200 dark:hover:bg-blue-950/30"
-                >
-                  No matching components
-                </a>
-              }
-            </nav>
-
-            <nav class="mt-10 grid gap-1" aria-label="Reference navigation">
-              <p class="px-4 pb-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-500">
-                Reference
-              </p>
-              @for (item of referenceItems; track item.label) {
-                <a
-                  [routerLink]="item.path"
-                  routerLinkActive="border-l-blue-800 bg-blue-50 text-blue-800 dark:border-l-blue-300 dark:bg-blue-950/40 dark:text-blue-200"
-                  class="border-l-4 border-transparent px-4 py-2 text-base text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 dark:text-slate-300 dark:hover:bg-blue-950/30"
-                >
-                  {{ item.label }}
-                </a>
-              }
-            </nav>
-          </div>
+          <ng-container [ngTemplateOutlet]="navigationContent" />
         </aside>
 
         <section class="min-w-0 px-6 py-8 sm:px-8 lg:px-10">
@@ -201,8 +275,15 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocsLayoutComponent {
+  private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly mobileNavigationTrigger =
+    viewChild<ElementRef<HTMLButtonElement>>('mobileNavigationTrigger');
+
   protected readonly query = signal('');
   protected readonly darkMode = signal(false);
+  protected readonly mobileNavigationOpen = signal(false);
   protected readonly themeLabel = computed(() => (this.darkMode() ? 'Light mode' : 'Dark mode'));
   protected readonly themeToggleLabel = computed(() =>
     this.darkMode() ? 'Switch to light mode' : 'Switch to dark mode',
@@ -215,6 +296,17 @@ export class DocsLayoutComponent {
     { label: 'Playground', path: '/playground', exact: true },
   ];
   protected readonly referenceItems = REFERENCE_ITEMS;
+  private readonly bodyScrollLock = effect((onCleanup) => {
+    if (!this.mobileNavigationOpen()) {
+      return;
+    }
+
+    const previousOverflow = this.document.body.style.overflow;
+    this.document.body.style.overflow = 'hidden';
+    onCleanup(() => {
+      this.document.body.style.overflow = previousOverflow;
+    });
+  });
   protected readonly componentGroups = computed<
     readonly {
       readonly label: string;
@@ -240,6 +332,21 @@ export class DocsLayoutComponent {
     this.darkMode.update((enabled) => !enabled);
   }
 
+  protected openMobileNavigation(): void {
+    this.mobileNavigationOpen.set(true);
+  }
+
+  protected closeMobileNavigation(restoreFocus = true): void {
+    if (!this.mobileNavigationOpen()) {
+      return;
+    }
+
+    this.mobileNavigationOpen.set(false);
+    if (restoreFocus) {
+      this.mobileNavigationTrigger()?.nativeElement.focus();
+    }
+  }
+
   private matchesQuery(doc: ComponentDoc, query: string): boolean {
     return [
       doc.name,
@@ -248,5 +355,14 @@ export class DocsLayoutComponent {
       doc.importName,
       getComponentImportPath(doc.slug),
     ].some((value) => value.toLowerCase().includes(query));
+  }
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.closeMobileNavigation(false));
   }
 }

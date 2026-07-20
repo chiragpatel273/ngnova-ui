@@ -858,14 +858,16 @@ export const componentDocs: ComponentDoc[] = [
           'Supports two-way binding when the mixed state is cleared by user interaction.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the native checkbox receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native checkbox receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the native checkbox loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native checkbox loses focus. The host also forwards a native blur event.',
       },
     ],
   },
@@ -947,14 +949,16 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the selected value after user interaction.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the native select receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native select receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the native select loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the native select loses focus. The host also forwards a native blur event.',
       },
     ],
   },
@@ -1078,14 +1082,15 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the selected value after user interaction.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when a radio receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when a radio receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when a radio loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description: 'Emits when a radio loses focus. The host also forwards a native blur event.',
       },
     ],
   },
@@ -1141,14 +1146,16 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Emits the checked value after user interaction.',
       },
       {
-        name: 'focus',
-        type: 'FocusEvent',
-        description: 'Emits when the switch receives focus.',
+        name: 'focused',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the switch receives focus. The host also forwards a native focus event.',
       },
       {
-        name: 'blur',
-        type: 'FocusEvent',
-        description: 'Emits when the switch loses focus.',
+        name: 'blurred',
+        type: 'OutputEmitterRef<FocusEvent>',
+        description:
+          'Emits when the switch loses focus. The host also forwards a native blur event.',
       },
     ],
   },

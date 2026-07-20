@@ -76,6 +76,61 @@ describe('App', () => {
     expect(lightToggle?.textContent?.trim()).toBe('Light mode');
   });
 
+  it('opens an accessible mobile navigation drawer and closes it with Escape or navigation', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/button');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const trigger = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-controls="docs-mobile-navigation"]',
+    );
+
+    expect(trigger).toBeTruthy();
+    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(compiled.querySelector('#docs-mobile-navigation')).toBeNull();
+
+    trigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const drawer = compiled.querySelector<HTMLElement>('#docs-mobile-navigation');
+    const closeButton = drawer?.querySelector<HTMLButtonElement>(
+      'button[aria-label="Close component navigation"]',
+    );
+
+    expect(drawer?.getAttribute('role')).toBe('dialog');
+    expect(drawer?.getAttribute('aria-modal')).toBe('true');
+    expect(trigger?.getAttribute('aria-expanded')).toBe('true');
+    expect(closeButton).toBeTruthy();
+    expect(document.body.style.overflow).toBe('hidden');
+
+    drawer?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('#docs-mobile-navigation')).toBeNull();
+    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(document.body.style.overflow).toBe('');
+    expect(document.activeElement).toBe(trigger);
+
+    trigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const inputLink = Array.from(
+      compiled.querySelectorAll<HTMLAnchorElement>('#docs-mobile-navigation a'),
+    ).find((link) => link.textContent?.trim() === 'Input');
+    inputLink?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(router.url).toBe('/components/input');
+    expect(compiled.querySelector('#docs-mobile-navigation')).toBeNull();
+  });
+
   it('has route-ready docs and detail content for every component', () => {
     for (const doc of componentDocs) {
       expect(docsBySlug.get(doc.slug)).toBe(doc);
@@ -115,5 +170,124 @@ describe('App', () => {
 
       expect(compiled.querySelectorAll('app-docs-code-block figure').length).toBeGreaterThan(0);
     }
+  });
+
+  it('uses the shared accessible Preview and Code pattern for button and generic component pages', async () => {
+    const router = TestBed.inject(Router);
+
+    for (const { slug, exampleCount } of [
+      { slug: 'button', exampleCount: 9 },
+      { slug: 'input', exampleCount: 1 },
+    ]) {
+      const fixture = TestBed.createComponent(App);
+      await router.navigateByUrl(`/components/${slug}`);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const examples = compiled.querySelectorAll('app-docs-preview-canvas');
+      expect(examples.length).toBe(exampleCount);
+
+      for (const example of examples) {
+        const tabList = example.querySelector<HTMLElement>('[role="tablist"]');
+        const tabs = Array.from(tabList?.children ?? []).filter(
+          (element): element is HTMLButtonElement => element.getAttribute('role') === 'tab',
+        );
+        const panel = example.querySelector<HTMLElement>('[role="tabpanel"]');
+        expect(tabs.length).toBe(2);
+        expect(tabs[0]?.textContent?.trim()).toBe('Preview');
+        expect(tabs[0]?.getAttribute('aria-selected')).toBe('true');
+        expect(tabs[0]?.getAttribute('aria-controls')).toBe(panel?.id);
+        expect(panel?.getAttribute('aria-labelledby')).toBe(tabs[0]?.id);
+      }
+
+      fixture.destroy();
+    }
+  });
+
+  it('switches Preview and Code with keyboard controls and copies the matching snippet', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const originalClipboard = navigator.clipboard;
+
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    try {
+      await router.navigateByUrl('/components/button');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const example = compiled.querySelector<HTMLElement>('app-docs-preview-canvas');
+      const tabList = example?.querySelector<HTMLElement>('[role="tablist"]');
+      const initialTabs = tabList?.querySelectorAll<HTMLButtonElement>(':scope > [role="tab"]');
+
+      initialTabs?.[0]?.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+      );
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const tabs = example?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      const codePanel = example?.querySelector<HTMLElement>('[role="tabpanel"]');
+      expect(tabs?.[1]?.getAttribute('aria-selected')).toBe('true');
+      expect(document.activeElement).toBe(tabs?.[1]);
+      expect(codePanel?.getAttribute('aria-labelledby')).toBe(tabs?.[1]?.id);
+
+      const copyButton = example?.querySelector<HTMLButtonElement>('app-docs-code-block ui-button');
+      copyButton?.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(writeText).toHaveBeenCalledWith(
+        expect.stringContaining('<ui-button>Primary Action</ui-button>'),
+      );
+      fixture.detectChanges();
+      expect(copyButton?.textContent?.trim()).toBe('Copied');
+    } finally {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: originalClipboard,
+      });
+    }
+  });
+
+  it('integrates the Card playground with the standard docs shell and generated code view', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/card');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    for (const expectedId of ['setup', 'usage', 'guide', 'api', 'accessibility']) {
+      expect(compiled.querySelector(`#${expectedId}`)).toBeTruthy();
+    }
+
+    const playground = compiled.querySelector<HTMLElement>('app-card-doc-playground');
+    const shadowSwitch = Array.from(
+      playground?.querySelectorAll<HTMLButtonElement>('[role="switch"]') ?? [],
+    ).find((control) => control.parentElement?.textContent?.includes('Shadow'));
+    expect(shadowSwitch?.getAttribute('aria-checked')).toBe('false');
+
+    shadowSwitch?.click();
+    fixture.detectChanges();
+    expect(shadowSwitch?.getAttribute('aria-checked')).toBe('true');
+
+    const codeTab = Array.from(
+      playground?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? [],
+    ).find((tab) => tab.textContent?.trim() === 'Code');
+    codeTab?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(playground?.querySelector('app-docs-code-block')?.textContent).toContain(
+      'variant="elevated"',
+    );
   });
 });

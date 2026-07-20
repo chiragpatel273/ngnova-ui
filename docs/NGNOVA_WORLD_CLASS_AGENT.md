@@ -183,6 +183,7 @@ Before calling any component or release task complete, run the smallest relevant
 npm.cmd run format:check
 npm.cmd run lint
 npm.cmd run test:lib
+npm.cmd run test:demo
 npm.cmd run build:lib
 npm.cmd run build:demo
 ```

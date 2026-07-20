@@ -1,205 +1,191 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 
 import type { ComponentDoc } from './docs-data';
-import { DocsCodeBlockComponent } from './docs-code-block';
+import { DocsPreviewCanvasComponent } from './docs-preview-canvas';
 
 type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
 @Component({
   selector: 'app-card-doc-playground',
   standalone: true,
-  imports: [DocsCodeBlockComponent],
+  imports: [DocsPreviewCanvasComponent],
+  host: {
+    class: 'block min-w-0',
+  },
   template: `
-    <article class="mx-auto max-w-[70rem] pb-20">
-      <header class="pt-6">
-        <p class="text-base text-slate-900 dark:text-slate-200">
-          Components / <strong>{{ doc().name }} Component</strong>
-        </p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-normal text-slate-950 dark:text-slate-50">
-          {{ doc().name }} Component
-        </h1>
-        <p class="mt-5 max-w-4xl text-xl leading-9 text-blue-950/85 dark:text-blue-100/80">
-          The Card component is a flexible container for grouping content like text, images, and
-          data visualizations. Use this playground to customize visual parameters and export the
-          resulting Angular template.
-        </p>
-      </header>
+    <section class="grid min-w-0 gap-5 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
+      <aside
+        class="order-2 h-max rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950 lg:order-1"
+        aria-label="Card properties"
+      >
+        <div class="flex items-center gap-3 border-b border-blue-200 pb-5 dark:border-blue-950">
+          <span class="font-mono text-xl text-blue-800 dark:text-blue-200" aria-hidden="true"
+            >::</span
+          >
+          <h2 class="font-semibold text-slate-950 dark:text-slate-50">Properties</h2>
+        </div>
 
-      <section class="mt-12 grid gap-8 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
-        <aside
-          class="h-max rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
-          aria-label="Card properties"
-        >
-          <div class="flex items-center gap-3 border-b border-blue-200 pb-5 dark:border-blue-950">
-            <span class="font-mono text-xl text-blue-800 dark:text-blue-200" aria-hidden="true"
-              >::</span
-            >
-            <h2 class="font-semibold text-slate-950 dark:text-slate-50">Properties</h2>
+        <div class="mt-7">
+          <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
+            Appearance
+          </p>
+          <div class="mt-5 grid gap-4">
+            @for (control of toggleControls; track control.key) {
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-base text-slate-950 dark:text-slate-100">{{
+                  control.label
+                }}</span>
+                <button
+                  type="button"
+                  role="switch"
+                  [attr.aria-checked]="control.value()"
+                  [class]="switchClasses(control.value())"
+                  (click)="control.toggle()"
+                >
+                  <span [class]="thumbClasses(control.value())"></span>
+                </button>
+              </div>
+            }
           </div>
+        </div>
 
-          <div class="mt-7">
-            <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
-              Appearance
-            </p>
-            <div class="mt-5 grid gap-4">
-              @for (control of toggleControls; track control.key) {
-                <div class="flex items-center justify-between gap-4">
-                  <span class="text-base text-slate-950 dark:text-slate-100">{{
-                    control.label
-                  }}</span>
-                  <button
-                    type="button"
-                    role="switch"
-                    [attr.aria-checked]="control.value()"
-                    [class]="switchClasses(control.value())"
-                    (click)="control.toggle()"
-                  >
-                    <span [class]="thumbClasses(control.value())"></span>
-                  </button>
-                </div>
+        <div class="mt-8">
+          <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
+            Spacing & Radius
+          </p>
+          <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
+            <span class="flex items-center justify-between">
+              Padding
+              <strong class="text-sm text-blue-800 dark:text-blue-200">{{ paddingPx() }}px</strong>
+            </span>
+            <input
+              type="range"
+              min="0"
+              max="32"
+              step="4"
+              [value]="paddingPx()"
+              (input)="updatePadding($event)"
+              class="accent-red-800"
+            />
+          </label>
+          <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
+            <span class="flex items-center justify-between">
+              Corner Radius
+              <strong class="text-sm text-blue-800 dark:text-blue-200">{{ radiusPx() }}px</strong>
+            </span>
+            <input
+              type="range"
+              min="0"
+              max="24"
+              step="2"
+              [value]="radiusPx()"
+              (input)="updateRadius($event)"
+              class="accent-red-800"
+            />
+          </label>
+        </div>
+
+        <button
+          type="button"
+          class="mt-8 w-full rounded bg-blue-800 px-4 py-4 text-base font-semibold text-white transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
+          (click)="resetAll()"
+        >
+          Reset All
+        </button>
+      </aside>
+
+      <app-docs-preview-canvas
+        class="order-1 lg:order-2"
+        title="Card playground"
+        description="Adjust the visual options, compare responsive widths, and copy the generated Angular template."
+        [code]="cardCode()"
+        filename="card-playground.example.html"
+        language="Angular template"
+      >
+        <div class="grid w-full min-w-0 gap-4">
+          <div
+            class="flex flex-wrap items-center justify-between gap-3"
+            aria-label="Preview device"
+          >
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Preview width
+            </span>
+            <div class="flex flex-wrap items-center gap-2">
+              @for (device of devices; track device.value) {
+                <button
+                  type="button"
+                  [class]="deviceButtonClasses(device.value)"
+                  (click)="previewDevice.set(device.value)"
+                  [attr.aria-pressed]="previewDevice() === device.value"
+                >
+                  {{ device.label }}
+                </button>
               }
             </div>
           </div>
 
-          <div class="mt-8">
-            <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
-              Spacing & Radius
-            </p>
-            <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
-              <span class="flex items-center justify-between">
-                Padding
-                <strong class="text-sm text-blue-800 dark:text-blue-200"
-                  >{{ paddingPx() }}px</strong
-                >
-              </span>
-              <input
-                type="range"
-                min="0"
-                max="32"
-                step="4"
-                [value]="paddingPx()"
-                (input)="updatePadding($event)"
-                class="accent-red-800"
-              />
-            </label>
-            <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
-              <span class="flex items-center justify-between">
-                Corner Radius
-                <strong class="text-sm text-blue-800 dark:text-blue-200">{{ radiusPx() }}px</strong>
-              </span>
-              <input
-                type="range"
-                min="0"
-                max="24"
-                step="2"
-                [value]="radiusPx()"
-                (input)="updateRadius($event)"
-                class="accent-red-800"
-              />
-            </label>
-          </div>
-
-          <button
-            type="button"
-            class="mt-8 w-full rounded bg-blue-800 px-4 py-4 text-base font-semibold text-white transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
-            (click)="resetAll()"
+          <div
+            class="min-w-0 bg-[radial-gradient(#f1caca_1px,transparent_1px)] bg-[length:18px_18px] p-4 sm:p-8"
           >
-            Reset All
-          </button>
-        </aside>
-
-        <div class="grid gap-8">
-          <section
-            class="overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950"
-            aria-label="Card preview"
-          >
-            <div
-              class="flex items-center justify-between border-b border-blue-200 px-6 py-5 dark:border-blue-950"
-            >
-              <h2 class="font-semibold text-slate-950 dark:text-slate-50">Preview</h2>
-              <div class="flex items-center gap-3" aria-label="Preview device">
-                @for (device of devices; track device.value) {
-                  <button
-                    type="button"
-                    [class]="deviceButtonClasses(device.value)"
-                    (click)="previewDevice.set(device.value)"
-                    [attr.aria-pressed]="previewDevice() === device.value"
-                  >
-                    {{ device.label }}
-                  </button>
+            <div [class]="previewShellClasses()">
+              <section [class]="previewCardClasses()" [style.border-radius.px]="radiusPx()">
+                @if (mediaHeader()) {
+                  <div class="relative overflow-hidden" [style.border-radius.px]="radiusPx()">
+                    <img
+                      src="/card-system-health.svg"
+                      alt="System health analytics bars"
+                      class="h-48 w-full object-cover"
+                    />
+                    <h3 class="absolute bottom-7 left-6 text-2xl font-bold text-white">
+                      System Health
+                    </h3>
+                  </div>
                 }
-              </div>
-            </div>
 
-            <div
-              class="bg-[radial-gradient(#f1caca_1px,transparent_1px)] bg-[length:18px_18px] p-8 sm:p-12"
-            >
-              <div [class]="previewShellClasses()">
-                <section [class]="previewCardClasses()" [style.border-radius.px]="radiusPx()">
-                  @if (mediaHeader()) {
-                    <div class="relative overflow-hidden" [style.border-radius.px]="radiusPx()">
-                      <img
-                        src="/card-system-health.svg"
-                        alt="System health analytics bars"
-                        class="h-48 w-full object-cover"
-                      />
-                      <h3 class="absolute bottom-7 left-6 text-2xl font-bold text-white">
-                        System Health
-                      </h3>
-                    </div>
+                <div class="relative bg-white dark:bg-slate-950" [style.padding.px]="paddingPx()">
+                  @if (accentMarker()) {
+                    <span
+                      class="absolute bottom-0 left-0 top-0 w-1.5 bg-blue-800"
+                      aria-hidden="true"
+                    ></span>
                   }
-
-                  <div class="relative bg-white dark:bg-slate-950" [style.padding.px]="paddingPx()">
-                    @if (accentMarker()) {
-                      <span
-                        class="absolute bottom-0 left-0 top-0 w-1.5 bg-blue-800"
-                        aria-hidden="true"
-                      ></span>
-                    }
-                    <div class="flex items-center justify-between gap-4">
-                      <span
-                        class="bg-slate-100 px-2 py-1 text-sm text-blue-950 dark:bg-slate-900 dark:text-blue-100"
+                  <div class="flex items-center justify-between gap-4">
+                    <span
+                      class="bg-slate-100 px-2 py-1 text-sm text-blue-950 dark:bg-slate-900 dark:text-blue-100"
+                    >
+                      Live Metrics
+                    </span>
+                    <span class="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                      Active
+                    </span>
+                  </div>
+                  <p class="mt-5 text-base leading-7 text-blue-950/90 dark:text-blue-100/80">
+                    Overall server cluster performance is operating within optimal parameters.
+                    Network latency decreased by 12% in the last session.
+                  </p>
+                  <div class="mt-7 border-t border-blue-200 pt-5 dark:border-blue-950">
+                    <div class="flex gap-3">
+                      <button
+                        type="button"
+                        class="rounded bg-blue-800 px-5 py-3 text-sm font-semibold text-white"
                       >
-                        Live Metrics
-                      </span>
-                      <span class="text-sm font-semibold text-blue-800 dark:text-blue-200">
-                        Active
-                      </span>
-                    </div>
-                    <p class="mt-5 text-base leading-7 text-blue-950/90 dark:text-blue-100/80">
-                      Overall server cluster performance is operating within optimal parameters.
-                      Network latency decreased by 12% in the last session.
-                    </p>
-                    <div class="mt-7 border-t border-blue-200 pt-5 dark:border-blue-950">
-                      <div class="flex gap-3">
-                        <button
-                          type="button"
-                          class="rounded bg-blue-800 px-5 py-3 text-sm font-semibold text-white"
-                        >
-                          Details
-                        </button>
-                        <button
-                          type="button"
-                          class="rounded px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200"
-                        >
-                          Analytics
-                        </button>
-                      </div>
+                        Details
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded px-5 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200"
+                      >
+                        Analytics
+                      </button>
                     </div>
                   </div>
-                </section>
-              </div>
+                </div>
+              </section>
             </div>
-          </section>
-
-          <app-docs-code-block
-            [code]="cardCode()"
-            filename="component.html"
-            language="Angular template"
-          />
+          </div>
         </div>
-      </section>
-    </article>
+      </app-docs-preview-canvas>
+    </section>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

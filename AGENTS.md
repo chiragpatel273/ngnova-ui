@@ -49,6 +49,7 @@ Run these before considering component or library work complete:
 
 ```bash
 npm.cmd run test:lib
+npm.cmd run test:demo
 npm.cmd run build:lib
 npm.cmd run build:demo
 npm.cmd pack --dry-run

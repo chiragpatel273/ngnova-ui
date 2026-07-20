@@ -5,7 +5,9 @@ const isWindows = process.platform === 'win32';
 const steps = [
   ['Format check', npm, ['run', 'format:check']],
   ['Lint', npm, ['run', 'lint']],
+  ['Docs API consistency', npm, ['run', 'check:docs-api']],
   ['Library tests', npm, ['run', 'test:lib']],
+  ['Docs app tests', npm, ['run', 'test:demo']],
   ['Library build', npm, ['run', 'build:lib']],
   ['Docs app build', npm, ['run', 'build:demo:app']],
   ['Package audit', npm, ['run', 'audit:package']],

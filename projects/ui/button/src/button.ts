@@ -21,7 +21,7 @@ export type UiButtonIntent = 'primary' | 'secondary' | 'success' | 'warning' | '
 export type UiButtonAppearance = 'solid' | 'outline' | 'ghost' | 'text' | 'tonal';
 
 const BASE_CLASSES =
-  'relative isolate inline-flex shrink-0 cursor-pointer select-none items-center justify-center rounded-lg font-medium tracking-[-0.006em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform] duration-150 ease-out focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:translate-y-px active:shadow-none active:duration-75 motion-reduce:transform-none motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:transform-none dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950';
+  'relative isolate inline-flex shrink-0 cursor-pointer select-none items-center justify-center rounded-lg font-medium tracking-[-0.006em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-150 ease-out focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:brightness-95 active:duration-75 motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:transform-none dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950';
 
 const RAISED_FINISH_CLASSES =
   'shadow-sm shadow-slate-950/10 ring-1 ring-inset ring-white/10 hover:shadow-md hover:shadow-slate-950/15';

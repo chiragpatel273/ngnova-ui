@@ -9,6 +9,7 @@ Before making code changes, read and follow:
 For broad component-library improvement, release-readiness, or continuous agent work, also follow:
 
 - `docs/NGNOVA_WORLD_CLASS_AGENT.md`
+- `docs/NGNOVA_PRODUCT_ROADMAP.md`
 
 For GitHub Issue driven cloud work, also follow:
 

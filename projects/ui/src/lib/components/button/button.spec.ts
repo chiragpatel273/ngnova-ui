@@ -382,6 +382,21 @@ describe('UiButtonComponent', () => {
     expect(className).toContain('cursor-pointer');
   });
 
+  it('applies subtle pressed feedback without moving the button', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.detectChanges();
+
+    const className = (buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement)
+      .className;
+
+    expect(className).toContain('active:brightness-95');
+    expect(className).toContain('active:duration-75');
+    expect(className).not.toContain('active:translate');
+    expect(className).not.toContain('active:scale');
+    expect(className).not.toContain('active:shadow');
+    expect(className).not.toContain('transform]');
+  });
+
   it('styles anchors and buttons with the uiButton directive', () => {
     const directiveFixture = TestBed.createComponent(ButtonDirectiveHostComponent);
     directiveFixture.detectChanges();

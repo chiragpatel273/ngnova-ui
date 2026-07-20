@@ -21,6 +21,9 @@ Production-oriented Angular workspace for **NgNova UI**, a small Angular compone
 
 See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md) for the project coding standards checklist used for NgNova UI component work.
 
+See [docs/NGNOVA_PRODUCT_ROADMAP.md](docs/NGNOVA_PRODUCT_ROADMAP.md) for the product position,
+release phases, measurable quality gates, and prioritized execution backlog.
+
 ## Projects
 
 - `projects/ui`: Angular library package source.

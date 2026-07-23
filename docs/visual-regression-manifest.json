@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "engines": ["chromium", "webkit"],
+  "themes": ["light", "dark"],
+  "viewports": {
+    "desktop": { "width": 1440, "height": 1000 },
+    "mobile": { "width": 390, "height": 844 }
+  },
+  "componentStates": [
+    {
+      "slug": "button",
+      "visualIds": [
+        "button-variants",
+        "button-visual-api",
+        "button-sizes",
+        "button-states",
+        "button-icons",
+        "button-links",
+        "button-group",
+        "button-forms",
+        "button-events"
+      ]
+    },
+    { "slug": "card", "visualIds": ["card-default"] },
+    { "slug": "form-field", "visualIds": ["form-field-default"] },
+    { "slug": "input", "visualIds": ["input-default"] },
+    { "slug": "badge", "visualIds": ["badge-default"] },
+    { "slug": "tag", "visualIds": ["tag-default"] },
+    { "slug": "avatar", "visualIds": ["avatar-default"] },
+    { "slug": "skeleton", "visualIds": ["skeleton-default"] },
+    { "slug": "progress-bar", "visualIds": ["progress-bar-default"] },
+    { "slug": "modal", "visualIds": ["modal-default"] },
+    { "slug": "checkbox", "visualIds": ["checkbox-default"] },
+    { "slug": "combobox", "visualIds": ["combobox-default"] },
+    { "slug": "date-picker", "visualIds": ["date-picker-default"] },
+    { "slug": "select", "visualIds": ["select-default"] },
+    { "slug": "alert", "visualIds": ["alert-default"] },
+    { "slug": "radio", "visualIds": ["radio-default"] },
+    { "slug": "switch", "visualIds": ["switch-default"] },
+    { "slug": "textarea", "visualIds": ["textarea-default"] },
+    { "slug": "tabs", "visualIds": ["tabs-default"] },
+    { "slug": "accordion", "visualIds": ["accordion-default"] },
+    { "slug": "file-upload", "visualIds": ["file-upload-default"] },
+    { "slug": "command-palette", "visualIds": ["command-palette-default"] },
+    { "slug": "overlay", "visualIds": ["overlay-default"] },
+    { "slug": "confirmation", "visualIds": ["confirmation-default"] },
+    { "slug": "tree-table", "visualIds": ["tree-table-default"] },
+    { "slug": "tree", "visualIds": ["tree-default"] },
+    { "slug": "data-view", "visualIds": ["data-view-default"] },
+    { "slug": "table", "visualIds": ["table-default"] },
+    { "slug": "table-virtual-scroll", "visualIds": ["table-virtual-scroll-default"] },
+    { "slug": "toast", "visualIds": ["toast-default"] },
+    { "slug": "breadcrumb", "visualIds": ["breadcrumb-default"] },
+    { "slug": "stepper", "visualIds": ["stepper-default"] },
+    { "slug": "paginator", "visualIds": ["paginator-default"] },
+    { "slug": "chip", "visualIds": ["chip-default"] },
+    { "slug": "divider", "visualIds": ["divider-default"] },
+    { "slug": "menu", "visualIds": ["menu-default"] },
+    { "slug": "drawer", "visualIds": ["drawer-default"] },
+    { "slug": "popover", "visualIds": ["popover-default"] },
+    { "slug": "tooltip", "visualIds": ["tooltip-default"] },
+    { "slug": "spinner", "visualIds": ["spinner-default"] }
+  ],
+  "interactiveStates": [
+    {
+      "slug": "modal",
+      "triggerRole": "button",
+      "triggerName": "Open dialog",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "combobox",
+      "triggerRole": "combobox",
+      "triggerName": "Framework",
+      "stateName": "open",
+      "targetRole": "listbox"
+    },
+    {
+      "slug": "date-picker",
+      "triggerRole": "button",
+      "triggerName": "Open calendar",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "command-palette",
+      "triggerRole": "button",
+      "triggerName": "Search commands Ctrl K",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "overlay",
+      "triggerRole": "button",
+      "triggerName": "Open connected overlay",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "confirmation",
+      "triggerRole": "button",
+      "triggerName": "Delete release",
+      "stateName": "open",
+      "targetRole": "alertdialog"
+    },
+    {
+      "slug": "menu",
+      "triggerRole": "button",
+      "triggerName": "More actions",
+      "stateName": "open",
+      "targetRole": "menu"
+    },
+    {
+      "slug": "drawer",
+      "triggerRole": "button",
+      "triggerName": "Open filter drawer",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "popover",
+      "triggerRole": "button",
+      "triggerName": "Open account actions",
+      "stateName": "open",
+      "targetRole": "dialog"
+    },
+    {
+      "slug": "tooltip",
+      "triggerRole": "button",
+      "triggerName": "Hover or focus for details",
+      "stateName": "visible",
+      "targetRole": "tooltip",
+      "action": "hover"
+    }
+  ]
+}

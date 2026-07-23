@@ -10,6 +10,8 @@ import type { UiAccordionItem } from '@ngnova/ui/accordion';
 import { UiAlertComponent } from '@ngnova/ui/alert';
 import { UiAvatarComponent } from '@ngnova/ui/avatar';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
+import { UiBreadcrumbComponent } from '@ngnova/ui/breadcrumb';
+import type { UiBreadcrumbItem } from '@ngnova/ui/breadcrumb';
 import {
   UiButtonComponent,
   UiButtonDirective,
@@ -20,8 +22,42 @@ import {
 import type { UiButtonAppearance, UiButtonIntent } from '@ngnova/ui/button';
 import { UiCardComponent } from '@ngnova/ui/card';
 import { UiCheckboxComponent } from '@ngnova/ui/checkbox';
+import { UiChipComponent } from '@ngnova/ui/chip';
+import { UiComboboxComponent } from '@ngnova/ui/combobox';
+import type { UiComboboxOption } from '@ngnova/ui/combobox';
+import { UiCommandPaletteComponent } from '@ngnova/ui/command-palette';
+import type { UiCommand } from '@ngnova/ui/command-palette';
+import { UiConfirmationDialogComponent, UiConfirmationService } from '@ngnova/ui/confirmation';
+import { UiDatePickerComponent } from '@ngnova/ui/date-picker';
+import { UiDataViewComponent, UiDataViewItemDirective } from '@ngnova/ui/data-view';
+import {
+  UiDrawerComponent,
+  UiDrawerFooterDirective,
+  UiDrawerHeaderDirective,
+} from '@ngnova/ui/drawer';
+import { UiDividerComponent } from '@ngnova/ui/divider';
+import { UiFileUploadComponent } from '@ngnova/ui/file-upload';
+import {
+  UiFormFieldComponent,
+  UiFormFieldControlDirective,
+  UiFormFieldPrefixDirective,
+  UiFormFieldSuffixDirective,
+} from '@ngnova/ui/form-field';
 import { UiInputComponent } from '@ngnova/ui/input';
+import { UiMenuComponent, UiMenuTriggerDirective } from '@ngnova/ui/menu';
+import type { UiMenuItem } from '@ngnova/ui/menu';
 import { UiModalComponent } from '@ngnova/ui/modal';
+import {
+  UiOverlayComponent,
+  UiOverlayContentDirective,
+  UiOverlayTriggerDirective,
+} from '@ngnova/ui/overlay';
+import { UiPaginatorComponent } from '@ngnova/ui/paginator';
+import {
+  UiPopoverComponent,
+  UiPopoverContentDirective,
+  UiPopoverTriggerDirective,
+} from '@ngnova/ui/popover';
 import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
 import { UiRadioGroupComponent } from '@ngnova/ui/radio';
 import type { UiRadioOption } from '@ngnova/ui/radio';
@@ -29,14 +65,25 @@ import { UiSelectComponent } from '@ngnova/ui/select';
 import type { UiSelectOption } from '@ngnova/ui/select';
 import { UiSkeletonComponent } from '@ngnova/ui/skeleton';
 import { UiSpinnerComponent } from '@ngnova/ui/spinner';
+import { UiStepperComponent } from '@ngnova/ui/stepper';
+import type { UiStepItem } from '@ngnova/ui/stepper';
 import { UiSwitchComponent } from '@ngnova/ui/switch';
 import { UiTabsComponent } from '@ngnova/ui/tabs';
 import type { UiTabItem } from '@ngnova/ui/tabs';
-import { UiTableComponent } from '@ngnova/ui/table';
-import type { UiTableColumn, UiTableRow } from '@ngnova/ui/table';
+import { UiTableCellDirective, UiTableComponent, UiTableHeaderDirective } from '@ngnova/ui/table';
+import type { UiTableColumn, UiTableRow, UiTableRowKey } from '@ngnova/ui/table';
+import {
+  UiTableVirtualRowDirective,
+  UiTableVirtualScrollComponent,
+} from '@ngnova/ui/table-virtual-scroll';
 import { UiTagComponent } from '@ngnova/ui/tag';
 import { UiTextareaComponent } from '@ngnova/ui/textarea';
 import { UiToastComponent, UiToastService } from '@ngnova/ui/toast';
+import { UiTooltipDirective } from '@ngnova/ui/tooltip';
+import { UiTreeComponent } from '@ngnova/ui/tree';
+import type { UiTreeNode } from '@ngnova/ui/tree';
+import { UiTreeTableComponent } from '@ngnova/ui/tree-table';
+import type { UiTreeTableColumn, UiTreeTableNode } from '@ngnova/ui/tree-table';
 
 import {
   componentDocDetailsBySlug,
@@ -82,9 +129,38 @@ interface ButtonUsageExample {
   readonly code: string;
 }
 
-const FORM_SLUGS = ['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'] as const;
-const OVERLAY_SLUGS = ['modal', 'toast'] as const;
-const DATA_SLUGS = ['tabs', 'accordion', 'table', 'card'] as const;
+const FORM_SLUGS = [
+  'form-field',
+  'combobox',
+  'date-picker',
+  'input',
+  'textarea',
+  'checkbox',
+  'radio',
+  'switch',
+  'select',
+] as const;
+const OVERLAY_SLUGS = [
+  'modal',
+  'toast',
+  'tooltip',
+  'popover',
+  'drawer',
+  'menu',
+  'command-palette',
+  'overlay',
+  'confirmation',
+] as const;
+const DATA_SLUGS = [
+  'tabs',
+  'accordion',
+  'table',
+  'table-virtual-scroll',
+  'data-view',
+  'tree',
+  'tree-table',
+  'card',
+] as const;
 const BUTTON_APPEARANCES: readonly UiButtonAppearance[] = [
   'solid',
   'outline',
@@ -187,7 +263,8 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
   {
     id: 'group',
     title: 'Group',
-    description: 'Group related actions with connected edges and shared semantics.',
+    description:
+      'Group related actions with connected edges, shared semantics, and unclipped keyboard focus.',
     filename: 'button-group.example.html',
     code: `<ui-button-group ariaLabel="View density">
   <ui-button variant="outline">Compact</ui-button>
@@ -235,6 +312,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     UiAlertComponent,
     UiAvatarComponent,
     UiBadgeComponent,
+    UiBreadcrumbComponent,
     UiButtonComponent,
     UiButtonDirective,
     UiButtonGroupComponent,
@@ -242,19 +320,52 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     UiButtonIconStartDirective,
     UiCardComponent,
     UiCheckboxComponent,
+    UiChipComponent,
+    UiComboboxComponent,
+    UiCommandPaletteComponent,
+    UiConfirmationDialogComponent,
+    UiDatePickerComponent,
+    UiDataViewComponent,
+    UiDataViewItemDirective,
+    UiDrawerComponent,
+    UiDrawerFooterDirective,
+    UiDrawerHeaderDirective,
+    UiDividerComponent,
+    UiFileUploadComponent,
+    UiFormFieldComponent,
+    UiFormFieldControlDirective,
+    UiFormFieldPrefixDirective,
+    UiFormFieldSuffixDirective,
     UiInputComponent,
+    UiMenuComponent,
+    UiMenuTriggerDirective,
     UiModalComponent,
+    UiOverlayComponent,
+    UiOverlayContentDirective,
+    UiOverlayTriggerDirective,
+    UiPaginatorComponent,
+    UiPopoverComponent,
+    UiPopoverContentDirective,
+    UiPopoverTriggerDirective,
     UiProgressBarComponent,
     UiRadioGroupComponent,
     UiSelectComponent,
     UiSkeletonComponent,
     UiSpinnerComponent,
+    UiStepperComponent,
     UiSwitchComponent,
     UiTabsComponent,
+    UiTableCellDirective,
     UiTableComponent,
+    UiTableHeaderDirective,
+    UiTableVirtualRowDirective,
+    UiTableVirtualScrollComponent,
     UiTagComponent,
     UiTextareaComponent,
     UiToastComponent,
+    UiTooltipDirective,
+    UiTreeComponent,
+    UiTreeTableComponent,
     CardDocPlaygroundComponent,
     DocsApiTableComponent,
     DocsCodeBlockComponent,
@@ -405,6 +516,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                   [description]="example.description"
                   [code]="example.code"
                   [filename]="example.filename"
+                  [visualId]="'button-' + example.id"
                   language="Angular template"
                 >
                   <div class="flex w-full min-w-0 items-center justify-center">
@@ -542,10 +654,29 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
               [description]="componentDoc.summary"
               [code]="componentDoc.usage"
               [filename]="componentDoc.selector + '.example.html'"
+              [visualId]="componentDoc.slug + '-default'"
               language="Angular template"
             >
               <div class="flex w-full min-w-0 items-center justify-center">
                 @switch (componentDoc.slug) {
+                  @case ('form-field') {
+                    <div class="w-full max-w-sm">
+                      <ui-form-field
+                        label="Workspace"
+                        helperText="Choose a short, recognizable name."
+                        required
+                      >
+                        <span uiFormFieldPrefix aria-hidden="true">@</span>
+                        <input
+                          uiFormFieldControl
+                          type="text"
+                          value="ngnova"
+                          autocomplete="organization"
+                        />
+                        <span uiFormFieldSuffix class="text-xs">.team</span>
+                      </ui-form-field>
+                    </div>
+                  }
                   @case ('input') {
                     <div class="w-full max-w-sm">
                       <ui-input
@@ -601,6 +732,30 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                       [formControl]="notifications"
                     />
                   }
+                  @case ('combobox') {
+                    <div class="w-full max-w-sm">
+                      <ui-combobox
+                        label="Framework"
+                        placeholder="Search frameworks"
+                        helperText="Type to filter, then use Arrow keys and Enter."
+                        [options]="docsComboboxOptions"
+                        [formControl]="docsFramework"
+                        clearable
+                      />
+                    </div>
+                  }
+                  @case ('date-picker') {
+                    <div class="w-full max-w-sm">
+                      <ui-date-picker
+                        label="Release date"
+                        helperText="Choose a publication date."
+                        [formControl]="docsReleaseDate"
+                        min="2026-01-01"
+                        max="2027-12-31"
+                        clearable
+                      />
+                    </div>
+                  }
                   @case ('select') {
                     <div class="w-full max-w-sm">
                       <ui-select
@@ -631,9 +786,192 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                       <ui-table
                         [columns]="tableColumns"
                         [rows]="tableRows"
-                        selectable
-                        (rowSelected)="selectedTableRow.set($event)"
+                        caption="Component release status"
+                        rowKey="id"
+                        selectionMode="multiple"
+                        [selectedKeys]="selectedTableKeys()"
+                        (selectedKeysChange)="selectedTableKeys.set($event)"
+                        [page]="1"
+                        [pageSize]="3"
+                        [totalItems]="8"
+                        stickyHeader
+                        stickySelectionColumn
+                      >
+                        <ng-template uiTableHeader="status" let-column>
+                          {{ column.header }} signal
+                        </ng-template>
+                        <ng-template uiTableCell="status" let-value>
+                          <span
+                            class="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                          >
+                            {{ value }}
+                          </span>
+                        </ng-template>
+                      </ui-table>
+                    </div>
+                  }
+                  @case ('data-view') {
+                    <div class="w-full">
+                      <ui-data-view
+                        [items]="dataViewItems"
+                        [layout]="dataViewLayout()"
+                        (layoutChange)="dataViewLayout.set($event)"
+                        showLayoutToggle
+                        ariaLabel="Component catalog"
+                      >
+                        <ng-template uiDataViewItem let-item let-layout="layout">
+                          <article
+                            class="h-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                          >
+                            <p class="font-semibold text-slate-900 dark:text-slate-100">
+                              {{ item.name }}
+                            </p>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                              {{ item.description }} · {{ layout }}
+                            </p>
+                          </article>
+                        </ng-template>
+                      </ui-data-view>
+                    </div>
+                  }
+                  @case ('tree') {
+                    <div class="w-full max-w-md">
+                      <ui-tree
+                        [nodes]="treeNodes"
+                        [expanded]="treeExpanded()"
+                        (expandedChange)="treeExpanded.set($event)"
+                        [selected]="treeSelected()"
+                        (selectedChange)="treeSelected.set($event)"
+                        ariaLabel="Documentation hierarchy"
                       />
+                    </div>
+                  }
+                  @case ('tree-table') {
+                    <div class="w-full overflow-x-auto">
+                      <ui-tree-table
+                        [columns]="treeTableColumns"
+                        [nodes]="treeTableNodes"
+                        [expanded]="treeTableExpanded()"
+                        (expandedChange)="treeTableExpanded.set($event)"
+                        [selected]="treeTableSelected()"
+                        (selectedChange)="treeTableSelected.set($event)"
+                        caption="Component package hierarchy"
+                      />
+                    </div>
+                  }
+                  @case ('file-upload') {
+                    <div class="w-full max-w-xl">
+                      <ui-file-upload
+                        [files]="uploadFiles()"
+                        (filesChange)="uploadFiles.set($event)"
+                        accept=".png,.jpg,.pdf"
+                        [maxFiles]="4"
+                        [maxFileSize]="5000000"
+                        helperText="PNG, JPG, or PDF up to 5 MB"
+                        ariaLabel="Release asset upload"
+                      />
+                    </div>
+                  }
+                  @case ('command-palette') {
+                    <div class="grid w-full max-w-xl gap-3">
+                      <button
+                        type="button"
+                        class="flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-300 bg-white px-4 text-left text-sm font-medium text-slate-700 shadow-sm hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600 dark:focus-visible:ring-blue-400"
+                        (click)="commandPaletteOpen.set(true)"
+                      >
+                        <span>Search commands</span>
+                        <kbd
+                          class="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+                        >
+                          Ctrl K
+                        </kbd>
+                      </button>
+                      <p class="text-sm text-slate-500 dark:text-slate-400" aria-live="polite">
+                        {{ selectedCommand() || 'Choose a project command.' }}
+                      </p>
+                      <ui-command-palette
+                        [commands]="docsCommands"
+                        [open]="commandPaletteOpen()"
+                        (openChange)="commandPaletteOpen.set($event)"
+                        [query]="commandQuery()"
+                        (queryChange)="commandQuery.set($event)"
+                        (commandSelected)="selectedCommand.set($event.command.label)"
+                        ariaLabel="Documentation commands"
+                      />
+                    </div>
+                  }
+                  @case ('overlay') {
+                    <div class="flex w-full max-w-xl items-center justify-center py-12">
+                      <ui-overlay
+                        [open]="advancedOverlayOpen()"
+                        (openChange)="advancedOverlayOpen.set($event)"
+                        [placements]="['bottom', 'top']"
+                        alignment="center"
+                        initialFocus="first"
+                        ariaLabel="Release actions"
+                      >
+                        <button
+                          uiOverlayTrigger
+                          type="button"
+                          class="min-h-11 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                        >
+                          Open connected overlay
+                        </button>
+                        <div uiOverlayContent class="grid min-w-64 gap-3">
+                          <div>
+                            <p class="font-semibold">Release actions</p>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                              Positioned by the optional CDK integration.
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            class="min-h-10 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-blue-500 dark:focus-visible:ring-blue-400"
+                            (click)="advancedOverlayOpen.set(false)"
+                          >
+                            Run release check
+                          </button>
+                        </div>
+                      </ui-overlay>
+                    </div>
+                  }
+                  @case ('confirmation') {
+                    <div class="grid w-full max-w-xl place-items-center gap-3 py-12">
+                      <button
+                        type="button"
+                        class="min-h-11 rounded-xl bg-red-600 px-5 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 dark:bg-red-500 dark:hover:bg-red-400 dark:focus-visible:ring-red-400 dark:focus-visible:ring-offset-slate-950"
+                        (click)="requestReleaseDeletion()"
+                      >
+                        Delete release
+                      </button>
+                      <p class="text-sm text-slate-500 dark:text-slate-400" aria-live="polite">
+                        {{ confirmationStatus() }}
+                      </p>
+                      <ui-confirmation-dialog />
+                    </div>
+                  }
+                  @case ('table-virtual-scroll') {
+                    <div class="w-full">
+                      <ui-table-virtual-scroll
+                        [rows]="virtualTableRows"
+                        [itemSize]="52"
+                        height="18rem"
+                        ariaLabel="Virtualized release records"
+                      >
+                        <ng-template uiTableVirtualRow let-row let-index="index">
+                          <div
+                            class="grid h-full grid-cols-[5rem_1fr_auto] items-center gap-3 px-4 text-sm"
+                          >
+                            <span class="font-mono text-xs text-slate-500">#{{ index + 1 }}</span>
+                            <span class="font-medium text-slate-900 dark:text-slate-100">
+                              {{ row.name }}
+                            </span>
+                            <span class="text-slate-500 dark:text-slate-400">
+                              {{ row.status }}
+                            </span>
+                          </div>
+                        </ng-template>
+                      </ui-table-virtual-scroll>
                     </div>
                   }
                   @case ('tabs') {
@@ -697,6 +1035,138 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                       <ui-tag variant="success">Published</ui-tag>
                       <ui-tag variant="warning" removable>Needs review</ui-tag>
                     </div>
+                  }
+                  @case ('breadcrumb') {
+                    <div class="w-full max-w-3xl">
+                      <ui-breadcrumb
+                        [items]="docsBreadcrumbItems"
+                        [maxItems]="4"
+                        ariaLabel="Component documentation location"
+                      />
+                    </div>
+                  }
+                  @case ('stepper') {
+                    <div class="w-full max-w-3xl">
+                      <ui-stepper
+                        [steps]="docsStepperItems"
+                        [active]="docsActiveStep()"
+                        (activeChange)="docsActiveStep.set($event)"
+                        ariaLabel="Release workflow"
+                      >
+                        <div
+                          class="rounded-xl border border-slate-200 bg-white p-5 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                        >
+                          Current panel: {{ docsActiveStep() }}
+                        </div>
+                      </ui-stepper>
+                    </div>
+                  }
+                  @case ('paginator') {
+                    <div class="w-full max-w-3xl">
+                      <ui-paginator
+                        [page]="docsPage()"
+                        (pageChange)="docsPage.set($event)"
+                        [pageSize]="docsPageSize()"
+                        (pageSizeChange)="docsPageSize.set($event)"
+                        [totalItems]="128"
+                        [pageSizeOptions]="[10, 25, 50]"
+                      />
+                    </div>
+                  }
+                  @case ('chip') {
+                    <div class="flex max-w-lg flex-wrap items-center justify-center gap-3">
+                      <ui-chip variant="primary">Angular</ui-chip>
+                      <ui-chip selectable [selected]="true">Selected</ui-chip>
+                      <ui-chip removable removeAriaLabel="Remove TypeScript filter"
+                        >TypeScript</ui-chip
+                      >
+                      <ui-chip selectable removable disabled>Disabled</ui-chip>
+                    </div>
+                  }
+                  @case ('divider') {
+                    <div class="grid w-full max-w-lg gap-6">
+                      <p>Account settings</p>
+                      <ui-divider />
+                      <p>Notification preferences</p>
+                      <ui-divider label="Advanced" [decorative]="false" />
+                      <p>Developer settings</p>
+                    </div>
+                  }
+                  @case ('menu') {
+                    <ui-menu
+                      [items]="docsMenuItems"
+                      ariaLabel="Component actions"
+                      align="end"
+                      (itemSelected)="lastMenuAction.set($event.item.label)"
+                    >
+                      <ui-button uiMenuTrigger variant="outline">More actions</ui-button>
+                    </ui-menu>
+                    @if (lastMenuAction(); as action) {
+                      <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                        Selected: {{ action }}
+                      </p>
+                    }
+                  }
+                  @case ('drawer') {
+                    <div class="grid justify-items-center gap-3">
+                      <ui-button (click)="drawerOpen.set(true)">Open filter drawer</ui-button>
+                      <span class="text-xs text-slate-500 dark:text-slate-400">
+                        Opens a focus-trapped panel from the right edge.
+                      </span>
+                    </div>
+                    <ui-drawer
+                      [open]="drawerOpen()"
+                      (openChange)="drawerOpen.set($event)"
+                      titleId="docs-drawer-title"
+                      descriptionId="docs-drawer-description"
+                    >
+                      <span uiDrawerHeader id="docs-drawer-title">Filter components</span>
+                      <p id="docs-drawer-description">Choose which release states to display.</p>
+                      <div class="mt-4 grid gap-3">
+                        <ui-checkbox label="Ready" />
+                        <ui-checkbox label="In progress" />
+                      </div>
+                      <ui-button uiDrawerFooter variant="outline" (click)="drawerOpen.set(false)">
+                        Cancel
+                      </ui-button>
+                      <ui-button uiDrawerFooter (click)="drawerOpen.set(false)">Apply</ui-button>
+                    </ui-drawer>
+                  }
+                  @case ('popover') {
+                    <ui-popover titleId="docs-popover-title" position="bottom">
+                      <button
+                        uiPopoverTrigger
+                        type="button"
+                        class="rounded-[var(--ui-control-radius,0.625rem)] bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-400 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                      >
+                        Open account actions
+                      </button>
+                      <div uiPopoverContent class="grid min-w-56 gap-3">
+                        <div>
+                          <h2 id="docs-popover-title" class="font-semibold">Account actions</h2>
+                          <p class="mt-1 text-slate-600 dark:text-slate-300">
+                            Manage your current session.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          class="rounded-md border border-slate-300 px-3 py-2 text-left font-medium hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:hover:bg-slate-900"
+                        >
+                          Sign out
+                        </button>
+                      </div>
+                    </ui-popover>
+                  }
+                  @case ('tooltip') {
+                    <button
+                      type="button"
+                      class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                      uiTooltip="Refresh dashboard data"
+                      tooltipPosition="bottom"
+                      [tooltipShowDelay]="100"
+                    >
+                      Hover or focus for details
+                    </button>
                   }
                   @case ('avatar') {
                     <div class="flex items-center justify-center gap-3">
@@ -913,12 +1383,15 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
 export class ComponentDocPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(UiToastService);
+  private readonly confirmations = inject(UiConfirmationService);
 
   protected readonly email = new FormControl('developer@example.com');
   protected readonly releaseNotes = new FormControl('Added form components and docs polish.');
   protected readonly newsletter = new FormControl(true);
   protected readonly contactPreference = new FormControl('email');
   protected readonly notifications = new FormControl(false);
+  protected readonly docsFramework = new FormControl('angular');
+  protected readonly docsReleaseDate = new FormControl('2026-07-23');
   protected readonly plan = new FormControl('pro');
   protected readonly buttonUsageExamples = BUTTON_USAGE_EXAMPLES;
   protected readonly buttonAppearances = BUTTON_APPEARANCES;
@@ -928,9 +1401,73 @@ export class ComponentDocPageComponent {
   protected readonly buttonFocused = signal(false);
   protected readonly copiedImportStatement = signal(false);
   protected readonly modalOpen = signal(false);
+  protected readonly drawerOpen = signal(false);
+  protected readonly lastMenuAction = signal('');
+  protected readonly docsMenuItems: readonly UiMenuItem[] = [
+    { value: 'edit', label: 'Edit component' },
+    { value: 'duplicate', label: 'Duplicate' },
+    { value: 'archive', label: 'Archive', separatorBefore: true },
+    { value: 'delete', label: 'Delete', danger: true },
+  ];
+  protected readonly docsBreadcrumbItems: readonly UiBreadcrumbItem[] = [
+    { label: 'Documentation', href: '/docs' },
+    { label: 'Components', href: '/docs/components' },
+    { label: 'Navigation', href: '/docs/components' },
+    { label: 'Breadcrumb' },
+  ];
+  protected readonly docsStepperItems: readonly UiStepItem[] = [
+    { value: 'details', label: 'Details', description: 'Package metadata', completed: true },
+    { value: 'review', label: 'Review', description: 'Quality checks' },
+    { value: 'publish', label: 'Publish', description: 'Release to npm' },
+  ];
+  protected readonly docsActiveStep = signal('review');
+  protected readonly docsPage = signal(3);
+  protected readonly docsPageSize = signal(10);
   protected readonly activeTab = signal('overview');
   protected readonly accordionActive = signal<readonly string[]>(['overview']);
-  protected readonly selectedTableRow = signal<UiTableRow | null>(null);
+  protected readonly selectedTableKeys = signal<readonly UiTableRowKey[]>([]);
+  protected readonly dataViewLayout = signal<'grid' | 'list'>('grid');
+  protected readonly treeExpanded = signal<readonly string[]>(['components']);
+  protected readonly treeSelected = signal<string | null>('button');
+  protected readonly treeTableExpanded = signal<readonly string[]>(['components']);
+  protected readonly treeTableSelected = signal<string | null>('button');
+  protected readonly uploadFiles = signal<readonly File[]>([]);
+  protected readonly commandPaletteOpen = signal(false);
+  protected readonly commandQuery = signal('');
+  protected readonly selectedCommand = signal('');
+  protected readonly advancedOverlayOpen = signal(false);
+  protected readonly confirmationStatus = signal('No destructive action requested.');
+  protected readonly docsCommands: readonly UiCommand[] = [
+    {
+      value: 'new-component',
+      label: 'Create component',
+      description: 'Scaffold a standalone library entry point',
+      keywords: ['add', 'generate'],
+      shortcut: 'C',
+      group: 'Project',
+    },
+    {
+      value: 'run-release-check',
+      label: 'Run release check',
+      description: 'Verify tests, builds, package, and consumer',
+      keywords: ['test', 'build', 'verify'],
+      shortcut: 'R',
+      group: 'Quality',
+    },
+    {
+      value: 'open-tokens',
+      label: 'Open design tokens',
+      description: 'Review theme foundations and semantic modes',
+      group: 'Navigation',
+    },
+    {
+      value: 'publish',
+      label: 'Publish package',
+      description: 'Unavailable until every release check passes',
+      group: 'Release',
+      disabled: true,
+    },
+  ];
 
   protected readonly qualityStats: readonly DocStat[] = [
     { label: 'Stable', value: 'API' },
@@ -942,6 +1479,12 @@ export class ComponentDocPageComponent {
     { label: 'Starter', value: 'starter' },
     { label: 'Pro', value: 'pro' },
     { label: 'Enterprise', value: 'enterprise' },
+  ];
+
+  protected readonly docsComboboxOptions: readonly UiComboboxOption[] = [
+    { label: 'Angular', value: 'angular', description: 'Full application framework' },
+    { label: 'React', value: 'react', description: 'UI rendering library' },
+    { label: 'Vue', value: 'vue', description: 'Progressive framework' },
   ];
 
   protected readonly contactOptions: readonly UiRadioOption[] = [
@@ -964,16 +1507,83 @@ export class ComponentDocPageComponent {
   ];
 
   protected readonly tableColumns: readonly UiTableColumn[] = [
-    { key: 'component', header: 'Component', sortable: true },
+    { key: 'component', header: 'Component', sortable: true, sticky: 'start' },
     { key: 'category', header: 'Category' },
     { key: 'status', header: 'Status' },
     { key: 'owner', header: 'Owner' },
   ];
 
   protected readonly tableRows: readonly UiTableRow[] = [
-    { component: 'Button', category: 'Foundation', status: 'Ready', owner: 'Design system' },
-    { component: 'Input', category: 'Forms', status: 'Ready', owner: 'Forms' },
-    { component: 'Modal', category: 'Overlay', status: 'A11y review', owner: 'Platform' },
+    {
+      id: 'button',
+      component: 'Button',
+      category: 'Foundation',
+      status: 'Ready',
+      owner: 'Design system',
+    },
+    { id: 'input', component: 'Input', category: 'Forms', status: 'Ready', owner: 'Forms' },
+    {
+      id: 'modal',
+      component: 'Modal',
+      category: 'Overlay',
+      status: 'A11y review',
+      owner: 'Platform',
+    },
+  ];
+  protected readonly virtualTableRows = Array.from({ length: 10_000 }, (_, index) => ({
+    id: index + 1,
+    name: `Release record ${index + 1}`,
+    status: index % 7 === 0 ? 'Review' : 'Ready',
+  }));
+  protected readonly dataViewItems = [
+    { id: 'button', name: 'Button', description: 'Actions and intent' },
+    { id: 'input', name: 'Input', description: 'Text entry and validation' },
+    { id: 'table', name: 'Table', description: 'Structured enterprise data' },
+  ];
+  protected readonly treeNodes: readonly UiTreeNode[] = [
+    {
+      value: 'components',
+      label: 'Components',
+      description: 'Production UI primitives',
+      children: [
+        { value: 'button', label: 'Button' },
+        { value: 'input', label: 'Input' },
+        { value: 'table', label: 'Table' },
+      ],
+    },
+    {
+      value: 'foundations',
+      label: 'Foundations',
+      children: [
+        { value: 'color', label: 'Color' },
+        { value: 'typography', label: 'Typography' },
+      ],
+    },
+  ];
+  protected readonly treeTableColumns: readonly UiTreeTableColumn[] = [
+    { key: 'name', header: 'Package', sortable: true },
+    { key: 'status', header: 'Status' },
+    { key: 'owner', header: 'Owner' },
+  ];
+  protected readonly treeTableNodes: readonly UiTreeTableNode[] = [
+    {
+      value: 'components',
+      data: { name: 'Components', status: 'Ready', owner: 'Design system' },
+      children: [
+        {
+          value: 'button',
+          data: { name: 'Button', status: 'Ready', owner: 'Foundations' },
+        },
+        {
+          value: 'table',
+          data: { name: 'Table', status: 'Ready', owner: 'Data' },
+        },
+      ],
+    },
+    {
+      value: 'utilities',
+      data: { name: 'Utilities', status: 'Review', owner: 'Platform' },
+    },
   ];
 
   protected readonly componentTabs: readonly UiTabItem[] = [
@@ -1054,6 +1664,23 @@ export class ComponentDocPageComponent {
 
   protected showToast(): void {
     this.toast.success('Package saved', 'The toast service is ready for application feedback.');
+  }
+
+  protected requestReleaseDeletion(): void {
+    void this.confirmations
+      .confirm({
+        title: 'Delete release 1.0.0?',
+        message: 'This removes the release record and cannot be undone.',
+        confirmLabel: 'Delete release',
+        intent: 'danger',
+        requireText: 'DELETE',
+        requireTextLabel: 'Type DELETE to continue',
+      })
+      .then((result) => {
+        this.confirmationStatus.set(
+          result.confirmed ? 'Release deletion confirmed.' : `Cancelled by ${result.reason}.`,
+        );
+      });
   }
 
   protected recordButtonPress(): void {

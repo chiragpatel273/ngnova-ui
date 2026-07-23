@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -7,7 +7,8 @@ function uiClassNames(...classes: (string | false | null | undefined)[]): string
 export type UiBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
 export type UiBadgeSize = 'sm' | 'md';
 
-const BASE_CLASSES = 'inline-flex items-center rounded-full font-medium ring-1 ring-inset';
+const BASE_CLASSES =
+  'inline-flex max-w-full items-center rounded-full font-medium ring-1 ring-inset';
 
 const VARIANT_CLASSES: Record<UiBadgeVariant, string> = {
   default:
@@ -29,20 +30,20 @@ const SIZE_CLASSES: Record<UiBadgeSize, string> = {
   selector: 'ui-badge',
   standalone: true,
   template: `<span
-    [attr.role]="ariaRole || null"
-    [attr.aria-label]="ariaLabel || null"
-    [class]="classes"
-    ><ng-content
-  /></span>`,
+    [attr.role]="ariaRole() || (ariaLabel() ? 'group' : null)"
+    [attr.aria-label]="ariaLabel() || null"
+    [class]="classes()"
+    ><span class="min-w-0 truncate"><ng-content /></span
+  ></span>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiBadgeComponent {
-  @Input() variant: UiBadgeVariant = 'default';
-  @Input() size: UiBadgeSize = 'md';
-  @Input() ariaRole = '';
-  @Input() ariaLabel = '';
+  readonly variant = input<UiBadgeVariant>('default');
+  readonly size = input<UiBadgeSize>('md');
+  readonly ariaRole = input('');
+  readonly ariaLabel = input('');
 
-  protected get classes(): string {
-    return uiClassNames(BASE_CLASSES, VARIANT_CLASSES[this.variant], SIZE_CLASSES[this.size]);
-  }
+  protected readonly classes = computed(() =>
+    uiClassNames(BASE_CLASSES, VARIANT_CLASSES[this.variant()], SIZE_CLASSES[this.size()]),
+  );
 }

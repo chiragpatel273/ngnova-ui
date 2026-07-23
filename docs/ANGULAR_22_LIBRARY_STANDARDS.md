@@ -101,9 +101,25 @@ Use this checklist whenever adding, reviewing, or refactoring NgNova UI componen
 - Keep shared class composition small and typed.
 - Avoid shipping source-only Angular code. Publish ng-packagr output from `dist/ui`.
 
+## Built-in Icon Standards
+
+- Follow `docs/decisions/0002-built-in-icon-contract.md` for fixed component action icons.
+- Use a `0 0 24 24` inline SVG with current-color, round two-unit strokes and no fill.
+- Size compact action icons at `1rem` and standard action icons at `1.25rem`.
+- Mark built-in decorative SVGs `aria-hidden="true"` and `focusable="false"`; the enclosing control
+  owns the accessible name.
+- Do not use emoji, icon fonts, or text glyphs such as `x`, `+`, and `-` for built-in controls.
+- Keep isolated secondary entry points dependency-free for fixed internal icons.
+
 ## Accessibility Standards
 
 - Components must be keyboard-friendly.
+- Follow `docs/decisions/0003-focus-visible-contract.md` for every interactive control.
+- Use a two-pixel blue keyboard-only ring with a two-pixel offset; use blue-400 and a slate-950
+  offset in dark mode.
+- Use an inset ring only for full-bleed controls inside overflow-clipped containers.
+- Do not use `focus:` for the primary focus indicator or remove an outline without a visible
+  replacement.
 - Preserve native semantics whenever possible.
 - Provide ARIA inputs only where needed, such as `ariaLabel`, `ariaRole`, `descriptionId`, and `titleId`.
 - Button loading state should expose screen-reader text.

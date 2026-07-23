@@ -5,6 +5,7 @@ import {
   computed,
   inject,
   input,
+  numberAttribute,
 } from '@angular/core';
 import { signal } from '@angular/core';
 
@@ -13,12 +14,14 @@ function uiClassNames(...classes: (string | false | null | undefined)[]): string
 }
 
 export type UiToastVariant = 'info' | 'success' | 'warning' | 'danger';
+export type UiToastPosition = 'top-right' | 'bottom-right';
 
 export interface UiToastMessage {
   readonly id: string;
   readonly title: string;
   readonly description?: string;
   readonly variant?: UiToastVariant;
+  readonly duration?: number;
 }
 
 export type UiToastInput = Omit<UiToastMessage, 'id'> & {
@@ -40,24 +43,69 @@ let nextToastId = 0;
 @Injectable({ providedIn: 'root' })
 export class UiToastService {
   private readonly messagesState = signal<readonly UiToastMessage[]>([]);
+  private readonly dismissTimers = new Map<string, ReturnType<typeof setTimeout>>();
   readonly messages = this.messagesState.asReadonly();
 
   show(message: UiToastInput): string {
     const id = message.id ?? `ui-toast-${++nextToastId}`;
-    this.messagesState.update((messages) => [...messages, { ...message, id }]);
+    this.cancelDismissTimer(id);
+    this.messagesState.update((messages) => [
+      ...messages.filter((currentMessage) => currentMessage.id !== id),
+      { ...message, id },
+    ]);
+
+    const duration = message.duration ?? 0;
+    if (Number.isFinite(duration) && duration > 0) {
+      this.dismissTimers.set(
+        id,
+        setTimeout(() => {
+          this.dismissTimers.delete(id);
+          this.removeMessage(id);
+        }, duration),
+      );
+    }
     return id;
   }
 
-  success(title: string, description?: string): string {
-    return this.show({ title, description, variant: 'success' });
+  info(title: string, description?: string, duration?: number): string {
+    return this.show({ title, description, duration, variant: 'info' });
+  }
+
+  success(title: string, description?: string, duration?: number): string {
+    return this.show({ title, description, duration, variant: 'success' });
+  }
+
+  warning(title: string, description?: string, duration?: number): string {
+    return this.show({ title, description, duration, variant: 'warning' });
+  }
+
+  danger(title: string, description?: string, duration?: number): string {
+    return this.show({ title, description, duration, variant: 'danger' });
   }
 
   dismiss(id: string): void {
-    this.messagesState.update((messages) => messages.filter((message) => message.id !== id));
+    this.cancelDismissTimer(id);
+    this.removeMessage(id);
   }
 
   clear(): void {
+    for (const timer of this.dismissTimers.values()) {
+      clearTimeout(timer);
+    }
+    this.dismissTimers.clear();
     this.messagesState.set([]);
+  }
+
+  private cancelDismissTimer(id: string): void {
+    const timer = this.dismissTimers.get(id);
+    if (timer) {
+      clearTimeout(timer);
+      this.dismissTimers.delete(id);
+    }
+  }
+
+  private removeMessage(id: string): void {
+    this.messagesState.update((messages) => messages.filter((message) => message.id !== id));
   }
 }
 
@@ -65,9 +113,18 @@ export class UiToastService {
   selector: 'ui-toast',
   standalone: true,
   template: `
-    <div [class]="viewportClasses()" aria-live="polite" aria-relevant="additions">
-      @for (message of service.messages(); track message.id) {
-        <section [class]="toastClasses(message.variant ?? 'info')" role="status">
+    <div
+      [class]="viewportClasses()"
+      [style.--ui-toast-viewport-offset]="viewportOffset()"
+      aria-live="polite"
+      aria-relevant="additions"
+    >
+      @for (message of visibleMessages(); track message.id) {
+        <section
+          [class]="toastClasses(message.variant ?? 'info')"
+          [attr.role]="message.variant === 'danger' ? 'alert' : 'status'"
+          aria-atomic="true"
+        >
           <div class="min-w-0">
             <p class="font-semibold">{{ message.title }}</p>
             @if (message.description) {
@@ -76,11 +133,21 @@ export class UiToastService {
           </div>
           <button
             type="button"
-            class="rounded px-1.5 text-current opacity-70 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            aria-label="Dismiss notification"
+            class="rounded px-1.5 text-current opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+            [attr.aria-label]="dismissAriaLabel()"
             (click)="service.dismiss(message.id)"
           >
-            <span aria-hidden="true">x</span>
+            <svg
+              class="size-4 shrink-0 fill-none stroke-current"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
           </button>
         </section>
       }
@@ -89,20 +156,29 @@ export class UiToastService {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiToastComponent {
-  readonly position = input<'top-right' | 'bottom-right'>('top-right');
+  readonly position = input<UiToastPosition>('top-right');
+  readonly viewportOffset = input('var(--ui-toast-offset, 1rem)');
+  readonly maxMessages = input(5, { transform: numberAttribute });
+  readonly dismissAriaLabel = input('Dismiss notification');
   protected readonly service = inject(UiToastService);
+  protected readonly visibleMessages = computed(() => {
+    const maximum = Math.max(1, Math.trunc(this.maxMessages()) || 1);
+    return this.service.messages().slice(-maximum);
+  });
 
   protected readonly viewportClasses = computed(() =>
     uiClassNames(
-      'pointer-events-none fixed z-50 flex w-full max-w-sm flex-col gap-3 p-4',
-      this.position() === 'top-right' && 'right-0 top-0',
-      this.position() === 'bottom-right' && 'bottom-0 right-0',
+      'pointer-events-none fixed right-0 z-50 flex w-full max-w-sm flex-col gap-3 p-[var(--ui-toast-viewport-offset)] pl-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-left))] pr-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-right))]',
+      this.position() === 'top-right' &&
+        'top-0 pt-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-top))]',
+      this.position() === 'bottom-right' &&
+        'bottom-0 pb-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-bottom))]',
     ),
   );
 
   protected toastClasses(variant: UiToastVariant): string {
     return uiClassNames(
-      'pointer-events-auto flex items-start justify-between gap-4 rounded-lg border p-4 shadow-lg',
+      'pointer-events-auto flex items-start justify-between gap-4 rounded-[var(--ui-surface-radius,0.75rem)] border p-4 shadow-lg',
       TOAST_CLASSES[variant],
     );
   }

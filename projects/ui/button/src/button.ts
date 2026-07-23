@@ -21,7 +21,7 @@ export type UiButtonIntent = 'primary' | 'secondary' | 'success' | 'warning' | '
 export type UiButtonAppearance = 'solid' | 'outline' | 'ghost' | 'text' | 'tonal';
 
 const BASE_CLASSES =
-  'relative isolate inline-flex shrink-0 cursor-pointer select-none items-center justify-center rounded-lg font-medium tracking-[-0.006em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-150 ease-out focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:brightness-95 active:duration-75 motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:transform-none dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950';
+  'relative isolate inline-flex shrink-0 cursor-pointer select-none items-center justify-center rounded-[var(--ui-control-radius,0.5rem)] font-medium tracking-[-0.006em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,filter] duration-[var(--ui-duration-normal,150ms)] ease-out focus-visible:z-10 focus-visible:[--tw-ring-inset:initial] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 active:brightness-95 active:duration-[var(--ui-duration-fast,75ms)] motion-reduce:transition-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:transform-none dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950';
 
 const RAISED_FINISH_CLASSES =
   'shadow-sm shadow-slate-950/10 ring-1 ring-inset ring-white/10 hover:shadow-md hover:shadow-slate-950/15';
@@ -135,9 +135,9 @@ const APPEARANCE_INTENT_CLASSES: Record<UiButtonAppearance, Record<UiButtonInten
 };
 
 const SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: 'h-8 gap-1.5 px-3 text-sm leading-5',
-  md: 'h-10 gap-2 px-4 text-sm leading-5',
-  lg: 'h-12 gap-2.5 px-5 text-base leading-6',
+  sm: 'h-[var(--ui-control-height-sm,2rem)] gap-1.5 px-3 text-sm leading-5',
+  md: 'h-[var(--ui-control-height-md,2.5rem)] gap-2 px-4 text-sm leading-5',
+  lg: 'h-[var(--ui-control-height-lg,3rem)] gap-2.5 px-5 text-base leading-6',
 };
 
 const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
@@ -248,7 +248,7 @@ export class UiButtonGroupComponent {
 
   protected get classes(): string {
     return uiClassNames(
-      'inline-flex items-stretch overflow-hidden rounded-lg shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
+      'isolate inline-flex items-stretch overflow-visible rounded-[var(--ui-control-radius,0.5rem)] shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
       this.fullWidth && 'flex w-full [&_ui-button]:flex-1 [&_ui-button_button]:w-full',
     );
   }

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "libraryVersion": "0.1.0",
+  "angular": {
+    "major": 22,
+    "peerRange": "^22.0.0",
+    "packages": ["@angular/common", "@angular/core", "@angular/forms"]
+  },
+  "angularCdk": {
+    "peerRange": "^22.0.0",
+    "optional": true,
+    "entryPoints": ["overlay", "table-virtual-scroll"]
+  },
+  "buildToolchain": {
+    "typescript": ">=6.0 <6.1",
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0",
+    "partialIvy": true,
+    "ecmaTarget": "ES2022"
+  },
+  "angularRuntimePeers": {
+    "rxjs": "^6.5.3 || ^7.4.0",
+    "zoneJs": "~0.15.0 || ~0.16.0",
+    "zoneOptional": true
+  }
+}

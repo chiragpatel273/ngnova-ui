@@ -26,3 +26,36 @@ jobs:
 
       - name: Release check
         run: npm run release:check
+
+  visual:
+    name: Visual regression
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Install browser engines
+        run: npx playwright install chromium webkit
+
+      - name: Compare documented states
+        run: npm run test:visual
+
+      - name: Upload visual diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-diagnostics
+          path: |
+            playwright-report
+            test-results
+          retention-days: 14

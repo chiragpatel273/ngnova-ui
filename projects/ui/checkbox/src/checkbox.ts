@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -36,7 +37,7 @@ let nextCheckboxId = 0;
         type="checkbox"
         [attr.name]="name || null"
         [checked]="checked"
-        [disabled]="disabled"
+        [disabled]="isDisabled"
         [required]="required"
         [indeterminate]="isIndeterminate()"
         [attr.aria-label]="ariaLabel || null"
@@ -52,7 +53,7 @@ let nextCheckboxId = 0;
           <label
             [for]="inputId"
             class="block cursor-pointer text-sm font-medium text-slate-800 dark:text-slate-100"
-            [class.cursor-not-allowed]="disabled"
+            [class.cursor-not-allowed]="isDisabled"
           >
             {{ label }}
           </label>
@@ -70,6 +71,7 @@ let nextCheckboxId = 0;
 })
 export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() helperText = '';
@@ -86,6 +88,7 @@ export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
 
   protected checked = false;
   protected readonly isIndeterminate = signal(false);
+  private readonly formDisabled = signal(false);
 
   private onChange: (value: boolean) => void = () => undefined;
   private onTouched: () => void = () => undefined;
@@ -98,9 +101,13 @@ export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
     return this.helperText ? this.messageId : null;
   }
 
+  protected get isDisabled(): boolean {
+    return this.disabled || this.formDisabled();
+  }
+
   protected get checkboxClasses(): string {
     return uiClassNames(
-      'mt-0.5 size-4 rounded border-slate-300 text-blue-600 shadow-sm transition-colors focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-blue-400/30',
+      'mt-0.5 size-4 rounded border-slate-300 text-blue-600 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950',
       this.isIndeterminate() && 'accent-blue-600',
     );
   }
@@ -113,6 +120,7 @@ export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
 
   writeValue(value: boolean | null): void {
     this.checked = value ?? false;
+    this.changeDetector.markForCheck();
   }
 
   registerOnChange(fn: (value: boolean) => void): void {
@@ -124,7 +132,8 @@ export class UiCheckboxComponent implements ControlValueAccessor, OnChanges {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.formDisabled.set(isDisabled);
+    this.changeDetector.markForCheck();
   }
 
   protected onChangeEvent(event: Event): void {

@@ -83,12 +83,11 @@ As of the application consistency audit on 2026-07-19:
 - All twenty components are standalone, `OnPush`, tested, documented, dark-mode aware, and emitted
   as secondary package entry points.
 - Six form controls implement `ControlValueAccessor`.
-- Nine interactive components currently expose test harnesses.
+- Fourteen interactive components expose test harnesses.
 - `npm.cmd run release:check` passes, including consumer installation and build smoke testing.
 - The library has a strong engineering base, but the docs shell, cross-component contracts, and
   release evidence are not yet at the intended product bar.
-- The current first-release tracker marks Input, Textarea, and Button as fully audited; the other
-  seventeen components still need formal release audits.
+- The first-release tracker now marks all twenty original components fully audited and Ready.
 
 The audit source of truth is
 `artifacts/application-consistency-audit/REPORT.md`.
@@ -119,6 +118,8 @@ These decisions prevent the roadmap from becoming an unbounded component-count r
 The phases are sequential. New feature work does not bypass the exit gate of the active phase.
 
 ## Phase 0 — Contract And Documentation Recovery
+
+**Status: Complete (2026-07-21).**
 
 **Goal:** remove the known P0/P1 inconsistencies before presenting the docs as production-ready.
 
@@ -153,6 +154,9 @@ The phases are sequential. New feature work does not bypass the exit gate of the
 - `npm.cmd run release:check` passes without an unexplained bundle warning.
 
 ## Phase 1 — First Twenty Release-Ready
+
+**Status: Complete (2026-07-22).** All twenty original components are marked Ready in the
+first-release tracker.
 
 **Goal:** make every existing component satisfy one published definition of done.
 
@@ -200,6 +204,10 @@ Input, Textarea, and Button remain under regression review because they are alre
 
 ## Phase 2 — Theme And Design-System Contract
 
+**Status: Complete (2026-07-22).** The optional v1 stylesheet, token bridge, theme playground,
+automated mode contract, migration guidance, package export, and clean-consumer verification are
+in place.
+
 **Goal:** provide excellent customization without coupling consumers to NgNova's documentation app.
 
 ### Work
@@ -240,6 +248,9 @@ Input, Textarea, and Button remain under regression review because they are alre
 10. Form Field foundation
 11. Autocomplete or Combobox
 12. Date Picker
+
+Delivery status is tracked in `docs/PHASE_3_TRACKER.md`; Tooltip and Popover are complete and Drawer
+is in progress.
 
 Each addition must solve a demonstrated workflow gap. It must not be accepted solely to increase the
 component count.
@@ -363,13 +374,14 @@ Create and execute these issues in order:
 - [x] Replace mobile component navigation with an accessible drawer.
 - [x] Build the shared responsive Preview/Code primitive and migrate all generic pages.
 - [x] Integrate the Card playground into the shared documentation layout.
-- [ ] Replace all improvised glyph icons with the shared icon contract.
-- [ ] Implement and test the common focus-visible token contract.
-- [ ] Fix Button Group focus clipping.
-- [ ] Add Toast viewport offset and safe-area support.
-- [ ] Replace unverified trust claims and synchronize the design-system document.
-- [ ] Resolve the documentation bundle-budget warning.
-- [ ] Begin the remaining component release audits in the Phase 1 order.
+- [x] Replace all improvised glyph icons with the shared icon contract.
+- [x] Implement and test the common focus-visible token contract.
+- [x] Fix Button Group focus clipping.
+- [x] Add Toast viewport offset and safe-area support.
+- [x] Replace unverified trust claims and synchronize the design-system document.
+- [x] Resolve the documentation bundle-budget warning.
+- [x] Complete the remaining component release audits in the Phase 1 order.
+- [x] Publish and verify the Phase 2 theme and design-system contract.
 
 ## Roadmap Governance
 

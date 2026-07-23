@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -22,14 +22,20 @@ const SHAPE_CLASSES: Record<UiAvatarShape, string> = {
   selector: 'ui-avatar',
   standalone: true,
   template: `
-    <span [class]="classes()" [attr.aria-label]="ariaLabel() || label() || null" role="img">
-      @if (src()) {
+    <span
+      [class]="classes()"
+      [attr.role]="hasImage() ? null : accessibleLabel() ? 'img' : null"
+      [attr.aria-label]="hasImage() ? null : accessibleLabel() || null"
+      [attr.aria-hidden]="!hasImage() && !accessibleLabel() ? 'true' : null"
+    >
+      @if (hasImage()) {
         <img
           [src]="src()"
-          [alt]="alt()"
+          [alt]="accessibleLabel()"
           class="size-full object-cover"
           [class.rounded-full]="shape() === 'circle'"
           [class.rounded-md]="shape() === 'square'"
+          (error)="handleImageError()"
         />
       } @else {
         <span aria-hidden="true">{{ initials() }}</span>
@@ -45,6 +51,15 @@ export class UiAvatarComponent {
   readonly size = input<UiAvatarSize>('md');
   readonly shape = input<UiAvatarShape>('circle');
   readonly ariaLabel = input('');
+
+  private readonly failedSrc = signal('');
+
+  protected readonly accessibleLabel = computed(
+    () => this.ariaLabel().trim() || this.alt().trim() || this.label().trim(),
+  );
+  protected readonly hasImage = computed(
+    () => Boolean(this.src()) && this.failedSrc() !== this.src(),
+  );
 
   protected readonly initials = computed(() => {
     const value = this.label().trim();
@@ -66,4 +81,8 @@ export class UiAvatarComponent {
       SHAPE_CLASSES[this.shape()],
     ),
   );
+
+  protected handleImageError(): void {
+    this.failedSrc.set(this.src());
+  }
 }

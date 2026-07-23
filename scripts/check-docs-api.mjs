@@ -188,6 +188,10 @@ function implementedDeclarations(sourceFile) {
 }
 
 function documentedNameFor(selector, name) {
+  if (selector.includes(`[${name}]`)) {
+    return name;
+  }
+
   if (selector.startsWith('[') && selector.endsWith(']')) {
     return `${selector} ${name}`;
   }

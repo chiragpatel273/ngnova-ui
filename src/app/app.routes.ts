@@ -1,33 +1,66 @@
 import type { Routes } from '@angular/router';
 
-import { ComponentDocPageComponent } from './docs/component-doc-page';
-import { DocsApiReferenceComponent } from './docs/docs-api-reference';
-import { DocsLayoutComponent } from './docs/docs-layout';
-import { DocsHomeComponent } from './docs/docs-home';
-import { DocsTemplatesComponent } from './docs/docs-templates';
-import { DocsTopicPageComponent } from './docs/docs-topic-page';
-import { GetStartedComponent } from './docs/get-started';
-
 export const routes: Routes = [
   {
     path: '',
-    component: DocsLayoutComponent,
+    loadComponent: () => import('./docs/docs-layout').then((module) => module.DocsLayoutComponent),
     children: [
-      { path: '', pathMatch: 'full', component: DocsHomeComponent },
-      { path: 'guide', component: GetStartedComponent },
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('./docs/docs-home').then((module) => module.DocsHomeComponent),
+      },
+      {
+        path: 'guide',
+        loadComponent: () =>
+          import('./docs/get-started').then((module) => module.GetStartedComponent),
+      },
       { path: 'get-started', redirectTo: 'guide', pathMatch: 'full' },
-      { path: 'apis', component: DocsApiReferenceComponent },
-      { path: 'components', component: DocsTopicPageComponent, data: { topic: 'components' } },
-      { path: 'templates', component: DocsTemplatesComponent },
-      { path: 'playground', component: DocsTopicPageComponent, data: { topic: 'playground' } },
+      {
+        path: 'apis',
+        loadComponent: () =>
+          import('./docs/docs-api-reference').then((module) => module.DocsApiReferenceComponent),
+      },
+      {
+        path: 'components',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: { topic: 'components' },
+      },
+      {
+        path: 'templates',
+        loadComponent: () =>
+          import('./docs/docs-templates').then((module) => module.DocsTemplatesComponent),
+      },
+      {
+        path: 'playground',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: { topic: 'playground' },
+      },
       {
         path: 'accessibility',
-        component: DocsTopicPageComponent,
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
         data: { topic: 'accessibility' },
       },
-      { path: 'theming', component: DocsTopicPageComponent, data: { topic: 'theming' } },
-      { path: 'roadmap', component: DocsTopicPageComponent, data: { topic: 'roadmap' } },
-      { path: 'components/:slug', component: ComponentDocPageComponent },
+      {
+        path: 'theming',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: { topic: 'theming' },
+      },
+      {
+        path: 'roadmap',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: { topic: 'roadmap' },
+      },
+      {
+        path: 'components/:slug',
+        loadComponent: () =>
+          import('./docs/component-doc-page').then((module) => module.ComponentDocPageComponent),
+      },
     ],
   },
 ];

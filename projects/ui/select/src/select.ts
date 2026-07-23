@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -7,6 +8,7 @@ import {
   Input,
   inject,
   output,
+  signal,
 } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -43,35 +45,49 @@ let nextSelectId = 0;
         }}</span>
       }
 
-      <select
-        [id]="inputId"
-        [attr.name]="name || null"
-        [value]="value"
-        [disabled]="disabled"
-        [required]="required"
-        [attr.aria-label]="ariaLabel || null"
-        [attr.aria-invalid]="!!errorText"
-        [attr.aria-describedby]="descriptionId"
-        [class]="selectClasses"
-        (change)="onSelect($event)"
-        (focus)="emitFocused($event)"
-        (blur)="markTouched($event)"
-      >
-        @if (placeholder) {
-          <option value="" [disabled]="required" [selected]="value === ''">
-            {{ placeholder }}
-          </option>
-        }
-        @for (option of options; track option.value) {
-          <option
-            [value]="option.value"
-            [disabled]="option.disabled"
-            [selected]="option.value === value"
-          >
-            {{ option.label }}
-          </option>
-        }
-      </select>
+      <span class="relative block">
+        <select
+          [id]="inputId"
+          [attr.name]="name || null"
+          [value]="value"
+          [disabled]="isDisabled"
+          [required]="required"
+          [attr.aria-label]="label ? null : ariaLabel || null"
+          [attr.aria-invalid]="errorText ? 'true' : null"
+          [attr.aria-describedby]="descriptionId"
+          [class]="selectClasses"
+          (change)="onSelect($event)"
+          (focus)="emitFocused($event)"
+          (blur)="markTouched($event)"
+        >
+          @if (placeholder) {
+            <option value="" [disabled]="required" [selected]="value === ''">
+              {{ placeholder }}
+            </option>
+          }
+          @for (option of options; track option.value) {
+            <option
+              [value]="option.value"
+              [disabled]="option.disabled"
+              [selected]="option.value === value"
+            >
+              {{ option.label }}
+            </option>
+          }
+        </select>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-slate-500 peer-disabled:opacity-50 dark:text-slate-400"
+        >
+          <path d="m6 8 4 4 4-4" />
+        </svg>
+      </span>
     </label>
 
     @if (errorText) {
@@ -88,6 +104,7 @@ let nextSelectId = 0;
 })
 export class UiSelectComponent implements ControlValueAccessor {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() placeholder = '';
@@ -105,6 +122,7 @@ export class UiSelectComponent implements ControlValueAccessor {
   readonly blurred = output<FocusEvent>();
 
   protected value = '';
+  private readonly formDisabled = signal(false);
 
   private onChange: (value: string) => void = () => undefined;
   private onTouched: () => void = () => undefined;
@@ -117,21 +135,25 @@ export class UiSelectComponent implements ControlValueAccessor {
     return this.errorText || this.helperText ? this.messageId : null;
   }
 
+  protected get isDisabled(): boolean {
+    return this.disabled || this.formDisabled();
+  }
+
   protected get selectClasses(): string {
     return uiClassNames(
-      'block w-full appearance-none rounded-lg border bg-white text-slate-900 shadow-sm transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:disabled:bg-slate-900',
-      'bg-[right_0.75rem_center] bg-no-repeat pr-10',
-      this.size === 'sm' && 'h-8 px-2.5 py-1.5 text-sm',
-      this.size === 'md' && 'h-10 px-3 py-2 text-sm',
-      this.size === 'lg' && 'h-12 px-4 py-2.5 text-base',
+      'peer block w-full appearance-none rounded-[var(--ui-control-radius,0.5rem)] border bg-white pr-10 text-slate-900 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950 dark:disabled:bg-slate-900',
+      this.size === 'sm' && 'h-[var(--ui-control-height-sm,2rem)] px-2.5 py-1.5 text-sm',
+      this.size === 'md' && 'h-[var(--ui-control-height-md,2.5rem)] px-3 py-2 text-sm',
+      this.size === 'lg' && 'h-[var(--ui-control-height-lg,3rem)] px-4 py-2.5 text-base',
       this.errorText
-        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30 dark:border-red-400'
-        : 'border-slate-300 focus:border-blue-500 focus:ring-blue-500/30 dark:border-slate-700 dark:focus:border-blue-400',
+        ? 'border-red-500 focus-visible:border-red-500 dark:border-red-400'
+        : 'border-slate-300 focus-visible:border-blue-500 dark:border-slate-700 dark:focus-visible:border-blue-400',
     );
   }
 
   writeValue(value: string | null): void {
     this.value = value ?? '';
+    this.changeDetector.markForCheck();
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -143,7 +165,8 @@ export class UiSelectComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.formDisabled.set(isDisabled);
+    this.changeDetector.markForCheck();
   }
 
   protected onSelect(event: Event): void {

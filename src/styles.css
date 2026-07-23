@@ -1,5 +1,6 @@
 @import '@fontsource-variable/inter/standard.css';
 @import 'tailwindcss';
+@import '../projects/ui/styles/theme.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 

@@ -25,9 +25,9 @@ export type UiInputLabelMode = 'top' | 'floating' | 'hidden';
 export type UiInputCounterMode = 'characters' | 'words';
 
 const SIZE_CLASSES: Record<UiInputSize, string> = {
-  sm: 'min-h-8 px-2.5 py-1.5 text-sm',
-  md: 'min-h-10 px-3 py-2 text-sm',
-  lg: 'min-h-12 px-4 py-2.5 text-base',
+  sm: 'min-h-[var(--ui-control-height-sm,2rem)] px-2.5 py-1.5 text-sm',
+  md: 'min-h-[var(--ui-control-height-md,2.5rem)] px-3 py-2 text-sm',
+  lg: 'min-h-[var(--ui-control-height-lg,3rem)] px-4 py-2.5 text-base',
 };
 
 const FLOATING_SIZE_CLASSES: Record<UiInputSize, string> = {
@@ -38,13 +38,10 @@ const FLOATING_SIZE_CLASSES: Record<UiInputSize, string> = {
 
 const INTENT_CLASSES: Record<UiInputIntent, string> = {
   default:
-    'border-slate-300 focus-within:border-blue-500 focus-within:ring-blue-500/30 dark:border-slate-700 dark:focus-within:border-blue-400',
-  success:
-    'border-emerald-500 focus-within:border-emerald-500 focus-within:ring-emerald-500/30 dark:border-emerald-400',
-  warning:
-    'border-amber-500 focus-within:border-amber-500 focus-within:ring-amber-500/30 dark:border-amber-400',
-  danger:
-    'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/30 dark:border-red-400',
+    'border-slate-300 focus-within:border-blue-500 dark:border-slate-700 dark:focus-within:border-blue-400',
+  success: 'border-emerald-500 focus-within:border-emerald-500 dark:border-emerald-400',
+  warning: 'border-amber-500 focus-within:border-amber-500 dark:border-amber-400',
+  danger: 'border-red-500 focus-within:border-red-500 dark:border-red-400',
 };
 
 const DEFAULT_VALIDATION_MESSAGES: Record<string, string> = {
@@ -243,7 +240,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected get controlFrameClasses(): string {
     return uiClassNames(
-      'relative flex w-full items-center gap-2 rounded-lg border shadow-sm transition-colors focus-within:ring-2',
+      'relative flex w-full items-center gap-2 rounded-[var(--ui-control-radius,0.5rem)] border shadow-sm transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-600 has-[:focus-visible]:ring-offset-2 dark:has-[:focus-visible]:ring-blue-400 dark:has-[:focus-visible]:ring-offset-slate-950',
       this.labelMode === 'floating' ? FLOATING_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
       this.appearance === 'filled'
         ? 'bg-slate-100 dark:bg-slate-900'
@@ -274,7 +271,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected get floatingLabelClasses(): string {
     return uiClassNames(
-      'pointer-events-none absolute left-3 origin-left transition-all duration-150',
+      'pointer-events-none absolute left-3 origin-left transition-all duration-[var(--ui-duration-normal,150ms)]',
       this.isFloatingLabelRaised
         ? 'top-1 text-xs text-slate-500 dark:text-slate-400'
         : 'top-1/2 -translate-y-1/2 text-sm text-slate-400 dark:text-slate-500',

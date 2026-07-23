@@ -67,12 +67,14 @@ also require shape, text, icon, border, or ARIA information.
 - Circular controls and avatars use `rounded-full` only when the geometry is actually circular.
 - Resting controls use no shadow or a one-pixel/subtle small shadow.
 - Hover may increase elevation by one restrained level.
-- Pressed controls move down by one pixel and remove elevation; never scale or squash controls.
+- Pressed buttons use a brief brightness change without translation, scaling, or layout movement.
 
 ## Focus And Motion
 
-- Keyboard focus uses a 2px primary ring with a 2px offset.
-- Dark mode changes both the ring and ring-offset colors so the gap stays visible.
+- Keyboard focus uses the shared 2px blue-600 ring with a 2px offset.
+- Dark mode uses a blue-400 ring and slate-950 offset so the gap stays visible.
+- Button clears its decorative inset-ring state during keyboard focus so the focus ring remains
+  outside the control; Button Group keeps overflow visible and raises the focused button.
 - Standard interaction duration is 150ms with an ease-out curve.
 - Press feedback may use 75ms.
 - Respect `prefers-reduced-motion`; motion is never required to understand state.
@@ -82,8 +84,8 @@ also require shape, text, icon, border, or ARIA information.
 NgNova UI is icon-library agnostic. Documentation examples use Heroicons through `@ng-icons`, but
 public Button APIs accept any projected icon marked with `uiButtonIconStart` or `uiButtonIconEnd`.
 
-- Standard button icon: 16px.
-- Icon-only button glyph: 18px inside a 32/40/48px square control.
+- Standard button markers default to 16px and scale with the component-owned icon-size variable.
+- Icon-only glyphs are 16/18/20px inside 32/40/48px square controls.
 - Outline icons use an approximately 2px stroke at standard size.
 - SVGs must fill the marker container and render as blocks to avoid baseline gaps.
 - Decorative icons are `aria-hidden`; icon-only controls require an accessible label.
@@ -100,10 +102,35 @@ public Button APIs accept any projected icon marked with `uiButtonIconStart` or 
 All Button appearances use the same typography, icon geometry, focus treatment, and interaction
 timing. Semantic intent changes color, not layout.
 
+The modern visual API combines `appearance` (`solid`, `outline`, `ghost`, `text`, or `tonal`) with
+`intent` (`primary`, `secondary`, `success`, `warning`, `danger`, or `neutral`). The legacy
+`variant` input remains supported for compatibility. Buttons use a 150ms ease-out color, border,
+shadow, and filter transition; pointer press feedback is a 75ms brightness change. Disabled and
+loading buttons do not activate, and loading replaces decorative icons with a labelled spinner.
+
+Button Group connects adjacent corners without clipping the shared outer focus ring. The focused
+button receives a raised stacking layer so its ring remains visible over neighboring controls.
+
 ## Implementation Sources
 
 - Demo font, theme, and icon normalization: `src/styles.css`
+- Public theme tokens: `projects/ui/styles/theme.css`
+- Theme adoption and stability guidance: `docs/THEME_MIGRATION.md`
 - Button geometry and state classes: `projects/ui/button/src/button.ts`
 - Consumer Tailwind and dark-mode setup: `README.md` and `/theming`
 
 Any new visual primitive should update this document when it changes a shared foundation.
+
+## Public Theme Token Contract
+
+Consumers may opt into `@ngnova/ui/styles/theme.css`. The stylesheet defines three stable layers:
+
+1. Foundation tokens cover type scales, spacing, radii, elevation, and motion.
+2. Semantic tokens describe canvas, surfaces, text, borders, brand, feedback, focus, and backdrop.
+3. Component tokens describe shared control heights/radius, focus geometry, dialog widths, and toast offset.
+
+The stylesheet never sets the consumer's body font. `--ui-font-family` defaults to `inherit`.
+Light values live on `:root` and `[data-ui-theme='light']`; dark values respond to either `.dark`
+or `[data-ui-theme='dark']`. Reduced-motion and forced-colors media queries adjust the same token
+contract. Token removals, renames, or semantic changes require migration guidance because `--ui-*`
+names are public API.

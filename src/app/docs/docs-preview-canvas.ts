@@ -17,6 +17,7 @@ let nextExampleId = 0;
     <section
       class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
       [attr.aria-labelledby]="titleId"
+      [attr.data-visual-example]="visualId() || null"
     >
       <div
         class="grid gap-4 border-b border-blue-200 p-4 dark:border-blue-950 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:p-5"
@@ -102,6 +103,7 @@ export class DocsPreviewCanvasComponent {
   readonly code = input.required<string>();
   readonly filename = input('example.html');
   readonly language = input('Angular template');
+  readonly visualId = input('');
 
   protected readonly activeView = signal<DocsExampleView>('preview');
   protected readonly views: readonly { readonly label: string; readonly value: DocsExampleView }[] =

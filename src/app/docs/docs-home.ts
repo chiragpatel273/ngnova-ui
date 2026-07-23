@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
 import { UiButtonComponent } from '@ngnova/ui/button';
@@ -19,39 +19,11 @@ interface HomePrinciple {
   readonly short: string;
 }
 
-interface HomeAdvantage {
-  readonly title: string;
-  readonly description: string;
-  readonly proof: string;
-}
-
-interface HomePath {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly description: string;
-  readonly link: string;
-  readonly action: string;
-}
-
-interface HomeCategory {
-  readonly name: string;
-  readonly description: string;
-  readonly count: number;
-  readonly link: string;
-}
-
 interface HomeUpdate {
   readonly version: string;
   readonly title: string;
   readonly description: string;
   readonly meta: string;
-}
-
-interface FeaturedComponent {
-  readonly name: string;
-  readonly slug: string;
-  readonly category: string;
-  readonly summary: string;
 }
 
 @Component({
@@ -70,7 +42,7 @@ interface FeaturedComponent {
         <div class="grid gap-10 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_31rem] lg:px-6 lg:py-12">
           <div class="min-w-0 self-center">
             <div class="flex flex-wrap items-center gap-2">
-              <ui-badge variant="danger" size="sm">Version 0.1 is now live</ui-badge>
+              <ui-badge variant="danger" size="sm">Package version 0.1.0</ui-badge>
               <ui-badge variant="info" size="sm">Angular 22 ready</ui-badge>
             </div>
 
@@ -81,9 +53,9 @@ interface FeaturedComponent {
             </h1>
 
             <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              The enterprise-scale Angular component library for high-performance teams. Build
-              resilient, accessible, and themeable applications with focused standalone imports and
-              production-ready documentation.
+              An Angular 22 standalone component library with focused package entry points, Tailwind
+              v4 styling, API-aligned documentation, and a release pipeline that builds a real
+              consumer application.
             </p>
 
             <div class="mt-7 flex flex-wrap gap-3">
@@ -98,9 +70,11 @@ interface FeaturedComponent {
             <p
               class="mt-7 border-t border-blue-100 pt-5 text-sm text-slate-500 dark:border-blue-950 dark:text-slate-400"
             >
-              Trusted by
-              <span class="font-semibold text-slate-950 dark:text-slate-100">2,500+</span>
-              engineering teams building Angular product systems.
+              Current release evidence:
+              <span class="font-semibold text-slate-950 dark:text-slate-100">
+                {{ componentCount }} documented components
+              </span>
+              with library, documentation, package, and consumer checks.
             </p>
           </div>
 
@@ -142,13 +116,19 @@ interface FeaturedComponent {
         class="border-b border-blue-100 bg-white px-5 py-8 text-center dark:border-blue-950 dark:bg-slate-950 lg:px-6"
       >
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-          Trusted by leading teams
+          Repository-backed release facts
         </p>
-        <div
-          class="mt-5 grid gap-4 text-sm font-semibold uppercase text-slate-400 sm:grid-cols-3 lg:grid-cols-6"
-        >
-          @for (team of trustedTeams; track team) {
-            <span>{{ team }}</span>
+        <div class="mt-5 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-4">
+          @for (metric of metrics; track metric.label) {
+            <section class="rounded border border-blue-100 p-4 dark:border-blue-950">
+              <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">{{ metric.value }}</p>
+              <h2 class="mt-1 text-sm font-semibold text-slate-950 dark:text-slate-50">
+                {{ metric.label }}
+              </h2>
+              <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                {{ metric.description }}
+              </p>
+            </section>
           }
         </div>
       </section>
@@ -156,10 +136,10 @@ interface FeaturedComponent {
       <section class="bg-slate-100 px-5 py-10 dark:bg-slate-950 lg:px-6">
         <div class="mx-auto max-w-3xl text-center">
           <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
-            Powering Enterprise Workflows
+            Built around verifiable contracts
           </h2>
           <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-            A practical component system for modern, scalable Angular engineering.
+            Each claim below maps to source code, generated package output, or the release pipeline.
           </p>
         </div>
 
@@ -189,7 +169,7 @@ interface FeaturedComponent {
       >
         <div>
           <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
-            Analytics Card Component
+            Package and consumer verification
           </h2>
           <div class="mt-5 grid gap-3">
             @for (item of analyticsHighlights; track item) {
@@ -205,18 +185,19 @@ interface FeaturedComponent {
           >
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs font-semibold uppercase text-slate-500">Weekly growth</p>
-                <p class="mt-1 text-4xl font-bold text-slate-950 dark:text-slate-50">24.8%</p>
+                <p class="text-xs font-semibold uppercase text-slate-500">Release pipeline</p>
+                <p class="mt-1 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                  Source to consumer
+                </p>
               </div>
-              <ui-tag variant="success">+2.4%</ui-tag>
+              <ui-tag variant="success">Passing</ui-tag>
             </div>
-            <div class="mt-6 flex h-28 items-end gap-3">
-              @for (bar of chartBars; track $index) {
-                <span
-                  class="flex-1 bg-blue-100 dark:bg-blue-950/70"
-                  [class.bg-blue-700]="$last"
-                  [style.height.%]="bar"
-                ></span>
+            <div class="mt-6 grid gap-3">
+              @for (check of releaseChecks; track check) {
+                <p class="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
+                  <span class="size-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                  {{ check }}
+                </p>
               }
             </div>
           </div>
@@ -224,14 +205,14 @@ interface FeaturedComponent {
 
         <div class="grid content-start gap-5">
           <app-docs-code-block
-            [code]="analyticsTemplateCode"
-            filename="usage.html"
+            [code]="quickStartCode"
+            filename="app.component.ts"
             language="Angular template"
           />
           <app-docs-code-block
-            [code]="analyticsComponentCode"
-            filename="component.ts"
-            language="TypeScript"
+            [code]="packageSetupCode"
+            filename="styles.css and template.html"
+            language="CSS and Angular template"
           />
         </div>
       </section>
@@ -276,10 +257,10 @@ interface FeaturedComponent {
       </section>
 
       <section class="bg-slate-900 px-5 py-14 text-center text-white lg:px-6">
-        <h2 class="text-4xl font-bold tracking-normal">Ready to optimize your workflow?</h2>
+        <h2 class="text-4xl font-bold tracking-normal">Ready to inspect the implementation?</h2>
         <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-300">
-          Join developers building scalable, reliable Angular applications with a component suite
-          designed for product teams.
+          Start with the guide, inspect each public API, and use the same package paths exercised by
+          the consumer smoke build.
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
           <a routerLink="/guide">
@@ -295,6 +276,7 @@ interface FeaturedComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocsHomeComponent {
+  protected readonly componentCount = componentDocs.length;
   protected readonly heroCode = `import { Component } from '@angular/core';
 import { UiCardComponent } from '@ngnova/ui/card';
 
@@ -302,22 +284,11 @@ import { UiCardComponent } from '@ngnova/ui/card';
   selector: 'app-hero-card',
   standalone: true,
   imports: [UiCardComponent],
-  template: '<ui-card elevated="true">...</ui-card>',
+  template: '<ui-card variant="elevated" padding="lg">...</ui-card>',
 })
 export class HeroCardComponent {
   title = 'Hello World';
 }`;
-
-  protected readonly analyticsTemplateCode = `<ui-analytics-card
-  title="Weekly Growth"
-  [data]="growthStats"
-  [trend]="2.4"
-  suite="recent">
-</ui-analytics-card>`;
-
-  protected readonly analyticsComponentCode = `const growthStats = this.analyticsService
-  .getWeekStats()
-  .pipe(map((response) => response.payload));`;
 
   protected readonly quickStartCode = `import { Component } from '@angular/core';
 import { UiButtonComponent } from '@ngnova/ui/button';
@@ -336,22 +307,18 @@ export class AppComponent {}`;
   Create project
 </ui-button>`;
 
-  protected readonly trustedTeams: readonly string[] = [
-    'TechForge',
-    'Skystream',
-    'Blocksy',
-    'Voltix',
-    'Nexus',
-    'Northstar',
-  ];
-
   protected readonly analyticsHighlights: readonly string[] = [
-    'Real-time data synchronization with RxJS streams',
-    'Configurable sparklines and growth metrics',
-    'Full dark mode and high-contrast support',
+    'ng-packagr emits the root package and isolated component entry points',
+    'Package audit and npm dry run inspect the generated dist/ui output',
+    'Consumer smoke installs the tarball and builds a separate Angular application',
   ];
 
-  protected readonly chartBars: readonly number[] = [36, 48, 31, 60, 43, 80, 28];
+  protected readonly releaseChecks: readonly string[] = [
+    'Format, lint, and documentation API consistency',
+    'Library and documentation application tests',
+    'Library and production documentation builds',
+    'Package audit, npm dry run, and consumer smoke build',
+  ];
 
   protected readonly updates: readonly HomeUpdate[] = [
     {
@@ -359,14 +326,14 @@ export class AppComponent {}`;
       title: 'Standalone Component Entrypoints',
       description:
         'Focused package paths for every public component, matching how Angular teams scale imports.',
-      meta: 'Released 2 days ago',
+      meta: 'Verified in generated package output',
     },
     {
       version: 'Fix',
       title: 'Docs Example Alignment',
       description:
         'Preview examples, code snippets, and API tables now follow the same documented component contracts.',
-      meta: 'Released 5 days ago',
+      meta: 'Verified by docs API and application tests',
     },
   ];
 
@@ -374,142 +341,43 @@ export class AppComponent {}`;
     {
       label: 'Components',
       value: String(componentDocs.length),
-      description: 'Finished docs pages',
-    },
-    { label: 'Tests', value: '72', description: 'Library specs passing' },
-    { label: 'Builds', value: '2', description: 'Library and demo' },
-    { label: 'Imports', value: '1:1', description: 'Focused entry points' },
-  ];
-
-  protected readonly paths: readonly HomePath[] = [
-    {
-      eyebrow: 'Learn',
-      title: 'Read the guide',
-      description: 'Install the package, configure Tailwind, and understand the library approach.',
-      link: '/guide',
-      action: 'Open guide',
+      description: 'Public components with API-aligned docs pages',
     },
     {
-      eyebrow: 'Build',
-      title: 'Pick a component',
-      description: 'Use live examples, matching snippets, API tables, and accessibility notes.',
-      link: '/components/button',
-      action: 'Browse components',
+      label: 'Compatibility',
+      value: 'Angular 22',
+      description: 'Standalone components built with Angular 22 tooling',
     },
     {
-      eyebrow: 'Compose',
-      title: 'Start from a template',
-      description: 'Preview a realistic admin dashboard built from NgNova UI primitives.',
-      link: '/templates',
-      action: 'View template',
+      label: 'Test suites',
+      value: 'Library + docs',
+      description: '100+ library tests and 10 documentation tests in the current release run',
     },
     {
-      eyebrow: 'Inspect',
-      title: 'Search the API',
-      description: 'Review selectors, imports, inputs, outputs, and public package contracts.',
-      link: '/apis',
-      action: 'Open API reference',
-    },
-  ];
-
-  protected readonly categories: readonly HomeCategory[] = [
-    {
-      name: 'Foundations',
-      description: 'Buttons, badges, tags, progress, cards, and loading states for everyday UI.',
-      count: this.countCategory('Foundations'),
-      link: '/components/button',
-    },
-    {
-      name: 'Forms',
-      description: 'Inputs, selects, text areas, toggles, radios, and checkboxes with form notes.',
-      count: this.countCategory('Forms'),
-      link: '/components/input',
-    },
-    {
-      name: 'Navigation/Data',
-      description: 'Tabs, accordions, navigation patterns, and tables for richer screens.',
-      count: this.countCategory('Navigation/Data'),
-      link: '/components/tabs',
-    },
-    {
-      name: 'Overlays',
-      description: 'Modal and toast primitives with keyboard, focus, and interaction guidance.',
-      count: this.countCategory('Overlays'),
-      link: '/components/modal',
+      label: 'Package checks',
+      value: 'Audit + smoke',
+      description: 'Generated tarball is audited and built in a separate consumer app',
     },
   ];
 
   protected readonly principles: readonly HomePrinciple[] = [
     {
       short: 'API',
-      title: 'Mobile First',
+      title: 'Standalone by default',
       description:
-        'Adaptive layouts and responsive primitives are documented for real mobile, tablet, and desktop usage.',
+        'All public components use standalone Angular entry points with focused package imports.',
     },
     {
       short: 'Theme',
-      title: 'Highly Customizable',
+      title: 'Tailwind v4 contract',
       description:
-        'Tailwind-native styling and focused inputs let teams control visual systems without fighting the library.',
+        'Static utility classes, documented package scanning, and class-based dark mode define the current theme surface.',
     },
     {
       short: 'A11y',
-      title: 'Enterprise Ready',
+      title: 'Release-gated changes',
       description:
-        'Typed APIs, keyboard behavior, accessibility notes, and test coverage are treated as first-release requirements.',
+        'Format, lint, tests, builds, package inspection, and consumer compilation run through one release command.',
     },
   ];
-
-  protected readonly advantages: readonly HomeAdvantage[] = [
-    {
-      title: 'Per-component imports',
-      description:
-        'Every public component has a focused package path that mirrors how developers expect modern Angular libraries to scale.',
-      proof: '@ngnova/ui/button',
-    },
-    {
-      title: 'Tailwind-native styling',
-      description:
-        'Components use static utility classes and dark-mode variants, so teams can adopt the library without a separate theme runtime.',
-      proof: 'Tailwind v4 source',
-    },
-    {
-      title: 'Docs as product recipes',
-      description:
-        'Component pages pair live previews with matching snippets, API tables, accessibility notes, and testing guidance.',
-      proof: `${componentDocs.length} docs pages`,
-    },
-  ];
-
-  protected readonly featuredComponents = computed<readonly FeaturedComponent[]>(() =>
-    ['button', 'input', 'modal', 'table', 'tabs', 'toast']
-      .map((slug) => componentDocs.find((doc) => doc.slug === slug))
-      .filter((doc): doc is (typeof componentDocs)[number] => !!doc)
-      .map((doc) => ({
-        name: doc.name,
-        slug: doc.slug,
-        category: this.categoryFor(doc.slug),
-        summary: doc.summary,
-      })),
-  );
-
-  private categoryFor(slug: string): string {
-    if (['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'].includes(slug)) {
-      return 'Forms';
-    }
-
-    if (['modal', 'toast'].includes(slug)) {
-      return 'Overlays';
-    }
-
-    if (['tabs', 'accordion', 'table'].includes(slug)) {
-      return 'Navigation/Data';
-    }
-
-    return 'Foundations';
-  }
-
-  private countCategory(category: string): number {
-    return componentDocs.filter((doc) => this.categoryFor(doc.slug) === category).length;
-  }
 }

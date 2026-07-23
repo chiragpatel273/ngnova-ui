@@ -20,6 +20,19 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
+  it('keeps documentation screens behind lazy route boundaries', () => {
+    const shell = routes[0];
+    const screenRoutes = shell.children?.filter((route) => !route.redirectTo) ?? [];
+
+    expect(shell.component).toBeUndefined();
+    expect(shell.loadComponent).toBeTypeOf('function');
+    expect(screenRoutes.length).toBeGreaterThan(0);
+    for (const route of screenRoutes) {
+      expect(route.component).toBeUndefined();
+      expect(route.loadComponent).toBeTypeOf('function');
+    }
+  });
+
   it('should render routed docs content', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -30,6 +43,11 @@ describe('App', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
       'Build faster with NgNova UI Docs',
     );
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain(
+      'Repository-backed release facts',
+    );
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('Trusted by');
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('2,500+');
 
     await router.navigateByUrl('/components/button');
     fixture.detectChanges();
@@ -74,6 +92,33 @@ describe('App', () => {
     expect(layout?.classList.contains('dark')).toBe(true);
     expect(lightToggle?.getAttribute('aria-pressed')).toBe('true');
     expect(lightToggle?.textContent?.trim()).toBe('Light mode');
+  });
+
+  it('previews scoped theme tokens without mutating the application theme', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/theming');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const playground = fixture.nativeElement.querySelector('.ui-theme') as HTMLElement;
+    const controls = playground.querySelectorAll<HTMLInputElement>('input[type="color"]');
+    const modeButton = Array.from(playground.querySelectorAll<HTMLButtonElement>('button')).find(
+      (button) => button.textContent?.includes('Preview dark mode'),
+    );
+
+    expect(playground.getAttribute('data-ui-theme')).toBe('light');
+    expect(playground.style.getPropertyValue('--ui-color-primary')).toBe('#2563eb');
+
+    controls[0].value = '#7c3aed';
+    controls[0].dispatchEvent(new Event('input'));
+    modeButton?.click();
+    fixture.detectChanges();
+
+    expect(playground.style.getPropertyValue('--ui-color-primary')).toBe('#7c3aed');
+    expect(playground.getAttribute('data-ui-theme')).toBe('dark');
+    expect(playground.classList).toContain('dark');
   });
 
   it('opens an accessible mobile navigation drawer and closes it with Escape or navigation', async () => {
@@ -135,7 +180,7 @@ describe('App', () => {
     for (const doc of componentDocs) {
       expect(docsBySlug.get(doc.slug)).toBe(doc);
       expect(componentDocDetailsBySlug.has(doc.slug)).toBe(true);
-      expect(doc.selector).toMatch(/^ui-/);
+      expect(doc.selector).toMatch(/^(ui-|\[ui)/);
     }
   });
 

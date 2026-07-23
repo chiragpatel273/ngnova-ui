@@ -8,8 +8,9 @@ const distPackageFile = join(distRoot, 'package.json');
 const componentDirs = readdirSync(uiRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name)
-  .filter((name) => !['src', 'testing'].includes(name))
+  .filter((name) => !['src', 'styles', 'testing'].includes(name))
   .sort();
+const documentedUtilityEntryPoints = new Set(['table-state']);
 
 const failures = [];
 
@@ -59,7 +60,7 @@ for (const slug of componentDirs) {
   if (requireFile(sourceFile, `${slug}: missing secondary source file`)) {
     const source = read(sourceFile);
 
-    if (!source.includes('ChangeDetectionStrategy.OnPush')) {
+    if (source.includes('@Component') && !source.includes('ChangeDetectionStrategy.OnPush')) {
       fail(`${slug}: component source does not include OnPush change detection`);
     }
   }
@@ -109,6 +110,10 @@ if (requireFile(docsDataFile, 'docs-data.ts is missing')) {
   const docsData = read(docsDataFile);
 
   for (const slug of componentDirs) {
+    if (documentedUtilityEntryPoints.has(slug)) {
+      continue;
+    }
+
     if (!new RegExp(`slug:\\s*['"]${escapeRegExp(slug)}['"]`).test(docsData)) {
       fail(`${slug}: missing component docs metadata`);
     }
@@ -137,9 +142,21 @@ if (existsSync(distRoot)) {
       fail('dist package name must be @ngnova/ui');
     }
 
-    if (packageJson.sideEffects !== false) {
-      fail('dist package sideEffects must be false');
+    if (
+      !Array.isArray(packageJson.sideEffects) ||
+      !packageJson.sideEffects.includes('./styles/theme.css')
+    ) {
+      fail('dist package must mark only the opt-in theme stylesheet as a side effect');
     }
+
+    const themeExport = packageJson.exports?.['./styles/theme.css'];
+    if (
+      themeExport?.style !== './styles/theme.css' ||
+      themeExport?.default !== './styles/theme.css'
+    ) {
+      fail('dist package must export ./styles/theme.css');
+    }
+    requireFile(join(distRoot, 'styles', 'theme.css'), 'dist package is missing styles/theme.css');
 
     if (packageJson.publishConfig?.access !== 'public') {
       fail('dist package publishConfig.access must be public');

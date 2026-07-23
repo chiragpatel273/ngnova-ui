@@ -14,7 +14,7 @@ function uiClassNames(...classes: (string | false | null | undefined)[]): string
 
 export type UiAlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
-const BASE_CLASSES = 'rounded-md border p-4 text-sm';
+const BASE_CLASSES = 'rounded-[var(--ui-surface-radius,0.75rem)] border p-4 text-sm';
 
 const VARIANT_CLASSES: Record<UiAlertVariant, string> = {
   info: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-100',
@@ -45,11 +45,21 @@ const VARIANT_CLASSES: Record<UiAlertVariant, string> = {
           @if (dismissible) {
             <button
               type="button"
-              class="-m-1 inline-flex size-7 items-center justify-center rounded-md text-current opacity-70 transition hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
-              aria-label="Dismiss alert"
+              class="-m-1 inline-flex size-7 items-center justify-center rounded-md text-current opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+              [attr.aria-label]="dismissAriaLabel"
               (click)="dismiss()"
             >
-              <span aria-hidden="true">&times;</span>
+              <svg
+                class="size-4 shrink-0 fill-none stroke-current"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
             </button>
           }
         </div>
@@ -62,6 +72,7 @@ export class UiAlertComponent implements OnChanges {
   @Input() variant: UiAlertVariant = 'info';
   @Input() title = '';
   @Input() ariaRole = '';
+  @Input() dismissAriaLabel = 'Dismiss alert';
   @Input({ transform: booleanAttribute }) open = true;
   @Input({ transform: booleanAttribute }) dismissible = false;
   readonly openChange = output<boolean>();

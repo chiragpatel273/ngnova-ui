@@ -6,9 +6,19 @@ const steps = [
   ['Format check', npm, ['run', 'format:check']],
   ['Lint', npm, ['run', 'lint']],
   ['Docs API consistency', npm, ['run', 'check:docs-api']],
+  ['Focus-visible contract', npm, ['run', 'check:focus-contract']],
+  ['Theme contract', npm, ['run', 'check:theme-contract']],
+  ['Angular compatibility', npm, ['run', 'check:angular-compatibility']],
+  ['Browser and AT support matrix', npm, ['run', 'check:support-matrix']],
+  ['Visual regression manifest', npm, ['run', 'check:visual-manifest']],
+  ['Release documentation', npm, ['run', 'check:release-docs']],
+  ['Project policies', npm, ['run', 'check:project-policies']],
+  ['Versioned documentation contract', npm, ['run', 'check:versioned-docs']],
   ['Library tests', npm, ['run', 'test:lib']],
   ['Docs app tests', npm, ['run', 'test:demo']],
   ['Library build', npm, ['run', 'build:lib']],
+  ['Public API compatibility', npm, ['run', 'check:public-api']],
+  ['Entry-point bundle budgets', npm, ['run', 'check:bundle-budgets']],
   ['Docs app build', npm, ['run', 'build:demo:app']],
   ['Package audit', npm, ['run', 'audit:package']],
   [
@@ -17,7 +27,7 @@ const steps = [
     ['pack', '--dry-run', '--cache', '../../.npm-cache'],
     { cwd: 'dist/ui' },
   ],
-  ['Consumer smoke', npm, ['run', 'smoke:consumer']],
+  ['Zoneless, SSR, and hydration consumer matrix', npm, ['run', 'smoke:consumer']],
 ];
 
 for (const [label, command, args, options = {}] of steps) {

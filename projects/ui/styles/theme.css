@@ -1,0 +1,188 @@
+/* NgNova UI theme contract v1. Token names are public, semver-sensitive API. */
+:root,
+[data-ui-theme='light'] {
+  color-scheme: light;
+
+  /* Foundation */
+  --ui-font-family: inherit;
+  --ui-font-family-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --ui-font-size-xs: 0.75rem;
+  --ui-font-size-sm: 0.875rem;
+  --ui-font-size-md: 1rem;
+  --ui-line-height-tight: 1.25;
+  --ui-line-height-normal: 1.5;
+  --ui-font-weight-regular: 400;
+  --ui-font-weight-medium: 500;
+  --ui-font-weight-semibold: 600;
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 0.75rem;
+  --ui-space-4: 1rem;
+  --ui-space-5: 1.25rem;
+  --ui-space-6: 1.5rem;
+  --ui-radius-sm: 0.375rem;
+  --ui-radius-md: 0.5rem;
+  --ui-radius-lg: 0.75rem;
+  --ui-radius-full: 9999px;
+  --ui-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.08);
+  --ui-shadow-md: 0 4px 12px rgb(15 23 42 / 0.12);
+  --ui-duration-fast: 75ms;
+  --ui-duration-normal: 150ms;
+  --ui-duration-slow: 300ms;
+  --ui-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Semantic */
+  --ui-color-canvas: #f8fafc;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-muted: #f1f5f9;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #475569;
+  --ui-color-text-subtle: #64748b;
+  --ui-color-border: #cbd5e1;
+  --ui-color-border-subtle: #e2e8f0;
+  --ui-color-primary: #2563eb;
+  --ui-color-primary-50: color-mix(in oklab, var(--ui-color-primary) 8%, white);
+  --ui-color-primary-100: color-mix(in oklab, var(--ui-color-primary) 16%, white);
+  --ui-color-primary-200: color-mix(in oklab, var(--ui-color-primary) 28%, white);
+  --ui-color-primary-300: color-mix(in oklab, var(--ui-color-primary) 44%, white);
+  --ui-color-primary-400: color-mix(in oklab, var(--ui-color-primary) 68%, white);
+  --ui-color-primary-500: color-mix(in oklab, var(--ui-color-primary) 84%, white);
+  --ui-color-primary-600: var(--ui-color-primary);
+  --ui-color-primary-700: color-mix(in oklab, var(--ui-color-primary) 84%, black);
+  --ui-color-primary-800: color-mix(in oklab, var(--ui-color-primary) 68%, black);
+  --ui-color-primary-900: color-mix(in oklab, var(--ui-color-primary) 52%, black);
+  --ui-color-primary-950: color-mix(in oklab, var(--ui-color-primary) 34%, black);
+  --ui-color-primary-hover: var(--ui-color-primary-700);
+  --ui-color-primary-contrast: #ffffff;
+  --ui-color-success: #059669;
+  --ui-color-warning: #d97706;
+  --ui-color-danger: #dc2626;
+  --ui-color-focus: #2563eb;
+  --ui-color-backdrop: rgb(2 6 23 / 0.62);
+
+  /* Component */
+  --ui-control-height-sm: 2rem;
+  --ui-control-height-md: 2.5rem;
+  --ui-control-height-lg: 3rem;
+  --ui-control-radius: var(--ui-radius-md);
+  --ui-surface-radius: var(--ui-radius-lg);
+  --ui-control-border: var(--ui-color-border);
+  --ui-control-shadow: var(--ui-shadow-sm);
+  --ui-focus-ring-width: 2px;
+  --ui-focus-ring-offset: 2px;
+  --ui-focus-ring-color: var(--ui-color-focus);
+  --ui-dialog-width-sm: 24rem;
+  --ui-dialog-width-md: 32rem;
+  --ui-dialog-width-lg: 42rem;
+  --ui-dialog-width-xl: 56rem;
+  --ui-drawer-width-sm: 20rem;
+  --ui-drawer-width-md: 28rem;
+  --ui-drawer-width-lg: 36rem;
+  --ui-drawer-height-sm: 16rem;
+  --ui-drawer-height-md: 24rem;
+  --ui-drawer-height-lg: 32rem;
+  --ui-toast-offset: 1rem;
+
+  /* Tailwind cooperation: existing static utilities resolve through public semantic tokens. */
+  --color-blue-50: var(--ui-color-primary-50);
+  --color-blue-100: var(--ui-color-primary-100);
+  --color-blue-200: var(--ui-color-primary-200);
+  --color-blue-300: var(--ui-color-primary-300);
+  --color-blue-400: var(--ui-color-primary-400);
+  --color-blue-500: var(--ui-color-primary-500);
+  --color-blue-600: var(--ui-color-primary-600);
+  --color-blue-700: var(--ui-color-primary-700);
+  --color-blue-800: var(--ui-color-primary-800);
+  --color-blue-900: var(--ui-color-primary-900);
+  --color-blue-950: var(--ui-color-primary-950);
+  --color-emerald-50: color-mix(in oklab, var(--ui-color-success) 8%, white);
+  --color-emerald-100: color-mix(in oklab, var(--ui-color-success) 16%, white);
+  --color-emerald-200: color-mix(in oklab, var(--ui-color-success) 28%, white);
+  --color-emerald-300: color-mix(in oklab, var(--ui-color-success) 44%, white);
+  --color-emerald-400: color-mix(in oklab, var(--ui-color-success) 68%, white);
+  --color-emerald-500: color-mix(in oklab, var(--ui-color-success) 84%, white);
+  --color-emerald-600: var(--ui-color-success);
+  --color-emerald-700: color-mix(in oklab, var(--ui-color-success) 84%, black);
+  --color-emerald-800: color-mix(in oklab, var(--ui-color-success) 68%, black);
+  --color-emerald-900: color-mix(in oklab, var(--ui-color-success) 52%, black);
+  --color-emerald-950: color-mix(in oklab, var(--ui-color-success) 34%, black);
+  --color-amber-50: color-mix(in oklab, var(--ui-color-warning) 8%, white);
+  --color-amber-100: color-mix(in oklab, var(--ui-color-warning) 16%, white);
+  --color-amber-200: color-mix(in oklab, var(--ui-color-warning) 28%, white);
+  --color-amber-300: color-mix(in oklab, var(--ui-color-warning) 44%, white);
+  --color-amber-400: color-mix(in oklab, var(--ui-color-warning) 72%, white);
+  --color-amber-500: var(--ui-color-warning);
+  --color-amber-600: color-mix(in oklab, var(--ui-color-warning) 84%, black);
+  --color-amber-700: color-mix(in oklab, var(--ui-color-warning) 72%, black);
+  --color-amber-800: color-mix(in oklab, var(--ui-color-warning) 60%, black);
+  --color-amber-900: color-mix(in oklab, var(--ui-color-warning) 48%, black);
+  --color-amber-950: color-mix(in oklab, var(--ui-color-warning) 32%, black);
+  --color-red-50: color-mix(in oklab, var(--ui-color-danger) 8%, white);
+  --color-red-100: color-mix(in oklab, var(--ui-color-danger) 16%, white);
+  --color-red-200: color-mix(in oklab, var(--ui-color-danger) 28%, white);
+  --color-red-300: color-mix(in oklab, var(--ui-color-danger) 44%, white);
+  --color-red-400: color-mix(in oklab, var(--ui-color-danger) 72%, white);
+  --color-red-500: color-mix(in oklab, var(--ui-color-danger) 86%, white);
+  --color-red-600: var(--ui-color-danger);
+  --color-red-700: color-mix(in oklab, var(--ui-color-danger) 84%, black);
+  --color-red-800: color-mix(in oklab, var(--ui-color-danger) 68%, black);
+  --color-red-900: color-mix(in oklab, var(--ui-color-danger) 52%, black);
+  --color-red-950: color-mix(in oklab, var(--ui-color-danger) 34%, black);
+}
+
+.dark,
+[data-ui-theme='dark'] {
+  color-scheme: dark;
+  --ui-color-canvas: #020617;
+  --ui-color-surface: #0f172a;
+  --ui-color-surface-muted: #1e293b;
+  --ui-color-surface-raised: #172033;
+  --ui-color-text: #f8fafc;
+  --ui-color-text-muted: #cbd5e1;
+  --ui-color-text-subtle: #94a3b8;
+  --ui-color-border: #475569;
+  --ui-color-border-subtle: #334155;
+  --ui-color-primary: #3b82f6;
+  --ui-color-primary-hover: #60a5fa;
+  --ui-color-primary-contrast: #ffffff;
+  --ui-color-success: #34d399;
+  --ui-color-warning: #fbbf24;
+  --ui-color-danger: #f87171;
+  --ui-color-focus: #60a5fa;
+  --ui-color-backdrop: rgb(2 6 23 / 0.76);
+  --ui-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.28);
+  --ui-shadow-md: 0 6px 18px rgb(0 0 0 / 0.34);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-duration-fast: 0.01ms;
+    --ui-duration-normal: 0.01ms;
+    --ui-duration-slow: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --ui-color-canvas: Canvas;
+    --ui-color-surface: Canvas;
+    --ui-color-surface-muted: Canvas;
+    --ui-color-surface-raised: Canvas;
+    --ui-color-text: CanvasText;
+    --ui-color-text-muted: CanvasText;
+    --ui-color-text-subtle: GrayText;
+    --ui-color-border: ButtonBorder;
+    --ui-color-border-subtle: ButtonBorder;
+    --ui-color-primary: LinkText;
+    --ui-color-primary-hover: LinkText;
+    --ui-color-primary-contrast: Canvas;
+    --ui-color-success: CanvasText;
+    --ui-color-warning: CanvasText;
+    --ui-color-danger: Mark;
+    --ui-color-focus: Highlight;
+    --ui-color-backdrop: Canvas;
+    --ui-shadow-sm: none;
+    --ui-shadow-md: none;
+  }
+}

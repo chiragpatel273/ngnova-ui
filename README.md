@@ -12,7 +12,8 @@ Production-oriented Angular workspace for **NgNova UI**, a small Angular compone
 ## Official Guidance Followed
 
 - Angular libraries are generated with the Angular CLI and built with `@angular/build:ng-packagr`.
-- Public API exports live in `projects/ui/src/public-api.ts`.
+- Public component exports live in focused `projects/ui/<component>/public-api.ts` entry points;
+  `projects/ui/src/public-api.ts` holds only the minimal package-root contract.
 - Angular packages used by the library are declared as `peerDependencies`.
 - Production library builds are used before publishing.
 - The package is partial-Ivy compatible through `projects/ui/tsconfig.lib.prod.json`.
@@ -24,6 +25,14 @@ See [docs/ANGULAR_22_LIBRARY_STANDARDS.md](docs/ANGULAR_22_LIBRARY_STANDARDS.md)
 See [docs/NGNOVA_PRODUCT_ROADMAP.md](docs/NGNOVA_PRODUCT_ROADMAP.md) for the product position,
 release phases, measurable quality gates, and prioritized execution backlog.
 
+## Project Policies
+
+- [Contributing](CONTRIBUTING.md)
+- [Support](SUPPORT.md)
+- [Security](SECURITY.md)
+- [Versioning and deprecation](docs/VERSIONING_AND_DEPRECATION.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
+
 ## Projects
 
 - `projects/ui`: Angular library package source.
@@ -33,6 +42,9 @@ release phases, measurable quality gates, and prioritized execution backlog.
 
 - `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; sizes `sm`, `md`, `lg`; `intent`/`appearance` visual API; disabled/loading states; `pressed`, `focused`, and `blurred` outputs.
 - `UiCardComponent`: header/body/footer content projection, outline/elevated variants, and body padding sizes.
+- `UiFormFieldComponent`: composable label, helper/error messaging, prefix/suffix slots, sizing, appearance, and ARIA wiring for projected native or custom controls.
+- `UiComboboxComponent`: filterable or server-driven suggestions with active-descendant keyboard navigation, Angular Forms, loading/empty states, and localization.
+- `UiDatePickerComponent`: localized calendar-grid date selection with ISO Angular Forms values, min/max and disabled dates, clearing, and full keyboard navigation.
 - `UiInputComponent`: label, placeholder, helper/error text, prefix/suffix slots, clear button, character counter, outline/filled appearance, size variants, validation message mapping, native input attributes, disabled/read-only/required states, focus/blur outputs, and Angular forms support through `ControlValueAccessor`.
 - `UiBadgeComponent`: variants `default`, `success`, `warning`, `danger`, `info`; sizes `sm`, `md`; optional ARIA role/label.
 - `UiModalComponent`: open/close state, sizes, header/body/footer slots, close button, backdrop close, Escape close, focus restore/trap behavior, and dialog ARIA basics.
@@ -44,12 +56,41 @@ release phases, measurable quality gates, and prioritized execution backlog.
 - `UiAlertComponent`: semantic feedback alert with `info`, `success`, `warning`, and `danger` variants plus optional dismiss action.
 - `UiTabsComponent`: keyboard-friendly tablist with two-way active state and disabled tabs.
 - `UiSpinnerComponent`: accessible loading indicator with sizes and decorative mode.
+- `UiTooltipDirective`: delayed hover/focus descriptions, Escape dismissal, collision-aware body overlay, and preserved ARIA relationships.
+- `UiPopoverComponent`: collision-aware interactive floating panel with controlled state, outside/Escape dismissal, focus restoration, and native top-layer enhancement.
+- `UiDrawerComponent`: accessible modal panel for side-sheet and bottom-sheet workflows with focus trapping, scroll lock, dismissal policy, and four edge positions.
+- `UiMenuComponent`: accessible dropdown actions with roving focus, typeahead, links, disabled items, separators, and destructive styling.
+- `UiDividerComponent`: semantic horizontal and vertical separators with labelled and decorative modes plus consistent insets.
+- `UiChipComponent`: compact selectable and removable values with controlled state, semantic variants, sizes, and disabled behavior.
+- `UiBreadcrumbComponent`: semantic hierarchy navigation with current-page state, link selection events, and compact middle collapsing.
+- `UiStepperComponent`: controlled horizontal or vertical workflow progress with complete, current, error, optional, and disabled states.
+- `UiPaginatorComponent`: localized controlled collection navigation with page-size selection and compact ellipsis ranges.
+- `UiTableComponent`: responsive semantic data grids with typed templates, controlled sorting and
+  selection, sticky regions, compact pagination, and loading/error/empty state orchestration.
+- `UiTableStateController`: independently importable headless sorting, immutable key selection, and pagination state from `@ngnova/ui/table-state`.
+- `UiTableVirtualScrollComponent`: optional Angular CDK fixed-size virtualization for large datasets,
+  typed row templates, stable tracking, and bounded DOM rendering from
+  `@ngnova/ui/table-virtual-scroll`.
+- `UiDataViewComponent`: typed responsive grid/list catalogs with controlled layout switching,
+  stable identity, and complete loading/error/empty state handling.
+- `UiTreeComponent`: accessible controlled hierarchy navigation with roving focus, complete arrow-key
+  behavior, typeahead, stable expansion, and single selection.
+- `UiTreeTableComponent`: controlled hierarchical treegrid with expandable rows, sortable columns,
+  row selection, complete async states, and row keyboard navigation.
+- `UiFileUploadComponent`: accessible controlled selection/drop zone with client-side validation,
+  progress presentation, immutable file changes, and explicit consumer-owned upload requests.
+- `UiCommandPaletteComponent`: controlled searchable command dialog with grouped results, global
+  Ctrl/Cmd+K invocation, complete keyboard navigation, focus management, and typed selection events.
+- `UiOverlayComponent`: optional Angular CDK connected-overlay primitive with fallback placement,
+  scroll strategies, dismissal policy, focus entry/restore, backdrop, and lifecycle events.
+- `UiConfirmationDialogComponent` and `UiConfirmationService`: queued Promise-based confirmation
+  workflows with typed results, safe focus, exact-text guards, dismissal policy, and localization.
 
 ## Why NgNova UI
 
 - **Angular 22 standalone first:** component imports are explicit and work without NgModules.
 - **Per-component package paths:** import from paths such as `@ngnova/ui/button`, `@ngnova/ui/input`, and `@ngnova/ui/toast`.
-- **Tailwind-native styling:** components use static Tailwind utility classes and support dark mode without a separate theme runtime.
+- **Tailwind-native styling:** components use static Tailwind utility classes, with an optional versioned CSS-token stylesheet and no theme runtime.
 - **Docs as implementation recipes:** each component page pairs a live preview with matching snippets, API tables, accessibility notes, and testing guidance.
 - **Testing surface included:** reusable Angular CDK harnesses ship from `@ngnova/ui/testing`.
 
@@ -64,12 +105,14 @@ In the consumer app stylesheet:
 
 ```css
 @import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
 @custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";
 ```
 
 Tailwind v4 ignores `node_modules` by default, so the `@source` line is required for consumers unless you later ship prebuilt CSS.
 The `@custom-variant` line makes Tailwind's `dark:` utilities respond to a `.dark` class on the application shell or `html` element.
+The optional theme stylesheet publishes stable `--ui-*` foundation, semantic, and component token layers. Override semantic tokens after the import to brand an application without a JavaScript provider.
 
 ## Import Example
 
@@ -86,8 +129,9 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 export class SaveButtonExample {}
 ```
 
-The root `@ngnova/ui` entry point is intentionally minimal. Import components from their
-focused package paths, such as `@ngnova/ui/button` or `@ngnova/ui/input`.
+The root `@ngnova/ui` entry point is intentionally minimal. Public components are exported from
+their focused public entry points such as `@ngnova/ui/button` or `@ngnova/ui/input`. This prevents
+optional Angular CDK integrations from entering unrelated dependency graphs.
 
 ## Component Test Harnesses
 
@@ -99,7 +143,14 @@ import { UiButtonHarness, UiInputHarness } from '@ngnova/ui/testing';
 
 Harnesses are available for:
 
+- `UiAccordionHarness`
+- `UiAlertHarness`
 - `UiButtonHarness`
+- `UiFormFieldHarness`
+- `UiFileUploadHarness`
+- `UiComboboxHarness`
+- `UiDatePickerHarness`
+- `UiDataViewHarness`
 - `UiInputHarness`
 - `UiCheckboxHarness`
 - `UiSelectHarness`
@@ -107,7 +158,20 @@ Harnesses are available for:
 - `UiSwitchHarness`
 - `UiTextareaHarness`
 - `UiModalHarness`
+- `UiPopoverHarness`
+- `UiDrawerHarness`
+- `UiMenuHarness`
+- `UiChipHarness`
+- `UiBreadcrumbHarness`
+- `UiStepperHarness`
+- `UiPaginatorHarness`
+- `UiTableHarness`
 - `UiTabsHarness`
+- `UiTagHarness`
+- `UiToastHarness`
+- `UiTooltipHarness`
+- `UiTreeHarness`
+- `UiTreeTableHarness`
 
 Install Angular CDK in apps that use these harnesses:
 
@@ -150,6 +214,12 @@ http://localhost:4200/components/button
 ```
 
 Each component page follows the same pattern with a live preview, import snippet, usage example, copy button, and API table.
+
+The stable 1.x documentation URL is
+[`/ngnova-ui/v1/`](https://chiragpatel273.github.io/ngnova-ui/v1/), with component routes such as
+the [Button documentation](https://chiragpatel273.github.io/ngnova-ui/v1/#/components/button).
+See [the hosting and version contract](docs/HOSTED_DOCUMENTATION.md) for build, deployment, and
+future-major rules.
 
 ## Scripts
 

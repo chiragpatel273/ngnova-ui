@@ -52,10 +52,102 @@ describe('UiTabsComponent', () => {
 
   it('supports keyboard navigation across enabled tabs', () => {
     const tablist = fixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const buttons = fixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    buttons[0].focus();
     tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
     fixture.detectChanges();
 
     expect(fixture.componentInstance.active).toBe('api');
+    expect(document.activeElement).toBe(buttons[1]);
+  });
+
+  it('wraps, skips disabled tabs, and supports Home and End', () => {
+    const tablist = fixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const buttons = fixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    buttons[1].focus();
+
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.active).toBe('overview');
+    expect(document.activeElement).toBe(buttons[0]);
+
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.active).toBe('api');
+
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.active).toBe('overview');
+  });
+
+  it('uses vertical arrow keys only for vertical tablists', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'overview');
+    tabsFixture.componentRef.setInput('orientation', 'vertical');
+    let selected = '';
+    tabsFixture.componentInstance.activeChange.subscribe((value) => {
+      selected = value;
+    });
+    tabsFixture.detectChanges();
+
+    const tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const buttons = tabsFixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    buttons[0].focus();
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+
+    expect(selected).toBe('api');
+    expect(document.activeElement).toBe(buttons[1]);
+    expect(tablist.getAttribute('aria-orientation')).toBe('vertical');
+    expect(tablist.className).toContain('flex-col');
+
+    selected = '';
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    expect(selected).toBe('');
+  });
+
+  it('provides one fallback roving tab stop for an empty or invalid active value', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'missing');
+    tabsFixture.detectChanges();
+
+    const buttons = tabsFixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    const panel = tabsFixture.nativeElement.querySelector('[role="tabpanel"]') as HTMLDivElement;
+
+    expect(buttons[0].getAttribute('aria-selected')).toBe('true');
+    expect(buttons[0].tabIndex).toBe(0);
+    expect(buttons[1].tabIndex).toBe(-1);
+    expect(buttons[2].tabIndex).toBe(-1);
+    expect(panel.getAttribute('aria-labelledby')).toBe(buttons[0].id);
+  });
+
+  it('does not emit for the active or a disabled tab', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'overview');
+    let changes = 0;
+    tabsFixture.componentInstance.activeChange.subscribe(() => {
+      changes += 1;
+    });
+    tabsFixture.detectChanges();
+
+    const buttons = tabsFixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    buttons[0].click();
+    buttons[2].click();
+
+    expect(changes).toBe(0);
+    expect(buttons[2].disabled).toBe(true);
   });
 
   it('uses stable sanitized ids for tab and panel relationships', () => {
@@ -72,5 +164,36 @@ describe('UiTabsComponent', () => {
     expect(button.getAttribute('aria-controls')).toBe('release-tabs-panel-release-notes');
     expect(panel.id).toBe('release-tabs-panel-release-notes');
     expect(panel.getAttribute('aria-labelledby')).toBe('release-tabs-tab-release-notes');
+  });
+
+  it('generates unique component IDs and exposes the accessible tablist label', () => {
+    const first = TestBed.createComponent(UiTabsComponent);
+    const second = TestBed.createComponent(UiTabsComponent);
+    first.componentRef.setInput('ariaLabel', 'Release sections');
+    first.detectChanges();
+
+    const tablist = first.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+
+    expect(first.componentInstance.id).not.toBe(second.componentInstance.id);
+    expect(tablist.getAttribute('aria-label')).toBe('Release sections');
+    expect(tablist.getAttribute('aria-orientation')).toBe('horizontal');
+  });
+
+  it('supports full-width tabs and localized overflow without widening the page', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'overview');
+    tabsFixture.componentRef.setInput('fullWidth', true);
+    tabsFixture.detectChanges();
+
+    const tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(tablist.className).toContain('max-w-full');
+    expect(tablist.className).toContain('overflow-auto');
+    expect(tablist.className).toContain('dark:bg-slate-900');
+    expect(tablist.className).toContain('w-full');
+    expect(button.className).toContain('flex-1');
+    expect(button.className).toContain('dark:focus-visible:ring-blue-400');
   });
 });

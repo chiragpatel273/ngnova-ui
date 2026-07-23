@@ -29,8 +29,9 @@ const BAR_CLASSES: Record<UiProgressBarVariant, string> = {
       role="progressbar"
       [attr.aria-label]="label()"
       [attr.aria-valuemin]="indeterminate() ? null : 0"
-      [attr.aria-valuemax]="indeterminate() ? null : max()"
+      [attr.aria-valuemax]="indeterminate() ? null : normalizedMax()"
       [attr.aria-valuenow]="indeterminate() ? null : normalizedValue()"
+      [attr.aria-valuetext]="indeterminate() ? null : ariaValueText() || null"
     >
       <div [class]="barClasses()" [style.width.%]="indeterminate() ? 45 : percentage()"></div>
     </div>
@@ -41,15 +42,21 @@ export class UiProgressBarComponent {
   readonly value = input(0, { transform: numberAttribute });
   readonly max = input(100, { transform: numberAttribute });
   readonly label = input('Progress');
+  readonly ariaValueText = input('');
   readonly variant = input<UiProgressBarVariant>('primary');
   readonly indeterminate = input(false, { transform: booleanAttribute });
 
-  protected readonly normalizedValue = computed(() =>
-    Math.min(Math.max(this.value(), 0), Math.max(this.max(), 1)),
-  );
+  protected readonly normalizedMax = computed(() => {
+    const maximum = this.max();
+    return Number.isFinite(maximum) && maximum > 0 ? maximum : 1;
+  });
+  protected readonly normalizedValue = computed(() => {
+    const value = this.value();
+    return Math.min(Math.max(Number.isFinite(value) ? value : 0, 0), this.normalizedMax());
+  });
 
   protected readonly percentage = computed(
-    () => (this.normalizedValue() / Math.max(this.max(), 1)) * 100,
+    () => (this.normalizedValue() / this.normalizedMax()) * 100,
   );
   protected readonly barClasses = computed(() =>
     uiClassNames(

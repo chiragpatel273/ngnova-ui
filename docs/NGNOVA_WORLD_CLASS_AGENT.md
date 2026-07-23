@@ -92,7 +92,10 @@ A public component is first-release ready only when all items below are true.
 
 ### Package Surface
 
-- Component is exported from `projects/ui/src/public-api.ts`.
+- Component is exported from its `projects/ui/<component>/public-api.ts` secondary entry point.
+- The root `projects/ui/src/public-api.ts` stays minimal because ng-packagr cannot safely compile
+  the same Angular declaration graph into both primary and secondary entry points, and a full root
+  barrel would make optional integrations part of the default dependency graph.
 - Component has a secondary entry point under `projects/ui/<component>/`.
 - Docs use per-component imports such as `@ngnova/ui/button`.
 - Package build emits the entry point under `dist/ui`.
@@ -158,22 +161,23 @@ Avoid one giant example block that forces horizontal scrolling or mixes unrelate
 
 ## Theme And Styling Contract
 
-NgNova UI currently supports light and dark mode through Tailwind classes. It does not yet expose a full theme token provider.
+NgNova UI supports light and dark mode through Tailwind classes and publishes an optional versioned CSS token contract from `@ngnova/ui/styles/theme.css`. It intentionally does not require a runtime theme provider.
 
 Consumer setup must remain documented:
 
 ```css
 @import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
 @custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";
 ```
 
 The agent should preserve this distinction:
 
-- Supported now: light mode, dark mode, Tailwind-native styling, static utility classes.
-- Not supported yet: brand palette API, Material-style theme provider, CSS variable token contract.
+- Supported now: light mode, dark mode, Tailwind-native styling, static utility classes, and foundation/semantic/component CSS variables.
+- Not supported: Material-style runtime providers or arbitrary JavaScript theme mutation APIs.
 
-If theme tokens are added later, treat them as public semver-sensitive API.
+Theme tokens are public semver-sensitive API. Additions are minor; renames, removals, and meaning changes require migration guidance and the appropriate semver change.
 
 ## Release Gates
 

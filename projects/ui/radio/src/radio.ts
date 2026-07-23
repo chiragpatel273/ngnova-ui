@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -7,6 +8,7 @@ import {
   Input,
   inject,
   output,
+  signal,
 } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -37,7 +39,12 @@ let nextRadioGroupId = 0;
     },
   ],
   template: `
-    <fieldset [attr.aria-describedby]="descriptionId" [disabled]="disabled">
+    <fieldset
+      [attr.aria-label]="label ? null : ariaLabel || null"
+      [attr.aria-describedby]="descriptionId"
+      [attr.aria-invalid]="errorText ? 'true' : null"
+      [disabled]="isDisabled"
+    >
       @if (label) {
         <legend class="mb-2 text-sm font-medium text-slate-800 dark:text-slate-100">
           {{ label }}
@@ -49,11 +56,11 @@ let nextRadioGroupId = 0;
           <label [class]="optionClasses(option)">
             <input
               type="radio"
-              class="mt-0.5 size-4 border-slate-300 text-blue-600 shadow-sm focus:ring-2 focus:ring-blue-500/30 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-blue-400/30"
+              class="mt-0.5 size-4 border-slate-300 text-blue-600 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
               [attr.name]="name || groupId"
               [value]="option.value"
               [checked]="value === option.value"
-              [disabled]="disabled || !!option.disabled"
+              [disabled]="isDisabled || !!option.disabled"
               [required]="required"
               (change)="selectOption(option)"
               (focus)="emitFocused($event)"
@@ -88,10 +95,12 @@ let nextRadioGroupId = 0;
 })
 export class UiRadioGroupComponent implements ControlValueAccessor {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() helperText = '';
   @Input() errorText = '';
+  @Input() ariaLabel = '';
   @Input() name = '';
   @Input() groupId = `ui-radio-group-${++nextRadioGroupId}`;
   @Input() orientation: UiRadioOrientation = 'vertical';
@@ -103,6 +112,7 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
   readonly blurred = output<FocusEvent>();
 
   protected value = '';
+  private readonly formDisabled = signal(false);
 
   private onChange: (value: string) => void = () => undefined;
   private onTouched: () => void = () => undefined;
@@ -113,6 +123,10 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
 
   protected get descriptionId(): string | null {
     return this.errorText || this.helperText ? this.messageId : null;
+  }
+
+  protected get isDisabled(): boolean {
+    return this.disabled || this.formDisabled();
   }
 
   protected get groupClasses(): string {
@@ -126,12 +140,13 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
   protected optionClasses(option: UiRadioOption): string {
     return uiClassNames(
       'flex items-start gap-3 rounded-lg',
-      this.disabled || option.disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer',
+      this.isDisabled || option.disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer',
     );
   }
 
   writeValue(value: string | null): void {
     this.value = value ?? '';
+    this.changeDetector.markForCheck();
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -143,11 +158,12 @@ export class UiRadioGroupComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.formDisabled.set(isDisabled);
+    this.changeDetector.markForCheck();
   }
 
   protected selectOption(option: UiRadioOption): void {
-    if (this.disabled || option.disabled || option.value === this.value) {
+    if (this.isDisabled || option.disabled || option.value === this.value) {
       return;
     }
 

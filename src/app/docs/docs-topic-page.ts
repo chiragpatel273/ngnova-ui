@@ -6,6 +6,7 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 
 import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';
+import { ThemePlaygroundComponent } from './theme-playground';
 
 interface TopicSection {
   readonly title: string;
@@ -69,7 +70,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         description:
           'Components preserve native semantics first, then add ARIA only where the pattern needs it.',
         items: [
-          'Keyboard activation and visible focus states',
+          'Keyboard activation with a consistent two-pixel blue focus-visible ring',
           'Associated labels, helper text, and errors',
           'Documented focus handling for overlays',
         ],
@@ -80,7 +81,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
     badge: 'Style Guide',
     title: 'NgNova Visual Foundations',
     summary:
-      'NgNova UI uses intentional typography, static Tailwind classes, and dark-mode variants so components remain consistent without a hidden theme runtime.',
+      'NgNova UI combines static Tailwind classes with versioned CSS tokens for light, dark, reduced-motion, and forced-colors modes—without a hidden theme runtime.',
     ctaLabel: 'Open Guide',
     ctaPath: '/guide',
     sections: [
@@ -91,6 +92,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         items: [
           'Add @custom-variant dark (&:where(.dark, .dark *)) for class-based dark mode',
           'Add @source "../node_modules/@ngnova/ui"',
+          'Optionally import @ngnova/ui/styles/theme.css for the public --ui-* token contract',
           'Toggle the dark class on html or the app shell',
           'Avoid undocumented internal class hooks',
         ],
@@ -142,6 +144,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
 };
 
 const THEME_STYLESHEET_CODE = `@import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
 @custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";`;
 
@@ -173,7 +176,7 @@ export class ThemeToggleComponent {
 @Component({
   selector: 'app-docs-topic-page',
   standalone: true,
-  imports: [RouterLink, UiButtonComponent, DocsCodeBlockComponent],
+  imports: [RouterLink, UiButtonComponent, DocsCodeBlockComponent, ThemePlaygroundComponent],
   template: `
     @if (topic(); as page) {
       <article class="mx-auto max-w-[73rem] pb-20">
@@ -245,6 +248,7 @@ export class ThemeToggleComponent {
           </section>
         } @else if (slug() === 'theming') {
           <section class="mt-10 grid gap-6">
+            <app-theme-playground />
             <article
               class="grid overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950 lg:grid-cols-[20rem_minmax(0,1fr)]"
             >
@@ -258,8 +262,9 @@ export class ThemeToggleComponent {
                   Tailwind stylesheet
                 </h2>
                 <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
-                  NgNova UI ships static Tailwind utility classes. Consumer apps must let Tailwind
-                  scan the package and opt into class-based dark mode.
+                  NgNova UI ships static Tailwind utility classes plus an optional versioned token
+                  stylesheet. Consumer apps must let Tailwind scan the package and opt into
+                  class-based dark mode.
                 </p>
               </div>
               <div class="min-w-0 p-5">
@@ -317,23 +322,26 @@ export class ThemeToggleComponent {
                 </h2>
                 <p class="mt-3 leading-7 text-slate-600 dark:text-slate-300">
                   The NgNova docs use Inter Variable and a system monospace stack. Library
-                  components inherit the consumer application's font, while icon marker directives
-                  normalize icon size, alignment, and accessibility without requiring one icon
-                  package.
+                  components inherit the consumer application's font. Built-in disclosure and
+                  dismiss actions use crisp current-color SVG geometry, while Button icon marker
+                  directives normalize consumer-provided icon size, alignment, and accessibility
+                  without requiring one icon package.
                 </p>
               </article>
               <article
                 class="rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
-                  Not yet
+                  Versioned contract
                 </p>
                 <h2 class="mt-3 text-xl font-bold text-slate-950 dark:text-slate-50">
-                  Theme tokens
+                  Theme tokens v1
                 </h2>
                 <p class="mt-3 leading-7 text-slate-600 dark:text-slate-300">
-                  NgNova UI does not yet expose Material-style theme providers, brand palettes, or
-                  CSS variable token APIs. That should be a planned post-foundation feature.
+                  Import <code class="font-mono">@ngnova/ui/styles/theme.css</code> to receive
+                  foundation, semantic, and component <code class="font-mono">--ui-*</code>
+                  custom properties. Override semantic tokens after the import; no JavaScript
+                  provider or forced font is required.
                 </p>
               </article>
             </section>

@@ -19,6 +19,11 @@ import type {
 export type UiModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 let nextModalId = 0;
+const openModalStacks = new WeakMap<Document, UiModalComponent[]>();
+const documentScrollLocks = new WeakMap<
+  Document,
+  { count: number; readonly previousOverflow: string }
+>();
 
 @Component({
   selector: 'ui-modal',
@@ -36,7 +41,8 @@ let nextModalId = 0;
         ></div>
         <section
           #dialogPanel
-          class="relative max-h-[90dvh] w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/20 outline-none dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/40"
+          class="relative max-h-[90dvh] w-full overflow-hidden rounded-[var(--ui-surface-radius,0.75rem)] border border-slate-200 bg-white shadow-xl shadow-slate-950/20 outline-none dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/40"
+          [style.max-width]="dialogWidth"
           [class.max-w-sm]="size === 'sm'"
           [class.max-w-lg]="size === 'md'"
           [class.max-w-2xl]="size === 'lg'"
@@ -56,11 +62,21 @@ let nextModalId = 0;
             </div>
             <button
               type="button"
-              class="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:hover:bg-slate-800 dark:hover:text-slate-100"
-              aria-label="Close dialog"
+              class="rounded-md p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+              [attr.aria-label]="closeAriaLabel"
               (click)="close()"
             >
-              <span aria-hidden="true">x</span>
+              <svg
+                class="size-5 shrink-0 fill-none stroke-current"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
             </button>
           </header>
 
@@ -87,6 +103,8 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
   @Input() titleId = `ui-modal-title-${++nextModalId}`;
   @Input() descriptionId = '';
   @Input() ariaLabel = '';
+  @Input() closeAriaLabel = 'Close dialog';
+  @Input() initialFocus = '';
   @Input({ transform: booleanAttribute }) restoreFocus = true;
   readonly openChange = output<boolean>();
   readonly opened = output<void>();
@@ -98,25 +116,46 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
 
   private readonly document = inject(DOCUMENT);
   private previouslyFocusedElement: HTMLElement | null = null;
-  private previousBodyOverflow = '';
   private shouldFocusDialog = false;
+  private hasDocumentScrollLock = false;
+  private registeredAsOpen = false;
+
+  protected get dialogWidth(): string {
+    const widths: Record<UiModalSize, string> = {
+      sm: 'var(--ui-dialog-width-sm, 24rem)',
+      md: 'var(--ui-dialog-width-md, 32rem)',
+      lg: 'var(--ui-dialog-width-lg, 42rem)',
+      xl: 'var(--ui-dialog-width-xl, 56rem)',
+    };
+    return widths[this.size];
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['open']?.currentValue === true) {
       this.previouslyFocusedElement = this.document.activeElement as HTMLElement | null;
+      this.registerOpenModal();
       this.lockDocumentScroll();
       this.shouldFocusDialog = true;
       this.opened.emit();
     } else if (changes['open']?.previousValue === true && changes['open']?.currentValue === false) {
+      const wasTopmost = this.isTopmostModal();
+      this.unregisterOpenModal();
       this.closed.emit();
       this.unlockDocumentScroll();
-      this.restorePreviouslyFocusedElement();
+      if (wasTopmost) {
+        this.restorePreviouslyFocusedElement();
+      }
     }
   }
 
   ngOnDestroy(): void {
-    if (this.open) {
+    if (this.registeredAsOpen) {
+      const wasTopmost = this.isTopmostModal();
+      this.unregisterOpenModal();
       this.unlockDocumentScroll();
+      if (wasTopmost) {
+        this.restorePreviouslyFocusedElement();
+      }
     }
   }
 
@@ -130,7 +169,7 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
   }
 
   handleKeydown(event: Event): void {
-    if (!this.open) {
+    if (!this.open || !this.isTopmostModal()) {
       return;
     }
 
@@ -178,8 +217,26 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
       return;
     }
 
+    const requestedElement = this.getRequestedInitialFocus(panel);
     const firstFocusable = this.getFocusableElements(panel)[0];
-    (firstFocusable ?? panel).focus();
+    (requestedElement ?? firstFocusable ?? panel).focus();
+  }
+
+  private getRequestedInitialFocus(panel: HTMLElement): HTMLElement | null {
+    if (!this.initialFocus) {
+      return null;
+    }
+
+    try {
+      const requestedElement = panel.querySelector<HTMLElement>(this.initialFocus);
+      return requestedElement &&
+        !requestedElement.hasAttribute('disabled') &&
+        requestedElement.tabIndex !== -1
+        ? requestedElement
+        : null;
+    } catch {
+      return null;
+    }
   }
 
   private trapFocus(event: KeyboardEvent): void {
@@ -227,11 +284,66 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
   }
 
   private lockDocumentScroll(): void {
-    this.previousBodyOverflow = this.document.body.style.overflow;
-    this.document.body.style.overflow = 'hidden';
+    if (this.hasDocumentScrollLock) {
+      return;
+    }
+
+    const currentLock = documentScrollLocks.get(this.document);
+    if (currentLock) {
+      currentLock.count += 1;
+    } else {
+      documentScrollLocks.set(this.document, {
+        count: 1,
+        previousOverflow: this.document.body.style.overflow,
+      });
+      this.document.body.style.overflow = 'hidden';
+    }
+    this.hasDocumentScrollLock = true;
   }
 
   private unlockDocumentScroll(): void {
-    this.document.body.style.overflow = this.previousBodyOverflow;
+    if (!this.hasDocumentScrollLock) {
+      return;
+    }
+
+    const currentLock = documentScrollLocks.get(this.document);
+    if (currentLock) {
+      currentLock.count -= 1;
+      if (currentLock.count === 0) {
+        this.document.body.style.overflow = currentLock.previousOverflow;
+        documentScrollLocks.delete(this.document);
+      }
+    }
+    this.hasDocumentScrollLock = false;
+  }
+
+  private registerOpenModal(): void {
+    const stack = openModalStacks.get(this.document) ?? [];
+    const existingIndex = stack.indexOf(this);
+    if (existingIndex !== -1) {
+      stack.splice(existingIndex, 1);
+    }
+    stack.push(this);
+    openModalStacks.set(this.document, stack);
+    this.registeredAsOpen = true;
+  }
+
+  private unregisterOpenModal(): void {
+    const stack = openModalStacks.get(this.document);
+    if (stack) {
+      const index = stack.indexOf(this);
+      if (index !== -1) {
+        stack.splice(index, 1);
+      }
+      if (!stack.length) {
+        openModalStacks.delete(this.document);
+      }
+    }
+    this.registeredAsOpen = false;
+  }
+
+  private isTopmostModal(): boolean {
+    const stack = openModalStacks.get(this.document);
+    return stack?.[stack.length - 1] === this;
   }
 }

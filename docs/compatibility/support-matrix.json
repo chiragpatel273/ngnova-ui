@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "browserPolicy": {
+    "browserslist": [
+      "last 2 Chrome major versions",
+      "last 2 Edge major versions",
+      "last 2 Firefox major versions",
+      "last 2 Safari major versions",
+      "last 2 iOS major versions",
+      "not dead"
+    ],
+    "tier1": [
+      {
+        "browser": "Chrome",
+        "platform": "Windows and Android",
+        "versions": "latest 2 stable majors"
+      },
+      { "browser": "Edge", "platform": "Windows", "versions": "latest 2 stable majors" },
+      {
+        "browser": "Firefox",
+        "platform": "Windows and macOS",
+        "versions": "latest 2 stable majors"
+      },
+      { "browser": "Safari", "platform": "macOS", "versions": "latest 2 stable majors" },
+      { "browser": "Safari", "platform": "iOS and iPadOS", "versions": "latest 2 stable majors" }
+    ]
+  },
+  "assistiveTechnology": [
+    {
+      "screenReader": "NVDA",
+      "browser": "Chrome",
+      "platform": "Windows",
+      "cadence": "every stable release"
+    },
+    {
+      "screenReader": "NVDA",
+      "browser": "Firefox",
+      "platform": "Windows",
+      "cadence": "every stable release"
+    },
+    {
+      "screenReader": "Narrator",
+      "browser": "Edge",
+      "platform": "Windows",
+      "cadence": "every stable release"
+    },
+    {
+      "screenReader": "VoiceOver",
+      "browser": "Safari",
+      "platform": "macOS",
+      "cadence": "every stable release"
+    },
+    {
+      "screenReader": "VoiceOver",
+      "browser": "Safari",
+      "platform": "iOS and iPadOS",
+      "cadence": "every stable release"
+    }
+  ],
+  "interactionModes": [
+    "keyboard-only",
+    "screen reader",
+    "touch",
+    "pointer",
+    "200% zoom",
+    "400% text zoom",
+    "forced colors",
+    "reduced motion",
+    "light and dark color schemes"
+  ]
+}

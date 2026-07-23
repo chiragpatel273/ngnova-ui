@@ -1,0 +1,18 @@
+{
+  "$schema": "./versions.schema.json",
+  "schemaVersion": 1,
+  "provider": "github-pages",
+  "repository": "chiragpatel273/ngnova-ui",
+  "canonicalOrigin": "https://chiragpatel273.github.io",
+  "projectPath": "/ngnova-ui",
+  "defaultVersion": "v1",
+  "versions": [
+    {
+      "id": "v1",
+      "packageRange": "1.x",
+      "status": "release-candidate",
+      "basePath": "/ngnova-ui/v1/",
+      "routeMode": "hash"
+    }
+  ]
+}

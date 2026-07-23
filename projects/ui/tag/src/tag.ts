@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Directive,
   booleanAttribute,
   computed,
   input,
@@ -33,23 +34,48 @@ const SIZE_CLASSES: Record<UiTagSize, string> = {
   md: 'px-2.5 py-1.5 text-sm',
 };
 
+@Directive({
+  selector: '[uiTagIcon]',
+  standalone: true,
+  host: {
+    class: 'size-4 shrink-0',
+    'aria-hidden': 'true',
+  },
+})
+export class UiTagIconDirective {}
+
 @Component({
   selector: 'ui-tag',
   standalone: true,
   template: `
-    <span [attr.aria-label]="ariaLabel() || null" [class]="classes()">
+    <span
+      [attr.role]="ariaLabel() ? 'group' : null"
+      [attr.aria-label]="ariaLabel() || null"
+      [class]="classes()"
+    >
+      <ng-content select="[uiTagIcon]" />
       @if (icon()) {
-        <span aria-hidden="true">{{ icon() }}</span>
+        <span class="shrink-0" aria-hidden="true">{{ icon() }}</span>
       }
       <span class="min-w-0 truncate"><ng-content /></span>
       @if (removable()) {
         <button
           type="button"
-          class="rounded-sm px-1 text-current opacity-70 transition hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          class="rounded-sm px-1 text-current opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
           [attr.aria-label]="removeLabel()"
           (click)="removed.emit()"
         >
-          <span aria-hidden="true">x</span>
+          <svg
+            class="size-4 shrink-0 fill-none stroke-current"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
         </button>
       }
     </span>

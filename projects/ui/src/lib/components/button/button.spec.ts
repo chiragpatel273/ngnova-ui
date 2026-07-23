@@ -272,9 +272,9 @@ describe('UiButtonComponent', () => {
 
   it('applies every current size', () => {
     const sizes: Record<UiButtonSize, readonly string[]> = {
-      sm: ['h-8', 'gap-1.5', 'px-3', 'text-sm', 'leading-5'],
-      md: ['h-10', 'gap-2', 'px-4', 'text-sm', 'leading-5'],
-      lg: ['h-12', 'gap-2.5', 'px-5', 'text-base', 'leading-6'],
+      sm: ['h-[var(--ui-control-height-sm,2rem)]', 'gap-1.5', 'px-3', 'text-sm', 'leading-5'],
+      md: ['h-[var(--ui-control-height-md,2.5rem)]', 'gap-2', 'px-4', 'text-sm', 'leading-5'],
+      lg: ['h-[var(--ui-control-height-lg,3rem)]', 'gap-2.5', 'px-5', 'text-base', 'leading-6'],
     };
 
     for (const [size, expectedClasses] of Object.entries(sizes) as [
@@ -390,7 +390,7 @@ describe('UiButtonComponent', () => {
       .className;
 
     expect(className).toContain('active:brightness-95');
-    expect(className).toContain('active:duration-75');
+    expect(className).toContain('active:duration-[var(--ui-duration-fast,75ms)]');
     expect(className).not.toContain('active:translate');
     expect(className).not.toContain('active:scale');
     expect(className).not.toContain('active:shadow');
@@ -442,8 +442,27 @@ describe('UiButtonComponent', () => {
 
     expect(group.getAttribute('aria-label')).toBe('Table density');
     expect(group.className).toContain('inline-flex');
-    expect(group.className).toContain('overflow-hidden');
+    expect(group.className).toContain('isolate');
+    expect(group.className).toContain('overflow-visible');
+    expect(group.className).not.toContain('overflow-hidden');
     expect(buttons.length).toBe(3);
+  });
+
+  it('keeps grouped keyboard focus rings above adjacent buttons without clipping', () => {
+    const groupFixture = TestBed.createComponent(ButtonGroupHostComponent);
+    groupFixture.detectChanges();
+
+    const group = groupFixture.nativeElement.querySelector('[role="group"]') as HTMLElement;
+    const buttons = Array.from(
+      groupFixture.nativeElement.querySelectorAll('ui-button button'),
+    ) as HTMLButtonElement[];
+
+    expect(group.className).toContain('overflow-visible');
+    for (const button of buttons) {
+      expect(button.className).toContain('focus-visible:z-10');
+      expect(button.className).toContain('focus-visible:ring-offset-2');
+      expect(button.className).toContain('focus-visible:[--tw-ring-inset:initial]');
+    }
   });
 
   it('supports full-width grouped actions', () => {

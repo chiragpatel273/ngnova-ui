@@ -4,6 +4,7 @@ import {
   booleanAttribute,
   computed,
   input,
+  numberAttribute,
   output,
 } from '@angular/core';
 
@@ -14,29 +15,42 @@ export interface UiAccordionItem {
   readonly disabled?: boolean;
 }
 
+let nextAccordionId = 0;
+
 @Component({
   selector: 'ui-accordion',
   standalone: true,
   template: `
     <div
-      class="divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 dark:divide-slate-800 dark:border-slate-800"
+      class="divide-y divide-slate-200 overflow-hidden rounded-[var(--ui-surface-radius,0.75rem)] border border-slate-200 dark:divide-slate-800 dark:border-slate-800"
     >
       @for (item of items(); track item.value) {
         <section>
-          <h3>
+          <div role="heading" [attr.aria-level]="resolvedHeadingLevel()">
             <button
               type="button"
               [id]="buttonId(item)"
               [disabled]="item.disabled"
               [attr.aria-expanded]="isOpen(item)"
               [attr.aria-controls]="panelId(item)"
-              class="flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-medium text-slate-900 transition hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-100 dark:hover:bg-slate-900"
+              class="flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-medium text-slate-900 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-100 dark:hover:bg-slate-900 dark:focus-visible:ring-blue-400"
               (click)="toggle(item)"
             >
               <span>{{ item.title }}</span>
-              <span aria-hidden="true">{{ isOpen(item) ? '-' : '+' }}</span>
+              <svg
+                class="size-5 shrink-0 fill-none stroke-current transition-transform duration-200"
+                [class.rotate-180]="isOpen(item)"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </button>
-          </h3>
+          </div>
           @if (isOpen(item)) {
             <div
               [id]="panelId(item)"
@@ -54,13 +68,17 @@ export interface UiAccordionItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiAccordionComponent {
-  readonly id = input('ui-accordion');
+  readonly id = input(`ui-accordion-${++nextAccordionId}`);
   readonly items = input<readonly UiAccordionItem[]>([]);
   readonly active = input<readonly string[]>([]);
   readonly multiple = input(false, { transform: booleanAttribute });
+  readonly headingLevel = input(3, { transform: numberAttribute });
   readonly activeChange = output<readonly string[]>();
 
   private readonly activeSet = computed(() => new Set(this.active()));
+  protected readonly resolvedHeadingLevel = computed(() =>
+    Math.min(6, Math.max(1, Math.trunc(this.headingLevel()) || 3)),
+  );
 
   protected isOpen(item: UiAccordionItem): boolean {
     return this.activeSet().has(item.value);

@@ -101,6 +101,7 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
         [code]="cardCode()"
         filename="card-playground.example.html"
         language="Angular template"
+        visualId="card-default"
       >
         <div class="grid w-full min-w-0 gap-4">
           <div

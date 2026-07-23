@@ -1,15 +1,18 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
-/tmp
-/.tmp
-/out-tsc
-/bazel-out
+/dist/
+/tmp/
+/.tmp/
+/out-tsc/
+/bazel-out/
+*.tsbuildinfo
 
 # Node
-/node_modules
-/.npm-cache
+/node_modules/
+/.npm-cache/
+*.tgz
+*.log
 npm-debug.log
 yarn-error.log
 
@@ -37,14 +40,26 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/.angular/
+/.cache/
+/.eslintcache
+/.stylelintcache
 .sass-cache/
 /connect.lock
-/coverage
+/coverage/
+/.nyc_output/
 /libpeerconnection.log
 testem.log
 /typings
 __screenshots__/
+/playwright-report/
+/test-results/
+/blob-report/
+/junit.xml
+
+# Local agent state
+/.agents/
+/.codex/
 
 # Local planning prompts
 /docs/WORLD_CLASS_COMPONENT_LIBRARY_PROMPT.md
@@ -54,4 +69,4 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-/artifacts
+/artifacts/

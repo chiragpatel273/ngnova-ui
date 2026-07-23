@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, booleanAttribute, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  booleanAttribute,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -17,27 +23,24 @@ const SIZE_CLASSES: Record<UiSpinnerSize, string> = {
   standalone: true,
   template: `
     <span
-      [class]="classes"
-      [attr.role]="decorative ? null : 'status'"
-      [attr.aria-label]="decorative ? null : label"
-      [attr.aria-hidden]="decorative ? 'true' : null"
-    >
-      @if (!decorative) {
-        <span class="sr-only">{{ label }}</span>
-      }
-    </span>
+      [class]="classes()"
+      [attr.role]="decorative() ? null : 'status'"
+      [attr.aria-label]="decorative() ? null : accessibleLabel()"
+      [attr.aria-hidden]="decorative() ? 'true' : null"
+    ></span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiSpinnerComponent {
-  @Input() size: UiSpinnerSize = 'md';
-  @Input() label = 'Loading';
-  @Input({ transform: booleanAttribute }) decorative = false;
+  readonly size = input<UiSpinnerSize>('md');
+  readonly label = input('Loading');
+  readonly decorative = input(false, { transform: booleanAttribute });
 
-  protected get classes(): string {
-    return uiClassNames(
-      'inline-block animate-spin rounded-full border-current border-t-transparent text-blue-600 dark:text-blue-400',
-      SIZE_CLASSES[this.size],
-    );
-  }
+  protected readonly accessibleLabel = computed(() => this.label().trim() || 'Loading');
+  protected readonly classes = computed(() =>
+    uiClassNames(
+      'inline-block animate-spin rounded-full border-current border-t-transparent text-blue-600 motion-reduce:animate-none dark:text-blue-400',
+      SIZE_CLASSES[this.size()],
+    ),
+  );
 }

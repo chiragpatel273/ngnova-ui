@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   booleanAttribute,
   Component,
   ElementRef,
@@ -7,6 +8,7 @@ import {
   Input,
   inject,
   output,
+  signal,
 } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -50,16 +52,16 @@ let nextSwitchId = 0;
           role="switch"
           [attr.name]="name || null"
           [checked]="checked"
-          [disabled]="disabled"
+          [disabled]="isDisabled"
           [required]="required"
-          [attr.aria-label]="ariaLabel || null"
+          [attr.aria-label]="label ? null : ariaLabel || null"
           [attr.aria-describedby]="descriptionId"
           (change)="onChangeEvent($event)"
           (focus)="emitFocused($event)"
           (blur)="markTouched($event)"
         />
         <span
-          class="h-6 w-11 rounded-full bg-slate-300 transition-colors peer-checked:bg-blue-600 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blue-600 peer-disabled:opacity-60 dark:bg-slate-700 dark:peer-checked:bg-blue-500"
+          class="h-6 w-11 rounded-full bg-slate-300 transition-colors peer-checked:bg-blue-600 peer-focus-visible:ring-2 peer-focus-visible:ring-blue-600 peer-focus-visible:ring-offset-2 peer-disabled:opacity-60 dark:bg-slate-700 dark:peer-checked:bg-blue-500 dark:peer-focus-visible:ring-blue-400 dark:peer-focus-visible:ring-offset-slate-950"
           aria-hidden="true"
         ></span>
         <span
@@ -73,6 +75,7 @@ let nextSwitchId = 0;
 })
 export class UiSwitchComponent implements ControlValueAccessor {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   @Input() label = '';
   @Input() helperText = '';
@@ -86,6 +89,7 @@ export class UiSwitchComponent implements ControlValueAccessor {
   readonly blurred = output<FocusEvent>();
 
   protected checked = false;
+  private readonly formDisabled = signal(false);
 
   private onChange: (value: boolean) => void = () => undefined;
   private onTouched: () => void = () => undefined;
@@ -98,15 +102,20 @@ export class UiSwitchComponent implements ControlValueAccessor {
     return this.helperText ? this.messageId : null;
   }
 
+  protected get isDisabled(): boolean {
+    return this.disabled || this.formDisabled();
+  }
+
   protected get labelClasses(): string {
     return uiClassNames(
       'flex items-center justify-between gap-4',
-      this.disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer',
+      this.isDisabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer',
     );
   }
 
   writeValue(value: boolean | null): void {
     this.checked = value ?? false;
+    this.changeDetector.markForCheck();
   }
 
   registerOnChange(fn: (value: boolean) => void): void {
@@ -118,7 +127,8 @@ export class UiSwitchComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.formDisabled.set(isDisabled);
+    this.changeDetector.markForCheck();
   }
 
   protected onChangeEvent(event: Event): void {

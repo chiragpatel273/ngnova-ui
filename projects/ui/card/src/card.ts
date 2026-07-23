@@ -27,7 +27,11 @@ const BODY_CLASSES: Record<UiCardPadding, string> = {
     class: 'block',
   },
   template: `
-    <section [class]="cardClasses">
+    <div
+      [class]="cardClasses"
+      [attr.role]="ariaLabel ? 'region' : null"
+      [attr.aria-label]="ariaLabel || null"
+    >
       <div class="ui-card-slot border-b border-slate-200 px-5 py-4 dark:border-slate-800">
         <ng-content select="[uiCardHeader]" />
       </div>
@@ -37,7 +41,7 @@ const BODY_CLASSES: Record<UiCardPadding, string> = {
       <div class="ui-card-slot border-t border-slate-200 px-5 py-4 dark:border-slate-800">
         <ng-content select="[uiCardFooter]" />
       </div>
-    </section>
+    </div>
   `,
   styles: [
     `
@@ -51,10 +55,11 @@ const BODY_CLASSES: Record<UiCardPadding, string> = {
 export class UiCardComponent {
   @Input() variant: UiCardVariant = 'outline';
   @Input() padding: UiCardPadding = 'md';
+  @Input() ariaLabel = '';
 
   protected get cardClasses(): string {
     return uiClassNames(
-      'overflow-hidden rounded-lg text-slate-700 dark:text-slate-200',
+      'overflow-hidden rounded-[var(--ui-surface-radius,0.75rem)] text-slate-700 dark:text-slate-200',
       CARD_CLASSES[this.variant],
     );
   }

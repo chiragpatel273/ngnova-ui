@@ -2,6 +2,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  heroArrowDownTray,
   heroArrowPath,
   heroArrowTrendingUp,
   heroBars3,
@@ -98,6 +99,7 @@ interface AdminActivity {
   ],
   providers: [
     provideIcons({
+      heroArrowDownTray,
       heroArrowPath,
       heroArrowTrendingUp,
       heroBars3,

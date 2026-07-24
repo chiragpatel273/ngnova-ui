@@ -3,7 +3,7 @@
     @for (item of navigationItems; track item.label) {
       <button
         type="button"
-        class="group flex min-h-8 w-full items-center gap-2 rounded px-2 text-left text-xs font-medium transition-colors"
+        class="group flex min-h-8 w-full items-center gap-2 rounded-md px-2.5 text-left text-xs font-medium transition-colors"
         [class.bg-blue-50]="activeNavigation() === item.label"
         [class.text-blue-700]="activeNavigation() === item.label"
         [class.shadow-[inset_2px_0_0_#2563eb]]="activeNavigation() === item.label"
@@ -23,10 +23,10 @@
     }
   </nav>
 
-  <div class="mt-auto border-t border-slate-200 pt-2.5">
+  <div class="mt-auto border-t border-slate-200 pt-3 dark:border-slate-800">
     <button
       type="button"
-      class="flex w-full items-center gap-2 rounded p-2 text-left transition-colors hover:bg-slate-100"
+      class="flex w-full items-center gap-2.5 rounded-md p-2 text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-900"
     >
       <ui-avatar label="Maya Chen" size="sm" />
       <span class="min-w-0 flex-1">
@@ -39,13 +39,15 @@
 </ng-template>
 
 <div
-  class="relative min-h-[42rem] bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-50 xl:grid xl:grid-cols-[10.5rem_minmax(0,1fr)]"
+  class="relative min-h-[42rem] bg-slate-50/70 text-slate-950 dark:bg-slate-950 dark:text-slate-50 xl:grid xl:grid-cols-[12.5rem_minmax(0,1fr)]"
   data-admin-template
 >
   <aside
-    class="hidden border-r border-slate-200 bg-white p-2.5 text-slate-950 dark:border-slate-800 dark:bg-slate-950 dark:text-white xl:flex xl:flex-col"
+    class="hidden border-r border-slate-200/80 bg-white p-3 text-slate-950 dark:border-slate-800 dark:bg-slate-950 dark:text-white xl:flex xl:flex-col"
   >
-    <div class="flex items-center gap-2.5 px-1.5">
+    <div
+      class="flex items-center gap-2.5 border-b border-slate-100 px-1 pb-3 dark:border-slate-800"
+    >
       <span
         class="inline-flex size-7 items-center justify-center rounded-md bg-blue-600 text-white"
       >
@@ -57,13 +59,13 @@
       </span>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-3.5">
       <ui-input ariaLabel="Search workspace" placeholder="Search..." size="sm">
         <ng-icon inputPrefix name="heroMagnifyingGlass" class="size-4" aria-hidden="true" />
       </ui-input>
     </div>
 
-    <p class="mb-1 mt-3 px-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+    <p class="mb-1.5 mt-4 px-2.5 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
       Workspace
     </p>
     <ng-container [ngTemplateOutlet]="adminNavigation" />
@@ -85,9 +87,9 @@
     </div>
   </ui-drawer>
 
-  <section class="min-w-0">
+  <section class="min-w-0 bg-slate-50/70 dark:bg-slate-950">
     <header
-      class="flex min-h-12 items-center gap-2 border-b border-slate-200 bg-white px-3 dark:border-slate-800 dark:bg-slate-950"
+      class="flex min-h-14 items-center gap-2 border-b border-slate-200/80 bg-white px-4 dark:border-slate-800 dark:bg-slate-950"
     >
       <button
         type="button"
@@ -131,9 +133,38 @@
       </div>
     </header>
 
-    <div class="space-y-3 p-3">
+    <div class="space-y-4 p-3 sm:p-4">
+      <section class="flex flex-wrap items-end justify-between gap-3" aria-labelledby="admin-title">
+        <div>
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.1em] text-blue-700 dark:text-blue-300"
+          >
+            Overview
+          </p>
+          <h1
+            id="admin-title"
+            class="mt-1 text-xl font-bold tracking-tight text-slate-950 dark:text-white"
+          >
+            Good morning, Maya
+          </h1>
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            Here is what is happening across Acme Corporation today.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" uiButton variant="outline" size="sm">
+            <ng-icon uiButtonIconStart name="heroArrowDownTray" />
+            Export
+          </button>
+          <ui-button size="sm">
+            <ng-icon uiButtonIconStart name="heroUserPlus" />
+            Add customer
+          </ui-button>
+        </div>
+      </section>
+
       <section
-        class="grid items-center gap-3 rounded-md border border-emerald-200 bg-emerald-50/70 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_13rem] dark:border-emerald-900 dark:bg-emerald-950/30"
+        class="grid items-center gap-3 rounded-lg border border-emerald-200/80 bg-emerald-50/70 px-3.5 py-3 sm:grid-cols-[minmax(0,1fr)_13rem] dark:border-emerald-900 dark:bg-emerald-950/30"
         aria-label="Quarterly revenue target"
       >
         <div class="flex min-w-0 items-center gap-2.5">
@@ -143,9 +174,9 @@
             aria-hidden="true"
           />
           <div class="min-w-0">
-            <h1 class="text-sm font-semibold text-slate-950 dark:text-white">
+            <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
               Your Q3 revenue target is 84% complete
-            </h1>
+            </h2>
             <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-300">
               You are $38,400 away from the quarterly goal with 18 days remaining.
             </p>
@@ -170,41 +201,37 @@
             @for (metric of metrics; track metric.label) {
               <article
                 data-admin-metric
-                class="flex min-w-0 gap-2 bg-white p-2.5 dark:bg-slate-950"
+                class="min-w-0 bg-white p-3.5 dark:bg-slate-950"
                 [attr.aria-label]="metric.label + ' metric'"
               >
-                <span [class]="metricIconClasses(metric.tone)">
-                  <ng-icon [name]="metric.icon" class="size-4" aria-hidden="true" />
-                </span>
-                <div class="min-w-0 flex-1">
-                  <p class="truncate text-xs font-medium text-slate-500 dark:text-slate-400">
-                    {{ metric.label }}
-                  </p>
-                  <p
-                    class="mt-1 text-xl font-bold leading-none tracking-tight text-slate-950 dark:text-white"
-                  >
-                    {{ metric.value }}
-                  </p>
-                  <p class="mt-1.5 truncate text-xs text-slate-500 dark:text-slate-400">
-                    {{ metric.context }}
-                  </p>
-                  <ui-tag
-                    class="mt-1 inline-flex"
-                    size="sm"
-                    [variant]="metric.positive ? 'success' : 'danger'"
-                  >
+                <div class="flex items-start justify-between gap-3">
+                  <span [class]="metricIconClasses(metric.tone)">
+                    <ng-icon [name]="metric.icon" class="size-4" aria-hidden="true" />
+                  </span>
+                  <ui-tag size="sm" [variant]="metric.positive ? 'success' : 'danger'">
                     {{ metric.change }}
                   </ui-tag>
                 </div>
+                <p class="mt-3 truncate text-xs font-medium text-slate-500 dark:text-slate-400">
+                  {{ metric.label }}
+                </p>
+                <p
+                  class="mt-1 text-xl font-bold leading-none tracking-tight text-slate-950 dark:text-white"
+                >
+                  {{ metric.value }}
+                </p>
+                <p class="mt-2 truncate text-xs text-slate-500 dark:text-slate-400">
+                  {{ metric.context }}
+                </p>
               </article>
             }
           </div>
         </ui-card>
       </section>
 
-      <section class="grid gap-3 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.95fr)]">
+      <section class="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.95fr)]">
         <ui-card class="min-w-0" padding="none" ariaLabel="Revenue overview">
-          <div class="flex items-start justify-between gap-3 px-3 pt-3">
+          <div class="flex items-start justify-between gap-3 px-4 pt-4">
             <div>
               <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Revenue overview</h2>
               <p class="mt-2 text-xl font-bold tracking-tight text-slate-950 dark:text-white">
@@ -230,12 +257,12 @@
             </button>
           </div>
 
-          <div class="mt-2 px-3">
+          <div class="mt-3 px-4">
             <app-admin-revenue-chart />
           </div>
 
           <div
-            class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-3 py-2 text-xs text-slate-500 dark:border-slate-800"
+            class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-4 py-2.5 text-xs text-slate-500 dark:border-slate-800"
           >
             <span class="inline-flex items-center gap-1.5">
               <span class="size-2 rounded-full bg-blue-600"></span>
@@ -249,7 +276,7 @@
         </ui-card>
 
         <ui-card class="min-w-0" padding="none" ariaLabel="Team capacity">
-          <div class="flex items-center justify-between gap-3 px-3 py-2.5">
+          <div class="flex items-center justify-between gap-3 px-4 py-3">
             <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Team capacity</h2>
             <button
               type="button"
@@ -263,7 +290,7 @@
           >
             @for (team of teamCapacity; track team.label) {
               <div
-                class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2 px-3 py-2"
+                class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2.5 px-4 py-2.5"
               >
                 <span class="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
                   {{ team.label }}
@@ -285,7 +312,7 @@
         </ui-card>
 
         <ui-card class="min-w-0" padding="none" ariaLabel="Recent activity">
-          <div class="flex items-center justify-between gap-3 px-3 py-2.5">
+          <div class="flex items-center justify-between gap-3 px-4 py-3">
             <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent activity</h2>
             <button
               type="button"
@@ -295,10 +322,10 @@
             </button>
           </div>
           <ol
-            class="divide-y divide-slate-200 border-t border-slate-200 px-3 dark:divide-slate-800 dark:border-slate-800"
+            class="divide-y divide-slate-200 border-t border-slate-200 px-4 dark:divide-slate-800 dark:border-slate-800"
           >
             @for (activity of activities; track activity.title + activity.time) {
-              <li class="flex gap-2 py-2">
+              <li class="flex gap-2.5 py-2.5">
                 <span [class]="activityIconClasses(activity.tone)">
                   <ng-icon [name]="activity.icon" class="size-4" aria-hidden="true" />
                 </span>
@@ -319,7 +346,7 @@
 
       <ui-card padding="none" ariaLabel="Recent orders">
         <div
-          class="flex items-center justify-between gap-3 border-b border-slate-200 px-3 py-2.5 dark:border-slate-800"
+          class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-800"
         >
           <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent orders</h2>
           <button
@@ -331,7 +358,7 @@
         </div>
 
         <ui-table
-          class="block [&_table]:!text-xs [&_td]:!px-2 [&_td]:!py-1.5 [&_th]:!px-2 [&_th]:!py-1.5"
+          class="block [&_table]:!text-xs [&_td]:!px-3 [&_td]:!py-2 [&_th]:!px-3 [&_th]:!py-2"
           caption="Recent customer orders"
           [columns]="orderColumns"
           [rows]="orderRows"

@@ -10,20 +10,20 @@ import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
   imports: [UiAlertComponent, UiBadgeComponent, UiButtonComponent, UiProgressBarComponent],
   template: `
     <section
-      class="ui-theme overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-800"
+      class="ui-theme overflow-hidden rounded-lg border border-slate-200 shadow-sm dark:border-slate-800"
       [attr.data-ui-theme]="mode()"
       [class.dark]="mode() === 'dark'"
       [style.--ui-color-primary]="primary()"
       [style.--ui-color-success]="success()"
     >
       <div
-        class="flex flex-col gap-4 border-b border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:flex-row sm:items-end sm:justify-between"
+        class="flex flex-col gap-3 border-b border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950 sm:flex-row sm:items-end sm:justify-between"
       >
         <div>
           <p class="text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-300">
             Live token scope
           </p>
-          <h2 class="mt-1 text-xl font-semibold text-slate-950 dark:text-white">
+          <h2 class="mt-1 text-base font-semibold text-slate-950 dark:text-white">
             Theme playground
           </h2>
           <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
@@ -32,15 +32,15 @@ import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
         </div>
         <button
           type="button"
-          class="h-10 rounded-lg border border-slate-300 bg-white px-4 text-sm font-medium text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          class="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           (click)="toggleMode()"
         >
           Preview {{ mode() === 'light' ? 'dark' : 'light' }} mode
         </button>
       </div>
 
-      <div class="grid gap-6 bg-slate-50 p-5 dark:bg-slate-900 lg:grid-cols-[15rem_minmax(0,1fr)]">
-        <fieldset class="grid content-start gap-4">
+      <div class="grid gap-4 bg-slate-50 p-4 dark:bg-slate-900 lg:grid-cols-[13rem_minmax(0,1fr)]">
+        <fieldset class="grid content-start gap-3">
           <legend class="text-sm font-semibold text-slate-950 dark:text-white">
             Semantic colors
           </legend>

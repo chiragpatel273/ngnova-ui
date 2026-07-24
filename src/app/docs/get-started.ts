@@ -17,7 +17,7 @@ interface GuideCard {
   standalone: true,
   imports: [RouterLink, UiButtonComponent],
   template: `
-    <div class="mx-auto grid max-w-[73rem] gap-8 xl:grid-cols-[minmax(0,1fr)_14rem]">
+    <div class="mx-auto grid max-w-[76rem] gap-6 xl:grid-cols-[minmax(0,1fr)_13rem]">
       <article class="pb-16">
         <header class="pt-5">
           <span
@@ -25,33 +25,35 @@ interface GuideCard {
           >
             Comprehensive Guides
           </span>
-          <h1 class="mt-6 text-4xl font-bold tracking-normal text-slate-950 dark:text-slate-50">
+          <h1
+            class="mt-4 text-2xl font-bold leading-8 tracking-normal text-slate-950 dark:text-slate-50"
+          >
             Documentation Guides
           </h1>
-          <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+          <p class="mt-2 max-w-3xl text-sm leading-5 text-slate-600 dark:text-slate-300">
             Everything you need to build high-quality Angular applications. From initial setup to
             advanced theme customization and accessibility standards.
           </p>
         </header>
 
-        <section class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <section class="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           @for (card of guideCards; track card.title) {
             <article [class]="cardClasses(card)">
               <div>
                 <p class="text-sm font-semibold uppercase text-blue-800 dark:text-blue-300">
                   {{ card.eyebrow }}
                 </p>
-                <h2 class="mt-4 text-xl font-semibold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-3 text-base font-semibold text-slate-950 dark:text-slate-50">
                   {{ card.title }}
                 </h2>
-                <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   {{ card.description }}
                 </p>
               </div>
 
               @if (card.code) {
                 <pre
-                  class="mt-5 overflow-x-auto whitespace-nowrap rounded bg-slate-950 p-4 font-mono text-sm leading-6 text-slate-50 shadow-sm dark:bg-black"
+                  class="mt-5 overflow-x-auto whitespace-nowrap rounded bg-slate-950 p-4 font-mono text-sm leading-5 text-slate-50 shadow-sm dark:bg-black"
                 ><code>{{ card.code }}</code></pre>
               }
 
@@ -60,7 +62,7 @@ interface GuideCard {
                   @for (action of card.actions; track action) {
                     <button
                       type="button"
-                      class="rounded border border-blue-200 bg-white px-4 py-3 text-base text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
+                      class="rounded border border-blue-200 bg-white px-3 py-2.5 text-sm text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
                     >
                       {{ action }}
                     </button>
@@ -78,10 +80,10 @@ interface GuideCard {
         </section>
 
         <footer
-          class="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-blue-200 pt-8 text-base text-slate-600 dark:border-blue-950 dark:text-slate-300"
+          class="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-blue-200 pt-6 text-sm text-slate-600 dark:border-blue-950 dark:text-slate-300"
         >
           <p>&copy; 2024 NgNova UI. Built for developers by developers.</p>
-          <nav class="flex flex-wrap gap-8" aria-label="Guide footer">
+          <nav class="flex flex-wrap gap-6" aria-label="Guide footer">
             <a routerLink="/components">GitHub</a>
             <a routerLink="/apis">API Reference</a>
             <a routerLink="/guide">NPM</a>
@@ -95,7 +97,7 @@ interface GuideCard {
             On This Page
           </p>
           <nav
-            class="mt-5 grid gap-4 text-base text-slate-600 dark:text-slate-400"
+            class="mt-4 grid gap-3 text-sm text-slate-600 dark:text-slate-400"
             aria-label="On this page"
           >
             @for (item of onThisPage; track item) {
@@ -112,11 +114,11 @@ interface GuideCard {
             }
           </nav>
 
-          <div class="mt-12 rounded bg-slate-200 p-5 dark:bg-slate-900">
-            <p class="text-base text-slate-600 dark:text-slate-300">Need help?</p>
+          <div class="mt-8 rounded bg-slate-200 p-4 dark:bg-slate-900">
+            <p class="text-sm text-slate-600 dark:text-slate-300">Need help?</p>
             <a
               routerLink="/apis"
-              class="mt-3 block border border-blue-200 bg-white px-4 py-3 text-center text-base text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
+              class="mt-2.5 block border border-blue-200 bg-white px-3 py-2.5 text-center text-sm text-slate-950 transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-blue-950/30"
             >
               Contact Support
             </a>
@@ -199,7 +201,7 @@ export class GetStartedComponent {
 
   protected cardClasses(card: GuideCard): string {
     const base =
-      'flex min-h-72 flex-col justify-between rounded border border-blue-200 p-6 dark:border-blue-950';
+      'flex min-h-64 flex-col justify-between rounded border border-blue-200 p-4 dark:border-blue-950';
     const size: Record<GuideCard['size'], string> = {
       normal: '',
       tall: '',

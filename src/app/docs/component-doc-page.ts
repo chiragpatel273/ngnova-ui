@@ -374,8 +374,8 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
   providers: [provideIcons({ heroArrowRight, heroPlus })],
   template: `
     @if (doc(); as componentDoc) {
-      <article class="mx-auto max-w-[64rem] pb-20">
-        <header class="border-b border-blue-200 pb-8 pt-4 dark:border-blue-950/70">
+      <article class="mx-auto max-w-[72rem] pb-14">
+        <header class="border-b border-blue-200 pb-6 pt-2 dark:border-blue-950/70">
           <div class="flex flex-wrap items-center gap-2">
             <span
               class="rounded bg-blue-100 px-2 py-1 text-xs font-semibold uppercase tracking-normal text-blue-800 dark:bg-blue-950 dark:text-blue-200"
@@ -394,18 +394,18 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
             </span>
           </div>
 
-          <div class="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:items-start">
+          <div class="mt-3 grid gap-5 lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-start">
             <div>
-              <h1 class="text-5xl font-bold leading-tight text-slate-950 dark:text-slate-50">
+              <h1 class="text-2xl font-bold leading-8 text-slate-950 dark:text-slate-50">
                 {{ componentDoc.name }}
               </h1>
-              <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-700 dark:text-slate-300">
+              <p class="mt-2 max-w-3xl text-sm leading-5 text-slate-700 dark:text-slate-300">
                 {{ componentDoc.summary }}
               </p>
-              <div class="mt-6 flex flex-wrap gap-2">
+              <div class="mt-4 flex flex-wrap gap-1.5">
                 @for (stat of qualityStats; track stat.label) {
                   <span
-                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-3 py-1.5 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-200 px-2.5 py-1 text-xs text-slate-800 dark:bg-slate-800 dark:text-slate-200"
                   >
                     <span class="size-1.5 rounded-full bg-blue-700" aria-hidden="true"></span>
                     {{ stat.value }} {{ stat.label }}
@@ -418,7 +418,9 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
               class="grid gap-0 overflow-hidden rounded border border-blue-200 bg-white text-sm dark:border-blue-950 dark:bg-slate-950"
             >
               @for (item of summaryItems(); track item.label) {
-                <div class="border-b border-blue-100 p-3 last:border-b-0 dark:border-blue-950/70">
+                <div
+                  class="border-b border-blue-100 px-3 py-2.5 last:border-b-0 dark:border-blue-950/70"
+                >
                   <dt class="text-xs font-medium uppercase text-slate-500 dark:text-slate-500">
                     {{ item.label }}
                   </dt>
@@ -431,27 +433,27 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
           </div>
         </header>
 
-        <section id="setup" class="border-b border-blue-200 py-8 dark:border-blue-950/70">
+        <section id="setup" class="border-b border-blue-200 py-6 dark:border-blue-950/70">
           <div
             class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
           >
-            <div class="grid gap-0 lg:grid-cols-[18rem_minmax(0,1fr)]">
+            <div class="grid gap-0 lg:grid-cols-[16rem_minmax(0,1fr)]">
               <div
-                class="border-b border-blue-100 bg-blue-50/60 p-5 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
+                class="border-b border-blue-100 bg-blue-50/60 p-4 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
               >
                 <p
                   class="text-xs font-semibold uppercase tracking-normal text-blue-800 dark:text-blue-200"
                 >
                   Setup
                 </p>
-                <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-1.5 text-lg font-bold text-slate-950 dark:text-slate-50">
                   Use this component
                 </h2>
-                <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   Import the standalone entry point in the Angular component that renders this UI
                   primitive.
                 </p>
-                <div class="mt-5 flex flex-wrap gap-2">
+                <div class="mt-4 flex flex-wrap gap-2">
                   <span
                     class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
                   >
@@ -480,7 +482,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                     </ui-button>
                   </div>
                   <pre
-                    class="overflow-x-auto whitespace-pre rounded bg-slate-950 px-4 py-2.5 font-mono text-sm leading-6 text-slate-50"
+                    class="overflow-x-auto whitespace-pre rounded bg-slate-950 px-4 py-2.5 font-mono text-sm leading-5 text-slate-50"
                   ><code>{{ importStatement() }}</code></pre>
                 </div>
               </div>
@@ -488,11 +490,11 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
           </div>
         </section>
 
-        <section id="usage" class="py-10">
-          <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <section id="usage" class="py-7">
+          <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">Usage & variants</h2>
-              <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
+              <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Usage & variants</h2>
+              <p class="mt-1.5 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-400">
                 Live examples use the public
                 <code class="font-mono">{{ componentDoc.selector }}</code>
                 API, paired with the exact snippet a product team would paste into an Angular app.
@@ -733,7 +735,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                     />
                   }
                   @case ('combobox') {
-                    <div class="w-full max-w-sm">
+                    <div class="min-h-72 w-full max-w-sm">
                       <ui-combobox
                         label="Framework"
                         placeholder="Search frameworks"
@@ -745,7 +747,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                     </div>
                   }
                   @case ('date-picker') {
-                    <div class="w-full max-w-sm">
+                    <div class="min-h-[30rem] w-full max-w-sm">
                       <ui-date-picker
                         label="Release date"
                         helperText="Choose a publication date."
@@ -1093,19 +1095,21 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                     </div>
                   }
                   @case ('menu') {
-                    <ui-menu
-                      [items]="docsMenuItems"
-                      ariaLabel="Component actions"
-                      align="end"
-                      (itemSelected)="lastMenuAction.set($event.item.label)"
-                    >
-                      <ui-button uiMenuTrigger variant="outline">More actions</ui-button>
-                    </ui-menu>
-                    @if (lastMenuAction(); as action) {
-                      <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">
-                        Selected: {{ action }}
-                      </p>
-                    }
+                    <div class="min-h-64 w-full max-w-sm text-center">
+                      <ui-menu
+                        [items]="docsMenuItems"
+                        ariaLabel="Component actions"
+                        align="end"
+                        (itemSelected)="lastMenuAction.set($event.item.label)"
+                      >
+                        <ui-button uiMenuTrigger variant="outline">More actions</ui-button>
+                      </ui-menu>
+                      @if (lastMenuAction(); as action) {
+                        <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                          Selected: {{ action }}
+                        </p>
+                      }
+                    </div>
                   }
                   @case ('drawer') {
                     <div class="grid justify-items-center gap-3">
@@ -1218,13 +1222,11 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
 
         <section
           id="guide"
-          class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70"
+          class="grid gap-4 border-t border-blue-200 py-7 dark:border-blue-950/70"
         >
           <div>
-            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">
-              Production guidance
-            </h2>
-            <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Production guidance</h2>
+            <p class="mt-1.5 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-400">
               Use these notes to decide when the component belongs in a product workflow and what to
               verify before shipping.
             </p>
@@ -1233,30 +1235,32 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
           <div class="grid gap-4 md:grid-cols-2">
             @for (card of guidanceCards(); track card.title) {
               <section
-                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+                class="rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
               >
-                <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
+                <h3 class="text-base font-bold text-slate-950 dark:text-slate-50">
                   {{ card.title }}
                 </h3>
-                <p class="mt-2 leading-7 text-slate-700 dark:text-slate-300">{{ card.body }}</p>
+                <p class="mt-1.5 text-sm leading-5 text-slate-700 dark:text-slate-300">
+                  {{ card.body }}
+                </p>
               </section>
             }
           </div>
         </section>
 
         @if (examples().length) {
-          <section id="examples" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
-            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">Examples</h2>
-            <div class="mt-6 grid gap-5">
+          <section id="examples" class="border-t border-blue-200 py-7 dark:border-blue-950/70">
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Examples</h2>
+            <div class="mt-4 grid gap-4">
               @for (example of examples(); track example.title) {
                 <section
-                  class="grid gap-4 rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+                  class="grid gap-3 rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
                 >
                   <div>
-                    <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50">
+                    <h3 class="text-base font-bold text-slate-950 dark:text-slate-50">
                       {{ example.title }}
                     </h3>
-                    <p class="mt-2 leading-7 text-slate-600 dark:text-slate-400">
+                    <p class="mt-1.5 text-sm leading-5 text-slate-600 dark:text-slate-400">
                       {{ example.description }}
                     </p>
                   </div>
@@ -1271,10 +1275,10 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
           </section>
         }
 
-        <section id="api" class="border-t border-blue-200 py-10 dark:border-blue-950/70">
-          <div class="mb-6">
-            <h2 class="text-3xl font-bold text-slate-950 dark:text-slate-50">API Reference</h2>
-            <p class="mt-2 max-w-2xl leading-7 text-slate-600 dark:text-slate-400">
+        <section id="api" class="border-t border-blue-200 py-7 dark:border-blue-950/70">
+          <div class="mb-4">
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">API Reference</h2>
+            <p class="mt-1.5 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-400">
               Inputs and outputs are semver-sensitive public API. Keep examples aligned with this
               table.
             </p>
@@ -1287,23 +1291,23 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
 
         <section
           id="accessibility"
-          class="grid gap-5 border-t border-blue-200 py-10 dark:border-blue-950/70 md:grid-cols-2"
+          class="grid gap-4 border-t border-blue-200 py-7 dark:border-blue-950/70 md:grid-cols-2"
         >
-          <div class="rounded bg-blue-100 p-6 dark:bg-blue-950/60">
-            <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">
+          <div class="rounded bg-blue-100 p-5 dark:bg-blue-950/60">
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">
               Accessibility matters
             </h2>
-            <ul class="mt-4 grid gap-2 leading-7 text-slate-800 dark:text-slate-200">
+            <ul class="mt-3 grid gap-2 text-sm leading-5 text-slate-800 dark:text-slate-200">
               @for (item of accessibilityNotes(); track item) {
                 <li>{{ item }}</li>
               }
             </ul>
           </div>
           <div
-            class="rounded border border-blue-200 bg-slate-200 p-6 dark:border-blue-950 dark:bg-slate-900"
+            class="rounded border border-blue-200 bg-slate-200 p-5 dark:border-blue-950 dark:bg-slate-900"
           >
-            <h2 class="text-2xl font-bold text-slate-950 dark:text-slate-50">Fast to verify</h2>
-            <ul class="mt-4 grid gap-2 leading-7 text-slate-700 dark:text-slate-300">
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Fast to verify</h2>
+            <ul class="mt-3 grid gap-2 text-sm leading-5 text-slate-700 dark:text-slate-300">
               @for (item of testingNotes(); track item) {
                 <li>{{ item }}</li>
               }
@@ -1312,7 +1316,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
         </section>
 
         <nav
-          class="mt-4 grid gap-4 border-t border-blue-200 pt-8 dark:border-blue-950/70 sm:grid-cols-2"
+          class="mt-3 grid gap-3 border-t border-blue-200 pt-6 dark:border-blue-950/70 sm:grid-cols-2"
           aria-label="Component pagination"
         >
           @if (previousDoc(); as previous) {
@@ -1321,7 +1325,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
               class="rounded border border-blue-200 bg-white p-4 text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
             >
               <span class="text-slate-500">Previous</span>
-              <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
+              <strong class="mt-1 block text-base text-blue-800 dark:text-blue-200">{{
                 previous.name
               }}</strong>
             </a>
@@ -1334,7 +1338,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
               class="rounded border border-blue-200 bg-white p-4 text-right text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
             >
               <span class="text-slate-500">Next</span>
-              <strong class="mt-1 block text-lg text-blue-800 dark:text-blue-200">{{
+              <strong class="mt-1 block text-base text-blue-800 dark:text-blue-200">{{
                 next.name
               }}</strong>
             </a>
@@ -1359,11 +1363,11 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
         </ui-modal>
       </article>
     } @else {
-      <section class="mx-auto max-w-3xl py-20 text-center">
+      <section class="mx-auto max-w-3xl py-14 text-center">
         <p class="text-sm font-semibold uppercase text-blue-800 dark:text-blue-300">
           Component not found
         </p>
-        <h1 class="mt-3 text-4xl font-bold text-slate-950 dark:text-slate-50">
+        <h1 class="mt-3 text-2xl font-bold leading-8 text-slate-950 dark:text-slate-50">
           No matching docs page
         </h1>
         <p class="mt-3 text-slate-600 dark:text-slate-400">
@@ -1621,7 +1625,6 @@ export class ComponentDocPageComponent {
 
     return [
       { label: 'Selector', value: currentDoc.selector },
-      { label: 'Import', value: currentDoc.importName },
       { label: 'Package', value: getComponentImportPath(currentDoc.slug) },
     ];
   });

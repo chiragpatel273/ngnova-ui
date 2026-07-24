@@ -179,33 +179,33 @@ export class ThemeToggleComponent {
   imports: [RouterLink, UiButtonComponent, DocsCodeBlockComponent, ThemePlaygroundComponent],
   template: `
     @if (topic(); as page) {
-      <article class="mx-auto max-w-[73rem] pb-20">
-        <header class="pt-5">
+      <article class="mx-auto max-w-[76rem] pb-14">
+        <header class="pt-2">
           <span
-            class="rounded bg-blue-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
+            class="rounded bg-blue-100 px-2 py-1 text-xs font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
           >
             {{ page.badge }}
           </span>
-          <h1 class="mt-7 text-5xl font-bold leading-tight text-slate-950 dark:text-slate-50">
+          <h1 class="mt-4 text-2xl font-bold leading-8 text-slate-950 dark:text-slate-50">
             {{ page.title }}
           </h1>
-          <p class="mt-5 max-w-4xl text-xl leading-9 text-slate-600 dark:text-slate-300">
+          <p class="mt-2 max-w-4xl text-sm leading-5 text-slate-600 dark:text-slate-300">
             {{ page.summary }}
           </p>
-          <a [routerLink]="page.ctaPath" class="mt-8 inline-block">
+          <a [routerLink]="page.ctaPath" class="mt-5 inline-block">
             <ui-button>{{ page.ctaLabel }}</ui-button>
           </a>
         </header>
 
         @if (slug() === 'components') {
           <section
-            class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+            class="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
             aria-label="All component docs"
           >
             @for (component of allComponents; track component.slug) {
               <a
                 [routerLink]="['/components', component.slug]"
-                class="group rounded border border-blue-200 bg-white p-6 transition hover:-translate-y-0.5 hover:bg-blue-50 hover:shadow-md dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
+                class="group rounded border border-blue-200 bg-white p-5 transition hover:-translate-y-0.5 hover:bg-blue-50 hover:shadow-md dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
               >
                 <div class="flex items-start justify-between gap-4">
                   <div>
@@ -214,7 +214,7 @@ export class ThemeToggleComponent {
                     >
                       {{ categoryFor(component.slug) }}
                     </span>
-                    <h2 class="mt-5 text-2xl font-medium text-slate-950 dark:text-slate-50">
+                    <h2 class="mt-3 text-base font-semibold text-slate-950 dark:text-slate-50">
                       {{ component.name }}
                     </h2>
                   </div>
@@ -224,11 +224,11 @@ export class ThemeToggleComponent {
                     {{ component.selector }}
                   </span>
                 </div>
-                <p class="mt-4 min-h-20 text-base leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-3 min-h-16 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   {{ component.summary }}
                 </p>
                 <dl
-                  class="mt-6 grid grid-cols-2 gap-3 border-t border-blue-100 pt-4 text-sm dark:border-blue-950/70"
+                  class="mt-4 grid grid-cols-2 gap-3 border-t border-blue-100 pt-3 text-xs dark:border-blue-950/70"
                 >
                   <div>
                     <dt class="text-slate-500">Inputs</dt>
@@ -247,21 +247,21 @@ export class ThemeToggleComponent {
             }
           </section>
         } @else if (slug() === 'theming') {
-          <section class="mt-10 grid gap-6">
+          <section class="mt-7 grid gap-4">
             <app-theme-playground />
             <article
-              class="grid overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950 lg:grid-cols-[20rem_minmax(0,1fr)]"
+              class="grid overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950 lg:grid-cols-[17rem_minmax(0,1fr)]"
             >
               <div
-                class="border-b border-blue-100 bg-blue-50/60 p-6 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
+                class="border-b border-blue-100 bg-blue-50/60 p-5 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
                   Required setup
                 </p>
-                <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-slate-50">
                   Tailwind stylesheet
                 </h2>
-                <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   NgNova UI ships static Tailwind utility classes plus an optional versioned token
                   stylesheet. Consumer apps must let Tailwind scan the package and opt into
                   class-based dark mode.
@@ -273,18 +273,18 @@ export class ThemeToggleComponent {
             </article>
 
             <article
-              class="grid overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950 lg:grid-cols-[20rem_minmax(0,1fr)]"
+              class="grid overflow-hidden rounded border border-blue-200 bg-white dark:border-blue-950 dark:bg-slate-950 lg:grid-cols-[17rem_minmax(0,1fr)]"
             >
               <div
-                class="border-b border-blue-100 bg-blue-50/60 p-6 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
+                class="border-b border-blue-100 bg-blue-50/60 p-5 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
                   App shell
                 </p>
-                <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-slate-50">
                   Toggle the dark class
                 </h2>
-                <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   Put the <code class="font-mono">dark</code> class on
                   <code class="font-mono">html</code> or a parent app shell. Components respond
                   automatically through their built-in <code class="font-mono">dark:</code>
@@ -298,29 +298,29 @@ export class ThemeToggleComponent {
 
             <section class="grid gap-5 md:grid-cols-3" aria-label="Theme support details">
               <article
-                class="rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
+                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
                   Supported now
                 </p>
-                <h2 class="mt-3 text-xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-3 text-base font-bold text-slate-950 dark:text-slate-50">
                   Light and dark modes
                 </h2>
-                <p class="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   Every public component includes light styles plus dark-mode variants for surfaces,
                   text, borders, focus rings, and common state colors.
                 </p>
               </article>
               <article
-                class="rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
+                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
                   Customization
                 </p>
-                <h2 class="mt-3 text-xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-3 text-base font-bold text-slate-950 dark:text-slate-50">
                   Typography and icons
                 </h2>
-                <p class="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   The NgNova docs use Inter Variable and a system monospace stack. Library
                   components inherit the consumer application's font. Built-in disclosure and
                   dismiss actions use crisp current-color SVG geometry, while Button icon marker
@@ -329,15 +329,15 @@ export class ThemeToggleComponent {
                 </p>
               </article>
               <article
-                class="rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
+                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
               >
                 <p class="text-xs font-semibold uppercase text-blue-800 dark:text-blue-200">
                   Versioned contract
                 </p>
-                <h2 class="mt-3 text-xl font-bold text-slate-950 dark:text-slate-50">
+                <h2 class="mt-3 text-base font-bold text-slate-950 dark:text-slate-50">
                   Theme tokens v1
                 </h2>
-                <p class="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   Import <code class="font-mono">@ngnova/ui/styles/theme.css</code> to receive
                   foundation, semantic, and component <code class="font-mono">--ui-*</code>
                   custom properties. Override semantic tokens after the import; no JavaScript
@@ -347,21 +347,21 @@ export class ThemeToggleComponent {
             </section>
           </section>
         } @else {
-          <section class="mt-10 grid gap-6 md:grid-cols-2">
+          <section class="mt-7 grid gap-4 md:grid-cols-2">
             @for (section of page.sections; track section.title) {
               <article
-                class="rounded border border-blue-200 bg-white p-8 dark:border-blue-950 dark:bg-slate-950"
+                class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
               >
-                <h2 class="text-2xl font-medium text-slate-950 dark:text-slate-50">
+                <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">
                   {{ section.title }}
                 </h2>
-                <p class="mt-4 text-lg leading-7 text-slate-600 dark:text-slate-300">
+                <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   {{ section.description }}
                 </p>
-                <div class="mt-7 flex flex-wrap gap-3">
+                <div class="mt-5 flex flex-wrap gap-2">
                   @for (item of section.items; track item) {
                     <span
-                      class="rounded bg-slate-100 px-3 py-2 text-base text-slate-800 dark:bg-slate-800 dark:text-slate-100"
+                      class="rounded bg-slate-100 px-2.5 py-1.5 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-100"
                     >
                       {{ item }}
                     </span>

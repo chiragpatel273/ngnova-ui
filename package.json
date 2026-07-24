@@ -15,6 +15,7 @@
     "build:demo:app": "ng build demo",
     "build:docs:versioned": "npm run build:lib && ng build demo --base-href /ngnova-ui/v1/ && node scripts/prepare-versioned-docs.mjs",
     "build:lib": "ng build ui",
+    "generate:admin-template": "node scripts/generate-admin-dashboard-template.mjs",
     "test:lib": "ng test ui --watch=false",
     "test:demo": "ng test demo --watch=false",
     "lint:lib": "ng lint ui",

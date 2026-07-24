@@ -13,28 +13,26 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
     class: 'block min-w-0',
   },
   template: `
-    <section class="grid min-w-0 gap-5 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
+    <section class="grid min-w-0 gap-4 lg:grid-cols-[15rem_minmax(0,1fr)]">
       <aside
-        class="order-2 h-max rounded border border-blue-200 bg-white p-6 dark:border-blue-950 dark:bg-slate-950 lg:order-1"
+        class="order-2 h-max rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950 lg:order-1"
         aria-label="Card properties"
       >
-        <div class="flex items-center gap-3 border-b border-blue-200 pb-5 dark:border-blue-950">
-          <span class="font-mono text-xl text-blue-800 dark:text-blue-200" aria-hidden="true"
+        <div class="flex items-center gap-2 border-b border-blue-200 pb-3 dark:border-blue-950">
+          <span class="font-mono text-base text-blue-800 dark:text-blue-200" aria-hidden="true"
             >::</span
           >
           <h2 class="font-semibold text-slate-950 dark:text-slate-50">Properties</h2>
         </div>
 
-        <div class="mt-7">
-          <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
+        <div class="mt-5">
+          <p class="text-xs uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
             Appearance
           </p>
-          <div class="mt-5 grid gap-4">
+          <div class="mt-3 grid gap-3">
             @for (control of toggleControls; track control.key) {
               <div class="flex items-center justify-between gap-4">
-                <span class="text-base text-slate-950 dark:text-slate-100">{{
-                  control.label
-                }}</span>
+                <span class="text-sm text-slate-950 dark:text-slate-100">{{ control.label }}</span>
                 <button
                   type="button"
                   role="switch"
@@ -49,11 +47,11 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
           </div>
         </div>
 
-        <div class="mt-8">
-          <p class="text-sm uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
+        <div class="mt-5">
+          <p class="text-xs uppercase tracking-wide text-blue-950/80 dark:text-blue-100/80">
             Spacing & Radius
           </p>
-          <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
+          <label class="mt-3 grid gap-2 text-sm text-slate-950 dark:text-slate-100">
             <span class="flex items-center justify-between">
               Padding
               <strong class="text-sm text-blue-800 dark:text-blue-200">{{ paddingPx() }}px</strong>
@@ -68,7 +66,7 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
               class="accent-red-800"
             />
           </label>
-          <label class="mt-5 grid gap-3 text-base text-slate-950 dark:text-slate-100">
+          <label class="mt-3 grid gap-2 text-sm text-slate-950 dark:text-slate-100">
             <span class="flex items-center justify-between">
               Corner Radius
               <strong class="text-sm text-blue-800 dark:text-blue-200">{{ radiusPx() }}px</strong>
@@ -87,7 +85,7 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
         <button
           type="button"
-          class="mt-8 w-full rounded bg-blue-800 px-4 py-4 text-base font-semibold text-white transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
+          class="mt-5 min-h-9 w-full rounded bg-blue-800 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 dark:bg-blue-700 dark:hover:bg-blue-600"
           (click)="resetAll()"
         >
           Reset All
@@ -126,7 +124,7 @@ type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
           </div>
 
           <div
-            class="min-w-0 bg-[radial-gradient(#f1caca_1px,transparent_1px)] bg-[length:18px_18px] p-4 sm:p-8"
+            class="min-w-0 bg-[radial-gradient(#f1caca_1px,transparent_1px)] bg-[length:18px_18px] p-4 sm:p-5"
           >
             <div [class]="previewShellClasses()">
               <section [class]="previewCardClasses()" [style.border-radius.px]="radiusPx()">

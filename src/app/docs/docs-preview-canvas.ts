@@ -20,14 +20,14 @@ let nextExampleId = 0;
       [attr.data-visual-example]="visualId() || null"
     >
       <div
-        class="grid gap-4 border-b border-blue-200 p-4 dark:border-blue-950 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:p-5"
+        class="grid gap-3 border-b border-blue-200 p-3 dark:border-blue-950 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start sm:p-4"
       >
         <div class="min-w-0">
-          <h3 [id]="titleId" class="text-lg font-bold text-slate-950 dark:text-slate-50">
+          <h3 [id]="titleId" class="text-base font-bold text-slate-950 dark:text-slate-50">
             {{ title() }}
           </h3>
           @if (description()) {
-            <p class="mt-1 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-400">
+            <p class="mt-1 max-w-2xl text-xs leading-5 text-slate-600 dark:text-slate-400">
               {{ description() }}
             </p>
           }
@@ -42,7 +42,7 @@ let nextExampleId = 0;
             <button
               type="button"
               role="tab"
-              class="min-h-9 rounded px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-300 dark:focus-visible:ring-offset-slate-950"
+              class="min-h-8 cursor-pointer rounded px-2.5 py-1 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 dark:focus-visible:ring-blue-300 dark:focus-visible:ring-offset-slate-950"
               [class.bg-white]="activeView() === view.value"
               [class.text-blue-800]="activeView() === view.value"
               [class.shadow-sm]="activeView() === view.value"
@@ -69,10 +69,10 @@ let nextExampleId = 0;
           [id]="panelId('preview')"
           [attr.aria-labelledby]="tabId('preview')"
           tabindex="0"
-          class="p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-700 sm:p-6"
+          class="p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-700 sm:p-4"
         >
           <div
-            class="flex min-h-48 min-w-0 items-center justify-center overflow-x-auto rounded bg-slate-50 p-4 dark:bg-slate-900 sm:p-6"
+            class="flex min-h-36 min-w-0 items-center justify-center overflow-x-auto rounded bg-slate-50 p-3 dark:bg-slate-900 sm:p-4"
           >
             <ng-content />
           </div>

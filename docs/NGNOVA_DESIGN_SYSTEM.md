@@ -33,15 +33,21 @@ The variable font is self-hosted through the combined weight and optical-size bu
 enabled so Inter adapts its glyph construction to small UI text and large headings. Components use
 inherited typography so they integrate with consumer applications.
 
-Use these weights consistently:
+Use this compact documentation scale consistently:
 
-| Role                  |  Weight | Typical size |
-| --------------------- | ------: | -----------: |
-| Body and descriptions |     400 |      14–16px |
-| Controls and labels   |     500 |      14–16px |
-| Section headings      |     600 |      20–30px |
-| Page headings         |     700 |      36–48px |
-| Code and metadata     | 400–600 |      12–14px |
+| Documentation role         |  Weight | Size | Line height |
+| -------------------------- | ------: | ---: | ----------: |
+| Page title                 |     700 | 24px |        32px |
+| Section heading            | 600–700 | 18px |        28px |
+| Card and example title     | 600–700 | 16px |        24px |
+| Body and descriptions      |     400 | 14px |        20px |
+| Controls and labels        | 500–600 | 12px |        16px |
+| Compact sidebar navigation | 400–600 | 13px |        20px |
+| Code and metadata          | 400–600 | 12px |        20px |
+
+Metrics inside product examples may use 20–24px values when their hierarchy requires it. Component
+previews may also demonstrate consumer-defined typography; those examples do not redefine the
+documentation chrome scale. Avoid text below 12px in documentation and templates.
 
 Avoid synthetic bold or italic faces. Use tight letter spacing only for short controls and large
 headings; body copy should keep normal tracking.

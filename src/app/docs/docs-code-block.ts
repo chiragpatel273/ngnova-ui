@@ -10,7 +10,7 @@ import { UiButtonComponent } from '@ngnova/ui/button';
       class="overflow-hidden rounded border border-[#3c3c3c] bg-[#1e1e1e] shadow-xl shadow-zinc-300/40 dark:shadow-black/30"
     >
       <figcaption
-        class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-[#3c3c3c] bg-[#252526] px-4 py-3 text-xs text-[#cccccc]"
+        class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-[#3c3c3c] bg-[#252526] px-3 py-2 text-xs text-[#cccccc]"
       >
         <div class="flex min-w-0 items-center gap-2.5 overflow-hidden">
           <span class="size-3 rounded-full bg-[#ff5f57]" aria-hidden="true"></span>
@@ -19,6 +19,9 @@ import { UiButtonComponent } from '@ngnova/ui/button';
           <span class="ml-2 shrink-0 rounded bg-[#333333] px-2 py-1 font-mono text-[#9cdcfe]">
             {{ language() }}
           </span>
+          <span class="truncate font-mono text-[#cccccc]" [title]="filename()">
+            {{ filename() }}
+          </span>
         </div>
         <ui-button class="justify-self-end" variant="secondary" size="sm" (click)="copy()">
           {{ copiedLabel() }}
@@ -26,11 +29,11 @@ import { UiButtonComponent } from '@ngnova/ui/button';
       </figcaption>
       <div class="grid max-h-96 grid-cols-[3.25rem_minmax(0,1fr)] overflow-y-auto">
         <pre
-          class="select-none border-r border-[#3c3c3c] bg-[#1b1b1b] px-4 py-5 text-right font-mono text-sm leading-7 text-[#858585]"
+          class="select-none border-r border-[#3c3c3c] bg-[#1b1b1b] px-3 py-3 text-right font-mono text-xs leading-5 text-[#858585]"
           >{{ lineNumbers() }}</pre
         >
         <pre
-          class="min-w-0 whitespace-pre-wrap break-words bg-[#1e1e1e] px-5 py-5 font-mono text-sm leading-7 text-[#d4d4d4] [overflow-wrap:anywhere]"
+          class="min-w-0 whitespace-pre-wrap break-words bg-[#1e1e1e] px-4 py-3 font-mono text-xs leading-5 text-[#d4d4d4] [overflow-wrap:anywhere]"
         ><code [innerHTML]="highlightedCode()"></code></pre>
       </div>
     </figure>

@@ -73,38 +73,6 @@ interface AdminActivity {
   readonly tone: 'blue' | 'emerald' | 'violet' | 'amber';
 }
 
-export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen bg-white xl:grid-cols-[11.5rem_minmax(0,1fr)]">
-  <aside class="hidden border-r border-slate-200 p-3 xl:flex xl:flex-col">
-    <!-- Brand, search, workspace navigation, and signed-in user -->
-  </aside>
-
-  <section class="min-w-0">
-    <header class="flex min-h-14 items-center border-b border-slate-200 px-4">
-      <!-- Workspace status, date, notifications, and account menu -->
-    </header>
-
-    <div class="space-y-4 p-4">
-      <section class="grid gap-4 rounded-md border border-emerald-200 bg-emerald-50/70 p-4">
-        <!-- Quarterly revenue target and progress -->
-      </section>
-
-      <section class="grid gap-px border border-slate-200 bg-slate-200 xl:grid-cols-4">
-        <!-- Revenue, customers, orders, and conversion -->
-      </section>
-
-      <section class="grid gap-4 xl:grid-cols-[1.25fr_1fr_0.95fr]">
-        <ui-card><!-- Revenue trend --></ui-card>
-        <ui-card><!-- Team capacity --></ui-card>
-        <ui-card><!-- Recent activity --></ui-card>
-      </section>
-
-      <ui-card padding="none">
-        <!-- Recent orders table with row selection -->
-      </ui-card>
-    </div>
-  </section>
-</main>`;
-
 @Component({
   selector: 'app-admin-dashboard-template',
   standalone: true,
@@ -158,7 +126,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
         @for (item of navigationItems; track item.label) {
           <button
             type="button"
-            class="group flex min-h-10 w-full items-center gap-2.5 rounded px-2.5 text-left text-sm font-medium transition-colors"
+            class="group flex min-h-8 w-full items-center gap-2 rounded px-2 text-left text-xs font-medium transition-colors"
             [class.bg-blue-50]="activeNavigation() === item.label"
             [class.text-blue-700]="activeNavigation() === item.label"
             [class.shadow-[inset_2px_0_0_#2563eb]]="activeNavigation() === item.label"
@@ -171,7 +139,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
             <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
             @if (item.badge) {
               <span
-                class="rounded-full bg-blue-50 px-1.5 py-0.5 text-[0.6875rem] font-semibold text-blue-700"
+                class="rounded-full bg-blue-50 px-1.5 py-0.5 text-xs font-semibold text-blue-700"
               >
                 {{ item.badge }}
               </span>
@@ -180,7 +148,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
         }
       </nav>
 
-      <div class="mt-auto border-t border-slate-200 pt-3">
+      <div class="mt-auto border-t border-slate-200 pt-2.5">
         <button
           type="button"
           class="flex w-full items-center gap-2 rounded p-2 text-left transition-colors hover:bg-slate-100"
@@ -188,7 +156,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
           <ui-avatar label="Maya Chen" size="sm" />
           <span class="min-w-0 flex-1">
             <span class="block truncate text-xs font-semibold text-slate-900">Maya Chen</span>
-            <span class="block truncate text-[0.6875rem] text-slate-500">Administrator</span>
+            <span class="block truncate text-xs text-slate-500">Administrator</span>
           </span>
           <ng-icon name="heroChevronDown" class="size-3.5 text-slate-400" aria-hidden="true" />
         </button>
@@ -196,33 +164,31 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
     </ng-template>
 
     <div
-      class="relative min-h-[46rem] bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-50 xl:grid xl:grid-cols-[11.5rem_minmax(0,1fr)]"
+      class="relative min-h-[42rem] bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-50 xl:grid xl:grid-cols-[10.5rem_minmax(0,1fr)]"
       data-admin-template
     >
       <aside
-        class="hidden border-r border-slate-200 bg-white p-3 text-slate-950 dark:border-slate-800 dark:bg-slate-950 dark:text-white xl:flex xl:flex-col"
+        class="hidden border-r border-slate-200 bg-white p-2.5 text-slate-950 dark:border-slate-800 dark:bg-slate-950 dark:text-white xl:flex xl:flex-col"
       >
         <div class="flex items-center gap-2.5 px-1.5">
           <span
-            class="inline-flex size-8 items-center justify-center rounded-md bg-blue-600 text-white"
+            class="inline-flex size-7 items-center justify-center rounded-md bg-blue-600 text-white"
           >
             <ng-icon name="heroBolt" class="size-4.5" aria-hidden="true" />
           </span>
           <span class="min-w-0">
             <span class="block truncate text-xs font-bold tracking-wide">NORTHSTAR</span>
-            <span class="block truncate text-[0.6875rem] text-slate-500">Operations cloud</span>
+            <span class="block truncate text-xs text-slate-500">Operations cloud</span>
           </span>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-3">
           <ui-input ariaLabel="Search workspace" placeholder="Search..." size="sm">
             <ng-icon inputPrefix name="heroMagnifyingGlass" class="size-4" aria-hidden="true" />
           </ui-input>
         </div>
 
-        <p
-          class="mb-1.5 mt-4 px-2.5 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-slate-400"
-        >
+        <p class="mb-1 mt-3 px-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
           Workspace
         </p>
         <ng-container [ngTemplateOutlet]="adminNavigation" />
@@ -246,7 +212,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
 
       <section class="min-w-0">
         <header
-          class="flex min-h-14 items-center gap-3 border-b border-slate-200 bg-white px-3 sm:px-4 dark:border-slate-800 dark:bg-slate-950"
+          class="flex min-h-12 items-center gap-2 border-b border-slate-200 bg-white px-3 dark:border-slate-800 dark:bg-slate-950"
         >
           <button
             type="button"
@@ -290,12 +256,12 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
           </div>
         </header>
 
-        <div class="space-y-4 p-3 sm:p-4">
+        <div class="space-y-3 p-3">
           <section
-            class="grid items-center gap-4 rounded-md border border-emerald-200 bg-emerald-50/70 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_14rem] dark:border-emerald-900 dark:bg-emerald-950/30"
+            class="grid items-center gap-3 rounded-md border border-emerald-200 bg-emerald-50/70 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_13rem] dark:border-emerald-900 dark:bg-emerald-950/30"
             aria-label="Quarterly revenue target"
           >
-            <div class="flex min-w-0 items-center gap-3">
+            <div class="flex min-w-0 items-center gap-2.5">
               <ng-icon
                 name="heroCheckCircle"
                 class="size-5 shrink-0 text-emerald-700 dark:text-emerald-300"
@@ -329,7 +295,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
                 @for (metric of metrics; track metric.label) {
                   <article
                     data-admin-metric
-                    class="flex min-w-0 gap-2.5 bg-white p-3 dark:bg-slate-950"
+                    class="flex min-w-0 gap-2 bg-white p-2.5 dark:bg-slate-950"
                     [attr.aria-label]="metric.label + ' metric'"
                   >
                     <span [class]="metricIconClasses(metric.tone)">
@@ -340,15 +306,15 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
                         {{ metric.label }}
                       </p>
                       <p
-                        class="mt-1 text-[1.375rem] font-bold leading-none tracking-tight text-slate-950 dark:text-white"
+                        class="mt-1 text-xl font-bold leading-none tracking-tight text-slate-950 dark:text-white"
                       >
                         {{ metric.value }}
                       </p>
-                      <p class="mt-2 truncate text-[0.6875rem] text-slate-500 dark:text-slate-400">
+                      <p class="mt-1.5 truncate text-xs text-slate-500 dark:text-slate-400">
                         {{ metric.context }}
                       </p>
                       <ui-tag
-                        class="mt-1.5 inline-flex"
+                        class="mt-1 inline-flex"
                         size="sm"
                         [variant]="metric.positive ? 'success' : 'danger'"
                       >
@@ -362,15 +328,15 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
           </section>
 
           <section
-            class="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.95fr)]"
+            class="grid gap-3 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.95fr)]"
           >
             <ui-card class="min-w-0" padding="none" ariaLabel="Revenue overview">
-              <div class="flex items-start justify-between gap-3 px-4 pt-4">
+              <div class="flex items-start justify-between gap-3 px-3 pt-3">
                 <div>
                   <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
                     Revenue overview
                   </h2>
-                  <p class="mt-3 text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
+                  <p class="mt-2 text-xl font-bold tracking-tight text-slate-950 dark:text-white">
                     $253,400
                   </p>
                   <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -398,7 +364,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
               </div>
 
               <div
-                class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-4 py-2.5 text-[0.6875rem] text-slate-500 dark:border-slate-800"
+                class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-3 py-2 text-xs text-slate-500 dark:border-slate-800"
               >
                 <span class="inline-flex items-center gap-1.5">
                   <span class="size-2 rounded-full bg-blue-600"></span>
@@ -412,7 +378,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
             </ui-card>
 
             <ui-card class="min-w-0" padding="none" ariaLabel="Team capacity">
-              <div class="flex items-center justify-between gap-3 px-4 py-3.5">
+              <div class="flex items-center justify-between gap-3 px-3 py-2.5">
                 <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Team capacity</h2>
                 <button
                   type="button"
@@ -426,7 +392,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
               >
                 @for (team of teamCapacity; track team.label) {
                   <div
-                    class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2 px-4 py-2.5"
+                    class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2 px-3 py-2"
                   >
                     <span class="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
                       {{ team.label }}
@@ -441,7 +407,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
                       [label]="team.label + ' capacity'"
                       [ariaValueText]="team.value + ' percent allocated'"
                     />
-                    <span class="text-right text-[0.6875rem] text-slate-500">
+                    <span class="text-right text-xs text-slate-500">
                       {{ team.assigned }}
                     </span>
                   </div>
@@ -450,7 +416,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
             </ui-card>
 
             <ui-card class="min-w-0" padding="none" ariaLabel="Recent activity">
-              <div class="flex items-center justify-between gap-3 px-4 py-3.5">
+              <div class="flex items-center justify-between gap-3 px-3 py-2.5">
                 <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
                   Recent activity
                 </h2>
@@ -462,10 +428,10 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
                 </button>
               </div>
               <ol
-                class="divide-y divide-slate-200 border-t border-slate-200 px-4 dark:divide-slate-800 dark:border-slate-800"
+                class="divide-y divide-slate-200 border-t border-slate-200 px-3 dark:divide-slate-800 dark:border-slate-800"
               >
                 @for (activity of activities; track activity.title + activity.time) {
-                  <li class="flex gap-2.5 py-2.5">
+                  <li class="flex gap-2 py-2">
                     <span [class]="activityIconClasses(activity.tone)">
                       <ng-icon [name]="activity.icon" class="size-4" aria-hidden="true" />
                     </span>
@@ -473,11 +439,11 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
                       <p class="truncate text-xs font-medium text-slate-800 dark:text-slate-100">
                         {{ activity.title }}
                       </p>
-                      <p class="mt-0.5 truncate text-[0.6875rem] text-slate-500">
+                      <p class="mt-0.5 truncate text-xs text-slate-500">
                         {{ activity.detail }}
                       </p>
                     </div>
-                    <span class="shrink-0 text-[0.625rem] text-slate-400">{{ activity.time }}</span>
+                    <span class="shrink-0 text-xs text-slate-400">{{ activity.time }}</span>
                   </li>
                 }
               </ol>
@@ -486,7 +452,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
 
           <ui-card padding="none" ariaLabel="Recent orders">
             <div
-              class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-800"
+              class="flex items-center justify-between gap-3 border-b border-slate-200 px-3 py-2.5 dark:border-slate-800"
             >
               <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent orders</h2>
               <button
@@ -498,7 +464,7 @@ export const ADMIN_DASHBOARD_TEMPLATE_SOURCE = `<main class="grid min-h-screen b
             </div>
 
             <ui-table
-              class="block [&_table]:!text-xs [&_td]:!px-2.5 [&_td]:!py-2 [&_th]:!px-2.5 [&_th]:!py-2"
+              class="block [&_table]:!text-xs [&_td]:!px-2 [&_td]:!py-1.5 [&_th]:!px-2 [&_th]:!py-1.5"
               caption="Recent customer orders"
               [columns]="orderColumns"
               [rows]="orderRows"

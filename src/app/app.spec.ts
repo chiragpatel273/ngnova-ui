@@ -65,6 +65,37 @@ describe('App', () => {
     );
   });
 
+  it('uses the shared compact page-title typography across documentation routes', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    for (const path of [
+      '/',
+      '/guide',
+      '/components/button',
+      '/templates',
+      '/apis',
+      '/accessibility',
+    ]) {
+      await router.navigateByUrl(path);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const pageTitle = (fixture.nativeElement as HTMLElement).querySelector('h1');
+      expect(pageTitle, `${path} should render a page title`).toBeTruthy();
+      expect(pageTitle?.classList.contains('text-2xl'), `${path} should use a 24px title`).toBe(
+        true,
+      );
+      expect(
+        pageTitle?.classList.contains('leading-8'),
+        `${path} should use a 32px line height`,
+      ).toBe(true);
+      expect(pageTitle?.classList.contains('text-3xl'), `${path} should not use a 30px title`).toBe(
+        false,
+      );
+    }
+  });
+
   it('toggles the docs theme from the header control', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -250,6 +281,57 @@ describe('App', () => {
 
     expect(dashboard?.querySelector('[role="dialog"][aria-label="Admin navigation"]')).toBeNull();
     expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('provides complete dashboard source files, a ZIP download, and a focused preview route', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/templates');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const openDashboardLink = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('a')).find(
+      (link) => link.textContent?.includes('Open dashboard'),
+    );
+    const downloadLink = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('a')).find(
+      (link) => link.textContent?.includes('Download ZIP'),
+    );
+    const sourceTabs = compiled.querySelectorAll<HTMLButtonElement>(
+      '[aria-label="Admin dashboard source files"] [role="tab"]',
+    );
+
+    expect(openDashboardLink?.getAttribute('href')).toBe('#/templates/admin-dashboard');
+    expect(openDashboardLink?.getAttribute('target')).toBe('_blank');
+    expect(openDashboardLink?.getAttribute('rel')).toContain('noopener');
+    expect(downloadLink?.getAttribute('href')).toBe(
+      'templates/admin-dashboard/ngnova-admin-dashboard.zip',
+    );
+    expect(downloadLink?.hasAttribute('download')).toBe(true);
+    expect(Array.from(sourceTabs, (tab) => tab.textContent?.trim())).toEqual([
+      'HTML',
+      'TypeScript',
+      'CSS',
+      'Chart helper',
+    ]);
+
+    sourceTabs[1]?.click();
+    fixture.detectChanges();
+    expect(compiled.querySelector('app-docs-code-block')?.textContent).toContain(
+      'admin-dashboard.component.ts',
+    );
+    expect(compiled.querySelector('app-docs-code-block')?.textContent).toContain(
+      'export class AdminDashboardComponent',
+    );
+
+    await router.navigateByUrl('/templates/admin-dashboard');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(compiled.querySelector('app-admin-dashboard-preview')).toBeTruthy();
+    expect(compiled.querySelector('[data-admin-template]')).toBeTruthy();
+    expect(compiled.querySelector('app-docs-layout')).toBeNull();
   });
 
   it('renders flagship component docs with unique section IDs, valid section links, and code blocks', async () => {

@@ -115,34 +115,48 @@ const API_ENTRIES: readonly ApiEntry[] = [
   selector: 'app-docs-api-reference',
   standalone: true,
   template: `
-    <article class="mx-auto max-w-[73rem] pb-20">
-      <header class="pt-5">
-        <h1 class="text-6xl font-bold leading-tight text-slate-950 dark:text-slate-50">
+    <article class="mx-auto max-w-[76rem] pb-14">
+      <header class="pt-2">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.08em] text-blue-700 dark:text-blue-300"
+        >
+          Reference
+        </p>
+        <h1 class="mt-1.5 text-2xl font-bold leading-8 text-slate-950 dark:text-slate-50">
           API Reference
         </h1>
-        <p class="mt-7 max-w-4xl text-2xl leading-10 text-slate-600 dark:text-slate-300">
+        <p class="mt-2 max-w-3xl text-sm leading-5 text-slate-600 dark:text-slate-300">
           Comprehensive documentation for all NgNova UI modules. Browse and filter through
           components, projection slots, services, and core types used across the library.
         </p>
       </header>
 
-      <section class="mt-10 grid gap-5">
-        <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_13rem]">
+      <section
+        class="mt-6 rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+        aria-label="API filters"
+      >
+        <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <label class="block">
             <span class="sr-only">Search API by name or description</span>
             <input
               type="search"
-              placeholder="Search API by name or description..."
+              placeholder="Search APIs..."
               [value]="query()"
               (input)="updateQuery($event)"
-              class="h-16 w-full rounded border border-blue-200 bg-white px-7 text-xl text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50"
+              class="h-9 w-full rounded-md border border-slate-300 bg-slate-50 px-3 text-xs text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:border-blue-400 dark:focus:bg-slate-950"
             />
           </label>
 
-          <label>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+            {{ filteredEntries().length }} of {{ apiEntries.length }} entries
+          </p>
+        </div>
+
+        <div class="mt-3 border-t border-slate-200 pt-3 dark:border-slate-800">
+          <label class="block sm:hidden">
             <span class="sr-only">Module filter</span>
             <select
-              class="h-16 w-full rounded border border-blue-200 bg-white px-5 text-lg text-slate-950 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 dark:border-blue-950 dark:bg-slate-950 dark:text-slate-50"
+              class="h-9 w-full rounded-md border border-slate-300 bg-white px-3 text-xs font-medium text-slate-950 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:border-blue-400"
               [value]="activeFilter()"
               (change)="updateFilter($event)"
             >
@@ -151,45 +165,48 @@ const API_ENTRIES: readonly ApiEntry[] = [
               }
             </select>
           </label>
-        </div>
 
-        <div class="flex flex-wrap gap-3">
-          @for (filter of filters; track filter) {
-            <button
-              type="button"
-              [class]="filterButtonClasses(filter)"
-              (click)="activeFilter.set(filter)"
-            >
-              {{ filter === 'All' ? 'All' : filter }}
-            </button>
-          }
+          <div class="hidden flex-wrap gap-1.5 sm:flex">
+            @for (filter of filters; track filter) {
+              <button
+                type="button"
+                [class]="filterButtonClasses(filter)"
+                [attr.aria-pressed]="activeFilter() === filter"
+                (click)="activeFilter.set(filter)"
+              >
+                {{ filter === 'All' ? 'All' : filter }}
+              </button>
+            }
+          </div>
         </div>
       </section>
 
-      <section class="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3" aria-label="API entries">
+      <section class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3" aria-label="API entries">
         @for (entry of filteredEntries(); track entry.name) {
           <article
-            class="rounded border border-blue-200 bg-white p-8 dark:border-blue-950 dark:bg-slate-950"
+            class="h-full rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:border-blue-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-950 dark:hover:border-blue-900"
           >
-            <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start justify-between gap-3">
               <span [class]="kindBadgeClasses(entry.kind)">{{
                 entry.kind.slice(0, -1) || entry.kind
               }}</span>
-              <span class="font-mono text-sm text-slate-600 dark:text-slate-400">
+              <span
+                class="max-w-[62%] break-all text-right font-mono text-xs leading-4 text-slate-500 dark:text-slate-400"
+              >
                 {{ entry.packageName }}
               </span>
             </div>
-            <h2 class="mt-7 text-2xl font-medium text-slate-950 dark:text-slate-50">
+            <h2 class="mt-3 text-base font-semibold leading-5 text-slate-950 dark:text-slate-50">
               {{ entry.name }}
             </h2>
-            <p class="mt-4 min-h-20 text-lg leading-7 text-slate-600 dark:text-slate-300">
+            <p class="mt-1.5 min-h-15 text-sm leading-5 text-slate-600 dark:text-slate-300">
               {{ entry.description }}
             </p>
-            <div class="mt-8 border-t border-blue-100 pt-6 dark:border-blue-950/70">
-              <div class="flex flex-wrap gap-3">
+            <div class="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800">
+              <div class="flex flex-wrap gap-1.5">
                 @for (signature of entry.signatures; track signature) {
                   <code
-                    class="rounded bg-slate-100 px-2 py-1 font-mono text-sm text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                    class="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs leading-4 text-slate-700 ring-1 ring-inset ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800"
                   >
                     {{ signature }}
                   </code>
@@ -199,18 +216,18 @@ const API_ENTRIES: readonly ApiEntry[] = [
           </article>
         } @empty {
           <p
-            class="rounded border border-dashed border-blue-200 p-8 text-slate-600 dark:border-blue-950 dark:text-slate-300"
+            class="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-600 md:col-span-2 xl:col-span-3 dark:border-slate-700 dark:text-slate-300"
           >
             No APIs match the current filters.
           </p>
         }
       </section>
 
-      <div class="mt-20 border-t border-blue-200 pt-10 text-center dark:border-blue-950">
-        <p class="text-lg text-slate-600 dark:text-slate-300">
+      <footer class="mt-8 border-t border-slate-200 pt-4 dark:border-slate-800">
+        <p class="text-center text-xs text-slate-500 dark:text-slate-400">
           Showing {{ filteredEntries().length }} of {{ apiEntries.length }} public API entries.
         </p>
-      </div>
+      </footer>
     </article>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -245,16 +262,17 @@ export class DocsApiReferenceComponent {
 
   protected filterButtonClasses(filter: ApiKind): string {
     const base =
-      'rounded-full px-6 py-3 text-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700';
-    const active = 'bg-blue-800 text-white';
+      'min-h-8 cursor-pointer rounded-md border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30';
+    const active =
+      'border-blue-700 bg-blue-700 text-white shadow-sm dark:border-blue-500 dark:bg-blue-600';
     const inactive =
-      'bg-slate-200 text-slate-800 hover:bg-blue-100 hover:text-blue-800 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-blue-950/50';
+      'border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-900 dark:hover:bg-blue-950/40 dark:hover:text-blue-200';
 
     return `${base} ${this.activeFilter() === filter ? active : inactive}`;
   }
 
   protected kindBadgeClasses(kind: ApiKind): string {
-    const base = 'rounded px-3 py-1 text-sm font-bold uppercase';
+    const base = 'rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-[0.04em]';
     const colors: Record<ApiKind, string> = {
       All: 'bg-slate-200 text-slate-800',
       Components: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200',

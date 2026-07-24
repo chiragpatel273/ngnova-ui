@@ -39,7 +39,7 @@ interface HomeUpdate {
   template: `
     <article class="mx-auto max-w-6xl bg-slate-100 dark:bg-slate-950">
       <section class="border-b border-blue-100 bg-slate-50 dark:border-blue-950 dark:bg-slate-950">
-        <div class="grid gap-10 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_31rem] lg:px-6 lg:py-12">
+        <div class="grid gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_27rem] lg:px-5 lg:py-7">
           <div class="min-w-0 self-center">
             <div class="flex flex-wrap items-center gap-2">
               <ui-badge variant="danger" size="sm">Package version 0.1.0</ui-badge>
@@ -47,12 +47,12 @@ interface HomeUpdate {
             </div>
 
             <h1
-              class="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-normal text-slate-950 dark:text-slate-50 lg:text-5xl"
+              class="mt-3 max-w-3xl text-2xl font-bold leading-8 tracking-normal text-slate-950 dark:text-slate-50"
             >
               Build faster with NgNova UI Docs
             </h1>
 
-            <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
+            <p class="mt-3 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-300">
               An Angular 22 standalone component library with focused package entry points, Tailwind
               v4 styling, API-aligned documentation, and a release pipeline that builds a real
               consumer application.
@@ -89,13 +89,13 @@ interface HomeUpdate {
       </section>
 
       <section
-        class="border-b border-blue-100 bg-white px-5 py-7 dark:border-blue-950 dark:bg-slate-950 lg:px-6"
+        class="border-b border-blue-100 bg-white px-4 py-5 dark:border-blue-950 dark:bg-slate-950 lg:px-5"
       >
         <div
           class="grid items-center gap-5 rounded bg-slate-100 p-5 dark:bg-slate-900 md:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]"
         >
           <div>
-            <h2 class="text-xl font-semibold text-slate-950 dark:text-slate-50">Quick Start</h2>
+            <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">Quick Start</h2>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Install the package, then import only the component entry point your Angular screen
               needs.
@@ -113,7 +113,7 @@ interface HomeUpdate {
       </section>
 
       <section
-        class="border-b border-blue-100 bg-white px-5 py-8 text-center dark:border-blue-950 dark:bg-slate-950 lg:px-6"
+        class="border-b border-blue-100 bg-white px-4 py-6 text-center dark:border-blue-950 dark:bg-slate-950 lg:px-5"
       >
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           Repository-backed release facts
@@ -121,7 +121,7 @@ interface HomeUpdate {
         <div class="mt-5 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-4">
           @for (metric of metrics; track metric.label) {
             <section class="rounded border border-blue-100 p-4 dark:border-blue-950">
-              <p class="text-2xl font-bold text-blue-700 dark:text-blue-300">{{ metric.value }}</p>
+              <p class="text-xl font-bold text-blue-700 dark:text-blue-300">{{ metric.value }}</p>
               <h2 class="mt-1 text-sm font-semibold text-slate-950 dark:text-slate-50">
                 {{ metric.label }}
               </h2>
@@ -133,30 +133,30 @@ interface HomeUpdate {
         </div>
       </section>
 
-      <section class="bg-slate-100 px-5 py-10 dark:bg-slate-950 lg:px-6">
+      <section class="bg-slate-100 px-4 py-6 dark:bg-slate-950 lg:px-5">
         <div class="mx-auto max-w-3xl text-center">
-          <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
+          <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">
             Built around verifiable contracts
           </h2>
-          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+          <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
             Each claim below maps to source code, generated package output, or the release pipeline.
           </p>
         </div>
 
-        <div class="mt-8 grid gap-5 md:grid-cols-3">
+        <div class="mt-6 grid gap-4 md:grid-cols-3">
           @for (principle of principles; track principle.title) {
             <section
-              class="rounded border border-blue-100 bg-white p-6 dark:border-blue-950 dark:bg-slate-950"
+              class="rounded border border-blue-100 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
             >
               <span
                 class="inline-flex rounded bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
               >
                 {{ principle.short }}
               </span>
-              <h3 class="mt-5 text-xl font-semibold text-slate-950 dark:text-slate-50">
+              <h3 class="mt-4 text-base font-semibold text-slate-950 dark:text-slate-50">
                 {{ principle.title }}
               </h3>
-              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
                 {{ principle.description }}
               </p>
             </section>
@@ -165,10 +165,10 @@ interface HomeUpdate {
       </section>
 
       <section
-        class="grid gap-8 bg-slate-50 px-5 py-10 dark:bg-slate-950 lg:grid-cols-[minmax(0,1fr)_29rem] lg:px-6"
+        class="grid gap-5 bg-slate-50 px-4 py-6 dark:bg-slate-950 lg:grid-cols-[minmax(0,1fr)_25rem] lg:px-5"
       >
         <div>
-          <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">
+          <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">
             Package and consumer verification
           </h2>
           <div class="mt-5 grid gap-3">
@@ -186,7 +186,7 @@ interface HomeUpdate {
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase text-slate-500">Release pipeline</p>
-                <p class="mt-1 text-2xl font-bold text-slate-950 dark:text-slate-50">
+                <p class="mt-1 text-xl font-bold text-slate-950 dark:text-slate-50">
                   Source to consumer
                 </p>
               </div>
@@ -218,11 +218,11 @@ interface HomeUpdate {
       </section>
 
       <section
-        class="border-y border-blue-100 bg-slate-200/60 px-5 py-10 dark:border-blue-950 dark:bg-slate-900 lg:px-6"
+        class="border-y border-blue-100 bg-slate-200/60 px-4 py-6 dark:border-blue-950 dark:bg-slate-900 lg:px-5"
       >
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 class="text-3xl font-semibold text-slate-950 dark:text-slate-50">What's New</h2>
+            <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">What's New</h2>
             <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
               Stay up to date with the latest component and documentation work.
             </p>
@@ -243,10 +243,10 @@ interface HomeUpdate {
                 {{ update.version }}
               </span>
               <div>
-                <h3 class="text-xl font-semibold text-slate-950 dark:text-slate-50">
+                <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
                   {{ update.title }}
                 </h3>
-                <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
                   {{ update.description }}
                 </p>
                 <p class="mt-3 text-xs text-slate-500">{{ update.meta }}</p>
@@ -256,13 +256,13 @@ interface HomeUpdate {
         </div>
       </section>
 
-      <section class="bg-slate-900 px-5 py-14 text-center text-white lg:px-6">
-        <h2 class="text-4xl font-bold tracking-normal">Ready to inspect the implementation?</h2>
-        <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-slate-300">
+      <section class="bg-slate-900 px-4 py-8 text-center text-white lg:px-5">
+        <h2 class="text-lg font-bold tracking-normal">Ready to inspect the implementation?</h2>
+        <p class="mx-auto mt-5 max-w-2xl text-sm leading-5 text-slate-300">
           Start with the guide, inspect each public API, and use the same package paths exercised by
           the consumer smoke build.
         </p>
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <div class="mt-6 flex flex-wrap justify-center gap-3">
           <a routerLink="/guide">
             <ui-button>Start your project</ui-button>
           </a>

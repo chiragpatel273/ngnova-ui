@@ -63,4 +63,11 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'templates/admin-dashboard',
+    loadComponent: () =>
+      import('./docs/admin-dashboard-preview').then(
+        (module) => module.AdminDashboardPreviewComponent,
+      ),
+  },
 ];

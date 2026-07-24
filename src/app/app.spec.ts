@@ -184,6 +184,74 @@ describe('App', () => {
     }
   });
 
+  it('lists every documented component exactly once in the left sidebar', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const componentNavigation = compiled.querySelector<HTMLElement>(
+      'nav[aria-label="Component documentation"]',
+    );
+    const sidebarSlugs = Array.from(
+      componentNavigation?.querySelectorAll<HTMLAnchorElement>('a[href^="/components/"]') ?? [],
+      (link) => link.getAttribute('href')?.replace('/components/', '') ?? '',
+    );
+    const documentedSlugs = componentDocs.map((doc) => doc.slug);
+
+    expect(componentNavigation).toBeTruthy();
+    expect(sidebarSlugs).toHaveLength(documentedSlugs.length);
+    expect(new Set(sidebarSlugs).size).toBe(documentedSlugs.length);
+    expect(new Set(sidebarSlugs)).toEqual(new Set(documentedSlugs));
+  });
+
+  it('renders the admin template as a responsive, component-composed dashboard', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/templates');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const dashboard = compiled.querySelector<HTMLElement>('[data-admin-template]');
+    const metrics = dashboard?.querySelectorAll('[data-admin-metric]');
+
+    expect(dashboard).toBeTruthy();
+    expect(metrics?.length).toBe(4);
+    expect(dashboard?.textContent).toContain('Revenue overview');
+    expect(dashboard?.textContent).toContain('Team capacity');
+    expect(dashboard?.textContent).toContain('Recent orders');
+    expect(dashboard?.querySelector('canvas[aria-label^="Revenue trend"]')).toBeTruthy();
+    expect(dashboard?.querySelector('ui-table')).toBeTruthy();
+    expect(dashboard?.querySelector('ui-input')).toBeTruthy();
+    expect(dashboard?.querySelector('ui-progress-bar')).toBeTruthy();
+
+    const mobileNavigationTrigger = dashboard?.querySelector<HTMLButtonElement>(
+      'button[aria-label="Open admin navigation"]',
+    );
+    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
+
+    mobileNavigationTrigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const mobileNavigation = dashboard?.querySelector<HTMLElement>(
+      '[role="dialog"][aria-label="Admin navigation"]',
+    );
+    expect(mobileNavigation).toBeTruthy();
+    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('true');
+
+    mobileNavigation?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(dashboard?.querySelector('[role="dialog"][aria-label="Admin navigation"]')).toBeNull();
+    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('renders flagship component docs with unique section IDs, valid section links, and code blocks', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);

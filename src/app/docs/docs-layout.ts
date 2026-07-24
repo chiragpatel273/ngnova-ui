@@ -38,26 +38,68 @@ interface PrimaryNavItem {
 
 const COMPONENT_GROUPS: readonly ComponentDocGroup[] = [
   {
-    label: 'Foundations',
-    slugs: ['button', 'badge', 'tag', 'avatar', 'alert', 'skeleton', 'spinner', 'progress-bar'],
+    label: 'Actions & status',
+    slugs: [
+      'button',
+      'badge',
+      'tag',
+      'chip',
+      'avatar',
+      'alert',
+      'spinner',
+      'skeleton',
+      'progress-bar',
+    ],
   },
   {
     label: 'Forms',
-    slugs: ['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'],
+    slugs: [
+      'form-field',
+      'input',
+      'textarea',
+      'checkbox',
+      'radio',
+      'switch',
+      'select',
+      'combobox',
+      'date-picker',
+      'file-upload',
+    ],
   },
   {
-    label: 'Layout',
-    slugs: ['card', 'table'],
+    label: 'Layout & data',
+    slugs: [
+      'card',
+      'divider',
+      'table',
+      'table-virtual-scroll',
+      'data-view',
+      'tree',
+      'tree-table',
+      'paginator',
+    ],
   },
   {
-    label: 'Navigation',
-    slugs: ['tabs', 'accordion'],
+    label: 'Navigation & workflow',
+    slugs: ['breadcrumb', 'tabs', 'accordion', 'stepper'],
   },
   {
-    label: 'Overlays',
-    slugs: ['modal', 'toast'],
+    label: 'Overlays & feedback',
+    slugs: [
+      'modal',
+      'drawer',
+      'menu',
+      'popover',
+      'tooltip',
+      'toast',
+      'command-palette',
+      'overlay',
+      'confirmation',
+    ],
   },
 ];
+
+const GROUPED_COMPONENT_SLUGS = new Set(COMPONENT_GROUPS.flatMap((group) => group.slugs));
 
 const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'API Reference', path: '/apis' },
@@ -314,14 +356,22 @@ export class DocsLayoutComponent {
     }[]
   >(() => {
     const normalizedQuery = this.query().trim().toLowerCase();
-
-    return COMPONENT_GROUPS.map((group) => ({
+    const matchesQuery = (doc: ComponentDoc): boolean =>
+      !normalizedQuery || this.matchesQuery(doc, normalizedQuery);
+    const groups = COMPONENT_GROUPS.map((group) => ({
       label: group.label,
       docs: group.slugs
         .map((slug) => componentDocs.find((doc) => doc.slug === slug))
         .filter((doc): doc is ComponentDoc => !!doc)
-        .filter((doc) => !normalizedQuery || this.matchesQuery(doc, normalizedQuery)),
+        .filter(matchesQuery),
     })).filter((group) => group.docs.length > 0);
+    const uncategorizedDocs = componentDocs.filter(
+      (doc) => !GROUPED_COMPONENT_SLUGS.has(doc.slug) && matchesQuery(doc),
+    );
+
+    return uncategorizedDocs.length > 0
+      ? [...groups, { label: 'More components', docs: uncategorizedDocs }]
+      : groups;
   });
 
   protected updateQuery(event: Event): void {

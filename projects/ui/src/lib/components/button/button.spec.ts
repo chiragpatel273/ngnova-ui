@@ -272,9 +272,21 @@ describe('UiButtonComponent', () => {
 
   it('applies every current size', () => {
     const sizes: Record<UiButtonSize, readonly string[]> = {
-      sm: ['h-[var(--ui-control-height-sm,2rem)]', 'gap-1.5', 'px-3', 'text-sm', 'leading-5'],
-      md: ['h-[var(--ui-control-height-md,2.5rem)]', 'gap-2', 'px-4', 'text-sm', 'leading-5'],
-      lg: ['h-[var(--ui-control-height-lg,3rem)]', 'gap-2.5', 'px-5', 'text-base', 'leading-6'],
+      sm: [
+        'h-[var(--ui-button-height-sm,1.875rem)]',
+        'gap-1.5',
+        'px-2.5',
+        'text-[0.8125rem]',
+        'leading-[1.125rem]',
+      ],
+      md: ['h-[var(--ui-button-height-md,2.25rem)]', 'gap-2', 'px-3.5', 'text-sm', 'leading-5'],
+      lg: [
+        'h-[var(--ui-button-height-lg,2.625rem)]',
+        'gap-2.5',
+        'px-4.5',
+        'text-[0.9375rem]',
+        'leading-[1.375rem]',
+      ],
     };
 
     for (const [size, expectedClasses] of Object.entries(sizes) as [
@@ -303,7 +315,7 @@ describe('UiButtonComponent', () => {
 
     const button = buttonFixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
-    expect(button.className).toContain('size-10');
+    expect(button.className).toContain('size-[var(--ui-button-height-md,2.25rem)]');
     expect(button.className).toContain('p-0');
     expect(button.className).toContain('[--ui-button-icon-size:1.125rem]');
     expect(button.className).not.toContain('w-full');

@@ -135,15 +135,15 @@ const APPEARANCE_INTENT_CLASSES: Record<UiButtonAppearance, Record<UiButtonInten
 };
 
 const SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: 'h-[var(--ui-control-height-sm,2rem)] gap-1.5 px-3 text-sm leading-5',
-  md: 'h-[var(--ui-control-height-md,2.5rem)] gap-2 px-4 text-sm leading-5',
-  lg: 'h-[var(--ui-control-height-lg,3rem)] gap-2.5 px-5 text-base leading-6',
+  sm: 'h-[var(--ui-button-height-sm,1.875rem)] gap-1.5 px-2.5 text-[0.8125rem] leading-[1.125rem]',
+  md: 'h-[var(--ui-button-height-md,2.25rem)] gap-2 px-3.5 text-sm leading-5',
+  lg: 'h-[var(--ui-button-height-lg,2.625rem)] gap-2.5 px-4.5 text-[0.9375rem] leading-[1.375rem]',
 };
 
 const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: 'size-8 p-0 text-sm',
-  md: 'size-10 p-0 text-sm',
-  lg: 'size-12 p-0 text-base',
+  sm: 'size-[var(--ui-button-height-sm,1.875rem)] p-0 text-[0.8125rem]',
+  md: 'size-[var(--ui-button-height-md,2.25rem)] p-0 text-sm',
+  lg: 'size-[var(--ui-button-height-lg,2.625rem)] p-0 text-[0.9375rem]',
 };
 
 const ICON_ONLY_GLYPH_SIZE_CLASSES: Record<UiButtonSize, string> = {

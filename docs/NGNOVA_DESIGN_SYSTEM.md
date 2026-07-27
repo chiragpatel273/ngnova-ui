@@ -91,7 +91,7 @@ NgNova UI is icon-library agnostic. Documentation examples use Heroicons through
 public Button APIs accept any projected icon marked with `uiButtonIconStart` or `uiButtonIconEnd`.
 
 - Standard button markers default to 16px and scale with the component-owned icon-size variable.
-- Icon-only glyphs are 16/18/20px inside 32/40/48px square controls.
+- Icon-only glyphs are 16/18/20px inside 30/36/42px square controls.
 - Outline icons use an approximately 2px stroke at standard size.
 - SVGs must fill the marker container and render as blocks to avoid baseline gaps.
 - Decorative icons are `aria-hidden`; icon-only controls require an accessible label.
@@ -101,12 +101,15 @@ public Button APIs accept any projected icon marked with `uiButtonIconStart` or 
 
 | Size   | Height | Horizontal padding | Icon-only size | Text |
 | ------ | -----: | -----------------: | -------------: | ---: |
-| Small  |   32px |               12px |           32px | 14px |
-| Medium |   40px |               16px |           40px | 14px |
-| Large  |   48px |               20px |           48px | 16px |
+| Small  |   30px |               10px |           30px | 13px |
+| Medium |   36px |               14px |           36px | 14px |
+| Large  |   42px |               18px |           42px | 15px |
 
 All Button appearances use the same typography, icon geometry, focus treatment, and interaction
 timing. Semantic intent changes color, not layout.
+
+The compact 30px small control remains above the WCAG 2.5.8 minimum target size. For touch-first
+surfaces, prefer medium or large buttons, or provide additional spacing around small controls.
 
 The modern visual API combines `appearance` (`solid`, `outline`, `ghost`, `text`, or `tonal`) with
 `intent` (`primary`, `secondary`, `success`, `warning`, `danger`, or `neutral`). The legacy

@@ -215,12 +215,6 @@ describe('App', () => {
       expect(details).toBeTruthy();
       expect(
         details?.examples.length,
-<<<<<<< ours
-        `${doc.name} should have a contextual example`,
-      ).toBeGreaterThan(0);
-      expect(details?.examples[0]?.title.toLowerCase()).not.toContain('interactive example');
-      expect(details?.examples[0]?.description.trim().length).toBeGreaterThan(20);
-=======
         `${doc.name} should teach at least two distinct product scenarios`,
       ).toBeGreaterThanOrEqual(2);
       for (const example of details?.examples ?? []) {
@@ -228,36 +222,30 @@ describe('App', () => {
         expect(example.description.trim().length).toBeGreaterThan(20);
         expect(example.code.trim().length).toBeGreaterThan(20);
       }
->>>>>>> theirs
       expect(doc.selector).toMatch(/^(ui-|\[ui)/);
     }
   });
 
-<<<<<<< ours
   it('uses each component contextual recipe to label its primary live preview', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
     for (const slug of ['badge', 'checkbox', 'drawer', 'spinner']) {
       await router.navigateByUrl(`/components/${slug}`);
-=======
   it('gives every component route a meaningful primary live example', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
     for (const doc of componentDocs) {
       await router.navigateByUrl(`/components/${doc.slug}`);
->>>>>>> theirs
       fixture.detectChanges();
       await fixture.whenStable();
 
       const preview = (fixture.nativeElement as HTMLElement).querySelector(
         'app-docs-preview-canvas',
       );
-<<<<<<< ours
 
       expect(preview?.querySelector('h3')?.textContent?.trim()).not.toMatch(/component example/i);
-=======
       const title = preview?.querySelector('h3')?.textContent?.trim() ?? '';
       const description = preview?.querySelector('p')?.textContent?.trim() ?? '';
 
@@ -270,9 +258,27 @@ describe('App', () => {
         description.length,
         `${doc.name} should explain the product scenario shown by its example`,
       ).toBeGreaterThan(20);
->>>>>>> theirs
       expect(preview?.textContent).not.toContain('interactive example');
     }
+  });
+
+  it('renders the additional examples as visible product recipes', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/card');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const recipes = compiled.querySelector('#examples');
+    const recipeTitles = Array.from(recipes?.querySelectorAll('h3') ?? []).map((heading) =>
+      heading.textContent?.trim(),
+    );
+
+    expect(recipes?.querySelector('h2')?.textContent?.trim()).toBe('Product recipes');
+    expect(recipes?.textContent).toContain('distinct, copyable product scenarios');
+    expect(recipeTitles).toEqual(['Settings card', 'Usage summary']);
   });
 
   it('lists every documented component exactly once in the left sidebar', async () => {

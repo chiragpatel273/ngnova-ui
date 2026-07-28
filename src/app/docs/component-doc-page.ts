@@ -1841,7 +1841,13 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
 
         @if (examples().length) {
           <section id="examples" class="border-t border-blue-200 py-7 dark:border-blue-950/70">
-            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Examples</h2>
+            <div>
+              <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Product recipes</h2>
+              <p class="mt-1.5 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-400">
+                Apply {{ componentDoc.name }} in distinct, copyable product scenarios—not just an
+                isolated component state.
+              </p>
+            </div>
             <div class="mt-4 grid gap-4">
               @for (example of examples(); track example.title) {
                 <section

@@ -226,6 +226,12 @@ describe('App', () => {
     }
   });
 
+  it('uses each component contextual recipe to label its primary live preview', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    for (const slug of ['badge', 'checkbox', 'drawer', 'spinner']) {
+      await router.navigateByUrl(`/components/${slug}`);
   it('gives every component route a meaningful primary live example', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -238,6 +244,8 @@ describe('App', () => {
       const preview = (fixture.nativeElement as HTMLElement).querySelector(
         'app-docs-preview-canvas',
       );
+
+      expect(preview?.querySelector('h3')?.textContent?.trim()).not.toMatch(/component example/i);
       const title = preview?.querySelector('h3')?.textContent?.trim() ?? '';
       const description = preview?.querySelector('p')?.textContent?.trim() ?? '';
 

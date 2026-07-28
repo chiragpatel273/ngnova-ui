@@ -224,7 +224,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
               routerLink="/guide"
               routerLinkActive="bg-blue-50 font-semibold text-blue-700 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-900"
               class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
-              (click)="closeMobileNavigation(false)"
+              (click)="handleSidebarNavigation()"
             >
               Getting Started
             </a>
@@ -248,7 +248,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
                       [routerLink]="['/components', item.slug]"
                       routerLinkActive="border-blue-200 bg-blue-50 font-semibold text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-200"
                       class="flex min-h-8 items-center rounded-md border border-transparent px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
-                      (click)="closeMobileNavigation(false)"
+                      (click)="handleSidebarNavigation()"
                     >
                       {{ item.name }}
                     </a>
@@ -259,7 +259,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
               <a
                 routerLink="/components"
                 class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
-                (click)="closeMobileNavigation(false)"
+                (click)="handleSidebarNavigation()"
               >
                 No matching components
               </a>
@@ -280,7 +280,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
                 [routerLink]="item.path"
                 routerLinkActive="bg-blue-50 font-semibold text-blue-700 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-900"
                 class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
-                (click)="closeMobileNavigation(false)"
+                (click)="handleSidebarNavigation()"
               >
                 {{ item.label }}
               </a>
@@ -426,6 +426,11 @@ export class DocsLayoutComponent {
     if (restoreFocus) {
       this.mobileNavigationTrigger()?.nativeElement.focus();
     }
+  }
+
+  protected handleSidebarNavigation(): void {
+    this.closeMobileNavigation(false);
+    this.document.defaultView?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }
 
   private matchesQuery(doc: ComponentDoc, query: string): boolean {

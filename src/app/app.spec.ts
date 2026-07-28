@@ -226,12 +226,6 @@ describe('App', () => {
     }
   });
 
-  it('uses each component contextual recipe to label its primary live preview', async () => {
-    const fixture = TestBed.createComponent(App);
-    const router = TestBed.inject(Router);
-
-    for (const slug of ['badge', 'checkbox', 'drawer', 'spinner']) {
-      await router.navigateByUrl(`/components/${slug}`);
   it('gives every component route a meaningful primary live example', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -303,6 +297,26 @@ describe('App', () => {
     expect(sidebarSlugs).toHaveLength(documentedSlugs.length);
     expect(new Set(sidebarSlugs).size).toBe(documentedSlugs.length);
     expect(new Set(sidebarSlugs)).toEqual(new Set(documentedSlugs));
+  });
+
+  it('scrolls to the top whenever a left-sidebar link is clicked', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+
+    await router.navigateByUrl('/components/button');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const activeSidebarLink = compiled.querySelector<HTMLAnchorElement>(
+      'nav[aria-label="Component documentation"] a[href="/components/button"]',
+    );
+
+    activeSidebarLink?.click();
+
+    expect(activeSidebarLink).toBeTruthy();
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
   });
 
   it('renders the admin template as a responsive, component-composed dashboard', async () => {

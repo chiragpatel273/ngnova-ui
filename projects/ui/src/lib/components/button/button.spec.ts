@@ -13,6 +13,7 @@ import {
   UiButtonComponent,
   UiButtonDirective,
   UiButtonGroupComponent,
+  UiButtonIconDirective,
   UiButtonIconEndDirective,
   UiButtonIconStartDirective,
 } from '../../../../button/src/button';
@@ -68,11 +69,25 @@ class ButtonIconHostComponent {}
 
 @Component({
   standalone: true,
-  imports: [UiButtonDirective],
+  imports: [UiButtonComponent, UiButtonIconDirective],
+  template: `
+    <ui-button iconOnly ariaLabel="Open search">
+      <span uiButtonIcon>search</span>
+    </ui-button>
+  `,
+})
+class IconOnlyButtonHostComponent {}
+
+@Component({
+  standalone: true,
+  imports: [UiButtonDirective, UiButtonIconDirective],
   template: `
     <a uiButton href="/reports" variant="outline">Reports</a>
     <a uiButton href="/settings" disabled>Settings</a>
     <button uiButton type="button" disabled>Disabled action</button>
+    <button uiButton iconOnly type="button" aria-label="Open search">
+      <span uiButtonIcon>search</span>
+    </button>
   `,
 })
 class ButtonDirectiveHostComponent {
@@ -317,9 +332,22 @@ describe('UiButtonComponent', () => {
 
     expect(button.className).toContain('size-[var(--ui-button-height-md,2.25rem)]');
     expect(button.className).toContain('p-0');
-    expect(button.className).toContain('[--ui-button-icon-size:1.125rem]');
+    expect(button.className).toContain(
+      '[--ui-button-icon-size:var(--ui-button-icon-size-md,1.125rem)]',
+    );
     expect(button.className).not.toContain('w-full');
     expect(button.getAttribute('aria-label')).toBe('Create item');
+  });
+
+  it('supports a dedicated decorative icon marker for icon-only buttons', () => {
+    const buttonFixture = TestBed.createComponent(IconOnlyButtonHostComponent);
+    buttonFixture.detectChanges();
+
+    const icon = buttonFixture.nativeElement.querySelector('[uiButtonIcon]') as HTMLElement;
+
+    expect(icon.getAttribute('aria-hidden')).toBe('true');
+    expect(icon.className).toContain('size-[var(--ui-button-icon-size,1rem)]');
+    expect(icon.className).toContain('[--ng-icon__stroke-width:2]');
   });
 
   it('marks start and end icon content as decorative', () => {
@@ -345,9 +373,9 @@ describe('UiButtonComponent', () => {
     buttonFixture.componentRef.setInput('ariaLabel', 'Create item');
 
     const expectedGlyphSizes = {
-      sm: '[--ui-button-icon-size:1rem]',
-      md: '[--ui-button-icon-size:1.125rem]',
-      lg: '[--ui-button-icon-size:1.25rem]',
+      sm: '[--ui-button-icon-size:var(--ui-button-icon-size-sm,1rem)]',
+      md: '[--ui-button-icon-size:var(--ui-button-icon-size-md,1.125rem)]',
+      lg: '[--ui-button-icon-size:var(--ui-button-icon-size-lg,1.25rem)]',
     } as const;
 
     for (const [size, expectedClass] of Object.entries(expectedGlyphSizes)) {
@@ -377,9 +405,27 @@ describe('UiButtonComponent', () => {
     buttonFixture.componentRef.setInput('ariaLabel', 'Create item');
     buttonFixture.detectChanges();
 
-    const labelWrapper = buttonFixture.nativeElement.querySelector('button > span') as HTMLElement;
+    const labelWrapper = buttonFixture.nativeElement.querySelector(
+      '[data-ui-button-label]',
+    ) as HTMLElement;
 
     expect(labelWrapper.className).toContain('hidden');
+  });
+
+  it('keeps the loading spinner visible for icon-only buttons', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('iconOnly', true);
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.componentRef.setInput('ariaLabel', 'Saving');
+    buttonFixture.detectChanges();
+
+    const spinner = buttonFixture.nativeElement.querySelector(
+      'button > [aria-hidden="true"]',
+    ) as HTMLElement;
+
+    expect(spinner).not.toBeNull();
+    expect(spinner.className).not.toContain('hidden');
+    expect(spinner.className).toContain('size-[var(--ui-button-icon-size,1rem)]');
   });
 
   it('supports full width layout and keeps enabled pointer affordance', () => {
@@ -422,6 +468,20 @@ describe('UiButtonComponent', () => {
     expect(anchor.className).toContain('border');
     expect(nativeButton.disabled).toBe(true);
     expect(nativeButton.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('supports icon-only geometry on native buttons with the uiButton directive', () => {
+    const directiveFixture = TestBed.createComponent(ButtonDirectiveHostComponent);
+    directiveFixture.detectChanges();
+
+    const iconButton = directiveFixture.nativeElement.querySelector(
+      'button[aria-label="Open search"]',
+    ) as HTMLButtonElement;
+
+    expect(iconButton.className).toContain('size-[var(--ui-button-height-md,2.25rem)]');
+    expect(iconButton.className).toContain('aspect-square');
+    expect(iconButton.className).toContain('p-0');
+    expect(iconButton.className).not.toContain('w-full');
   });
 
   it('prevents disabled anchor activation with the uiButton directive', () => {

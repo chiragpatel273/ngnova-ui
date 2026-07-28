@@ -209,9 +209,69 @@ describe('App', () => {
 
   it('has route-ready docs and detail content for every component', () => {
     for (const doc of componentDocs) {
+      const details = componentDocDetailsBySlug.get(doc.slug);
+
       expect(docsBySlug.get(doc.slug)).toBe(doc);
-      expect(componentDocDetailsBySlug.has(doc.slug)).toBe(true);
+      expect(details).toBeTruthy();
+      expect(
+        details?.examples.length,
+<<<<<<< ours
+        `${doc.name} should have a contextual example`,
+      ).toBeGreaterThan(0);
+      expect(details?.examples[0]?.title.toLowerCase()).not.toContain('interactive example');
+      expect(details?.examples[0]?.description.trim().length).toBeGreaterThan(20);
+=======
+        `${doc.name} should teach at least two distinct product scenarios`,
+      ).toBeGreaterThanOrEqual(2);
+      for (const example of details?.examples ?? []) {
+        expect(example.title.toLowerCase()).not.toContain('interactive example');
+        expect(example.description.trim().length).toBeGreaterThan(20);
+        expect(example.code.trim().length).toBeGreaterThan(20);
+      }
+>>>>>>> theirs
       expect(doc.selector).toMatch(/^(ui-|\[ui)/);
+    }
+  });
+
+<<<<<<< ours
+  it('uses each component contextual recipe to label its primary live preview', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    for (const slug of ['badge', 'checkbox', 'drawer', 'spinner']) {
+      await router.navigateByUrl(`/components/${slug}`);
+=======
+  it('gives every component route a meaningful primary live example', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    for (const doc of componentDocs) {
+      await router.navigateByUrl(`/components/${doc.slug}`);
+>>>>>>> theirs
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const preview = (fixture.nativeElement as HTMLElement).querySelector(
+        'app-docs-preview-canvas',
+      );
+<<<<<<< ours
+
+      expect(preview?.querySelector('h3')?.textContent?.trim()).not.toMatch(/component example/i);
+=======
+      const title = preview?.querySelector('h3')?.textContent?.trim() ?? '';
+      const description = preview?.querySelector('p')?.textContent?.trim() ?? '';
+
+      expect(preview, `${doc.name} should render a live example`).toBeTruthy();
+      expect(title, `${doc.name} should use a contextual example title`).not.toMatch(
+        /component example|interactive example/i,
+      );
+      expect(title.length, `${doc.name} should use a descriptive example title`).toBeGreaterThan(3);
+      expect(
+        description.length,
+        `${doc.name} should explain the product scenario shown by its example`,
+      ).toBeGreaterThan(20);
+>>>>>>> theirs
+      expect(preview?.textContent).not.toContain('interactive example');
     }
   });
 
@@ -367,12 +427,13 @@ describe('App', () => {
     }
   });
 
-  it('uses the shared accessible Preview and Code pattern for button and generic component pages', async () => {
+  it('uses the shared accessible Preview and Code pattern for flagship component pages', async () => {
     const router = TestBed.inject(Router);
 
     for (const { slug, exampleCount } of [
       { slug: 'button', exampleCount: 9 },
-      { slug: 'input', exampleCount: 1 },
+      { slug: 'input', exampleCount: 7 },
+      { slug: 'table', exampleCount: 6 },
     ]) {
       const fixture = TestBed.createComponent(App);
       await router.navigateByUrl(`/components/${slug}`);

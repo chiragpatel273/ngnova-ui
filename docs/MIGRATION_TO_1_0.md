@@ -55,12 +55,13 @@ meaning from visual weight:
 <ui-button intent="danger" appearance="outline">Delete</ui-button>
 ```
 
-Use `uiButtonIconStart` and `uiButtonIconEnd` on projected SVG/icon components. Icon-only buttons
-require `iconOnly` and an `ariaLabel`.
+Use `uiButtonIconStart` and `uiButtonIconEnd` on projected SVG/icon components beside visible text.
+Icon-only buttons use the dedicated `uiButtonIcon` marker and require `iconOnly` plus an
+`ariaLabel`.
 
 ```html
 <ui-button iconOnly ariaLabel="Create item">
-  <ng-icon uiButtonIconStart name="heroPlus" />
+  <ng-icon uiButtonIcon name="heroPlus" />
 </ui-button>
 ```
 

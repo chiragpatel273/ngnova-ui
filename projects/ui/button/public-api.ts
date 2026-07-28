@@ -9,6 +9,7 @@ export {
   UiButtonComponent,
   UiButtonDirective,
   UiButtonGroupComponent,
+  UiButtonIconDirective,
   UiButtonIconEndDirective,
   UiButtonIconStartDirective,
 } from './src/button';

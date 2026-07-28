@@ -46,7 +46,7 @@ export const componentDocs: ComponentDoc[] = [
     selector: 'ui-button',
     summary: 'Action button with variants, sizes, disabled state, and loading feedback.',
     importName:
-      'UiButtonComponent, UiButtonDirective, UiButtonGroupComponent, UiButtonIconStartDirective, UiButtonIconEndDirective',
+      'UiButtonComponent, UiButtonDirective, UiButtonGroupComponent, UiButtonIconDirective, UiButtonIconStartDirective, UiButtonIconEndDirective',
     usage: `<section aria-label="Button variants">
   <div class="flex flex-wrap items-center gap-3">
     <ui-button>Primary Action</ui-button>
@@ -81,8 +81,8 @@ export const componentDocs: ComponentDoc[] = [
 </section>
 
 <section aria-label="Button icons">
-  <ui-button ariaLabel="Create item" iconOnly>
-    <ng-icon uiButtonIconStart name="heroPlus" />
+  <ui-button ariaLabel="Create item" iconOnly size="md">
+    <ng-icon uiButtonIcon name="heroPlus" />
   </ui-button>
   <ui-button>
     <ng-icon uiButtonIconStart name="heroPlus" />
@@ -161,6 +161,13 @@ export const componentDocs: ComponentDoc[] = [
           'Applies square sizing for icon-only buttons and suppresses full-width expansion.',
       },
       {
+        name: '[uiButton] iconOnly',
+        type: 'boolean',
+        defaultValue: 'false',
+        description:
+          'Applies square icon-button sizing to a native button, anchor, or router link.',
+      },
+      {
         name: 'ariaLabel',
         type: 'string',
         defaultValue: "''",
@@ -209,6 +216,12 @@ export const componentDocs: ComponentDoc[] = [
         type: 'boolean',
         defaultValue: 'false',
         description: 'Expands the directive host to the full width of its container.',
+      },
+      {
+        name: 'uiButtonIcon',
+        type: 'directive',
+        defaultValue: 'n/a',
+        description: 'Marks and normalizes the decorative glyph inside an icon-only button.',
       },
       {
         name: 'uiButtonIconStart',
@@ -3916,7 +3929,7 @@ export function getComponentImportPath(slug: string): string {
   return `@ngnova/ui/${slug}`;
 }
 
-export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
+const baseComponentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
   [
     'button',
     {
@@ -3941,15 +3954,17 @@ export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>([
 </div>`,
         },
         {
-          title: 'Crisp SVG icon',
+          title: 'Icon action',
           description:
-            'Project an SVG through uiTagIcon so sizing and decorative semantics stay consistent.',
-          code: `<ui-tag variant="success">
-  <svg uiTagIcon viewBox="0 0 24 24" fill="none" stroke="currentColor">
-    <path d="m5 12 4 4L19 6" />
-  </svg>
-  Published
-</ui-tag>`,
+            'Pair a short action label with a decorative icon, or provide an accessible label for an icon-only control.',
+          code: `<ui-button (pressed)="createRelease()">
+  <ng-icon uiButtonIconStart name="heroPlus" />
+  Create release
+</ui-button>
+
+<ui-button iconOnly appearance="ghost" ariaLabel="More release actions">
+  <ng-icon uiButtonIcon name="heroEllipsisHorizontal" />
+</ui-button>`,
         },
         {
           title: 'Testing with the button harness',
@@ -6047,3 +6062,346 @@ save(): void {
     },
   ],
 ]);
+
+/**
+ * A second, focused recipe for components whose primary recipe already covers basic usage.
+ * Keeping these scenarios separate makes the audit intentional: every component page teaches
+ * both a common product workflow and a materially different state or composition pattern.
+ */
+const supplementalComponentExamples: Readonly<Record<string, ComponentExample>> = {
+  card: {
+    title: 'Usage summary',
+    description:
+      'Compose a compact billing summary with supporting metadata and a clear next action.',
+    code: `<ui-card>
+  <h3 uiCardHeader>Current usage</h3>
+  <p class="text-3xl font-semibold">18,420 <span class="text-sm">requests</span></p>
+  <p class="text-sm text-slate-600">82% of the monthly allowance</p>
+  <a uiButton uiCardFooter href="/billing" variant="outline">Review billing</a>
+</ui-card>`,
+  },
+  badge: {
+    title: 'Unread count',
+    description:
+      'Add a concise count to a labelled inbox link without replacing its accessible name.',
+    code: `<a href="/inbox" class="inline-flex items-center gap-2">
+  <span>Inbox</span>
+  <ui-badge variant="info" ariaLabel="12 unread messages">12</ui-badge>
+</a>`,
+  },
+  tag: {
+    title: 'Release classification',
+    description:
+      'Use semantic, non-removable tags to classify a release without implying an action.',
+    code: `<div class="flex flex-wrap gap-2" aria-label="Release classification">
+  <ui-tag variant="success">Stable</ui-tag>
+  <ui-tag variant="info">Angular 22</ui-tag>
+  <ui-tag variant="warning">Prerelease docs</ui-tag>
+</div>`,
+  },
+  avatar: {
+    title: 'Review team',
+    description:
+      'Label a compact group of contributors while retaining a useful fallback for each person.',
+    code: `<div class="flex -space-x-2" aria-label="Release reviewers">
+  <ui-avatar label="Avery Chen" src="/people/avery.jpg" />
+  <ui-avatar label="Morgan Lee" />
+  <ui-avatar label="Sam Rivera" />
+</div>`,
+  },
+  skeleton: {
+    title: 'Results table loading',
+    description:
+      'Repeat aligned placeholders to preserve table rhythm while report data is loading.',
+    code: `<div aria-busy="true" aria-label="Loading release results" class="grid gap-3">
+  @for (row of [1, 2, 3]; track row) {
+    <div class="grid grid-cols-[2fr_1fr_5rem] gap-4">
+      <ui-skeleton />
+      <ui-skeleton />
+      <ui-skeleton />
+    </div>
+  }
+</div>`,
+  },
+  'progress-bar': {
+    title: 'Storage quota',
+    description:
+      'Pair progress with visible values so quota consumption remains understandable without color.',
+    code: `<section aria-labelledby="storage-heading">
+  <div class="flex justify-between">
+    <h3 id="storage-heading">Storage</h3>
+    <span>7.2 GB of 10 GB</span>
+  </div>
+  <ui-progress-bar [value]="72" ariaLabel="Storage used" />
+</section>`,
+  },
+  checkbox: {
+    title: 'Terms confirmation',
+    description:
+      'Connect a required agreement to explanatory copy before allowing account creation.',
+    code: `<ui-checkbox
+  label="I agree to the workspace terms"
+  helperText="Required to create a shared workspace."
+  [formControl]="termsControl"
+/>
+<ui-button [disabled]="termsControl.invalid">Create workspace</ui-button>`,
+  },
+  alert: {
+    title: 'Validation summary',
+    description:
+      'Place a persistent error summary before a form and link users to the fields that need attention.',
+    code: `<ui-alert variant="danger" title="Resolve 2 validation errors">
+  <ul class="list-disc pl-5">
+    <li><a href="#release-name">Enter a release name</a></li>
+    <li><a href="#release-date">Choose a release date</a></li>
+  </ul>
+</ui-alert>`,
+  },
+  radio: {
+    title: 'Billing cadence',
+    description:
+      'Present mutually exclusive billing choices with concise pricing context in one named group.',
+    code: `<ui-radio-group label="Billing cadence" [formControl]="billingCadence">
+  <ui-radio value="monthly" label="Monthly" helperText="$24 per month" />
+  <ui-radio value="annual" label="Annual" helperText="$240 per year — save $48" />
+</ui-radio-group>`,
+  },
+  switch: {
+    title: 'Privacy preference',
+    description:
+      'Use a switch for an immediately applied setting and explain the consequence beside it.',
+    code: `<ui-switch
+  label="Show profile to workspace members"
+  helperText="Your name, role, and avatar will be visible in member search."
+  [formControl]="profileVisibility"
+/>`,
+  },
+  tabs: {
+    title: 'Account settings',
+    description:
+      'Organize related settings views while keeping each tab label short and task-oriented.',
+    code: `<ui-tabs [items]="[
+  { value: 'profile', label: 'Profile', content: 'Update your public profile.' },
+  { value: 'security', label: 'Security', content: 'Manage passwords and sessions.' },
+  { value: 'billing', label: 'Billing', content: 'Review invoices and payment methods.' }
+]" />`,
+  },
+  accordion: {
+    title: 'Frequently asked questions',
+    description: 'Use single expansion when readers should focus on one detailed answer at a time.',
+    code: `<ui-accordion
+  ariaLabel="Billing questions"
+  [items]="billingQuestions"
+  [expandedIds]="['trial']"
+  (expandedIdsChange)="expandedQuestions.set($event)"
+/>`,
+  },
+  'file-upload': {
+    title: 'Profile photo upload',
+    description:
+      'Constrain a single image upload and communicate the accepted format before selection.',
+    code: `<ui-file-upload
+  label="Profile photo"
+  helperText="PNG or JPEG, up to 2 MB."
+  accept="image/png,image/jpeg"
+  [multiple]="false"
+  [maxFileSize]="2097152"
+  (filesChange)="previewPhoto($event)"
+/>`,
+  },
+  'command-palette': {
+    title: 'Navigation launcher',
+    description:
+      'Group destinations by product area and let keyboard users move directly to a selected route.',
+    code: `<ui-command-palette
+  [open]="paletteOpen()"
+  [commands]="navigationCommands"
+  placeholder="Go to a page…"
+  (selected)="navigateTo($event)"
+  (openChange)="paletteOpen.set($event)"
+/>`,
+  },
+  overlay: {
+    title: 'Notification inspector',
+    description:
+      'Anchor a compact, interactive notification list to its trigger without introducing a modal task.',
+    code: `<ui-overlay placement="bottom-end">
+  <button uiOverlayTrigger uiButton variant="ghost">Notifications</button>
+  <section uiOverlayContent aria-label="Recent notifications" class="w-80 p-4">
+    <h3>Recent notifications</h3>
+    <a href="/releases/42">Release 4.2 is ready to review</a>
+  </section>
+</ui-overlay>`,
+  },
+  confirmation: {
+    title: 'Leave with unsaved changes',
+    description:
+      'Request confirmation before navigation while making the safe and destructive outcomes explicit.',
+    code: `<ui-button variant="ghost" (pressed)="confirmLeave()">Back to projects</ui-button>
+
+<!-- Component class -->
+confirmLeave(): void {
+  this.confirmation.confirm({
+    title: 'Discard unsaved changes?',
+    message: 'Your edits to this release will be lost.',
+    confirmText: 'Discard changes',
+    cancelText: 'Keep editing',
+    variant: 'danger',
+  }).then((confirmed) => confirmed && this.navigateBack());
+}`,
+  },
+  'tree-table': {
+    title: 'Permission hierarchy',
+    description:
+      'Show inherited access in a hierarchy while keeping permission values aligned in data columns.',
+    code: `<ui-tree-table
+  caption="Workspace permissions"
+  [columns]="permissionColumns"
+  [nodes]="permissionNodes"
+  [expandedKeys]="expandedPermissionKeys()"
+  (expandedKeysChange)="expandedPermissionKeys.set($event)"
+/>`,
+  },
+  tree: {
+    title: 'Workspace navigation',
+    description:
+      'Use selection and expansion together for a navigable hierarchy whose state remains parent-owned.',
+    code: `<ui-tree
+  ariaLabel="Workspace navigation"
+  [nodes]="workspaceNodes"
+  [selectedKey]="selectedWorkspaceKey()"
+  [expandedKeys]="expandedWorkspaceKeys()"
+  (selectedKeyChange)="openWorkspaceItem($event)"
+  (expandedKeysChange)="expandedWorkspaceKeys.set($event)"
+/>`,
+  },
+  toast: {
+    title: 'Undo archive',
+    description:
+      'Confirm a completed background action and offer a short-lived recovery path when appropriate.',
+    code: `<ui-button (pressed)="archiveProject()">Archive project</ui-button>
+
+<!-- Component class -->
+archiveProject(): void {
+  this.projects.archive(this.projectId);
+  this.toast.success('Project archived', 'The project moved to your archive.');
+}`,
+  },
+  breadcrumb: {
+    title: 'Invoice location',
+    description:
+      'Truncate a deep hierarchy visually while preserving an explicit current-page destination.',
+    code: `<ui-breadcrumb
+  ariaLabel="Invoice location"
+  [items]="[
+    { label: 'Billing', href: '/billing' },
+    { label: 'Invoices', href: '/billing/invoices' },
+    { label: 'INV-2026-042', current: true }
+  ]"
+/>`,
+  },
+  paginator: {
+    title: 'Search results',
+    description:
+      'Reset pagination when filters change and announce the current result range beside the controls.',
+    code: `<p aria-live="polite">Showing {{ rangeStart }}–{{ rangeEnd }} of {{ totalResults }}</p>
+<ui-paginator
+  [page]="page()"
+  [pageSize]="25"
+  [totalItems]="totalResults"
+  ariaLabel="Search result pages"
+  (pageChange)="loadPage($event)"
+/>`,
+  },
+  chip: {
+    title: 'Team member picker',
+    description:
+      'Represent selected people as removable chips and return focus to the picker after removal.',
+    code: `<div class="flex flex-wrap gap-2" aria-label="Selected reviewers">
+  @for (reviewer of reviewers(); track reviewer.id) {
+    <ui-chip removable (removed)="removeReviewer(reviewer.id)">
+      {{ reviewer.name }}
+    </ui-chip>
+  }
+</div>`,
+  },
+  divider: {
+    title: 'Menu group boundary',
+    description:
+      'Use an unlabeled divider only where surrounding menu labels already explain the grouping.',
+    code: `<nav aria-label="Account">
+  <a href="/profile">Profile</a>
+  <a href="/preferences">Preferences</a>
+  <ui-divider />
+  <button type="button" class="text-red-700">Sign out</button>
+</nav>`,
+  },
+  menu: {
+    title: 'Account switcher',
+    description:
+      'Provide a labelled trigger and checked state for switching between recently used workspaces.',
+    code: `<ui-menu [items]="workspaceItems" ariaLabel="Switch workspace">
+  <button uiMenuTrigger uiButton variant="outline">Acme workspace</button>
+</ui-menu>`,
+  },
+  drawer: {
+    title: 'Mobile navigation',
+    description:
+      'Move application navigation into a modal drawer on small screens and label it by purpose.',
+    code: `<ui-button (pressed)="navigationOpen.set(true)">Open navigation</ui-button>
+<ui-drawer
+  side="left"
+  ariaLabel="Application navigation"
+  [open]="navigationOpen()"
+  (openChange)="navigationOpen.set($event)"
+>
+  <nav><a href="/dashboard">Dashboard</a><a href="/projects">Projects</a></nav>
+</ui-drawer>`,
+  },
+  popover: {
+    title: 'Schedule settings',
+    description:
+      'Keep lightweight scheduling controls near their trigger without interrupting the surrounding form.',
+    code: `<ui-popover placement="bottom-start">
+  <button uiPopoverTrigger uiButton variant="outline">Schedule</button>
+  <form uiPopoverContent class="grid w-72 gap-3 p-4">
+    <ui-date-picker label="Publish date" [formControl]="publishDate" />
+    <ui-button type="submit">Apply schedule</ui-button>
+  </form>
+</ui-popover>`,
+  },
+  tooltip: {
+    title: 'Truncated value',
+    description:
+      'Reveal a clipped value on hover and focus while leaving the visible table layout compact.',
+    code: `<span
+  class="block max-w-48 truncate"
+  uiTooltip="enterprise-release-candidate-2026.07.28"
+  tooltipPlacement="top"
+  tabindex="0"
+>
+  enterprise-release-candidate-2026.07.28
+</span>`,
+  },
+  spinner: {
+    title: 'Loading table region',
+    description:
+      'Combine a named status with the affected region so users understand which content is pending.',
+    code: `<section aria-busy="true" aria-labelledby="invoices-heading" class="grid place-items-center gap-3">
+  <h3 id="invoices-heading">Invoices</h3>
+  <ui-spinner label="Loading invoices" size="lg" />
+</section>`,
+  },
+};
+
+export const componentDocDetailsBySlug = new Map<string, ComponentDocDetails>(
+  [...baseComponentDocDetailsBySlug].map(([slug, details]) => {
+    const supplementalExample = supplementalComponentExamples[slug];
+    return [
+      slug,
+      supplementalExample
+        ? { ...details, examples: [...details.examples, supplementalExample] }
+        : details,
+    ];
+  }),
+);

@@ -141,16 +141,27 @@ const SIZE_CLASSES: Record<UiButtonSize, string> = {
 };
 
 const ICON_ONLY_SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: 'size-[var(--ui-button-height-sm,1.875rem)] p-0 text-[0.8125rem]',
-  md: 'size-[var(--ui-button-height-md,2.25rem)] p-0 text-sm',
-  lg: 'size-[var(--ui-button-height-lg,2.625rem)] p-0 text-[0.9375rem]',
+  sm: 'size-[var(--ui-button-height-sm,1.875rem)] aspect-square p-0 text-[0.8125rem] leading-none',
+  md: 'size-[var(--ui-button-height-md,2.25rem)] aspect-square p-0 text-sm leading-none',
+  lg: 'size-[var(--ui-button-height-lg,2.625rem)] aspect-square p-0 text-[0.9375rem] leading-none',
 };
 
-const ICON_ONLY_GLYPH_SIZE_CLASSES: Record<UiButtonSize, string> = {
-  sm: '[--ui-button-icon-size:1rem]',
-  md: '[--ui-button-icon-size:1.125rem]',
-  lg: '[--ui-button-icon-size:1.25rem]',
+const ICON_GLYPH_SIZE_CLASSES: Record<UiButtonSize, string> = {
+  sm: '[--ui-button-icon-size:var(--ui-button-icon-size-sm,1rem)]',
+  md: '[--ui-button-icon-size:var(--ui-button-icon-size-md,1.125rem)]',
+  lg: '[--ui-button-icon-size:var(--ui-button-icon-size-lg,1.25rem)]',
 };
+
+@Directive({
+  selector: '[uiButtonIcon]',
+  standalone: true,
+  host: {
+    class:
+      'pointer-events-none inline-flex size-[var(--ui-button-icon-size,1rem)] shrink-0 items-center justify-center leading-none [--ng-icon__stroke-width:2] [&_svg]:block [&_svg]:size-full',
+    'aria-hidden': 'true',
+  },
+})
+export class UiButtonIconDirective {}
 
 @Directive({
   selector: '[uiButtonIconStart]',
@@ -192,6 +203,7 @@ export class UiButtonDirective implements OnInit, OnDestroy {
   @Input() size: UiButtonSize = 'md';
   @Input({ transform: booleanAttribute }) disabled = false;
   @Input({ transform: booleanAttribute }) fullWidth = false;
+  @Input({ transform: booleanAttribute }) iconOnly = false;
 
   protected get buttonHost(): boolean {
     return this.host.nativeElement.tagName.toLowerCase() === 'button';
@@ -216,8 +228,9 @@ export class UiButtonDirective implements OnInit, OnDestroy {
       BASE_CLASSES,
       VARIANT_CLASSES[this.variant],
       getFinishClasses(this.variant),
-      SIZE_CLASSES[this.size],
-      this.fullWidth && 'w-full',
+      this.iconOnly ? ICON_ONLY_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
+      ICON_GLYPH_SIZE_CLASSES[this.size],
+      this.fullWidth && !this.iconOnly && 'w-full',
       this.disabled && 'pointer-events-none',
     );
   }
@@ -270,15 +283,18 @@ export class UiButtonGroupComponent {
     >
       @if (loading) {
         <span
-          class="size-4 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
+          class="size-[var(--ui-button-icon-size,1rem)] shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
           aria-hidden="true"
         ></span>
         @if (loadingLabel) {
           <span class="sr-only">{{ loadingLabel }}</span>
         }
       }
-      <ng-content select="[uiButtonIconStart]" />
-      <span class="inline-flex min-w-0 items-center justify-center" [class.hidden]="iconOnly"
+      <ng-content select="[uiButtonIconStart], [uiButtonIcon]" />
+      <span
+        data-ui-button-label
+        class="inline-flex min-w-0 items-center justify-center"
+        [class.hidden]="iconOnly"
         ><ng-content
       /></span>
       <ng-content select="[uiButtonIconEnd]" />
@@ -310,10 +326,9 @@ export class UiButtonComponent {
       this.visualClasses,
       getFinishClasses(this.variant, this.appearance),
       this.iconOnly ? ICON_ONLY_SIZE_CLASSES[this.size] : SIZE_CLASSES[this.size],
-      this.iconOnly && ICON_ONLY_GLYPH_SIZE_CLASSES[this.size],
-      this.iconOnly && '[&>span]:hidden',
+      ICON_GLYPH_SIZE_CLASSES[this.size],
       this.loading &&
-        '[&_[uiButtonIconStart]]:hidden [&_[uiButtonIconEnd]]:hidden [&>[aria-hidden=true]]:m-0',
+        '[&_[uiButtonIcon]]:hidden [&_[uiButtonIconStart]]:hidden [&_[uiButtonIconEnd]]:hidden [&>[aria-hidden=true]]:m-0',
       this.fullWidth && !this.iconOnly && 'w-full',
     );
   }

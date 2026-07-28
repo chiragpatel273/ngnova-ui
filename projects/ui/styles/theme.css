@@ -68,6 +68,9 @@
   --ui-button-height-sm: 1.875rem;
   --ui-button-height-md: 2.25rem;
   --ui-button-height-lg: 2.625rem;
+  --ui-button-icon-size-sm: 1rem;
+  --ui-button-icon-size-md: 1.125rem;
+  --ui-button-icon-size-lg: 1.25rem;
   --ui-control-radius: var(--ui-radius-md);
   --ui-surface-radius: var(--ui-radius-lg);
   --ui-control-border: var(--ui-color-border);

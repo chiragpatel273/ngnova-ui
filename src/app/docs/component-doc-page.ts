@@ -3,7 +3,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowRight, heroPlus } from '@ng-icons/heroicons/outline';
+import {
+  heroArrowRight,
+  heroBell,
+  heroEllipsisHorizontal,
+  heroMagnifyingGlass,
+  heroPlus,
+} from '@ng-icons/heroicons/outline';
 import { map } from 'rxjs';
 import { UiAccordionComponent } from '@ngnova/ui/accordion';
 import type { UiAccordionItem } from '@ngnova/ui/accordion';
@@ -16,6 +22,7 @@ import {
   UiButtonComponent,
   UiButtonDirective,
   UiButtonGroupComponent,
+  UiButtonIconDirective,
   UiButtonIconEndDirective,
   UiButtonIconStartDirective,
 } from '@ngnova/ui/button';
@@ -71,7 +78,7 @@ import { UiSwitchComponent } from '@ngnova/ui/switch';
 import { UiTabsComponent } from '@ngnova/ui/tabs';
 import type { UiTabItem } from '@ngnova/ui/tabs';
 import { UiTableCellDirective, UiTableComponent, UiTableHeaderDirective } from '@ngnova/ui/table';
-import type { UiTableColumn, UiTableRow, UiTableRowKey } from '@ngnova/ui/table';
+import type { UiTableColumn, UiTableRow, UiTableRowKey, UiTableSort } from '@ngnova/ui/table';
 import {
   UiTableVirtualRowDirective,
   UiTableVirtualScrollComponent,
@@ -129,6 +136,29 @@ interface ButtonUsageExample {
   readonly code: string;
 }
 
+interface InputUsageExample {
+  readonly id:
+    | 'forms'
+    | 'visual-options'
+    | 'adornments'
+    | 'search'
+    | 'password'
+    | 'validation'
+    | 'counters';
+  readonly title: string;
+  readonly description: string;
+  readonly filename: string;
+  readonly code: string;
+}
+
+interface TableUsageExample {
+  readonly id: 'basic' | 'sorting' | 'selection' | 'templates' | 'pagination' | 'states';
+  readonly title: string;
+  readonly description: string;
+  readonly filename: string;
+  readonly code: string;
+}
+
 const FORM_SLUGS = [
   'form-field',
   'combobox',
@@ -176,6 +206,45 @@ const BUTTON_INTENTS: readonly UiButtonIntent[] = [
   'danger',
   'neutral',
 ];
+
+const PRIMARY_PREVIEW_TITLES: Readonly<Record<string, string>> = {
+  'form-field': 'Workspace address field',
+  textarea: 'Release notes editor',
+  checkbox: 'Subscription and bulk selection',
+  radio: 'Contact preference',
+  switch: 'Release notifications',
+  combobox: 'Framework search',
+  'date-picker': 'Release date',
+  select: 'Plan selection',
+  modal: 'Publish confirmation',
+  toast: 'Package saved notification',
+  'data-view': 'Component catalog',
+  tree: 'Documentation hierarchy',
+  'tree-table': 'Package hierarchy',
+  'file-upload': 'Release asset upload',
+  'command-palette': 'Project command search',
+  overlay: 'Connected release actions',
+  confirmation: 'Guarded release deletion',
+  alert: 'Dismissible release status',
+  accordion: 'Documentation topics',
+  tabs: 'Component reference tabs',
+  breadcrumb: 'Documentation breadcrumb',
+  stepper: 'Release workflow',
+  paginator: 'Release results pagination',
+  chip: 'Active component filters',
+  divider: 'Settings section divider',
+  menu: 'Record actions menu',
+  drawer: 'Filter side panel',
+  popover: 'Account actions popover',
+  tooltip: 'Icon action guidance',
+  spinner: 'Invoice loading status',
+  badge: 'Release status badges',
+  tag: 'Removable status tag',
+  avatar: 'Contributor identity',
+  skeleton: 'Loading card placeholder',
+  'progress-bar': 'Build progress',
+  'table-virtual-scroll': 'Large release dataset',
+};
 
 const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
   {
@@ -235,7 +304,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     id: 'icons',
     title: 'Icons',
     description:
-      'Mark decorative leading and trailing icons explicitly, and label icon-only actions.',
+      'Use the dedicated icon marker for square actions; size controls both the button and glyph.',
     filename: 'button-icons.example.html',
     code: `<ui-button>
   <ng-icon uiButtonIconStart name="heroPlus" />
@@ -247,8 +316,16 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
   <ng-icon uiButtonIconEnd name="heroArrowRight" />
 </ui-button>
 
-<ui-button iconOnly ariaLabel="Create item">
-  <ng-icon uiButtonIconStart name="heroPlus" />
+<ui-button iconOnly size="sm" appearance="ghost" ariaLabel="Search">
+  <ng-icon uiButtonIcon name="heroMagnifyingGlass" />
+</ui-button>
+
+<ui-button iconOnly size="md" appearance="outline" ariaLabel="Notifications">
+  <ng-icon uiButtonIcon name="heroBell" />
+</ui-button>
+
+<ui-button iconOnly size="lg" ariaLabel="Create item">
+  <ng-icon uiButtonIcon name="heroPlus" />
 </ui-button>`,
   },
   {
@@ -301,6 +378,221 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
   },
 ];
 
+const INPUT_USAGE_EXAMPLES: readonly InputUsageExample[] = [
+  {
+    id: 'forms',
+    title: 'Reactive forms',
+    description:
+      'Connect the input to Angular forms while keeping labels, autocomplete, and support text together.',
+    filename: 'input-reactive-form.example.html',
+    code: `<ui-input
+  label="Work email"
+  type="email"
+  autocomplete="email"
+  helperText="We will only use this for account updates."
+  [formControl]="email"
+/>`,
+  },
+  {
+    id: 'visual-options',
+    title: 'Sizes and appearances',
+    description:
+      'Use size for layout density and appearance for the surrounding surface treatment.',
+    filename: 'input-visual-options.example.html',
+    code: `<ui-input label="Small outline" size="sm" placeholder="Compact field" />
+<ui-input label="Medium filled" appearance="filled" placeholder="Default density" />
+<ui-input label="Large outline" size="lg" placeholder="Prominent field" />`,
+  },
+  {
+    id: 'adornments',
+    title: 'Prefixes and suffixes',
+    description:
+      'Project short, non-editable context before or after the value without putting it in the label.',
+    filename: 'input-adornments.example.html',
+    code: `<ui-input label="Workspace URL" placeholder="design-system">
+  <span uiInputPrefix class="text-sm text-slate-500">https://</span>
+  <span uiInputSuffix class="text-sm text-slate-500">.ngnova.app</span>
+</ui-input>
+
+<ui-input label="Monthly budget" type="number" inputMode="decimal">
+  <span uiInputPrefix class="text-sm text-slate-500">$</span>
+  <span uiInputSuffix class="text-sm text-slate-500">USD</span>
+</ui-input>`,
+  },
+  {
+    id: 'search',
+    title: 'Clear and submit',
+    description:
+      'Make temporary queries easy to reset and handle Enter without reaching into the native input.',
+    filename: 'input-search.example.html',
+    code: `<ui-input
+  label="Search components"
+  type="search"
+  labelMode="hidden"
+  placeholder="Search components"
+  clearable
+  [formControl]="searchQuery"
+  (submitted)="lastSearch.set($event)"
+  (cleared)="lastSearch.set('')"
+/>
+
+<p aria-live="polite">Last submitted query: {{ lastSearch() || 'None' }}</p>`,
+  },
+  {
+    id: 'password',
+    title: 'Password reveal',
+    description:
+      'Add an accessible visibility toggle while preserving the password input contract.',
+    filename: 'input-password.example.html',
+    code: `<ui-input
+  label="Password"
+  type="password"
+  autocomplete="current-password"
+  helperText="Use at least 12 characters."
+  revealable
+  [formControl]="password"
+/>`,
+  },
+  {
+    id: 'validation',
+    title: 'Validation and intent',
+    description:
+      'Pair semantic field states with useful messages; explicit errors take danger priority.',
+    filename: 'input-validation.example.html',
+    code: `<ui-input
+  label="Username"
+  intent="success"
+  helperText="This username is available."
+/>
+
+<ui-input
+  label="Recovery email"
+  type="email"
+  errorText="Enter a valid email address."
+  [formControl]="invalidEmail"
+/>`,
+  },
+  {
+    id: 'counters',
+    title: 'Counters and field states',
+    description:
+      'Show hard character limits, soft word limits, and non-editable states with the same API.',
+    filename: 'input-counters-states.example.html',
+    code: `<ui-input
+  label="Project name"
+  helperText="Keep it concise."
+  [maxLength]="24"
+  [formControl]="projectName"
+/>
+
+<ui-input
+  label="Release summary"
+  counterMode="words"
+  [counterMax]="8"
+  [formControl]="releaseSummary"
+/>
+
+<ui-input label="Organization ID" [formControl]="organizationId" [readonly]="true" />
+<ui-input label="Managed domain" [formControl]="managedDomain" />`,
+  },
+];
+
+const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
+  {
+    id: 'basic',
+    title: 'Basic table',
+    description:
+      'Describe columns and rows with typed data, and provide a caption for screen-reader context.',
+    filename: 'table-basic.example.html',
+    code: `<ui-table
+  [columns]="tableColumns"
+  [rows]="tableRows"
+  caption="Component release status"
+  rowKey="id"
+/>`,
+  },
+  {
+    id: 'sorting',
+    title: 'Controlled sorting',
+    description:
+      'Own the sort state in the parent so local arrays, server requests, or cached queries can respond consistently.',
+    filename: 'table-sorting.example.html',
+    code: `<ui-table
+  [columns]="sortableColumns"
+  [rows]="sortedTableRows()"
+  [sort]="tableSort()"
+  (sortChange)="tableSort.set($event)"
+  caption="Sortable component inventory"
+  rowKey="id"
+/>`,
+  },
+  {
+    id: 'selection',
+    title: 'Multiple row selection',
+    description:
+      'Use stable row keys for controlled checkbox selection, including the select-all control.',
+    filename: 'table-selection.example.html',
+    code: `<ui-table
+  [columns]="tableColumns"
+  [rows]="tableRows"
+  caption="Select components for release"
+  rowKey="id"
+  selectionMode="multiple"
+  [selectedKeys]="selectedTableKeys()"
+  (selectedKeysChange)="selectedTableKeys.set($event)"
+/>
+
+<p aria-live="polite">{{ selectedTableKeys().length }} components selected</p>`,
+  },
+  {
+    id: 'templates',
+    title: 'Custom headers and cells',
+    description:
+      'Project templates by column key to add contextual headers and rich cell presentation.',
+    filename: 'table-templates.example.html',
+    code: `<ui-table [columns]="tableColumns" [rows]="tableRows" caption="Release readiness">
+  <ng-template uiTableHeader="status" let-column>
+    {{ column.header }} signal
+  </ng-template>
+
+  <ng-template uiTableCell="status" let-value>
+    <span class="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+      {{ value }}
+    </span>
+  </ng-template>
+</ui-table>`,
+  },
+  {
+    id: 'pagination',
+    title: 'Pagination and sticky columns',
+    description:
+      'Coordinate server-style pages while keeping the selection and first data columns visible during scrolling.',
+    filename: 'table-pagination.example.html',
+    code: `<ui-table
+  [columns]="tableColumns"
+  [rows]="pagedTableRows()"
+  caption="Paginated component inventory"
+  rowKey="id"
+  selectionMode="multiple"
+  [page]="tablePage()"
+  [pageSize]="3"
+  [totalItems]="allTableRows.length"
+  (pageChange)="tablePage.set($event)"
+  stickyHeader
+  stickySelectionColumn
+/>`,
+  },
+  {
+    id: 'states',
+    title: 'Loading, empty, and error states',
+    description: 'Communicate asynchronous table states with built-in status and alert semantics.',
+    filename: 'table-states.example.html',
+    code: `<ui-table [columns]="tableColumns" [rows]="[]" loading loadingText="Loading releases..." />
+<ui-table [columns]="tableColumns" [rows]="[]" emptyText="No matching components." />
+<ui-table [columns]="tableColumns" [rows]="[]" error errorText="Release data is unavailable." />`,
+  },
+];
+
 @Component({
   selector: 'app-component-doc-page',
   standalone: true,
@@ -316,6 +608,7 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     UiButtonComponent,
     UiButtonDirective,
     UiButtonGroupComponent,
+    UiButtonIconDirective,
     UiButtonIconEndDirective,
     UiButtonIconStartDirective,
     UiCardComponent,
@@ -371,7 +664,15 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
     DocsCodeBlockComponent,
     DocsPreviewCanvasComponent,
   ],
-  providers: [provideIcons({ heroArrowRight, heroPlus })],
+  providers: [
+    provideIcons({
+      heroArrowRight,
+      heroBell,
+      heroEllipsisHorizontal,
+      heroMagnifyingGlass,
+      heroPlus,
+    }),
+  ],
   template: `
     @if (doc(); as componentDoc) {
       <article class="mx-auto max-w-[72rem] pb-14">
@@ -537,19 +838,19 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                           <div class="grid justify-items-center gap-2">
                             <ui-button size="sm">Button</ui-button>
                             <span class="text-xs text-slate-500 dark:text-slate-400"
-                              >Small · 32px</span
+                              >Small · 30px</span
                             >
                           </div>
                           <div class="grid justify-items-center gap-2">
                             <ui-button size="md">Button</ui-button>
                             <span class="text-xs text-slate-500 dark:text-slate-400"
-                              >Medium · 40px</span
+                              >Medium · 36px</span
                             >
                           </div>
                           <div class="grid justify-items-center gap-2">
                             <ui-button size="lg">Button</ui-button>
                             <span class="text-xs text-slate-500 dark:text-slate-400"
-                              >Large · 48px</span
+                              >Large · 42px</span
                             >
                           </div>
                         </div>
@@ -585,18 +886,64 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                         </div>
                       }
                       @case ('icons') {
-                        <div class="flex flex-wrap items-center justify-center gap-3">
-                          <ui-button>
-                            <ng-icon uiButtonIconStart name="heroPlus" />
-                            Create
-                          </ui-button>
-                          <ui-button variant="outline">
-                            Continue
-                            <ng-icon uiButtonIconEnd name="heroArrowRight" />
-                          </ui-button>
-                          <ui-button iconOnly ariaLabel="Create item">
-                            <ng-icon uiButtonIconStart name="heroPlus" />
-                          </ui-button>
+                        <div class="grid w-full gap-5">
+                          <div class="flex flex-wrap items-center justify-center gap-3">
+                            <ui-button>
+                              <ng-icon uiButtonIconStart name="heroPlus" />
+                              Create
+                            </ui-button>
+                            <ui-button variant="outline">
+                              Continue
+                              <ng-icon uiButtonIconEnd name="heroArrowRight" />
+                            </ui-button>
+                          </div>
+                          <div
+                            class="flex flex-wrap items-end justify-center gap-5 border-t border-slate-200 pt-5 dark:border-slate-800"
+                            aria-label="Icon button sizes"
+                          >
+                            <div class="grid justify-items-center gap-2">
+                              <ui-button iconOnly size="sm" appearance="ghost" ariaLabel="Search">
+                                <ng-icon uiButtonIcon name="heroMagnifyingGlass" />
+                              </ui-button>
+                              <span class="text-xs text-slate-500 dark:text-slate-400"
+                                >Small · 30px</span
+                              >
+                            </div>
+                            <div class="grid justify-items-center gap-2">
+                              <ui-button
+                                iconOnly
+                                size="md"
+                                appearance="outline"
+                                ariaLabel="Notifications"
+                              >
+                                <ng-icon uiButtonIcon name="heroBell" />
+                              </ui-button>
+                              <span class="text-xs text-slate-500 dark:text-slate-400"
+                                >Medium · 36px</span
+                              >
+                            </div>
+                            <div class="grid justify-items-center gap-2">
+                              <ui-button iconOnly size="lg" ariaLabel="Create item">
+                                <ng-icon uiButtonIcon name="heroPlus" />
+                              </ui-button>
+                              <span class="text-xs text-slate-500 dark:text-slate-400"
+                                >Large · 42px</span
+                              >
+                            </div>
+                            <div class="grid justify-items-center gap-2">
+                              <button
+                                uiButton
+                                iconOnly
+                                size="md"
+                                variant="ghost"
+                                type="button"
+                                aria-label="More actions"
+                              >
+                                <ng-icon uiButtonIcon name="heroEllipsisHorizontal" />
+                              </button>
+                              <span class="text-xs text-slate-500 dark:text-slate-400">Native</span>
+                            </div>
+                          </div>
                         </div>
                       }
                       @case ('links') {
@@ -650,9 +997,253 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
                 </app-docs-preview-canvas>
               }
             </div>
+          } @else if (componentDoc.slug === 'input') {
+            <div class="grid gap-5">
+              @for (example of inputUsageExamples; track example.id) {
+                <app-docs-preview-canvas
+                  [title]="example.title"
+                  [description]="example.description"
+                  [code]="example.code"
+                  [filename]="example.filename"
+                  [visualId]="'input-' + example.id"
+                  language="Angular template"
+                >
+                  <div class="flex w-full min-w-0 items-center justify-center">
+                    @switch (example.id) {
+                      @case ('forms') {
+                        <div class="w-full max-w-sm">
+                          <ui-input
+                            label="Work email"
+                            type="email"
+                            autocomplete="email"
+                            helperText="We will only use this for account updates."
+                            [formControl]="email"
+                          />
+                        </div>
+                      }
+                      @case ('visual-options') {
+                        <div class="grid w-full max-w-md gap-4">
+                          <ui-input label="Small outline" size="sm" placeholder="Compact field" />
+                          <ui-input
+                            label="Medium filled"
+                            appearance="filled"
+                            placeholder="Default density"
+                          />
+                          <ui-input label="Large outline" size="lg" placeholder="Prominent field" />
+                        </div>
+                      }
+                      @case ('adornments') {
+                        <div class="grid w-full max-w-md gap-4">
+                          <ui-input label="Workspace URL" placeholder="design-system">
+                            <span uiInputPrefix class="text-sm text-slate-500 dark:text-slate-400">
+                              https://
+                            </span>
+                            <span uiInputSuffix class="text-sm text-slate-500 dark:text-slate-400">
+                              .ngnova.app
+                            </span>
+                          </ui-input>
+                          <ui-input label="Monthly budget" type="number" inputMode="decimal">
+                            <span uiInputPrefix class="text-sm text-slate-500 dark:text-slate-400">
+                              $
+                            </span>
+                            <span uiInputSuffix class="text-sm text-slate-500 dark:text-slate-400">
+                              USD
+                            </span>
+                          </ui-input>
+                        </div>
+                      }
+                      @case ('search') {
+                        <div class="grid w-full max-w-sm gap-3">
+                          <ui-input
+                            label="Search components"
+                            type="search"
+                            labelMode="hidden"
+                            placeholder="Search components"
+                            clearable
+                            [formControl]="searchQuery"
+                            (submitted)="lastSearch.set($event)"
+                            (cleared)="lastSearch.set('')"
+                          />
+                          <p class="text-sm text-slate-600 dark:text-slate-400" aria-live="polite">
+                            Last submitted query:
+                            <span class="font-medium text-slate-950 dark:text-slate-100">
+                              {{ lastSearch() || 'None' }}
+                            </span>
+                          </p>
+                        </div>
+                      }
+                      @case ('password') {
+                        <div class="w-full max-w-sm">
+                          <ui-input
+                            label="Password"
+                            type="password"
+                            autocomplete="current-password"
+                            helperText="Use at least 12 characters."
+                            revealable
+                            [formControl]="password"
+                          />
+                        </div>
+                      }
+                      @case ('validation') {
+                        <div class="grid w-full max-w-md gap-4 sm:grid-cols-2">
+                          <ui-input
+                            label="Username"
+                            intent="success"
+                            helperText="This username is available."
+                            [formControl]="username"
+                          />
+                          <ui-input
+                            label="Recovery email"
+                            type="email"
+                            errorText="Enter a valid email address."
+                            [formControl]="invalidEmail"
+                          />
+                        </div>
+                      }
+                      @case ('counters') {
+                        <div class="grid w-full max-w-md gap-4">
+                          <ui-input
+                            label="Project name"
+                            helperText="Keep it concise."
+                            [maxLength]="24"
+                            [formControl]="projectName"
+                          />
+                          <ui-input
+                            label="Release summary"
+                            counterMode="words"
+                            [counterMax]="8"
+                            [formControl]="releaseSummary"
+                          />
+                          <div class="grid gap-4 sm:grid-cols-2">
+                            <ui-input
+                              label="Organization ID"
+                              [formControl]="organizationId"
+                              [readonly]="true"
+                            />
+                            <ui-input label="Managed domain" [formControl]="managedDomain" />
+                          </div>
+                        </div>
+                      }
+                    }
+                  </div>
+                </app-docs-preview-canvas>
+              }
+            </div>
+          } @else if (componentDoc.slug === 'table') {
+            <div class="grid gap-5">
+              @for (example of tableUsageExamples; track example.id) {
+                <app-docs-preview-canvas
+                  [title]="example.title"
+                  [description]="example.description"
+                  [code]="example.code"
+                  [filename]="example.filename"
+                  [visualId]="'table-' + example.id"
+                  language="Angular template"
+                >
+                  <div class="w-full min-w-0">
+                    @switch (example.id) {
+                      @case ('basic') {
+                        <ui-table
+                          [columns]="tableColumns"
+                          [rows]="tableRows"
+                          caption="Component release status"
+                          rowKey="id"
+                        />
+                      }
+                      @case ('sorting') {
+                        <ui-table
+                          [columns]="sortableTableColumns"
+                          [rows]="sortedTableRows()"
+                          [sort]="tableSort()"
+                          (sortChange)="tableSort.set($event)"
+                          caption="Sortable component inventory"
+                          rowKey="id"
+                        />
+                      }
+                      @case ('selection') {
+                        <div class="grid gap-3">
+                          <ui-table
+                            [columns]="tableColumns"
+                            [rows]="tableRows"
+                            caption="Select components for release"
+                            rowKey="id"
+                            selectionMode="multiple"
+                            [selectedKeys]="selectedTableKeys()"
+                            (selectedKeysChange)="selectedTableKeys.set($event)"
+                          />
+                          <p
+                            class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                            aria-live="polite"
+                          >
+                            {{ selectedTableKeys().length }} components selected
+                          </p>
+                        </div>
+                      }
+                      @case ('templates') {
+                        <ui-table
+                          [columns]="tableColumns"
+                          [rows]="tableRows"
+                          caption="Release readiness"
+                        >
+                          <ng-template uiTableHeader="status" let-column>
+                            {{ column.header }} signal
+                          </ng-template>
+                          <ng-template uiTableCell="status" let-value>
+                            <span
+                              class="inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                            >
+                              {{ value }}
+                            </span>
+                          </ng-template>
+                        </ui-table>
+                      }
+                      @case ('pagination') {
+                        <ui-table
+                          [columns]="tableColumns"
+                          [rows]="pagedTableRows()"
+                          caption="Paginated component inventory"
+                          rowKey="id"
+                          selectionMode="multiple"
+                          [page]="tablePage()"
+                          [pageSize]="3"
+                          [totalItems]="allTableRows.length"
+                          (pageChange)="tablePage.set($event)"
+                          stickyHeader
+                          stickySelectionColumn
+                        />
+                      }
+                      @case ('states') {
+                        <div class="grid gap-4 lg:grid-cols-3">
+                          <ui-table
+                            [columns]="stateTableColumns"
+                            [rows]="[]"
+                            caption="Loading state"
+                            loading
+                            loadingText="Loading releases..."
+                          />
+                          <ui-table
+                            [columns]="stateTableColumns"
+                            [rows]="[]"
+                            caption="Empty state"
+                            emptyText="No matching components."
+                          />
+                          <ui-table
+                            [columns]="stateTableColumns"
+                            [rows]="[]"
+                            caption="Error state"
+                            error
+                            errorText="Release data is unavailable."
+                          />
+                        </div>
+                      }
+                    }
+                  </div>
+                </app-docs-preview-canvas>
+              }
+            </div>
           } @else {
             <app-docs-preview-canvas
-              [title]="componentDoc.name + ' interactive example'"
+              [title]="primaryPreviewTitle()"
               [description]="componentDoc.summary"
               [code]="componentDoc.usage"
               [filename]="componentDoc.selector + '.example.html'"
@@ -1250,7 +1841,13 @@ const BUTTON_USAGE_EXAMPLES: readonly ButtonUsageExample[] = [
 
         @if (examples().length) {
           <section id="examples" class="border-t border-blue-200 py-7 dark:border-blue-950/70">
-            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Examples</h2>
+            <div>
+              <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Product recipes</h2>
+              <p class="mt-1.5 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-400">
+                Apply {{ componentDoc.name }} in distinct, copyable product scenarios—not just an
+                isolated component state.
+              </p>
+            </div>
             <div class="mt-4 grid gap-4">
               @for (example of examples(); track example.title) {
                 <section
@@ -1390,6 +1987,17 @@ export class ComponentDocPageComponent {
   private readonly confirmations = inject(UiConfirmationService);
 
   protected readonly email = new FormControl('developer@example.com');
+  protected readonly searchQuery = new FormControl('input');
+  protected readonly password = new FormControl('correct-horse-battery-staple');
+  protected readonly username = new FormControl('ngnova');
+  protected readonly invalidEmail = new FormControl('not-an-email');
+  protected readonly projectName = new FormControl('NgNova design system');
+  protected readonly releaseSummary = new FormControl('Ship accessible Angular components');
+  protected readonly organizationId = new FormControl('org_01J9');
+  protected readonly managedDomain = new FormControl({
+    value: 'example.com',
+    disabled: true,
+  });
   protected readonly releaseNotes = new FormControl('Added form components and docs polish.');
   protected readonly newsletter = new FormControl(true);
   protected readonly contactPreference = new FormControl('email');
@@ -1398,11 +2006,14 @@ export class ComponentDocPageComponent {
   protected readonly docsReleaseDate = new FormControl('2026-07-23');
   protected readonly plan = new FormControl('pro');
   protected readonly buttonUsageExamples = BUTTON_USAGE_EXAMPLES;
+  protected readonly inputUsageExamples = INPUT_USAGE_EXAMPLES;
+  protected readonly tableUsageExamples = TABLE_USAGE_EXAMPLES;
   protected readonly buttonAppearances = BUTTON_APPEARANCES;
   protected readonly buttonIntents = BUTTON_INTENTS;
   protected readonly buttonPressCount = signal(0);
   protected readonly buttonSubmitCount = signal(0);
   protected readonly buttonFocused = signal(false);
+  protected readonly lastSearch = signal('');
   protected readonly copiedImportStatement = signal(false);
   protected readonly modalOpen = signal(false);
   protected readonly drawerOpen = signal(false);
@@ -1430,6 +2041,8 @@ export class ComponentDocPageComponent {
   protected readonly activeTab = signal('overview');
   protected readonly accordionActive = signal<readonly string[]>(['overview']);
   protected readonly selectedTableKeys = signal<readonly UiTableRowKey[]>([]);
+  protected readonly tableSort = signal<UiTableSort>({ key: 'component', direction: 'asc' });
+  protected readonly tablePage = signal(1);
   protected readonly dataViewLayout = signal<'grid' | 'list'>('grid');
   protected readonly treeExpanded = signal<readonly string[]>(['components']);
   protected readonly treeSelected = signal<string | null>('button');
@@ -1517,6 +2130,14 @@ export class ComponentDocPageComponent {
     { key: 'owner', header: 'Owner' },
   ];
 
+  protected readonly sortableTableColumns: readonly UiTableColumn[] = this.tableColumns.map(
+    (column) => ({ ...column, sortable: true }),
+  );
+
+  protected readonly stateTableColumns: readonly UiTableColumn[] = [
+    { key: 'component', header: 'Component' },
+  ];
+
   protected readonly tableRows: readonly UiTableRow[] = [
     {
       id: 'button',
@@ -1534,6 +2155,29 @@ export class ComponentDocPageComponent {
       owner: 'Platform',
     },
   ];
+
+  protected readonly allTableRows: readonly UiTableRow[] = [
+    ...this.tableRows,
+    { id: 'select', component: 'Select', category: 'Forms', status: 'Ready', owner: 'Forms' },
+    { id: 'toast', component: 'Toast', category: 'Overlay', status: 'Ready', owner: 'Platform' },
+    { id: 'tree', component: 'Tree', category: 'Data', status: 'Review', owner: 'Data' },
+    { id: 'tabs', component: 'Tabs', category: 'Data', status: 'Ready', owner: 'Navigation' },
+    { id: 'drawer', component: 'Drawer', category: 'Overlay', status: 'Ready', owner: 'Platform' },
+  ];
+
+  protected readonly sortedTableRows = computed(() => {
+    const { key, direction } = this.tableSort();
+    const multiplier = direction === 'asc' ? 1 : -1;
+    return [...this.tableRows].sort(
+      (left, right) => String(left[key] ?? '').localeCompare(String(right[key] ?? '')) * multiplier,
+    );
+  });
+
+  protected readonly pagedTableRows = computed(() => {
+    const pageSize = 3;
+    const start = (this.tablePage() - 1) * pageSize;
+    return this.allTableRows.slice(start, start + pageSize);
+  });
   protected readonly virtualTableRows = Array.from({ length: 10_000 }, (_, index) => ({
     id: index + 1,
     name: `Release record ${index + 1}`,
@@ -1653,6 +2297,9 @@ export class ComponentDocPageComponent {
   });
   protected readonly examples = computed<readonly ComponentExample[]>(
     () => this.details()?.examples.slice(0, 2) ?? [],
+  );
+  protected readonly primaryPreviewTitle = computed(
+    () => PRIMARY_PREVIEW_TITLES[this.slug()] ?? `${this.doc()?.name ?? 'Component'} example`,
   );
   protected readonly accessibilityNotes = computed<readonly string[]>(() => {
     const notes = this.details()?.accessibility ?? ['Preserve native semantics whenever possible.'];

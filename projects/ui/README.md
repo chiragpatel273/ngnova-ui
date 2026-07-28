@@ -46,6 +46,10 @@ export class ExampleComponent {}
 
 The root `@ngnova/ui` entry point is intentionally minimal. Import components from their focused package paths, such as `@ngnova/ui/button` or `@ngnova/ui/input`.
 
+Button icons are library-agnostic. Mark an icon-only glyph with `uiButtonIcon`, set
+`iconOnly`, and choose `size="sm"`, `"md"`, or `"lg"`; use `uiButtonIconStart` and
+`uiButtonIconEnd` for icons beside visible labels.
+
 ## Testing
 
 NgNova UI provides Angular CDK test harnesses from `@ngnova/ui/testing`.

@@ -88,10 +88,11 @@ also require shape, text, icon, border, or ARIA information.
 ## Icons
 
 NgNova UI is icon-library agnostic. Documentation examples use Heroicons through `@ng-icons`, but
-public Button APIs accept any projected icon marked with `uiButtonIconStart` or `uiButtonIconEnd`.
+public Button APIs accept any projected icon marked with `uiButtonIcon`, `uiButtonIconStart`, or
+`uiButtonIconEnd`.
 
-- Standard button markers default to 16px and scale with the component-owned icon-size variable.
-- Icon-only glyphs are 16/18/20px inside 30/36/42px square controls.
+- Button glyphs scale to 16/18/20px for small, medium, and large controls.
+- Icon-only glyphs use the same scale inside 30/36/42px square controls.
 - Outline icons use an approximately 2px stroke at standard size.
 - SVGs must fill the marker container and render as blocks to avoid baseline gaps.
 - Decorative icons are `aria-hidden`; icon-only controls require an accessible label.

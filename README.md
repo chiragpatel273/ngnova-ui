@@ -40,7 +40,7 @@ release phases, measurable quality gates, and prioritized execution backlog.
 
 ## Components
 
-- `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; sizes `sm`, `md`, `lg`; `intent`/`appearance` visual API; disabled/loading states; `pressed`, `focused`, and `blurred` outputs.
+- `UiButtonComponent`: variants `primary`, `secondary`, `outline`, `ghost`, `danger`; compact `sm`, `md`, `lg` sizes; `intent`/`appearance` visual API; dedicated icon-only geometry and icon markers; disabled/loading states; `pressed`, `focused`, and `blurred` outputs.
 - `UiCardComponent`: header/body/footer content projection, outline/elevated variants, and body padding sizes.
 - `UiFormFieldComponent`: composable label, helper/error messaging, prefix/suffix slots, sizing, appearance, and ARIA wiring for projected native or custom controls.
 - `UiComboboxComponent`: filterable or server-driven suggestions with active-descendant keyboard navigation, Angular Forms, loading/empty states, and localization.

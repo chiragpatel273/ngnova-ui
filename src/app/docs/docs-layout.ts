@@ -1,5 +1,5 @@
 import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet, ViewportScroller } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -350,6 +350,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
 export class DocsLayoutComponent {
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
   private readonly destroyRef = inject(DestroyRef);
   private readonly mobileNavigationTrigger =
     viewChild<ElementRef<HTMLButtonElement>>('mobileNavigationTrigger');
@@ -444,6 +445,7 @@ export class DocsLayoutComponent {
   }
 
   constructor() {
+    this.viewportScroller.setOffset([0, 64]);
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),

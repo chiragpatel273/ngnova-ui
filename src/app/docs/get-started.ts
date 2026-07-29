@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { UiButtonComponent } from '@ngnova/ui/button';
 
 interface GuideCard {
+  readonly id: string;
   readonly eyebrow: string;
   readonly title: string;
   readonly description: string;
@@ -10,6 +11,11 @@ interface GuideCard {
   readonly size: 'wide' | 'normal' | 'tall';
   readonly actions?: readonly string[];
   readonly code?: string;
+}
+
+interface GuidePageLink {
+  readonly label: string;
+  readonly fragment: string;
 }
 
 @Component({
@@ -38,7 +44,7 @@ interface GuideCard {
 
         <section class="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           @for (card of guideCards; track card.title) {
-            <article [class]="cardClasses(card)">
+            <article [id]="card.id" [class]="cardClasses(card)">
               <div>
                 <p class="text-sm font-semibold uppercase text-blue-800 dark:text-blue-300">
                   {{ card.eyebrow }}
@@ -100,16 +106,13 @@ interface GuideCard {
             class="mt-4 grid gap-3 text-sm text-slate-600 dark:text-slate-400"
             aria-label="On this page"
           >
-            @for (item of onThisPage; track item) {
+            @for (item of onThisPage; track item.fragment) {
               <a
-                href="#"
-                [class]="
-                  item === 'Getting Started'
-                    ? 'font-medium text-blue-800 dark:text-blue-200'
-                    : 'hover:text-blue-800 dark:hover:text-blue-200'
-                "
+                [routerLink]="[]"
+                [fragment]="item.fragment"
+                class="transition hover:text-blue-800 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
               >
-                {{ item }}
+                {{ item.label }}
               </a>
             }
           </nav>
@@ -130,16 +133,17 @@ interface GuideCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GetStartedComponent {
-  protected readonly onThisPage: readonly string[] = [
-    'Getting Started',
-    'Installation',
-    'Accessibility',
-    'Customization',
-    'Best Practices',
+  protected readonly onThisPage: readonly GuidePageLink[] = [
+    { label: 'Getting Started', fragment: 'getting-started' },
+    { label: 'Installation', fragment: 'installation' },
+    { label: 'Accessibility', fragment: 'accessibility' },
+    { label: 'Customization', fragment: 'customization' },
+    { label: 'Best Practices', fragment: 'best-practices' },
   ];
 
   protected readonly guideCards: readonly GuideCard[] = [
     {
+      id: 'getting-started',
       eyebrow: 'Start',
       title: 'Getting Started',
       description:
@@ -148,6 +152,7 @@ export class GetStartedComponent {
       size: 'normal',
     },
     {
+      id: 'installation',
       eyebrow: 'Install',
       title: 'Installation',
       description:
@@ -157,6 +162,7 @@ export class GetStartedComponent {
       code: `npm install @ngnova/ui`,
     },
     {
+      id: 'accessibility',
       eyebrow: 'A11y',
       title: 'Accessibility',
       description:
@@ -165,6 +171,7 @@ export class GetStartedComponent {
       size: 'tall',
     },
     {
+      id: 'customization',
       eyebrow: 'Theme',
       title: 'Customizing Themes',
       description:
@@ -174,6 +181,7 @@ export class GetStartedComponent {
       actions: ['Tailwind CSS', 'SCSS'],
     },
     {
+      id: 'release-workflow',
       eyebrow: 'Tools',
       title: 'Release Workflow',
       description:
@@ -182,6 +190,7 @@ export class GetStartedComponent {
       size: 'normal',
     },
     {
+      id: 'best-practices',
       eyebrow: 'Quality',
       title: 'Best Practices',
       description:
@@ -190,6 +199,7 @@ export class GetStartedComponent {
       size: 'normal',
     },
     {
+      id: 'community-support',
       eyebrow: 'Support',
       title: 'Community & Support',
       description:
@@ -201,7 +211,7 @@ export class GetStartedComponent {
 
   protected cardClasses(card: GuideCard): string {
     const base =
-      'flex min-h-64 flex-col justify-between rounded border border-blue-200 p-4 dark:border-blue-950';
+      'flex min-h-64 scroll-mt-24 flex-col justify-between rounded border border-blue-200 p-4 dark:border-blue-950';
     const size: Record<GuideCard['size'], string> = {
       normal: '',
       tall: '',

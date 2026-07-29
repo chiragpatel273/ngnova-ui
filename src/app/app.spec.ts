@@ -96,6 +96,39 @@ describe('App', () => {
     }
   });
 
+  it('links every Guide table-of-contents item to an existing section', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/guide');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const links = Array.from(
+      compiled.querySelectorAll<HTMLAnchorElement>('nav[aria-label="On this page"] a'),
+    );
+    const expectedFragments = [
+      'getting-started',
+      'installation',
+      'accessibility',
+      'customization',
+      'best-practices',
+    ];
+
+    expect(links.map((link) => link.textContent?.trim())).toEqual([
+      'Getting Started',
+      'Installation',
+      'Accessibility',
+      'Customization',
+      'Best Practices',
+    ]);
+    expect(links.map((link) => link.hash.slice(1))).toEqual(expectedFragments);
+    for (const fragment of expectedFragments) {
+      expect(compiled.querySelector(`#${fragment}`)).toBeTruthy();
+    }
+  });
+
   it('toggles the docs theme from the header control', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -155,6 +188,7 @@ describe('App', () => {
   it('opens an accessible mobile navigation drawer and closes it with Escape or navigation', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
 
     await router.navigateByUrl('/components/button');
     fixture.detectChanges();
@@ -329,15 +363,29 @@ describe('App', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const dashboard = compiled.querySelector<HTMLElement>('[data-admin-template]');
+    const dashboardHeader = dashboard?.querySelector<HTMLElement>('[data-admin-header]');
     const metrics = dashboard?.querySelectorAll('[data-admin-metric]');
+    const mainContent = dashboard?.querySelector<HTMLElement>('main#admin-main-content');
+    const skipLink = dashboard?.querySelector<HTMLAnchorElement>('a[href="#admin-main-content"]');
+    const mobileOrders = dashboard?.querySelectorAll('[data-admin-mobile-orders] article');
 
     expect(dashboard).toBeTruthy();
+    expect(dashboardHeader).toBeTruthy();
+    expect(mainContent?.getAttribute('aria-labelledby')).toBe('admin-title');
+    expect(skipLink?.textContent).toContain('Skip to dashboard content');
+    expect(mainContent?.querySelector('h1')?.textContent).toContain('Overview');
+    expect(dashboard?.querySelector('[data-admin-page-intro]')?.textContent).toContain(
+      'Good morning, Maya',
+    );
+    expect(dashboardHeader?.querySelector('[data-admin-header-search]')).toBeTruthy();
+    expect(dashboardHeader?.querySelector('[data-admin-notifications]')).toBeTruthy();
     expect(metrics?.length).toBe(4);
     expect(dashboard?.textContent).toContain('Revenue overview');
     expect(dashboard?.textContent).toContain('Team capacity');
     expect(dashboard?.textContent).toContain('Recent orders');
     expect(dashboard?.querySelector('canvas[aria-label^="Revenue trend"]')).toBeTruthy();
     expect(dashboard?.querySelector('ui-table')).toBeTruthy();
+    expect(mobileOrders?.length).toBe(5);
     expect(dashboard?.querySelector('ui-input')).toBeTruthy();
     expect(dashboard?.querySelector('ui-progress-bar')).toBeTruthy();
 

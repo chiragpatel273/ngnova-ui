@@ -226,7 +226,8 @@ export class UiStepperComponent {
     const completed = this.state(step, index) === 'complete';
     return uiClassNames(
       'absolute bg-slate-200 dark:bg-slate-800',
-      this.orientation === 'horizontal' && 'left-[calc(50%+1.25rem)] right-0 top-4 h-px',
+      this.orientation === 'horizontal' &&
+        'left-[calc(50%+1.25rem)] right-[calc(-50%+1.25rem)] top-4 h-px',
       this.orientation === 'vertical' && 'bottom-0 left-[0.9375rem] top-9 w-px',
       completed && 'bg-blue-700 dark:bg-blue-500',
     );

@@ -69,7 +69,7 @@ export class AdminRevenueChartComponent {
     context.scale(density, density);
     context.clearRect(0, 0, width, height);
 
-    const plot = { left: 38, right: width - 10, top: 10, bottom: height - 24 };
+    const plot = { left: 38, right: width - 24, top: 10, bottom: height - 24 };
     const yTicks = [80, 60, 40, 20, 0] as const;
 
     context.font = '10px Inter, ui-sans-serif, system-ui, sans-serif';

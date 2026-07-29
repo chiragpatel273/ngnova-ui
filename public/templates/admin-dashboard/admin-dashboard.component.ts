@@ -25,7 +25,6 @@ import {
   heroUsers,
 } from '@ng-icons/heroicons/outline';
 import { UiAvatarComponent } from '@ngnova/ui/avatar';
-import { UiBadgeComponent } from '@ngnova/ui/badge';
 import {
   UiButtonComponent,
   UiButtonDirective,
@@ -82,7 +81,6 @@ interface AdminActivity {
     NgIcon,
     NgTemplateOutlet,
     UiAvatarComponent,
-    UiBadgeComponent,
     UiButtonComponent,
     UiButtonDirective,
     UiButtonIconStartDirective,

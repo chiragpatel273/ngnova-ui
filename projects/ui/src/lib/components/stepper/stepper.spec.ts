@@ -117,6 +117,15 @@ describe('UiStepperComponent', () => {
     expect(connector.className).toContain('bg-blue-700');
   });
 
+  it('spans horizontal connectors between adjacent step markers', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const connector = fixture.nativeElement.querySelector('[data-step-connector]') as HTMLElement;
+
+    expect(connector.className).toContain('left-[calc(50%+1.25rem)]');
+    expect(connector.className).toContain('right-[calc(-50%+1.25rem)]');
+  });
+
   it('falls back to the first enabled step and generates unique stable relationships', () => {
     const first = TestBed.createComponent(UiStepperComponent);
     const second = TestBed.createComponent(UiStepperComponent);

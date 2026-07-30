@@ -39,7 +39,7 @@ optional-CDK integrations, and supported component harnesses.
 
 ## Release evidence
 
-- Public declaration compatibility baseline: 43 TypeScript entry points and 237 exported symbols.
+- Public declaration compatibility baseline: 43 TypeScript entry points and 238 exported symbols.
 - Visual regression: 194 reviewed images across Chromium desktop/mobile and WebKit, including 10
   open/visible interaction states.
 - Runtime consumers: zoneless build, SSR browser/server builds, live server rendering, and Angular

@@ -47,6 +47,7 @@
         "UiButtonComponent",
         "UiButtonDirective",
         "UiButtonGroupComponent",
+        "UiButtonIconDirective",
         "UiButtonIconEndDirective",
         "UiButtonIconStartDirective",
         "UiButtonIntent",
@@ -54,7 +55,7 @@
         "UiButtonType",
         "UiButtonVariant"
       ],
-      "signatureSha256": "0cbd4946ad13c09c0318a78d0c2b1c89f620e2e8988da7117a86de3cfca227ed"
+      "signatureSha256": "f3b2b30629694872aa03a17345b0082855113ce638c591c3f2969c6d56999839"
     },
     "./card": {
       "importPath": "@ngnova/ui/card",

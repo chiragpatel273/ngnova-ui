@@ -2,7 +2,10 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
-const source = readFileSync(join(root, 'projects', 'ui', 'styles', 'theme.css'), 'utf8');
+const source = readFileSync(join(root, 'projects', 'ui', 'styles', 'theme.css'), 'utf8').replace(
+  /\r\n?/g,
+  '\n',
+);
 const requiredTokens = [
   '--ui-font-family',
   '--ui-space-4',

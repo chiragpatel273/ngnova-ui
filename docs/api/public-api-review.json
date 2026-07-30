@@ -3,8 +3,8 @@
   "packageName": "@ngnova/ui",
   "reviewedPackageVersion": "0.1.0",
   "stabilityStage": "final-pre-1.0",
-  "reviewedOn": "2026-07-23",
-  "baselineSha256": "bf35a83fea7138b1b69df668f820dd053e0945abdd1d8e66604d7c7ff76a84bf",
+  "reviewedOn": "2026-07-30",
+  "baselineSha256": "040a0e8874b44f0c0705bbc3918a85d39104462dcc2543b0573ba84c4cdae7fe",
   "breakingChangeLedger": "../PRE_1_0_BREAKING_CHANGE_AUDIT.md",
   "undocumentedBreakingChanges": []
 }

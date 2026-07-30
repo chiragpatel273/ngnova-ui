@@ -247,3 +247,9 @@ npm publish --access public
 ```
 
 For CI publishing, prefer npm trusted publishing or provenance when available for your host.
+
+## License
+
+NgNova UI is available under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Chirag Patel.

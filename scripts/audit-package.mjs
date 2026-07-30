@@ -3,8 +3,12 @@ import { join } from 'node:path';
 
 const root = process.cwd();
 const uiRoot = join(root, 'projects', 'ui');
+const uiPackageFile = join(uiRoot, 'package.json');
 const distRoot = join(root, 'dist', 'ui');
 const distPackageFile = join(distRoot, 'package.json');
+const rootLicenseFile = join(root, 'LICENSE');
+const uiLicenseFile = join(uiRoot, 'LICENSE');
+const distLicenseFile = join(distRoot, 'LICENSE');
 const componentDirs = readdirSync(uiRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name)
@@ -51,6 +55,37 @@ function walkTsFiles(dir) {
 
     return entry.isFile() && path.endsWith('.ts') ? [path] : [];
   });
+}
+
+if (
+  requireFile(rootLicenseFile, 'repository is missing the MIT LICENSE file') &&
+  requireFile(uiLicenseFile, 'publishable package source is missing the MIT LICENSE file')
+) {
+  const rootLicense = read(rootLicenseFile);
+  const uiLicense = read(uiLicenseFile);
+
+  if (rootLicense !== uiLicense) {
+    fail('repository and publishable package LICENSE files must match');
+  }
+
+  for (const requiredText of [
+    'MIT License',
+    'Copyright (c) 2026 Chirag Patel',
+    'Permission is hereby granted, free of charge',
+    'THE SOFTWARE IS PROVIDED "AS IS"',
+  ]) {
+    if (!rootLicense.includes(requiredText)) {
+      fail(`MIT LICENSE is missing required text: ${requiredText}`);
+    }
+  }
+}
+
+if (requireFile(uiPackageFile, 'publishable package source is missing package.json')) {
+  const uiPackage = JSON.parse(read(uiPackageFile));
+
+  if (uiPackage.license !== 'MIT') {
+    fail('publishable package source license must be MIT');
+  }
 }
 
 for (const slug of componentDirs) {
@@ -140,6 +175,22 @@ if (existsSync(distRoot)) {
 
     if (packageJson.name !== '@ngnova/ui') {
       fail('dist package name must be @ngnova/ui');
+    }
+
+    if (packageJson.license !== 'MIT') {
+      fail('dist package license must be MIT');
+    }
+
+    if (
+      requireFile(distLicenseFile, 'dist package is missing LICENSE') &&
+      existsSync(rootLicenseFile)
+    ) {
+      const distLicense = read(distLicenseFile);
+      const sourceLicense = read(rootLicenseFile);
+
+      if (distLicense !== sourceLicense) {
+        fail('dist package LICENSE must match the repository LICENSE');
+      }
     }
 
     if (

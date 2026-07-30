@@ -9,6 +9,7 @@ All notable changes to `@ngnova/ui` are recorded here. NgNova UI follows Semanti
 
 - 40 documented Angular 22 standalone components across foundations, forms, navigation, data,
   overlays, feedback, and workflow categories.
+- MIT licensing with the complete license notice included in the repository and published package.
 - Focused `@ngnova/ui/<component>` entry points, optional CDK integrations, an exported semantic
   theme stylesheet, and a supported `@ngnova/ui/testing` harness surface.
 - Headless table state, advanced table composition, virtual scrolling, Data View, Tree, Tree Table,

@@ -145,3 +145,9 @@ npm run build:lib
 cd dist/ui
 npm publish --access public
 ```
+
+## License
+
+NgNova UI is available under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Chirag Patel.

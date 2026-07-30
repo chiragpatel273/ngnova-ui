@@ -326,8 +326,15 @@ describe('App', () => {
       (link) => link.getAttribute('href')?.replace('/components/', '') ?? '',
     );
     const documentedSlugs = componentDocs.map((doc) => doc.slug);
+    const groupToggles = componentNavigation?.querySelectorAll<HTMLButtonElement>(
+      'button[aria-controls^="docs-group-"]',
+    );
 
     expect(componentNavigation).toBeTruthy();
+    expect(groupToggles?.length).toBe(5);
+    expect(
+      Array.from(groupToggles ?? [], (toggle) => toggle.getAttribute('aria-expanded')),
+    ).toEqual(['true', 'true', 'true', 'true', 'true']);
     expect(sidebarSlugs).toHaveLength(documentedSlugs.length);
     expect(new Set(sidebarSlugs).size).toBe(documentedSlugs.length);
     expect(new Set(sidebarSlugs)).toEqual(new Set(documentedSlugs));
@@ -346,10 +353,14 @@ describe('App', () => {
     const activeSidebarLink = compiled.querySelector<HTMLAnchorElement>(
       'nav[aria-label="Component documentation"] a[href="/components/button"]',
     );
+    const activeGroupToggle = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-controls="docs-group-actions-status"]',
+    );
 
     activeSidebarLink?.click();
 
     expect(activeSidebarLink).toBeTruthy();
+    expect(activeGroupToggle?.getAttribute('aria-expanded')).toBe('true');
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
   });
 

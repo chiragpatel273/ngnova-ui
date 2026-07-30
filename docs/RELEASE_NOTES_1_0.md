@@ -3,7 +3,7 @@
 NgNova UI 1.0 is the first stable contract for an Angular 22 standalone component library designed
 around focused imports, accessible interactions, semantic theming, and evidence-backed releases.
 These notes describe the release candidate; publication occurs only after every Phase 5 gate is
-green.
+green. The source and published package are available under the MIT License.
 
 ## Component catalog
 

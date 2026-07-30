@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import type { ElementRef } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroBars3, heroXMark } from '@ng-icons/heroicons/outline';
+import { heroBars3, heroChevronDown, heroXMark } from '@ng-icons/heroicons/outline';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -104,7 +104,6 @@ const GROUPED_COMPONENT_SLUGS = new Set(COMPONENT_GROUPS.flatMap((group) => grou
 const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'API Reference', path: '/apis' },
   { label: 'Templates', path: '/templates' },
-  { label: 'CLI Reference', path: '/guide' },
   { label: 'Style Guide', path: '/theming' },
 ];
 
@@ -112,7 +111,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
   selector: 'app-docs-layout',
   standalone: true,
   imports: [CdkTrapFocus, NgIcon, NgTemplateOutlet, RouterLink, RouterLinkActive, RouterOutlet],
-  providers: [provideIcons({ heroBars3, heroXMark })],
+  providers: [provideIcons({ heroBars3, heroChevronDown, heroXMark })],
   template: `
     <main
       class="min-h-dvh bg-slate-100 text-sm text-slate-950 dark:bg-slate-950 dark:text-slate-50"
@@ -133,10 +132,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             <ng-icon name="heroBars3" class="size-5" aria-hidden="true" />
           </button>
 
-          <a
-            routerLink="/guide"
-            class="shrink-0 text-base font-bold text-blue-800 dark:text-blue-300"
-          >
+          <a routerLink="/" class="shrink-0 text-base font-bold text-blue-800 dark:text-blue-300">
             <span class="sm:hidden">NgNova UI</span>
             <span class="hidden sm:inline">NgNova UI Docs</span>
           </a>
@@ -190,25 +186,22 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
 
       <ng-template #navigationContent>
         <div class="px-3 py-4">
-          <div
-            class="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
-          >
-            <div class="min-w-0">
-              <p class="truncate text-sm font-semibold text-slate-950 dark:text-slate-50">
-                Components
+          <div class="px-2">
+            <div class="flex items-center justify-between gap-3">
+              <p
+                class="text-xs font-semibold uppercase tracking-[0.12em] text-blue-700 dark:text-blue-300"
+              >
+                Library
               </p>
-              <p class="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
-                NgNova UI library
-              </p>
+              <span
+                class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-900 dark:text-slate-400"
+              >
+                v0.1.0
+              </span>
             </div>
-            <span
-              class="shrink-0 rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-100 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-900"
-            >
-              v0.1.0
-            </span>
           </div>
 
-          <label class="mt-3 block lg:hidden">
+          <label class="mt-4 block lg:hidden">
             <span class="sr-only">Search documentation</span>
             <input
               type="search"
@@ -219,35 +212,53 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             />
           </label>
 
-          <nav class="mt-3 grid gap-1" aria-label="Documentation start">
+          <nav
+            class="mt-4 border-y border-slate-200 py-2 dark:border-slate-800"
+            aria-label="Documentation start"
+          >
             <a
               routerLink="/guide"
-              routerLinkActive="bg-blue-50 font-semibold text-blue-700 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-900"
-              class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
+              routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200"
+              class="flex min-h-9 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
               (click)="handleSidebarNavigation()"
             >
               Getting Started
             </a>
           </nav>
 
-          <nav class="mt-4 grid gap-3.5" aria-label="Component documentation">
+          <nav class="mt-3 grid gap-1" aria-label="Component documentation">
             @for (group of componentGroups(); track group.label) {
-              <section>
-                <div
-                  class="mb-1.5 flex min-h-7 items-center rounded-md bg-slate-200/70 px-2.5 dark:bg-slate-900"
+              <section class="min-w-0">
+                <button
+                  type="button"
+                  class="flex min-h-9 w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[0.8125rem] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                  [attr.aria-expanded]="groupExpanded(group.label)"
+                  [attr.aria-controls]="sidebarGroupId(group.label)"
+                  (click)="toggleGroup(group.label)"
                 >
-                  <p
-                    class="text-xs font-bold uppercase tracking-[0.06em] text-slate-700 dark:text-slate-300"
+                  <ng-icon
+                    name="heroChevronDown"
+                    class="size-4 shrink-0 text-slate-400 transition-transform"
+                    [class.-rotate-90]="!groupExpanded(group.label)"
+                    aria-hidden="true"
+                  />
+                  <span class="min-w-0 flex-1 truncate">{{ group.label }}</span>
+                  <span
+                    class="min-w-5 rounded-full bg-slate-100 px-1.5 py-0.5 text-center text-xs font-medium text-slate-500 dark:bg-slate-900 dark:text-slate-400"
                   >
-                    {{ group.label }}
-                  </p>
-                </div>
-                <div class="ml-2 grid gap-1 border-l border-slate-200 pl-2 dark:border-slate-800">
+                    {{ group.docs.length }}
+                  </span>
+                </button>
+                <div
+                  class="mt-0.5 grid gap-0.5"
+                  [id]="sidebarGroupId(group.label)"
+                  [class.hidden]="!groupExpanded(group.label)"
+                >
                   @for (item of group.docs; track item.slug) {
                     <a
                       [routerLink]="['/components', item.slug]"
-                      routerLinkActive="border-blue-200 bg-blue-50 font-semibold text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-200"
-                      class="flex min-h-8 items-center rounded-md border border-transparent px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
+                      routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_2px_0_0_#60a5fa]"
+                      class="flex min-h-8 items-center rounded-md py-1.5 pl-8 pr-2.5 text-[0.8125rem] text-slate-600 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
                       (click)="handleSidebarNavigation()"
                     >
                       {{ item.name }}
@@ -267,19 +278,19 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
           </nav>
 
           <nav
-            class="mt-5 grid gap-1 border-t border-slate-200 pt-4 dark:border-slate-800"
+            class="mt-3 grid gap-0.5 border-t border-slate-200 pt-3 dark:border-slate-800"
             aria-label="Reference navigation"
           >
             <p
-              class="px-2.5 pb-1 text-xs font-semibold uppercase tracking-[0.06em] text-slate-500 dark:text-slate-500"
+              class="px-2.5 pb-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500"
             >
               Reference
             </p>
             @for (item of referenceItems; track item.label) {
               <a
                 [routerLink]="item.path"
-                routerLinkActive="bg-blue-50 font-semibold text-blue-700 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:ring-blue-900"
-                class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
+                routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200"
+                class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-600 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
                 (click)="handleSidebarNavigation()"
               >
                 {{ item.label }}
@@ -306,11 +317,11 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             tabindex="-1"
             cdkTrapFocus
             [cdkTrapFocusAutoCapture]="true"
-            class="relative h-dvh w-[min(22rem,calc(100vw-3rem))] overflow-y-auto border-r border-slate-200 bg-slate-50 shadow-2xl outline-none dark:border-slate-800 dark:bg-slate-950"
+            class="relative h-dvh w-[min(20rem,calc(100vw-2.5rem))] overflow-y-auto border-r border-slate-200 bg-white shadow-2xl outline-none dark:border-slate-800 dark:bg-slate-950"
             (keydown.escape)="closeMobileNavigation()"
           >
             <div
-              class="sticky top-0 z-10 flex h-12 items-center justify-between border-b border-slate-200 bg-slate-50/95 px-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95"
+              class="sticky top-0 z-10 flex h-12 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95"
             >
               <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
                 Browse documentation
@@ -329,9 +340,9 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
         </div>
       }
 
-      <div class="mx-auto grid max-w-[100rem] lg:grid-cols-[15.5rem_minmax(0,1fr)]">
+      <div class="mx-auto grid max-w-[100rem] lg:grid-cols-[17rem_minmax(0,1fr)]">
         <aside
-          class="sticky top-12 hidden h-[calc(100dvh-3rem)] overflow-y-auto border-r border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950 lg:block"
+          class="sticky top-12 hidden h-[calc(100dvh-3rem)] overflow-y-auto border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 lg:block"
         >
           <ng-container [ngTemplateOutlet]="navigationContent" />
         </aside>
@@ -358,6 +369,10 @@ export class DocsLayoutComponent {
   protected readonly query = signal('');
   protected readonly darkMode = signal(false);
   protected readonly mobileNavigationOpen = signal(false);
+  protected readonly expandedGroups = signal<ReadonlySet<string>>(
+    new Set(COMPONENT_GROUPS.map((group) => group.label)),
+  );
+  protected readonly componentCount = componentDocs.length;
   protected readonly themeLabel = computed(() => (this.darkMode() ? 'Light mode' : 'Dark mode'));
   protected readonly themeToggleLabel = computed(() =>
     this.darkMode() ? 'Switch to light mode' : 'Switch to dark mode',
@@ -434,6 +449,26 @@ export class DocsLayoutComponent {
     this.document.defaultView?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }
 
+  protected groupExpanded(label: string): boolean {
+    return !!this.query().trim() || this.expandedGroups().has(label);
+  }
+
+  protected toggleGroup(label: string): void {
+    this.expandedGroups.update((expanded) => {
+      const next = new Set(expanded);
+      if (next.has(label)) {
+        next.delete(label);
+      } else {
+        next.add(label);
+      }
+      return next;
+    });
+  }
+
+  protected sidebarGroupId(label: string): string {
+    return `docs-group-${label.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}`;
+  }
+
   private matchesQuery(doc: ComponentDoc, query: string): boolean {
     return [
       doc.name,
@@ -446,11 +481,29 @@ export class DocsLayoutComponent {
 
   constructor() {
     this.viewportScroller.setOffset([0, 64]);
+    this.expandGroupForUrl(this.router.url);
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => this.closeMobileNavigation(false));
+      .subscribe((event) => {
+        this.closeMobileNavigation(false);
+        this.expandGroupForUrl(event.urlAfterRedirects);
+      });
+  }
+
+  private expandGroupForUrl(url: string): void {
+    const slug = /^\/components\/([^/?#]+)/.exec(url)?.[1];
+    if (!slug) {
+      return;
+    }
+
+    const group = COMPONENT_GROUPS.find((candidate) => candidate.slugs.includes(slug));
+    if (!group || this.expandedGroups().has(group.label)) {
+      return;
+    }
+
+    this.expandedGroups.update((expanded) => new Set([...expanded, group.label]));
   }
 }

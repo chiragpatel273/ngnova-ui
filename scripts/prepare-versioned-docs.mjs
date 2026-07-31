@@ -2,7 +2,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 
 const workspaceRoot = resolve('.');
-const sourceRoot = resolve('dist/demo/browser');
+const sourceRoot = resolve('dist/docs/browser');
 const outputRoot = resolve('dist/versioned-docs');
 const manifestPath = resolve('docs/hosting/versions.json');
 

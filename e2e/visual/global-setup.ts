@@ -4,7 +4,7 @@ import { extname, join, normalize, relative } from 'node:path';
 
 const host = '127.0.0.1';
 const port = 4200;
-const root = join(process.cwd(), 'dist', 'demo', 'browser');
+const root = join(process.cwd(), 'dist', 'docs', 'browser');
 const contentTypes: Readonly<Record<string, string>> = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -17,7 +17,7 @@ const contentTypes: Readonly<Record<string, string>> = {
 
 export default async function globalSetup(): Promise<() => Promise<void>> {
   if (!existsSync(join(root, 'index.html'))) {
-    throw new Error('Visual tests require dist/demo/browser; run npm.cmd run build:demo first.');
+    throw new Error('Visual tests require dist/docs/browser; run npm.cmd run build:docs first.');
   }
 
   const server = createServer((request, response) => {

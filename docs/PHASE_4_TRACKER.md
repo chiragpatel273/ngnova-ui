@@ -154,6 +154,6 @@ audited, bundle measured, and verified in the clean consumer release gate.
   queue-wide focus restoration, and scroll-lock cleanup.
 - Added live guarded-deletion docs, complete service/host/accessibility/edge-case guidance, six
   focused workflow tests, host-destruction coverage, and `UiConfirmationDialogHarness`.
-- All 357 library tests and 11 docs tests pass with 40-component docs/API validation, 41 package
+- All 361 library tests and 19 documentation tests pass with 40-component docs/API validation, 41 package
   entry points, 132 packed files, and the clean consumer release gate.
 - Built contribution before compression: 22,021-byte FESM and 4,573-byte declarations.

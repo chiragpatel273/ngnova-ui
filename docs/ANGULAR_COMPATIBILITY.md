@@ -8,7 +8,7 @@ libraries. The machine-readable source for this page is
 
 | Surface                              | Supported contract                                                                |
 | ------------------------------------ | --------------------------------------------------------------------------------- |
-| NgNova UI candidate                  | `0.1.0`                                                                           |
+| NgNova UI                            | `1.0.0`                                                                           |
 | Angular                              | `^22.0.0` for `@angular/core`, `@angular/common`, and `@angular/forms`            |
 | Angular CDK                          | `^22.0.0`, optional; required only by CDK-backed entry points                     |
 | TypeScript used to build the package | `>=6.0 <6.1`                                                                      |

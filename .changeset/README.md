@@ -20,7 +20,7 @@ Publish only after the library is built and verified:
 npm run test:lib
 npm run lint
 npm run build:lib
-npm run build:demo
+npm run build:docs
 npm run pack:lib
 cd dist/ui
 npm publish --access public

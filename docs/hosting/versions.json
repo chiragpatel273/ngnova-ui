@@ -10,7 +10,7 @@
     {
       "id": "v1",
       "packageRange": "1.x",
-      "status": "release-candidate",
+      "status": "stable",
       "basePath": "/ngnova-ui/v1/",
       "routeMode": "hash"
     }

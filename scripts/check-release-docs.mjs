@@ -7,7 +7,7 @@ const [
   workspacePackage,
   libraryPackage,
   changesetConfig,
-  changeset,
+  packageChangelog,
   changelog,
   migration,
   releaseNotes,
@@ -15,7 +15,7 @@ const [
   readJson('package.json'),
   readJson('projects/ui/package.json'),
   readJson('.changeset/config.json'),
-  readText('.changeset/bright-novas-launch.md'),
+  readText('projects/ui/CHANGELOG.md'),
   readText('CHANGELOG.md'),
   readText('docs/MIGRATION_TO_1_0.md'),
   readText('docs/RELEASE_NOTES_1_0.md'),
@@ -39,12 +39,16 @@ requireValue(
 );
 requireValue(libraryPackage.name === '@ngnova/ui', 'The release package must be named @ngnova/ui.');
 requireValue(
+  libraryPackage.version === '1.0.0',
+  'The release package must declare the stable 1.0.0 version.',
+);
+requireValue(
   changesetConfig.baseBranch === 'main' && changesetConfig.access === 'public',
   'Changesets must target main and publish with public access.',
 );
 requireValue(
-  /^---\s*\r?\n['"]@ngnova\/ui['"]: major\s*\r?\n---/m.test(changeset),
-  'The 1.0 changeset must declare a major release for @ngnova/ui.',
+  packageChangelog.includes('## 1.0.0') && packageChangelog.includes('### Major Changes'),
+  'The package changelog must contain the applied 1.0.0 major release.',
 );
 
 for (const heading of ['Added', 'Changed', 'Fixed', 'Security']) {
@@ -100,5 +104,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  'Release documentation check passed: workspace, changeset, changelog, migration guide, and 1.0 release notes agree.',
+  'Release documentation check passed: workspace, package version, changelogs, migration guide, and 1.0 release notes agree.',
 );

@@ -98,9 +98,9 @@ PR description template:
 - [ ] `npm.cmd run format:check`
 - [ ] `npm.cmd run lint`
 - [ ] `npm.cmd run test:lib`
-- [ ] `npm.cmd run test:demo`
+- [ ] `npm.cmd run test:docs`
 - [ ] `npm.cmd run build:lib`
-- [ ] `npm.cmd run build:demo`
+- [ ] `npm.cmd run build:docs`
 - [ ] `npm.cmd pack --dry-run`
 
 Closes #<issue-number>
@@ -114,9 +114,9 @@ Run these before opening a PR for component or release work:
 npm.cmd run format:check
 npm.cmd run lint
 npm.cmd run test:lib
-npm.cmd run test:demo
+npm.cmd run test:docs
 npm.cmd run build:lib
-npm.cmd run build:demo
+npm.cmd run build:docs
 npm.cmd pack --dry-run
 ```
 

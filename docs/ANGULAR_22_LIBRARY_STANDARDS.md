@@ -44,7 +44,7 @@ Use this checklist whenever adding, reviewing, or refactoring NgNova UI componen
 - Do not deep-mutate objects or arrays stored in signals. Replace with a new object or array using `set()` or `update()`.
 - Do not force signal-only APIs on consumers. Public inputs should remain normal Angular inputs unless signal inputs clearly improve the component API.
 - If using signal inputs in the future, keep public naming consistent with the existing component API and document the Angular version requirement.
-- In docs/demo components, signals are encouraged for local UI state such as `modalOpen`, `copied`, and active examples.
+- In documentation components, signals are encouraged for local UI state such as `modalOpen`, `copied`, and active examples.
 
 ## TypeScript Standards
 
@@ -200,7 +200,7 @@ If NgNova UI later ships prebuilt CSS, document the CSS import clearly and reass
 
 ## Automation Standards
 
-- Keep ESLint enabled for both the demo app and library.
+- Keep ESLint enabled for both the documentation application and library.
 - Keep Prettier format checks enabled.
 - CI must run install, format check, lint, library tests, documentation app tests, library build, docs
   app build, and package dry-run.
@@ -214,9 +214,9 @@ Run these before considering component work complete:
 npm.cmd run format:check
 npm.cmd run lint
 npm.cmd run test:lib
-npm.cmd run test:demo
+npm.cmd run test:docs
 npm.cmd run build:lib
-npm.cmd run build:demo
+npm.cmd run build:docs
 npm.cmd pack --dry-run
 ```
 

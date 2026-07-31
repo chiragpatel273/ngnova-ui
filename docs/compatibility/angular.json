@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "libraryVersion": "0.1.0",
+  "libraryVersion": "1.0.0",
   "angular": {
     "major": 22,
     "peerRange": "^22.0.0",

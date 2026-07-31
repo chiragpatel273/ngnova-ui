@@ -138,7 +138,7 @@ Work through components in risk order, not visual order.
 
 ## Documentation Quality Bar
 
-Documentation should feel like product documentation, not a scaffold demo.
+Documentation should feel like a maintained product reference, not a scaffold prototype.
 
 Each component page should answer:
 
@@ -187,9 +187,9 @@ Before calling any component or release task complete, run the smallest relevant
 npm.cmd run format:check
 npm.cmd run lint
 npm.cmd run test:lib
-npm.cmd run test:demo
+npm.cmd run test:docs
 npm.cmd run build:lib
-npm.cmd run build:demo
+npm.cmd run build:docs
 ```
 
 Before npm release, also run:

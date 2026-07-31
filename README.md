@@ -1,6 +1,7 @@
 # NgNova UI
 
-Production-oriented Angular workspace for **NgNova UI**, a small Angular component library published as `@ngnova/ui`, plus a demo app that previews every component.
+Production-oriented Angular workspace for **NgNova UI 1.0.0**, a tested Angular 22 component
+library published as `@ngnova/ui`, with maintained documentation for every public component.
 
 ## Assumptions
 
@@ -36,7 +37,7 @@ release phases, measurable quality gates, and prioritized execution backlog.
 ## Projects
 
 - `projects/ui`: Angular library package source.
-- `src/app`: demo/documentation app.
+- `src/app`: documentation application.
 
 ## Components
 
@@ -197,7 +198,7 @@ npm run build:lib
 npm start
 ```
 
-The demo app imports from `@ngnova/ui` through the Angular-generated TypeScript path mapping. Build the library first when testing the package shape.
+The documentation application imports from `@ngnova/ui` through the Angular-generated TypeScript path mapping. Build the library first when testing the package shape.
 
 ## Documentation App
 
@@ -224,7 +225,7 @@ See [the hosting contract](docs/HOSTED_DOCUMENTATION.md) for build and deploymen
 
 ```bash
 npm run build:lib     # Production ng-packagr build to dist/ui
-npm run build:demo    # Production demo app build
+npm run build:docs    # Production documentation application build
 npm run test:lib      # Unit tests for the library
 npm run pack:lib      # Build then create a local .tgz package in dist/ui
 npm run publish:lib   # Build then publish dist/ui with public scoped access

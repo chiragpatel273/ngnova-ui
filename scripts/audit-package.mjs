@@ -6,6 +6,7 @@ const uiRoot = join(root, 'projects', 'ui');
 const uiPackageFile = join(uiRoot, 'package.json');
 const distRoot = join(root, 'dist', 'ui');
 const distPackageFile = join(distRoot, 'package.json');
+const distChangelogFile = join(distRoot, 'CHANGELOG.md');
 const rootLicenseFile = join(root, 'LICENSE');
 const uiLicenseFile = join(uiRoot, 'LICENSE');
 const distLicenseFile = join(distRoot, 'LICENSE');
@@ -161,15 +162,21 @@ if (requireFile(docsDataFile, 'docs-data.ts is missing')) {
 
 for (const file of [...walkTsFiles(join(root, 'src')), ...walkTsFiles(uiRoot)]) {
   const contents = read(file);
+  const contentsWithoutVersionImport = contents.replace(
+    /import\s*\{\s*NGNOVA_UI_VERSION\s*\}\s*from\s*['"]@ngnova\/ui['"];?/g,
+    '',
+  );
 
-  if (/from\s+['"]@ngnova\/ui['"]/.test(contents)) {
+  if (/from\s+['"]@ngnova\/ui['"]/.test(contentsWithoutVersionImport)) {
     fail(
-      `${file.replace(`${root}\\`, '')}: imports from root @ngnova/ui instead of a secondary entry point`,
+      `${file.replace(`${root}\\`, '')}: imports components from root @ngnova/ui instead of a secondary entry point`,
     );
   }
 }
 
 if (existsSync(distRoot)) {
+  requireFile(distChangelogFile, 'dist package is missing CHANGELOG.md');
+
   if (requireFile(distPackageFile, 'dist/ui/package.json is missing')) {
     const packageJson = JSON.parse(read(distPackageFile));
 

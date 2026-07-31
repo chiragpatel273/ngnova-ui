@@ -59,11 +59,11 @@
 ## Automated checks
 
 - `npm.cmd run format:check` — passed
-- `npm.cmd run lint` — passed for demo and library
+- `npm.cmd run lint` — passed for documentation and library
 - `npm.cmd run test:lib` — passed
-- `npm.cmd run test:demo` — passed
+- `npm.cmd run test:docs` — passed
 - `npm.cmd run build:lib` — passed
-- `npm.cmd run build:demo` — passed with the existing selector-warning output
+- `npm.cmd run build:docs` — passed with the existing selector-warning output
 - `npm.cmd pack --dry-run` from `dist/ui` — passed
 
 final result: passed

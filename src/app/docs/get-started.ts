@@ -91,12 +91,17 @@ interface GuidePageLink {
         >
           <p>
             NgNova UI {{ libraryVersion }} &middot; Open source under the MIT License &middot;
-            &copy; 2026 Chirag Patel
+            &copy; 2026 Chirag Patel and contributors
           </p>
           <nav class="flex flex-wrap gap-6" aria-label="Guide footer">
-            <a routerLink="/components">GitHub</a>
+            <a href="https://github.com/chiragpatel273/ngnova-ui" target="_blank" rel="noreferrer"
+              >GitHub</a
+            >
             <a routerLink="/apis">API Reference</a>
-            <a routerLink="/guide">NPM</a>
+            <a routerLink="/contributing">Contributing</a>
+            <a href="https://www.npmjs.com/package/@ngnova/ui" target="_blank" rel="noreferrer"
+              >npm</a
+            >
           </nav>
         </footer>
       </article>

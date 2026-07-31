@@ -13,6 +13,12 @@ Read the project standards:
 By participating, you agree to follow `CODE_OF_CONDUCT.md`. Report vulnerabilities through the
 private process in `SECURITY.md`, never through a public issue or pull request.
 
+## Contribution License
+
+By submitting a contribution to NgNova UI, you agree that your contribution will be licensed under
+the project's MIT License. You confirm that you have the right to submit the contribution. NgNova
+UI does not currently require a separate contributor license agreement.
+
 ## Development
 
 Install dependencies:

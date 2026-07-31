@@ -28,7 +28,8 @@ release phases, measurable quality gates, and prioritized execution backlog.
 
 ## Project Policies
 
-- [Contributing](CONTRIBUTING.md)
+- [Public contribution guide](https://chiragpatel273.github.io/ngnova-ui/#/contributing)
+- [Repository contribution policy](CONTRIBUTING.md)
 - [Support](SUPPORT.md)
 - [Security](SECURITY.md)
 - [Versioning and deprecation](docs/VERSIONING_AND_DEPRECATION.md)

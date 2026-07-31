@@ -76,6 +76,7 @@ describe('App', () => {
       '/templates',
       '/apis',
       '/accessibility',
+      '/contributing',
     ]) {
       await router.navigateByUrl(path);
       fixture.detectChanges();
@@ -94,6 +95,25 @@ describe('App', () => {
         false,
       );
     }
+  });
+
+  it('publishes an actionable contribution guide', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/contributing');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Contribute to NgNova UI');
+    expect(compiled.textContent).toContain('npm.cmd run release:check');
+    expect(compiled.textContent).toContain('licensed under the project');
+    expect(
+      compiled.querySelector<HTMLAnchorElement>(
+        'a[href="https://github.com/chiragpatel273/ngnova-ui/security/advisories/new"]',
+      ),
+    ).toBeTruthy();
   });
 
   it('links every Guide table-of-contents item to an existing section', async () => {

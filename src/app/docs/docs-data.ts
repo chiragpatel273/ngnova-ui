@@ -6376,11 +6376,11 @@ archiveProject(): void {
       'Reveal a clipped value on hover and focus while leaving the visible table layout compact.',
     code: `<span
   class="block max-w-48 truncate"
-  uiTooltip="enterprise-release-candidate-2026.07.28"
+  uiTooltip="enterprise-release-2026.07.28"
   tooltipPlacement="top"
   tabindex="0"
 >
-  enterprise-release-candidate-2026.07.28
+  enterprise-release-2026.07.28
 </span>`,
   },
   spinner: {

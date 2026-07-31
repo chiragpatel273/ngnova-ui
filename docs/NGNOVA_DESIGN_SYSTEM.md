@@ -123,7 +123,7 @@ button receives a raised stacking layer so its ring remains visible over neighbo
 
 ## Implementation Sources
 
-- Demo font, theme, and icon normalization: `src/styles.css`
+- Documentation font, theme, and icon normalization: `src/styles.css`
 - Public theme tokens: `projects/ui/styles/theme.css`
 - Theme adoption and stability guidance: `docs/THEME_MIGRATION.md`
 - Button geometry and state classes: `projects/ui/button/src/button.ts`

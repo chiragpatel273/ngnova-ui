@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
 import { UiButtonComponent } from '@ngnova/ui/button';
 import { UiTagComponent } from '@ngnova/ui/tag';
@@ -42,7 +43,7 @@ interface HomeUpdate {
         <div class="grid gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_27rem] lg:px-5 lg:py-7">
           <div class="min-w-0 self-center">
             <div class="flex flex-wrap items-center gap-2">
-              <ui-badge variant="danger" size="sm">Package version 0.1.0</ui-badge>
+              <ui-badge variant="danger" size="sm"> Package version {{ libraryVersion }} </ui-badge>
               <ui-badge variant="info" size="sm">Angular 22 ready</ui-badge>
             </div>
 
@@ -276,6 +277,7 @@ interface HomeUpdate {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocsHomeComponent {
+  protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly componentCount = componentDocs.length;
   protected readonly heroCode = `import { Component } from '@angular/core';
 import { UiCardComponent } from '@ngnova/ui/card';

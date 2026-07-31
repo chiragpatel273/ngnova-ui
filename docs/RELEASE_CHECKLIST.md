@@ -17,7 +17,7 @@ npm run format:check
 npm run lint
 npm run test:lib
 npm run build:lib
-npm run build:demo
+npm run build:docs
 npm run pack:lib
 ```
 

@@ -8,12 +8,17 @@ const workspace = join(root, '.tmp', 'consumer-matrix');
 const distUi = join(root, 'dist', 'ui');
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const isWindows = process.platform === 'win32';
-const packageTarball = 'ngnova-ui-0.1.0.tgz';
 const rootPackage = JSON.parse(
   await import('node:fs/promises').then(({ readFile }) =>
     readFile(join(root, 'package.json'), 'utf8'),
   ),
 );
+const libraryPackage = JSON.parse(
+  await import('node:fs/promises').then(({ readFile }) =>
+    readFile(join(distUi, 'package.json'), 'utf8'),
+  ),
+);
+const packageTarball = `ngnova-ui-${libraryPackage.version}.tgz`;
 
 function run(label, command, args, options = {}) {
   console.log(`\n> ${label}`);
@@ -118,7 +123,7 @@ run(
 
 writeJson(join(workspace, 'package.json'), {
   name: 'ngnova-consumer-matrix',
-  version: '0.0.0',
+  version: '1.0.0',
   private: true,
   type: 'module',
   scripts: {

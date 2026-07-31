@@ -43,11 +43,11 @@ The audit verified visible hierarchy, responsive reflow, accessible selected/exp
 
 ## Automated verification
 
-- `npm.cmd run lint:demo` — passed
+- `npm.cmd run lint:docs` — passed
 - `npm.cmd run test:lib` — passed, 357 tests
-- `npm.cmd run test:demo` — passed, 13 tests
+- `npm.cmd run test:docs` — passed, 13 tests
 - `npm.cmd run build:lib` — passed
-- `npm.cmd run build:demo:app` — passed with the existing selector-warning output
+- `npm.cmd run build:docs:app` — passed with the existing selector-warning output
 - `npm.cmd pack --dry-run` from `dist/ui` — passed
 
 final result: passed

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "0.1.0",
+  "packageVersion": "1.0.0",
   "compression": "gzip-9",
   "entryPoints": {
     ".": {

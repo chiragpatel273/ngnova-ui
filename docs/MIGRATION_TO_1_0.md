@@ -112,9 +112,9 @@ reviewing the corresponding design change.
 
 ```powershell
 npm.cmd run test:lib
-npm.cmd run test:demo
+npm.cmd run test:docs
 npm.cmd run build:lib
-npm.cmd run build:demo
+npm.cmd run build:docs
 npm.cmd pack --dry-run
 ```
 

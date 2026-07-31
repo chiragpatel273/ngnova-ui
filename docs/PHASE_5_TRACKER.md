@@ -53,7 +53,7 @@ is verified. See `FINAL_RELEASE_AUDIT.md`.
 
 - Pinned the latest-two-major evergreen browser policy in `.browserslistrc` and a
   machine-readable support manifest.
-- Defined the release-candidate matrix for NVDA, Narrator, and VoiceOver across Chrome, Firefox,
+- Defined the release-verification matrix for NVDA, Narrator, and VoiceOver across Chrome, Firefox,
   Edge, desktop Safari, and mobile Safari.
 - Documented required keyboard, screen-reader, touch, zoom/reflow, forced-colors, reduced-motion,
   and theme checks plus release-blocking severity.

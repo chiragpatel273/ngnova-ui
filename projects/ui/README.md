@@ -1,6 +1,7 @@
 # @ngnova/ui
 
-NgNova UI is a small Angular component library built with standalone components and Tailwind CSS utility classes.
+NgNova UI 1.0.0 is an Angular 22 component library built with standalone components, focused
+entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 ## Why NgNova UI
 

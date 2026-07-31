@@ -76,21 +76,19 @@ Every public component must uphold six promises.
 
 ## Current Baseline
 
-As of the application consistency audit on 2026-07-19:
+As of the 1.0 release audit on 2026-07-31:
 
-- The package is version `0.1.0` and targets Angular 22.
-- Twenty public component entry points exist.
-- All twenty components are standalone, `OnPush`, tested, documented, dark-mode aware, and emitted
-  as secondary package entry points.
-- Six form controls implement `ControlValueAccessor`.
-- Fourteen interactive components expose test harnesses.
-- `npm.cmd run release:check` passes, including consumer installation and build smoke testing.
-- The library has a strong engineering base, but the docs shell, cross-component contracts, and
-  release evidence are not yet at the intended product bar.
-- The first-release tracker now marks all twenty original components fully audited and Ready.
+- The package source is version `1.0.0` and targets Angular 22.
+- Forty documented visual components ship through focused secondary entry points.
+- Public components are standalone, `OnPush`, tested, documented, dark-mode aware, and packaged
+  with intentional exports.
+- The release gate covers API/docs consistency, theme and focus contracts, unit tests, production
+  builds, package contents, bundle budgets, and clean zoneless and SSR/hydration consumers.
+- The reviewed public surface contains 43 TypeScript entry points and 238 exported symbols.
+- GitHub Pages serves the maintained documentation at the project root; npm publication remains
+  the only external release action.
 
-The audit source of truth is
-`artifacts/application-consistency-audit/REPORT.md`.
+The release evidence source of truth is `docs/FINAL_RELEASE_AUDIT.md`.
 
 ## Strategic Decisions
 
@@ -232,6 +230,8 @@ in place.
 
 ## Phase 3 — Workflow Completion Components
 
+**Status: Complete (2026-07-27).**
+
 **Goal:** add the smallest set of components that lets teams build complete product workflows.
 
 ### Priority components
@@ -249,8 +249,7 @@ in place.
 11. Autocomplete or Combobox
 12. Date Picker
 
-Delivery status is tracked in `docs/PHASE_3_TRACKER.md`; Tooltip and Popover are complete and Drawer
-is in progress.
+Delivery evidence is tracked in `docs/PHASE_3_TRACKER.md`.
 
 Each addition must solve a demonstrated workflow gap. It must not be accepted solely to increase the
 component count.
@@ -263,6 +262,8 @@ component count.
 - No new component creates an undocumented visual or API exception.
 
 ## Phase 4 — Data And Enterprise Depth
+
+**Status: Complete (2026-07-28).**
 
 **Goal:** support serious data-heavy Angular applications without turning the core into a monolith.
 
@@ -284,6 +285,8 @@ component count.
 - Advanced behavior is optional and does not inflate basic component bundles.
 
 ## Phase 5 — 1.0 Stability
+
+**Status: Locally complete (2026-07-31); npm publication pending.**
 
 **Goal:** publish a stable contract that production teams can adopt confidently.
 

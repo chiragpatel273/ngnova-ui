@@ -111,9 +111,9 @@ if (review.baselineSha256 !== baselineSha256) {
 if (
   review.packageName !== snapshot.packageName ||
   review.reviewedPackageVersion !== baseline.packageVersion ||
-  review.stabilityStage !== 'final-pre-1.0'
+  review.stabilityStage !== 'stable-1.0'
 ) {
-  fail('the API review metadata does not match the final pre-1.0 package baseline.');
+  fail('the API review metadata does not match the stable 1.0 package baseline.');
 }
 const failures = [];
 const baselinePaths = new Set(Object.keys(baseline.entryPoints ?? {}));

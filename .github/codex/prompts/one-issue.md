@@ -34,7 +34,7 @@ npm.cmd run format:check
 npm.cmd run lint
 npm.cmd run test:lib
 npm.cmd run build:lib
-npm.cmd run build:demo
+npm.cmd run build:docs
 npm.cmd pack --dry-run
 ```
 

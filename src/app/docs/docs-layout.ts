@@ -13,6 +13,7 @@ import {
 import type { ElementRef } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroBars3, heroChevronDown, heroXMark } from '@ng-icons/heroicons/outline';
+import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -196,7 +197,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
               <span
                 class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-900 dark:text-slate-400"
               >
-                v0.1.0
+                v{{ libraryVersion }}
               </span>
             </div>
           </div>
@@ -373,6 +374,7 @@ export class DocsLayoutComponent {
     new Set(COMPONENT_GROUPS.map((group) => group.label)),
   );
   protected readonly componentCount = componentDocs.length;
+  protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly themeLabel = computed(() => (this.darkMode() ? 'Light mode' : 'Dark mode'));
   protected readonly themeToggleLabel = computed(() =>
     this.darkMode() ? 'Switch to light mode' : 'Switch to dark mode',

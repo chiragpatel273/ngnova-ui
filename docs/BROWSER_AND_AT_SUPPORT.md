@@ -23,7 +23,7 @@ targets.
 
 ## Assistive-technology matrix
 
-Use the latest stable screen reader available at release-candidate time.
+Use the latest stable screen reader available at release-verification time.
 
 | Screen reader | Browser | Platform   | Cadence              |
 | ------------- | ------- | ---------- | -------------------- |
@@ -52,7 +52,7 @@ Automated unit tests enforce semantic DOM, ARIA state, focus transitions, disabl
 keyboard contracts. The visual suite compares every documented state in Chromium and WebKit,
 including desktop/mobile viewports, light/dark themes, and reduced motion. Firefox presentation is
 covered by the Tier 1 manual release matrix; it is not falsely inferred from another engine's
-pixels. Real screen-reader output remains a manual release-candidate check because browser
+pixels. Real screen-reader output remains a manual release check because browser
 accessibility trees and synthesized speech cannot be validated faithfully by DOM assertions alone.
 
 ## Issue severity

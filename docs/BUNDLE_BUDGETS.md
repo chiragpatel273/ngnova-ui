@@ -7,8 +7,8 @@ bytes and deterministic gzip level 9. The machine-readable measurements and ceil
 ## Current package
 
 - 43 JavaScript entry points measured.
-- 607,582 cumulative raw bytes across isolated entry points.
-- 121,687 cumulative gzip bytes across isolated entry points.
+- 609,744 cumulative raw bytes across isolated entry points.
+- 121,809 cumulative gzip bytes across isolated entry points.
 - Theme stylesheet: 7,954 raw / 1,648 gzip bytes.
 
 The cumulative number is inventory, not an application bundle estimate: Angular, shared helpers,

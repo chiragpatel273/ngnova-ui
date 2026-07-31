@@ -11,6 +11,7 @@ import {
   heroPlus,
 } from '@ng-icons/heroicons/outline';
 import { map } from 'rxjs';
+import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { UiAccordionComponent } from '@ngnova/ui/accordion';
 import type { UiAccordionItem } from '@ngnova/ui/accordion';
 import { UiAlertComponent } from '@ngnova/ui/alert';
@@ -686,7 +687,7 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
             <span
               class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
             >
-              v0.1.0
+              v{{ libraryVersion }}
             </span>
             <span
               class="rounded bg-slate-200 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -2005,6 +2006,7 @@ export class ComponentDocPageComponent {
   protected readonly docsFramework = new FormControl('angular');
   protected readonly docsReleaseDate = new FormControl('2026-07-23');
   protected readonly plan = new FormControl('pro');
+  protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly buttonUsageExamples = BUTTON_USAGE_EXAMPLES;
   protected readonly inputUsageExamples = INPUT_USAGE_EXAMPLES;
   protected readonly tableUsageExamples = TABLE_USAGE_EXAMPLES;

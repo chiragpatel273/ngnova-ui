@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "0.1.0",
+  "packageVersion": "1.0.0",
   "angularPeer": "^22.0.0",
   "rootPolicy": "minimal",
   "entryPoints": {
     ".": {
       "importPath": "@ngnova/ui",
       "symbols": ["NGNOVA_UI_VERSION"],
-      "signatureSha256": "b2042f373e7a62ec85b1ad859e89de0b28db3a1bdd53d361a3cc38f4845ea409"
+      "signatureSha256": "90fe4b6effc1fd6b8473933feb65a60d7b8c5bf3c5f2a4467cd91c645853ee70"
     },
     "./accordion": {
       "importPath": "@ngnova/ui/accordion",

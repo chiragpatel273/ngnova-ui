@@ -3,21 +3,21 @@
 This tracker records the evidence required before NgNova UI can claim a stable 1.0 contract. An
 item is Ready only when its policy, automation, documentation, and release-gate evidence agree.
 
-Local implementation and verification are complete. Public hosting remains Ready to deploy until
-the GitHub Pages workflow is published and its live URL is verified. See `FINAL_RELEASE_AUDIT.md`.
+Local implementation and verification are complete. GitHub Pages is deployed and its live root URL
+is verified. See `FINAL_RELEASE_AUDIT.md`.
 
-| Order | Stability evidence                              | Status          | Primary evidence                   | Automated gate                         |
-| ----: | ----------------------------------------------- | --------------- | ---------------------------------- | -------------------------------------- |
-|     1 | Public API review and compatibility report      | Ready           | `PUBLIC_API_COMPATIBILITY.md`      | `check:public-api`                     |
-|     2 | No undocumented pre-1.0 breaking changes        | Ready           | `PRE_1_0_BREAKING_CHANGE_AUDIT.md` | `check:public-api`                     |
-|     3 | Angular compatibility and migration policy      | Ready           | `ANGULAR_COMPATIBILITY.md`         | `check:angular-compatibility`          |
-|     4 | Browser and assistive-technology support matrix | Ready           | `BROWSER_AND_AT_SUPPORT.md`        | `check:support-matrix`                 |
-|     5 | Automated visual regression coverage            | Ready           | `VISUAL_REGRESSION.md`             | `check:visual-manifest`, `test:visual` |
-|     6 | SSR, hydration, and zoneless consumers in CI    | Ready           | `CONSUMER_RUNTIME_MATRIX.md`       | `smoke:consumer`                       |
-|     7 | Bundle measurements and regression budgets      | Ready           | `BUNDLE_BUDGETS.md`                | `check:bundle-budgets`                 |
-|     8 | Changesets, changelog, migration, release notes | Ready           | `RELEASE_NOTES_1_0.md`             | `check:release-docs`                   |
-|     9 | Security, contribution, support, deprecation    | Ready           | `VERSIONING_AND_DEPRECATION.md`    | `check:project-policies`               |
-|    10 | Hosted versioned documentation                  | Ready to deploy | `HOSTED_DOCUMENTATION.md`          | `check:versioned-docs`                 |
+| Order | Stability evidence                              | Status | Primary evidence                   | Automated gate                         |
+| ----: | ----------------------------------------------- | ------ | ---------------------------------- | -------------------------------------- |
+|     1 | Public API review and compatibility report      | Ready  | `PUBLIC_API_COMPATIBILITY.md`      | `check:public-api`                     |
+|     2 | No undocumented pre-1.0 breaking changes        | Ready  | `PRE_1_0_BREAKING_CHANGE_AUDIT.md` | `check:public-api`                     |
+|     3 | Angular compatibility and migration policy      | Ready  | `ANGULAR_COMPATIBILITY.md`         | `check:angular-compatibility`          |
+|     4 | Browser and assistive-technology support matrix | Ready  | `BROWSER_AND_AT_SUPPORT.md`        | `check:support-matrix`                 |
+|     5 | Automated visual regression coverage            | Ready  | `VISUAL_REGRESSION.md`             | `check:visual-manifest`, `test:visual` |
+|     6 | SSR, hydration, and zoneless consumers in CI    | Ready  | `CONSUMER_RUNTIME_MATRIX.md`       | `smoke:consumer`                       |
+|     7 | Bundle measurements and regression budgets      | Ready  | `BUNDLE_BUDGETS.md`                | `check:bundle-budgets`                 |
+|     8 | Changesets, changelog, migration, release notes | Ready  | `RELEASE_NOTES_1_0.md`             | `check:release-docs`                   |
+|     9 | Security, contribution, support, deprecation    | Ready  | `VERSIONING_AND_DEPRECATION.md`    | `check:project-policies`               |
+|    10 | Hosted latest documentation                     | Ready  | `HOSTED_DOCUMENTATION.md`          | `check:versioned-docs`                 |
 
 ## 1. Public API review and compatibility report
 
@@ -114,14 +114,13 @@ the GitHub Pages workflow is published and its live URL is verified. See `FINAL_
 - Linked conduct and governance policies from the repository landing page and added an automated
   completeness gate.
 
-## 10. Hosted versioned documentation
+## 10. Hosted latest documentation
 
-- Defined the GitHub Pages major-version contract and the stable
-  `/ngnova-ui/v1/#/components/<slug>` route shape.
-- Added a machine-readable version manifest and schema, with v1 marked as a release candidate
-  until the 1.0 package is published.
-- Built and validated the static v1 artifact with hash routing, root/latest redirects, a GitHub
-  Pages fallback, and the correct project base path.
+- Defined the GitHub Pages latest-documentation contract and the primary
+  `/ngnova-ui/#/components/<slug>` route shape.
+- Retained the machine-readable release-line manifest and an automatic `/v1/` compatibility
+  redirect without maintaining a second documentation build.
+- Built and validated the latest static artifact at the project root with hash routing, a GitHub
+  Pages fallback, and `/latest/` and `/v1/` redirects.
 - Added the least-privilege Pages artifact/deployment workflow and an automated drift gate.
-- Local evidence is complete. Public hosting becomes Ready after the workflow is committed to
-  `main`, GitHub Pages uses GitHub Actions as its source, and the deployment URL is verified.
+- Public hosting is Ready: GitHub Pages uses GitHub Actions and the live URL is verified.

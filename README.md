@@ -215,11 +215,10 @@ http://localhost:4200/components/button
 
 Each component page follows the same pattern with a live preview, import snippet, usage example, copy button, and API table.
 
-The stable 1.x documentation URL is
-[`/ngnova-ui/v1/`](https://chiragpatel273.github.io/ngnova-ui/v1/), with component routes such as
-the [Button documentation](https://chiragpatel273.github.io/ngnova-ui/v1/#/components/button).
-See [the hosting and version contract](docs/HOSTED_DOCUMENTATION.md) for build, deployment, and
-future-major rules.
+The documentation always shows the latest release at
+[`/ngnova-ui/`](https://chiragpatel273.github.io/ngnova-ui/), with component routes such as the
+[Button documentation](https://chiragpatel273.github.io/ngnova-ui/#/components/button).
+See [the hosting contract](docs/HOSTED_DOCUMENTATION.md) for build and deployment details.
 
 ## Scripts
 

@@ -23,19 +23,19 @@ if (!activeVersion) {
 }
 
 const builtIndex = await readFile(resolve(sourceRoot, 'index.html'), 'utf8');
-const expectedBase = `<base href="${activeVersion.basePath}">`;
+const latestBasePath = `${manifest.projectPath}/`;
+const expectedBase = `<base href="${latestBasePath}">`;
 
 if (!builtIndex.includes(expectedBase)) {
   throw new Error(
-    `Documentation build must contain ${expectedBase}. Build with the versioned base href first.`,
+    `Documentation build must contain ${expectedBase}. Build with the latest documentation base href first.`,
   );
 }
 
 await rm(outputRoot, { force: true, recursive: true });
-await mkdir(outputRoot, { recursive: true });
-await cp(sourceRoot, resolve(outputRoot, activeVersion.id), { recursive: true });
+await cp(sourceRoot, outputRoot, { recursive: true });
 
-const targetUrl = `${manifest.projectPath}/${manifest.defaultVersion}/`;
+const targetUrl = `${manifest.projectPath}/`;
 const redirectDocument = (target) => `<!doctype html>
 <html lang="en">
   <head>
@@ -51,16 +51,15 @@ const redirectDocument = (target) => `<!doctype html>
 </html>
 `;
 
-await writeFile(resolve(outputRoot, 'index.html'), redirectDocument(targetUrl));
+await mkdir(resolve(outputRoot, activeVersion.id));
+await writeFile(resolve(outputRoot, activeVersion.id, 'index.html'), redirectDocument(targetUrl));
 await mkdir(resolve(outputRoot, 'latest'));
 await writeFile(resolve(outputRoot, 'latest/index.html'), redirectDocument(targetUrl));
 await writeFile(resolve(outputRoot, '404.html'), redirectDocument(targetUrl));
 await writeFile(resolve(outputRoot, '.nojekyll'), '');
 await writeFile(resolve(outputRoot, 'versions.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 
+console.log('Prepared latest documentation at dist/versioned-docs.');
 console.log(
-  `Prepared ${activeVersion.id} documentation at dist/versioned-docs/${activeVersion.id}.`,
-);
-console.log(
-  `Stable component route: ${manifest.canonicalOrigin}${activeVersion.basePath}#/components/button`,
+  `Latest component route: ${manifest.canonicalOrigin}${latestBasePath}#/components/button`,
 );

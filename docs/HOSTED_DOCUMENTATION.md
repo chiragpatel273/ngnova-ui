@@ -1,28 +1,26 @@
-# Hosted versioned documentation
+# Hosted latest documentation
 
-NgNova UI documentation is prepared for GitHub Pages with a stable major-version URL:
+NgNova UI documentation is published to GitHub Pages at one primary URL that always serves the
+latest release:
 
-- Current 1.x line: `https://chiragpatel273.github.io/ngnova-ui/v1/`
+- Latest documentation: `https://chiragpatel273.github.io/ngnova-ui/`
 - Button documentation:
-  `https://chiragpatel273.github.io/ngnova-ui/v1/#/components/button`
-- Unversioned root and `/latest/`: redirect to the default major line.
+  `https://chiragpatel273.github.io/ngnova-ui/#/components/button`
+- `/latest/` and `/v1/`: redirect to the latest documentation.
 
-The URL is a deployment contract. The site becomes publicly reachable after the Pages workflow is
-committed to `main` and GitHub Pages is configured to use GitHub Actions as its source.
+The root URL is the public deployment contract. GitHub Pages is configured to use GitHub Actions as
+its source.
 
 ## URL contract
 
 The machine-readable source is `docs/hosting/versions.json`.
 
-- Major paths such as `/v1/` remain stable for the lifetime of that major line.
+- The project root always serves the latest documentation build.
 - Hash routing keeps every client-side route directly reloadable on static hosting.
-- The root and `/latest/` are convenience redirects and are not version-pinned.
-- Existing major directories must not be removed while their status is `stable` or `maintenance`.
-- A future major must add a new manifest entry and preserve the built assets for supported older
-  majors before changing `defaultVersion`.
-
-The v1 path is marked `release-candidate` until the 1.0 package is published. Change it to `stable`
-in the same release change that publishes 1.0.
+- `/latest/` and the current major path are compatibility redirects, not separately maintained
+  documentation copies.
+- A future major release may update the manifest and redirect aliases without changing the primary
+  URL.
 
 ## Local build
 
@@ -30,11 +28,11 @@ in the same release change that publishes 1.0.
 npm.cmd run build:docs:versioned
 ```
 
-This builds the library and documentation app with `/ngnova-ui/v1/` as the base URL, validates the
+This builds the library and documentation app with `/ngnova-ui/` as the base URL, validates the
 built HTML, and assembles the Pages artifact in `dist/versioned-docs`.
 
 Preview the artifact with any static server rooted at `dist/versioned-docs`, then open
-`/v1/#/components/button`.
+`/#/components/button`.
 
 ## Deployment
 
@@ -56,5 +54,6 @@ Before a docs deployment:
 1. update component docs and the version manifest in the same change;
 2. run `npm.cmd run check:versioned-docs`;
 3. run `npm.cmd run build:docs:versioned`;
-4. verify root, `/latest/`, `/v1/`, and at least one component hash route locally; and
+4. verify the root app, `/latest/` and `/v1/` redirects, and at least one component hash route
+   locally; and
 5. review the Pages deployment URL and status after the workflow completes.

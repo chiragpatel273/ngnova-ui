@@ -3,7 +3,7 @@
 Audit date: 2026-07-23  
 Candidate: `@ngnova/ui` 1.0 release candidate  
 Local status: Ready  
-External status: Awaiting GitHub publish and Pages verification
+External status: GitHub Pages verified; awaiting npm publication
 
 ## Release gate
 
@@ -40,16 +40,17 @@ Total: 130 passed, 20 skipped, 0 failed.
   command; the root workspace remains private and is not the publish target.
 - Only `dist/ui` may be published.
 
-## Versioned documentation
+## Hosted documentation
 
-`npm.cmd run build:docs:versioned` passed and produced `dist/versioned-docs/v1` with the correct
-`/ngnova-ui/v1/` base path, root/latest redirects, hash routing, and Pages fallback.
+`npm.cmd run build:docs:versioned` passed and produced the latest documentation at the
+`/ngnova-ui/` project root with hash routing, a Pages fallback, and automatic `/latest/` and
+`/v1/` redirects.
 
-The stable Button route is:
-`https://chiragpatel273.github.io/ngnova-ui/v1/#/components/button`.
+The latest Button route is:
+`https://chiragpatel273.github.io/ngnova-ui/#/components/button`.
 
-This URL is not yet claimed as live. The repository still needs the verified local change set
-published to GitHub, the Pages source set to GitHub Actions, and the deployment result inspected.
+GitHub Pages is configured to deploy through GitHub Actions, and the public root and v1 URLs were
+verified after deployment.
 
 ## Known non-blocking output
 

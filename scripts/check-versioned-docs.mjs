@@ -64,6 +64,10 @@ requireValue(
   packageJson.scripts?.['build:docs:versioned']?.includes('prepare-versioned-docs.mjs'),
   'build:docs:versioned must assemble the validated Pages artifact.',
 );
+requireValue(
+  packageJson.scripts?.['build:docs:versioned']?.includes(`--base-href ${manifest.projectPath}/`),
+  'build:docs:versioned must serve the latest documentation from the project root.',
+);
 
 for (const evidence of [
   'actions/configure-pages@v5',
@@ -80,10 +84,14 @@ for (const evidence of [
   );
 }
 
-const stableButtonUrl = `${manifest.canonicalOrigin}${manifest.projectPath}/${manifest.defaultVersion}/#/components/button`;
+const latestButtonUrl = `${manifest.canonicalOrigin}${manifest.projectPath}/#/components/button`;
 requireValue(
-  guide.includes(stableButtonUrl),
-  `Hosting guide must publish the stable Button URL: ${stableButtonUrl}`,
+  guide.includes(latestButtonUrl),
+  `Hosting guide must publish the latest Button URL: ${latestButtonUrl}`,
+);
+requireValue(
+  guide.includes(`/${manifest.defaultVersion}/`) && guide.includes('redirect'),
+  `Hosting guide must describe the /${manifest.defaultVersion}/ compatibility redirect.`,
 );
 
 if (errors.length > 0) {
@@ -94,4 +102,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Versioned documentation check passed: ${stableButtonUrl}`);
+console.log(`Hosted documentation check passed: ${latestButtonUrl}`);

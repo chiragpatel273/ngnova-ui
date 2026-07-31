@@ -15,7 +15,7 @@ External status: Awaiting GitHub publish and Pages verification
   project-policy, and versioned-hosting contracts passed.
 - Library tests passed: 42 files and 357 tests.
 - Documentation tests passed: 1 file and 11 tests.
-- The library built as 43 JavaScript entry points with 237 reviewed exported symbols.
+- The library built as 43 JavaScript entry points with 238 reviewed exported symbols.
 - Bundle budgets passed at 607,582 raw bytes and 121,687 deterministic gzip bytes.
 - The documentation production build, package audit, and `dist/ui` npm dry run passed.
 - A clean packed-package consumer passed zoneless compilation, SSR browser/server builds, runtime

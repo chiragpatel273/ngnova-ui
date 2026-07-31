@@ -11,7 +11,7 @@ No undocumented breaking change exists between the packaged 0.1.0 candidate and
 
 The review covered:
 
-- all 43 packaged TypeScript entry points and 237 exported symbols;
+- all 43 packaged TypeScript entry points and 238 exported symbols;
 - selectors, inputs, outputs, services, exported types, and declaration signatures;
 - the deliberately minimal package root and focused secondary entry points;
 - the optional Angular CDK peer boundary;
@@ -24,6 +24,9 @@ incorporated into the final candidate rather than presented as compatibility gua
 
 - component outputs use semantic names such as `pressed`, `focused`, `blurred`, and
   `valueChange`;
+- Button icon projection uses the public `uiButtonIcon`, `uiButtonIconStart`, and
+  `uiButtonIconEnd` marker directives, including dedicated icon-only sizing and decorative
+  accessibility behavior;
 - all component imports use focused `@ngnova/ui/<component>` entry points;
 - the package root remains minimal to avoid duplicate Angular declarations and optional-CDK
   coupling;

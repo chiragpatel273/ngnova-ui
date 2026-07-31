@@ -25,7 +25,7 @@ the GitHub Pages workflow is published and its live URL is verified. See `FINAL_
   the testing surface from the generated npm package.
 - Confirmed the minimal root policy after a full-root experiment failed ng-packagr compilation and
   would have pulled optional CDK integrations into the default dependency graph.
-- Added a normalized declaration baseline covering 43 TypeScript entry points and 237 exported
+- Added a normalized declaration baseline covering 43 TypeScript entry points and 238 exported
   symbols, with explicit added/removed entry-point, symbol, signature, Angular-peer, and root-policy
   failures.
 - Added the compatibility report and baseline refresh process; intentional changes require semver,

@@ -25,19 +25,44 @@ if (JSON.stringify(documentedSlugs) !== JSON.stringify(manifestSlugs)) {
 
 const allSources = `${pageSource}\n${cardSource}`;
 const visualIds = manifest.componentStates.flatMap((entry) => entry.visualIds);
+const dynamicExampleCollections = {
+  button: 'BUTTON_USAGE_EXAMPLES',
+  input: 'INPUT_USAGE_EXAMPLES',
+  table: 'TABLE_USAGE_EXAMPLES',
+};
+
+function hasDynamicExample(state, visualId) {
+  const collectionName = dynamicExampleCollections[state.slug];
+  const prefix = `${state.slug}-`;
+  if (!collectionName || !visualId.startsWith(prefix)) {
+    return false;
+  }
+
+  const collectionMatch = pageSource.match(
+    new RegExp(`const ${collectionName}:[\\s\\S]*?= \\[([\\s\\S]*?)\\n\\];`),
+  );
+  const binding = `[visualId]="'${state.slug}-' + example.id"`;
+  const exampleId = visualId.slice(prefix.length);
+
+  return (
+    pageSource.includes(binding) && Boolean(collectionMatch?.[1].includes(`id: '${exampleId}'`))
+  );
+}
+
 if (new Set(visualIds).size !== visualIds.length) {
   fail('visual IDs must be unique.');
 }
 
 for (const state of manifest.componentStates) {
   for (const visualId of state.visualIds) {
-    const sourceToken =
-      visualId === `${state.slug}-default`
-        ? state.slug === 'card'
+    const hasDefaultPreview =
+      visualId === `${state.slug}-default` &&
+      allSources.includes(
+        state.slug === 'card'
           ? 'visualId="card-default"'
-          : '[visualId]="componentDoc.slug + \'-default\'"'
-        : visualId.replace('button-', '');
-    if (!allSources.includes(sourceToken)) {
+          : '[visualId]="componentDoc.slug + \'-default\'"',
+      );
+    if (!hasDefaultPreview && !hasDynamicExample(state, visualId)) {
       fail(`${visualId} is not connected to a rendered documentation preview.`);
     }
   }

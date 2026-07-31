@@ -101,7 +101,8 @@ if (!existsSync(reviewFile)) {
   fail('docs/api/public-api-review.json is missing; the baseline has not been reviewed.');
 }
 const review = JSON.parse(readFileSync(reviewFile, 'utf8'));
-const baselineSha256 = createHash('sha256').update(baselineContents).digest('hex');
+const normalizedBaselineContents = baselineContents.replace(/\r\n?/g, '\n');
+const baselineSha256 = createHash('sha256').update(normalizedBaselineContents).digest('hex');
 if (review.baselineSha256 !== baselineSha256) {
   fail(
     'the API baseline changed without updating the reviewed digest and breaking-change documentation.',

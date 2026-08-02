@@ -187,17 +187,20 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
       </header>
 
       <ng-template #navigationContent>
-        <div class="px-3 py-4">
-          <div class="px-2">
-            <div class="flex items-center justify-between gap-3">
-              <p
-                class="text-xs font-semibold uppercase tracking-[0.12em] text-blue-700 dark:text-blue-300"
-              >
-                Library
-              </p>
-              <span
-                class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-900 dark:text-slate-400"
-              >
+        <div class="px-4 py-5">
+          <div class="border-b border-slate-200 pb-4 dark:border-slate-800">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p
+                  class="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300"
+                >
+                  NgNova UI
+                </p>
+                <p class="mt-1 text-sm font-semibold text-slate-950 dark:text-white">
+                  Documentation
+                </p>
+              </div>
+              <span class="pt-0.5 font-mono text-[0.6875rem] text-slate-500 dark:text-slate-400">
                 v{{ libraryVersion }}
               </span>
             </div>
@@ -210,57 +213,54 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
               placeholder="Search documentation..."
               [value]="query()"
               (input)="updateQuery($event)"
-              class="h-8 w-full rounded-md border border-blue-200 bg-white px-2.5 text-xs outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-blue-950 dark:bg-slate-900 dark:focus-visible:border-blue-400"
+              class="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-xs text-slate-900 outline-none transition placeholder:text-slate-400 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50 dark:focus-visible:border-blue-400"
             />
           </label>
 
-          <nav
-            class="mt-4 border-y border-slate-200 py-2 dark:border-slate-800"
-            aria-label="Documentation start"
-          >
+          <nav class="mt-4" aria-label="Documentation start">
+            <p
+              class="mb-1.5 px-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500"
+            >
+              Overview
+            </p>
             <a
               routerLink="/guide"
-              routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200"
-              class="flex min-h-9 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+              routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
+              class="flex min-h-9 items-center rounded-md px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
               (click)="handleSidebarNavigation()"
             >
               Getting Started
             </a>
           </nav>
 
-          <nav class="mt-3 grid gap-1" aria-label="Component documentation">
+          <nav class="mt-5 grid gap-3" aria-label="Component documentation">
             @for (group of componentGroups(); track group.label) {
               <section class="min-w-0">
                 <button
                   type="button"
-                  class="flex min-h-9 w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[0.8125rem] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                  class="group flex min-h-8 w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
                   [attr.aria-expanded]="groupExpanded(group.label)"
                   [attr.aria-controls]="sidebarGroupId(group.label)"
                   (click)="toggleGroup(group.label)"
                 >
+                  <span class="min-w-0 flex-1 truncate">{{ group.label }}</span>
                   <ng-icon
                     name="heroChevronDown"
-                    class="size-4 shrink-0 text-slate-400 transition-transform"
+                    class="size-3.5 shrink-0 text-slate-400 transition-transform group-hover:text-slate-600 dark:group-hover:text-slate-300"
                     [class.-rotate-90]="!groupExpanded(group.label)"
                     aria-hidden="true"
                   />
-                  <span class="min-w-0 flex-1 truncate">{{ group.label }}</span>
-                  <span
-                    class="min-w-5 rounded-full bg-slate-100 px-1.5 py-0.5 text-center text-xs font-medium text-slate-500 dark:bg-slate-900 dark:text-slate-400"
-                  >
-                    {{ group.docs.length }}
-                  </span>
                 </button>
                 <div
-                  class="mt-0.5 grid gap-0.5"
+                  class="ml-3 mt-1 grid gap-0.5 border-l border-slate-200 pl-2 dark:border-slate-800"
                   [id]="sidebarGroupId(group.label)"
                   [class.hidden]="!groupExpanded(group.label)"
                 >
                   @for (item of group.docs; track item.slug) {
                     <a
                       [routerLink]="['/components', item.slug]"
-                      routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_2px_0_0_#60a5fa]"
-                      class="flex min-h-8 items-center rounded-md py-1.5 pl-8 pr-2.5 text-[0.8125rem] text-slate-600 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                      routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
+                      class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
                       (click)="handleSidebarNavigation()"
                     >
                       {{ item.name }}
@@ -271,7 +271,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             } @empty {
               <a
                 routerLink="/components"
-                class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-700 transition hover:bg-white hover:text-blue-700 hover:shadow-sm dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-blue-200"
+                class="flex min-h-9 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
                 (click)="handleSidebarNavigation()"
               >
                 No matching components
@@ -280,19 +280,19 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
           </nav>
 
           <nav
-            class="mt-3 grid gap-0.5 border-t border-slate-200 pt-3 dark:border-slate-800"
+            class="mt-5 grid gap-0.5 border-t border-slate-200 pt-4 dark:border-slate-800"
             aria-label="Reference navigation"
           >
             <p
-              class="px-2.5 pb-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500"
+              class="mb-1 px-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500"
             >
               Reference
             </p>
             @for (item of referenceItems; track item.label) {
               <a
                 [routerLink]="item.path"
-                routerLinkActive="bg-blue-50 font-semibold text-blue-700 shadow-[inset_2px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200"
-                class="flex min-h-8 items-center rounded-md px-2.5 py-1.5 text-[0.8125rem] text-slate-600 transition hover:bg-slate-100 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-blue-200 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
+                class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
                 (click)="handleSidebarNavigation()"
               >
                 {{ item.label }}
@@ -344,7 +344,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
 
       <div class="mx-auto grid max-w-[100rem] lg:grid-cols-[17rem_minmax(0,1fr)]">
         <aside
-          class="sticky top-12 hidden h-[calc(100dvh-3rem)] overflow-y-auto border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 lg:block"
+          class="sticky top-12 hidden h-[calc(100dvh-3rem)] overflow-y-auto border-r border-slate-200 bg-slate-50/80 dark:border-slate-800 dark:bg-slate-950 lg:block"
         >
           <ng-container [ngTemplateOutlet]="navigationContent" />
         </aside>
@@ -374,7 +374,6 @@ export class DocsLayoutComponent {
   protected readonly expandedGroups = signal<ReadonlySet<string>>(
     new Set(COMPONENT_GROUPS.map((group) => group.label)),
   );
-  protected readonly componentCount = componentDocs.length;
   protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly themeLabel = computed(() => (this.darkMode() ? 'Light mode' : 'Dark mode'));
   protected readonly themeToggleLabel = computed(() =>

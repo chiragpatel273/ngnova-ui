@@ -1,385 +1,452 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import type { OnDestroy } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroArrowRight,
+  heroChatBubbleLeftRight,
+  heroCheckCircle,
+  heroClipboardDocument,
+  heroClipboardDocumentList,
+  heroRectangleStack,
+  heroTableCells,
+} from '@ng-icons/heroicons/outline';
 import { RouterLink } from '@angular/router';
 import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
-import { UiButtonComponent } from '@ngnova/ui/button';
-import { UiTagComponent } from '@ngnova/ui/tag';
+import { UiButtonComponent, UiButtonIconDirective } from '@ngnova/ui/button';
 
-import { DocsCodeBlockComponent } from './docs-code-block';
-import { componentDocs } from './docs-data';
-
-interface HomeMetric {
+interface QuickStartSnippet {
+  readonly id: 'install' | 'import';
   readonly label: string;
-  readonly value: string;
+  readonly code: string;
+}
+
+interface HomeAssurance {
+  readonly title: string;
   readonly description: string;
 }
 
-interface HomePrinciple {
+interface HomeBenefit {
   readonly title: string;
   readonly description: string;
-  readonly short: string;
 }
 
-interface HomeUpdate {
-  readonly version: string;
-  readonly title: string;
+interface HomeTaskLink {
+  readonly label: string;
   readonly description: string;
-  readonly meta: string;
+  readonly icon: string;
+  readonly path: string;
 }
 
 @Component({
   selector: 'app-docs-home',
   standalone: true,
-  imports: [
-    RouterLink,
-    UiBadgeComponent,
-    UiButtonComponent,
-    DocsCodeBlockComponent,
-    UiTagComponent,
+  imports: [NgIcon, RouterLink, UiBadgeComponent, UiButtonComponent, UiButtonIconDirective],
+  providers: [
+    provideIcons({
+      heroArrowRight,
+      heroChatBubbleLeftRight,
+      heroCheckCircle,
+      heroClipboardDocument,
+      heroClipboardDocumentList,
+      heroRectangleStack,
+      heroTableCells,
+    }),
   ],
   template: `
-    <article class="mx-auto max-w-6xl bg-slate-100 dark:bg-slate-950">
-      <section class="border-b border-blue-100 bg-slate-50 dark:border-blue-950 dark:bg-slate-950">
-        <div class="grid gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_27rem] lg:px-5 lg:py-7">
-          <div class="min-w-0 self-center">
+    <article class="mx-auto max-w-[76rem] pb-16">
+      <section class="pt-5">
+        <div
+          class="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)] lg:items-start"
+        >
+          <header class="min-w-0 py-1 lg:pr-6">
             <div class="flex flex-wrap items-center gap-2">
-              <ui-badge variant="danger" size="sm"> Package version {{ libraryVersion }} </ui-badge>
+              <span
+                class="inline-flex rounded bg-blue-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
+              >
+                NgNova UI v{{ libraryVersion }}
+              </span>
               <ui-badge variant="info" size="sm">Angular 22 ready</ui-badge>
             </div>
 
             <h1
-              class="mt-3 max-w-3xl text-2xl font-bold leading-8 tracking-normal text-slate-950 dark:text-slate-50"
+              class="mt-4 max-w-3xl text-2xl font-bold leading-8 tracking-normal text-slate-950 dark:text-slate-50"
             >
-              Build faster with NgNova UI Docs
+              Build production-ready Angular interfaces faster
             </h1>
 
-            <p class="mt-3 max-w-2xl text-sm leading-5 text-slate-600 dark:text-slate-300">
-              An Angular 22 standalone component library with focused package entry points, Tailwind
-              v4 styling, API-aligned documentation, and a release pipeline that builds a real
-              consumer application.
+            <p class="mt-2 max-w-3xl text-sm leading-5 text-slate-600 dark:text-slate-300">
+              NgNova UI gives Angular teams accessible standalone components, focused imports, and
+              documentation that stays aligned with the package.
             </p>
 
-            <div class="mt-7 flex flex-wrap gap-3">
-              <a routerLink="/components/button">
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a routerLink="/guide">
                 <ui-button>Get started</ui-button>
               </a>
               <a routerLink="/components/button">
-                <ui-button variant="outline">View components</ui-button>
+                <ui-button variant="outline">Explore components</ui-button>
               </a>
             </div>
+          </header>
 
+          <aside
+            class="min-w-0 rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
+            aria-labelledby="quick-start-heading"
+          >
             <p
-              class="mt-7 border-t border-blue-100 pt-5 text-sm text-slate-500 dark:border-blue-950 dark:text-slate-400"
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300"
             >
-              Current release evidence:
-              <span class="font-semibold text-slate-950 dark:text-slate-100">
-                {{ componentCount }} documented components
-              </span>
-              with library, documentation, package, and consumer checks.
+              Quick start
             </p>
-          </div>
+            <h2
+              id="quick-start-heading"
+              class="mt-2 text-xl font-semibold tracking-[-0.015em] text-slate-950 dark:text-slate-50"
+            >
+              Start in minutes
+            </h2>
 
-          <aside class="min-w-0 self-center">
-            <app-docs-code-block
-              [code]="heroCode"
-              filename="hero-card.component.ts"
-              language="TypeScript"
-            />
+            <div class="mt-6 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5">
+              @for (snippet of quickStartSnippets; track snippet.id) {
+                <section class="min-w-0">
+                  <h3 class="text-sm font-semibold text-slate-950 dark:text-slate-100">
+                    {{ snippet.label }}
+                  </h3>
+
+                  <div class="relative mt-3 min-w-0 overflow-hidden rounded bg-slate-950 shadow-sm">
+                    <pre
+                      class="max-w-full overflow-x-auto whitespace-pre py-3 pl-4 pr-13 font-mono text-xs leading-5 text-slate-100"
+                      [title]="snippet.code"
+                    ><code>{{ snippet.code }}</code></pre>
+                    <ui-button
+                      class="absolute right-2 top-2"
+                      appearance="solid"
+                      intent="neutral"
+                      size="sm"
+                      [iconOnly]="true"
+                      [ariaLabel]="copyButtonLabel(snippet)"
+                      [title]="copyButtonLabel(snippet)"
+                      (click)="copySnippet(snippet)"
+                    >
+                      <ng-icon
+                        uiButtonIcon
+                        [name]="
+                          copiedSnippet() === snippet.id
+                            ? 'heroCheckCircle'
+                            : 'heroClipboardDocument'
+                        "
+                      />
+                    </ui-button>
+                  </div>
+                </section>
+              }
+            </div>
+
+            <p class="mt-6 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              Import only the component entry points your Angular screen needs.
+            </p>
+            <p class="sr-only" aria-live="polite">{{ copyAnnouncement() }}</p>
           </aside>
         </div>
       </section>
 
-      <section
-        class="border-b border-blue-100 bg-white px-4 py-5 dark:border-blue-950 dark:bg-slate-950 lg:px-5"
-      >
-        <div
-          class="grid items-center gap-5 rounded bg-slate-100 p-5 dark:bg-slate-900 md:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]"
-        >
-          <div>
-            <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">Quick Start</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Install the package, then import only the component entry point your Angular screen
-              needs.
-            </p>
-          </div>
+      <section class="mt-4 grid gap-4 md:grid-cols-3" aria-label="Library assurances">
+        @for (assurance of assurances; track assurance.title) {
           <div
-            class="flex min-w-0 items-center justify-between gap-4 rounded bg-slate-950 px-4 py-3 font-mono text-sm text-slate-100"
+            class="flex gap-3 rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
           >
-            <code class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
-              npm install &#64;ngnova/ui
-            </code>
-            <span class="shrink-0 text-slate-500">copy</span>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="border-b border-blue-100 bg-white px-4 py-6 text-center dark:border-blue-950 dark:bg-slate-950 lg:px-5"
-      >
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-          Repository-backed release facts
-        </p>
-        <div class="mt-5 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-4">
-          @for (metric of metrics; track metric.label) {
-            <section class="rounded border border-blue-100 p-4 dark:border-blue-950">
-              <p class="text-xl font-bold text-blue-700 dark:text-blue-300">{{ metric.value }}</p>
-              <h2 class="mt-1 text-sm font-semibold text-slate-950 dark:text-slate-50">
-                {{ metric.label }}
+            <ng-icon
+              class="mt-0.5 shrink-0 text-blue-600 dark:text-blue-400"
+              name="heroCheckCircle"
+              size="20"
+              aria-hidden="true"
+            />
+            <div>
+              <h2 class="text-sm font-semibold text-slate-950 dark:text-slate-100">
+                {{ assurance.title }}
               </h2>
               <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                {{ metric.description }}
+                {{ assurance.description }}
               </p>
-            </section>
-          }
-        </div>
-      </section>
-
-      <section class="bg-slate-100 px-4 py-6 dark:bg-slate-950 lg:px-5">
-        <div class="mx-auto max-w-3xl text-center">
-          <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">
-            Built around verifiable contracts
-          </h2>
-          <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
-            Each claim below maps to source code, generated package output, or the release pipeline.
-          </p>
-        </div>
-
-        <div class="mt-6 grid gap-4 md:grid-cols-3">
-          @for (principle of principles; track principle.title) {
-            <section
-              class="rounded border border-blue-100 bg-white p-4 dark:border-blue-950 dark:bg-slate-950"
-            >
-              <span
-                class="inline-flex rounded bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
-              >
-                {{ principle.short }}
-              </span>
-              <h3 class="mt-4 text-base font-semibold text-slate-950 dark:text-slate-50">
-                {{ principle.title }}
-              </h3>
-              <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
-                {{ principle.description }}
-              </p>
-            </section>
-          }
-        </div>
+            </div>
+          </div>
+        }
       </section>
 
       <section
-        class="grid gap-5 bg-slate-50 px-4 py-6 dark:bg-slate-950 lg:grid-cols-[minmax(0,1fr)_25rem] lg:px-5"
+        class="mt-4 grid gap-6 rounded border border-blue-200 bg-white p-4 dark:border-blue-950 dark:bg-slate-950 sm:p-5 lg:grid-cols-[minmax(18rem,0.86fr)_minmax(0,1.14fr)]"
       >
-        <div>
-          <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">
-            Package and consumer verification
-          </h2>
-          <div class="mt-5 grid gap-3">
-            @for (item of analyticsHighlights; track item) {
-              <p class="text-sm text-slate-600 dark:text-slate-300">
-                <span class="mr-2 font-semibold text-blue-800 dark:text-blue-300">Check</span
-                >{{ item }}
-              </p>
-            }
-          </div>
-
-          <div
-            class="mt-7 rounded border border-blue-100 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+        <div class="self-center">
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300"
           >
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-xs font-semibold uppercase text-slate-500">Release pipeline</p>
-                <p class="mt-1 text-xl font-bold text-slate-950 dark:text-slate-50">
-                  Source to consumer
-                </p>
-              </div>
-              <ui-tag variant="success">Passing</ui-tag>
-            </div>
-            <div class="mt-6 grid gap-3">
-              @for (check of releaseChecks; track check) {
-                <p class="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
-                  <span class="size-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
-                  {{ check }}
-                </p>
-              }
-            </div>
-          </div>
+            Made for production
+          </p>
+          <h2
+            class="mt-2 text-xl font-bold leading-7 tracking-normal text-slate-950 dark:text-slate-50"
+          >
+            Built for real Angular teams
+          </h2>
+          <p class="mt-4 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Move from a first import to a consistent product UI with typed APIs, deliberate
+            defaults, and release checks that exercise the package as a consumer would.
+          </p>
+          <a
+            routerLink="/guide"
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:text-blue-300 dark:hover:text-blue-200"
+          >
+            Read the architecture guide
+            <ng-icon name="heroArrowRight" size="16" aria-hidden="true" />
+          </a>
         </div>
 
-        <div class="grid content-start gap-5">
-          <app-docs-code-block
-            [code]="quickStartCode"
-            filename="app.component.ts"
-            language="Angular template"
-          />
-          <app-docs-code-block
-            [code]="packageSetupCode"
-            filename="styles.css and template.html"
-            language="CSS and Angular template"
-          />
+        <div
+          class="border-t border-blue-200 dark:border-blue-950 lg:border-l lg:border-t-0 lg:pl-6"
+        >
+          @for (benefit of benefits; track benefit.title) {
+            <section
+              class="border-b border-blue-200 py-4 first:pt-0 last:border-b-0 last:pb-0 dark:border-blue-950 lg:first:pt-4"
+            >
+              <h3 class="text-base font-semibold text-slate-950 dark:text-slate-100">
+                {{ benefit.title }}
+              </h3>
+              <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                {{ benefit.description }}
+              </p>
+            </section>
+          }
         </div>
       </section>
 
       <section
-        class="border-y border-blue-100 bg-slate-200/60 px-4 py-6 dark:border-blue-950 dark:bg-slate-900 lg:px-5"
+        class="mt-4 rounded border border-blue-200 bg-slate-200/70 p-4 dark:border-blue-950 dark:bg-slate-900 sm:p-5"
       >
         <div class="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 class="text-lg font-semibold text-slate-950 dark:text-slate-50">What's New</h2>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Stay up to date with the latest component and documentation work.
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300"
+            >
+              Explore by task
             </p>
+            <h2 class="mt-2 text-xl font-semibold text-slate-950 dark:text-slate-50">
+              Start with what you need
+            </h2>
           </div>
-          <a routerLink="/guide" class="text-sm font-semibold text-blue-800 dark:text-blue-300">
-            View full changelog
+          <a
+            routerLink="/components/button"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:text-blue-300 dark:hover:text-blue-200"
+          >
+            Browse every component
+            <ng-icon name="heroArrowRight" size="16" aria-hidden="true" />
           </a>
         </div>
 
-        <div class="mt-7 grid gap-5 md:grid-cols-2">
-          @for (update of updates; track update.title) {
-            <section
-              class="grid gap-4 rounded border border-blue-100 bg-white p-5 dark:border-blue-950 dark:bg-slate-950 sm:grid-cols-[3rem_minmax(0,1fr)]"
+        <div
+          class="mt-5 grid gap-px overflow-hidden rounded-lg border border-blue-100 bg-blue-100 dark:border-blue-900 dark:bg-blue-900 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          @for (task of taskLinks; track task.label) {
+            <a
+              [routerLink]="task.path"
+              class="group flex min-h-24 gap-3 bg-white p-4 transition-colors hover:bg-blue-50 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 dark:bg-slate-950 dark:hover:bg-blue-950/40"
             >
               <span
-                class="flex size-12 items-center justify-center rounded bg-blue-50 text-sm font-semibold text-blue-800 dark:bg-blue-950/50 dark:text-blue-200"
+                class="flex size-9 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-700 group-hover:bg-white dark:bg-blue-950 dark:text-blue-300 dark:group-hover:bg-slate-900"
               >
-                {{ update.version }}
+                <ng-icon [name]="task.icon" size="20" aria-hidden="true" />
               </span>
-              <div>
-                <h3 class="text-base font-semibold text-slate-950 dark:text-slate-50">
-                  {{ update.title }}
-                </h3>
-                <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
-                  {{ update.description }}
-                </p>
-                <p class="mt-3 text-xs text-slate-500">{{ update.meta }}</p>
-              </div>
-            </section>
+              <span class="min-w-0">
+                <span
+                  class="flex items-center gap-2 text-sm font-semibold text-slate-950 dark:text-slate-100"
+                >
+                  {{ task.label }}
+                  <ng-icon
+                    class="text-blue-600 transition-transform group-hover:translate-x-0.5 dark:text-blue-400"
+                    name="heroArrowRight"
+                    size="15"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span class="mt-2 block text-xs leading-5 text-slate-500 dark:text-slate-400">
+                  {{ task.description }}
+                </span>
+              </span>
+            </a>
           }
-        </div>
-      </section>
-
-      <section class="bg-slate-900 px-4 py-8 text-center text-white lg:px-5">
-        <h2 class="text-lg font-bold tracking-normal">Ready to inspect the implementation?</h2>
-        <p class="mx-auto mt-5 max-w-2xl text-sm leading-5 text-slate-300">
-          Start with the guide, inspect each public API, and use the same package paths exercised by
-          the consumer smoke build.
-        </p>
-        <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <a routerLink="/guide">
-            <ui-button>Start your project</ui-button>
-          </a>
-          <a routerLink="/templates">
-            <ui-button variant="outline">View templates</ui-button>
-          </a>
         </div>
       </section>
     </article>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DocsHomeComponent {
+export class DocsHomeComponent implements OnDestroy {
+  private readonly document = inject(DOCUMENT);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private copyResetTimer: ReturnType<typeof globalThis.setTimeout> | null = null;
+
   protected readonly libraryVersion = NGNOVA_UI_VERSION;
-  protected readonly componentCount = componentDocs.length;
-  protected readonly heroCode = `import { Component } from '@angular/core';
-import { UiCardComponent } from '@ngnova/ui/card';
+  protected readonly copiedSnippet = signal<QuickStartSnippet['id'] | null>(null);
+  protected readonly copyAnnouncement = signal('');
 
-@Component({
-  selector: 'app-hero-card',
-  standalone: true,
-  imports: [UiCardComponent],
-  template: '<ui-card variant="elevated" padding="lg">...</ui-card>',
-})
-export class HeroCardComponent {
-  title = 'Hello World';
-}`;
-
-  protected readonly quickStartCode = `import { Component } from '@angular/core';
-import { UiButtonComponent } from '@ngnova/ui/button';
-
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [UiButtonComponent],
-  template: '<ui-button>Create project</ui-button>',
-})
-export class AppComponent {}`;
-
-  protected readonly packageSetupCode = `@source "../node_modules/@ngnova/ui";
-
-<ui-button variant="primary" size="md">
-  Create project
-</ui-button>`;
-
-  protected readonly analyticsHighlights: readonly string[] = [
-    'ng-packagr emits the root package and isolated component entry points',
-    'Package audit and npm dry run inspect the generated dist/ui output',
-    'Consumer smoke installs the tarball and builds a separate Angular application',
-  ];
-
-  protected readonly releaseChecks: readonly string[] = [
-    'Format, lint, and documentation API consistency',
-    'Library and documentation application tests',
-    'Library and production documentation builds',
-    'Package audit, npm dry run, and consumer smoke build',
-  ];
-
-  protected readonly updates: readonly HomeUpdate[] = [
+  protected readonly quickStartSnippets: readonly QuickStartSnippet[] = [
     {
-      version: '0.1',
-      title: 'Standalone Component Entrypoints',
-      description:
-        'Focused package paths for every public component, matching how Angular teams scale imports.',
-      meta: 'Verified in generated package output',
+      id: 'install',
+      label: 'Install',
+      code: 'npm install @ngnova/ui',
     },
     {
-      version: 'Fix',
-      title: 'Docs Example Alignment',
-      description:
-        'Preview examples, code snippets, and API tables now follow the same documented component contracts.',
-      meta: 'Verified by docs API and application tests',
+      id: 'import',
+      label: 'Import',
+      code: "import { UiButtonComponent } from '@ngnova/ui/button';",
     },
   ];
 
-  protected readonly metrics: readonly HomeMetric[] = [
+  protected readonly assurances: readonly HomeAssurance[] = [
     {
-      label: 'Components',
-      value: String(componentDocs.length),
-      description: 'Public components with API-aligned docs pages',
+      title: 'Angular-native',
+      description: 'Standalone, typed, and tree-shakeable by design.',
     },
     {
-      label: 'Compatibility',
-      value: 'Angular 22',
-      description: 'Standalone components built with Angular 22 tooling',
+      title: 'Accessible by default',
+      description: 'Semantics, keyboard behavior, and focus management built in.',
     },
     {
-      label: 'Test suites',
-      value: 'Library + docs',
-      description: '100+ library tests and 10 documentation tests in the current release run',
-    },
-    {
-      label: 'Package checks',
-      value: 'Audit + smoke',
-      description: 'Generated tarball is audited and built in a separate consumer app',
+      title: 'Release checked',
+      description: 'Tests, builds, package audits, and consumer verification on every release.',
     },
   ];
 
-  protected readonly principles: readonly HomePrinciple[] = [
+  protected readonly benefits: readonly HomeBenefit[] = [
     {
-      short: 'API',
-      title: 'Standalone by default',
+      title: 'Focused package entry points',
       description:
-        'All public components use standalone Angular entry points with focused package imports.',
+        'Import only what a screen needs for smaller bundles, clearer ownership, and faster builds.',
     },
     {
-      short: 'Theme',
-      title: 'Tailwind v4 contract',
+      title: 'Tailwind v4 theming',
       description:
-        'Static utility classes, documented package scanning, and class-based dark mode define the current theme surface.',
+        'Use documented theme contracts and sensible defaults without giving up product-level customization.',
     },
     {
-      short: 'A11y',
-      title: 'Release-gated changes',
+      title: 'API-aligned documentation',
       description:
-        'Format, lint, tests, builds, package inspection, and consumer compilation run through one release command.',
+        'Examples, code snippets, and API tables follow the same public contracts shipped by the library.',
     },
   ];
+
+  protected readonly taskLinks: readonly HomeTaskLink[] = [
+    {
+      label: 'Build forms',
+      description: 'Inputs, selection, validation, and upload patterns.',
+      icon: 'heroClipboardDocumentList',
+      path: '/components/form-field',
+    },
+    {
+      label: 'Present data',
+      description: 'Tables, pagination, and scalable data states.',
+      icon: 'heroTableCells',
+      path: '/components/table',
+    },
+    {
+      label: 'Guide workflows',
+      description: 'Steppers, tabs, navigation, and progressive disclosure.',
+      icon: 'heroRectangleStack',
+      path: '/components/stepper',
+    },
+    {
+      label: 'Show feedback',
+      description: 'Alerts, toasts, progress, and loading states.',
+      icon: 'heroChatBubbleLeftRight',
+      path: '/components/alert',
+    },
+  ];
+
+  protected copySnippet(snippet: QuickStartSnippet): void {
+    this.copiedSnippet.set(snippet.id);
+    this.copyAnnouncement.set(`Copying the ${snippet.label.toLowerCase()} command.`);
+    this.changeDetectorRef.detectChanges();
+    void this.completeCopy(snippet);
+  }
+
+  private async completeCopy(snippet: QuickStartSnippet): Promise<void> {
+    const copied = await this.writeToClipboard(snippet.code);
+
+    if (!copied) {
+      this.copiedSnippet.set(null);
+      this.copyAnnouncement.set(
+        `Could not copy the ${snippet.label.toLowerCase()} command. Select the code and copy it manually.`,
+      );
+      this.changeDetectorRef.markForCheck();
+      return;
+    }
+
+    this.copyAnnouncement.set(`${snippet.label} command copied to clipboard.`);
+    this.changeDetectorRef.markForCheck();
+
+    if (this.copyResetTimer !== null) {
+      globalThis.clearTimeout(this.copyResetTimer);
+    }
+
+    this.copyResetTimer = globalThis.setTimeout(() => {
+      this.copiedSnippet.set(null);
+      this.copyResetTimer = null;
+      this.changeDetectorRef.markForCheck();
+    }, 1500);
+  }
+
+  protected copyButtonLabel(snippet: QuickStartSnippet): string {
+    return this.copiedSnippet() === snippet.id
+      ? `${snippet.label} command copied`
+      : `Copy ${snippet.label.toLowerCase()} command`;
+  }
+
+  ngOnDestroy(): void {
+    if (this.copyResetTimer !== null) {
+      globalThis.clearTimeout(this.copyResetTimer);
+    }
+  }
+
+  private async writeToClipboard(value: string): Promise<boolean> {
+    const clipboard = this.document.defaultView?.navigator.clipboard;
+
+    if (clipboard?.writeText) {
+      try {
+        await clipboard.writeText(value);
+        return true;
+      } catch {
+        // Continue with the selection-based fallback for restricted browser contexts.
+      }
+    }
+
+    return this.copyWithSelection(value);
+  }
+
+  private copyWithSelection(value: string): boolean {
+    if (!this.document.body) {
+      return false;
+    }
+
+    const textarea = this.document.createElement('textarea');
+    textarea.value = value;
+    textarea.readOnly = true;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    textarea.style.opacity = '0';
+    this.document.body.append(textarea);
+    textarea.select();
+
+    try {
+      return this.document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      textarea.remove();
+    }
+  }
 }

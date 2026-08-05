@@ -18,7 +18,6 @@ import {
   heroTableCells,
 } from '@ng-icons/heroicons/outline';
 import { RouterLink } from '@angular/router';
-import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { UiBadgeComponent } from '@ngnova/ui/badge';
 import { UiButtonComponent, UiButtonIconDirective } from '@ngnova/ui/button';
 
@@ -68,11 +67,6 @@ interface HomeTaskLink {
         >
           <header class="min-w-0 py-1 lg:pr-6">
             <div class="flex flex-wrap items-center gap-2">
-              <span
-                class="inline-flex rounded bg-blue-100 px-3 py-2 text-sm font-medium uppercase tracking-wide text-blue-800 dark:bg-blue-950 dark:text-blue-200"
-              >
-                NgNova UI v{{ libraryVersion }}
-              </span>
               <ui-badge variant="info" size="sm">Angular 22 ready</ui-badge>
             </div>
 
@@ -83,8 +77,8 @@ interface HomeTaskLink {
             </h1>
 
             <p class="mt-2 max-w-3xl text-sm leading-5 text-slate-600 dark:text-slate-300">
-              NgNova UI gives Angular teams accessible standalone components, focused imports, and
-              documentation that stays aligned with the package.
+              Accessible standalone components, focused imports, and package-aligned documentation
+              help Angular teams ship with confidence.
             </p>
 
             <div class="mt-6 flex flex-wrap gap-3">
@@ -290,7 +284,6 @@ export class DocsHomeComponent implements OnDestroy {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private copyResetTimer: ReturnType<typeof globalThis.setTimeout> | null = null;
 
-  protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly copiedSnippet = signal<QuickStartSnippet['id'] | null>(null);
   protected readonly copyAnnouncement = signal('');
 

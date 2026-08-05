@@ -135,8 +135,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
           </button>
 
           <a routerLink="/" class="shrink-0 text-base font-bold text-blue-800 dark:text-blue-300">
-            <span class="sm:hidden">NgNova UI</span>
-            <span class="hidden sm:inline">NgNova UI Docs</span>
+            NgNova UI
           </a>
 
           <nav
@@ -189,17 +188,8 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
       <ng-template #navigationContent>
         <div class="px-4 py-5">
           <div class="border-b border-slate-200 pb-4 dark:border-slate-800">
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <p
-                  class="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300"
-                >
-                  NgNova UI
-                </p>
-                <p class="mt-1 text-sm font-semibold text-slate-950 dark:text-white">
-                  Documentation
-                </p>
-              </div>
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-sm font-semibold text-slate-950 dark:text-white">Documentation</p>
               <span class="pt-0.5 font-mono text-[0.6875rem] text-slate-500 dark:text-slate-400">
                 v{{ libraryVersion }}
               </span>

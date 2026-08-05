@@ -64,6 +64,11 @@ describe('App', () => {
     expect(homeArticle?.classList.contains('max-w-[76rem]')).toBe(true);
     expect(quickStartCard?.classList.contains('border-blue-200')).toBe(true);
     expect(quickStartCard?.classList.contains('bg-white')).toBe(true);
+    expect(homeCompiled.textContent?.match(/NgNova UI/g)).toHaveLength(1);
+    expect(homeCompiled.textContent?.match(/v1\.0\.0/g)).toHaveLength(1);
+    expect(homeArticle?.textContent).not.toContain('NgNova UI');
+    expect(homeArticle?.textContent).not.toContain('v1.0.0');
+    expect(homeArticle?.textContent).toContain('Angular 22 ready');
     expect(homeCompiled.querySelector('[data-home-showcase]')).toBeNull();
     expect(homeCompiled.textContent).not.toContain(
       'From individual components to a complete product',

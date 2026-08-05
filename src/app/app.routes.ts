@@ -57,6 +57,11 @@ export const routes: Routes = [
         data: { topic: 'roadmap' },
       },
       {
+        path: 'contributing',
+        loadComponent: () =>
+          import('./docs/docs-contributing').then((module) => module.DocsContributingComponent),
+      },
+      {
         path: 'components/:slug',
         loadComponent: () =>
           import('./docs/component-doc-page').then((module) => module.ComponentDocPageComponent),

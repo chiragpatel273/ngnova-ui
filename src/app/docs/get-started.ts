@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { UiButtonComponent } from '@ngnova/ui/button';
 
 interface GuideCard {
@@ -88,11 +89,19 @@ interface GuidePageLink {
         <footer
           class="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-blue-200 pt-6 text-sm text-slate-600 dark:border-blue-950 dark:text-slate-300"
         >
-          <p>&copy; 2024 NgNova UI. Built for developers by developers.</p>
+          <p>
+            NgNova UI {{ libraryVersion }} &middot; Open source under the MIT License &middot;
+            &copy; 2026 Chirag Patel and contributors
+          </p>
           <nav class="flex flex-wrap gap-6" aria-label="Guide footer">
-            <a routerLink="/components">GitHub</a>
+            <a href="https://github.com/chiragpatel273/ngnova-ui" target="_blank" rel="noreferrer"
+              >GitHub</a
+            >
             <a routerLink="/apis">API Reference</a>
-            <a routerLink="/guide">NPM</a>
+            <a routerLink="/contributing">Contributing</a>
+            <a href="https://www.npmjs.com/package/@ngnova/ui" target="_blank" rel="noreferrer"
+              >npm</a
+            >
           </nav>
         </footer>
       </article>
@@ -133,6 +142,7 @@ interface GuidePageLink {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GetStartedComponent {
+  protected readonly libraryVersion = NGNOVA_UI_VERSION;
   protected readonly onThisPage: readonly GuidePageLink[] = [
     { label: 'Getting Started', fragment: 'getting-started' },
     { label: 'Installation', fragment: 'installation' },

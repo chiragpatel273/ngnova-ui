@@ -147,6 +147,12 @@ cd dist/ui
 npm publish --access public
 ```
 
+## Contributing
+
+Read the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/#/contributing) for
+the fork-to-pull-request workflow, engineering expectations, release checks, security reporting,
+and contribution-license terms.
+
 ## License
 
 NgNova UI is available under the [MIT License](LICENSE).

@@ -53,6 +53,9 @@ for (const evidence of [
   'Changesets and compatibility',
   'CODE_OF_CONDUCT.md',
   'SECURITY.md',
+  'Contribution License',
+  "project's MIT License",
+  'right to submit the contribution',
 ]) {
   requireValue(
     contributing.includes(evidence),

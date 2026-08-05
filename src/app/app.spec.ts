@@ -41,13 +41,38 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Build faster with NgNova UI Docs',
+      'Build production-ready Angular interfaces faster',
     );
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Start in minutes');
     expect((fixture.nativeElement as HTMLElement).textContent).toContain(
-      'Repository-backed release facts',
+      'Start with what you need',
+    );
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain(
+      '40 documented components',
+    );
+    expect((fixture.nativeElement as HTMLElement).textContent).not.toContain(
+      'hero-card.component.ts',
     );
     expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('Trusted by');
     expect((fixture.nativeElement as HTMLElement).textContent).not.toContain('2,500+');
+
+    const homeCompiled = fixture.nativeElement as HTMLElement;
+    const homeArticle = homeCompiled.querySelector<HTMLElement>('app-docs-home > article');
+    const quickStartCard = homeCompiled.querySelector<HTMLElement>(
+      'app-docs-home aside[aria-labelledby="quick-start-heading"]',
+    );
+    expect(homeArticle?.classList.contains('max-w-[76rem]')).toBe(true);
+    expect(quickStartCard?.classList.contains('border-blue-200')).toBe(true);
+    expect(quickStartCard?.classList.contains('bg-white')).toBe(true);
+    expect(homeCompiled.textContent?.match(/NgNova UI/g)).toHaveLength(1);
+    expect(homeCompiled.textContent?.match(/v1\.0\.0/g)).toHaveLength(1);
+    expect(homeArticle?.textContent).not.toContain('NgNova UI');
+    expect(homeArticle?.textContent).not.toContain('v1.0.0');
+    expect(homeArticle?.textContent).toContain('Angular 22 ready');
+    expect(homeCompiled.querySelector('[data-home-showcase]')).toBeNull();
+    expect(homeCompiled.textContent).not.toContain(
+      'From individual components to a complete product',
+    );
 
     await router.navigateByUrl('/components/button');
     fixture.detectChanges();
@@ -65,6 +90,93 @@ describe('App', () => {
     );
   });
 
+  it('copies quick-start commands from icon-only controls', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const originalClipboard = navigator.clipboard;
+
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+
+    try {
+      await router.navigateByUrl('/');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const copyButtons = compiled.querySelectorAll<HTMLButtonElement>(
+        'aside button[aria-label^="Copy"]',
+      );
+      const quickStartCodeBlocks = compiled.querySelectorAll('aside pre');
+
+      expect(copyButtons.length).toBe(2);
+      expect(quickStartCodeBlocks.length).toBe(2);
+      expect(
+        Array.from(quickStartCodeBlocks).every((block) =>
+          block.parentElement?.classList.contains('bg-slate-950'),
+        ),
+      ).toBe(true);
+      expect(Array.from(copyButtons, (button) => button.textContent?.trim())).toEqual(['', '']);
+
+      copyButtons[0]?.click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(writeText).toHaveBeenCalledWith('npm install @ngnova/ui');
+      expect(compiled.querySelector('button[aria-label="Install command copied"]')).toBeTruthy();
+    } finally {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: originalClipboard,
+      });
+    }
+  });
+
+  it('falls back to selection-based copying when clipboard permission is denied', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    const originalClipboard = navigator.clipboard;
+    const originalExecCommand = document.execCommand;
+    const execCommand = vi.fn().mockReturnValue(true);
+
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: vi.fn().mockRejectedValue(new Error('Clipboard access denied')) },
+    });
+    Object.defineProperty(document, 'execCommand', {
+      configurable: true,
+      value: execCommand,
+    });
+
+    try {
+      await router.navigateByUrl('/');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      compiled
+        .querySelector<HTMLButtonElement>('button[aria-label="Copy import command"]')
+        ?.click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(execCommand).toHaveBeenCalledWith('copy');
+      expect(compiled.querySelector('button[aria-label="Import command copied"]')).toBeTruthy();
+    } finally {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: originalClipboard,
+      });
+      Object.defineProperty(document, 'execCommand', {
+        configurable: true,
+        value: originalExecCommand,
+      });
+    }
+  });
+
   it('uses the shared compact page-title typography across documentation routes', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -76,6 +188,7 @@ describe('App', () => {
       '/templates',
       '/apis',
       '/accessibility',
+      '/contributing',
     ]) {
       await router.navigateByUrl(path);
       fixture.detectChanges();
@@ -94,6 +207,25 @@ describe('App', () => {
         false,
       );
     }
+  });
+
+  it('publishes an actionable contribution guide', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/contributing');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Contribute to NgNova UI');
+    expect(compiled.textContent).toContain('npm.cmd run release:check');
+    expect(compiled.textContent).toContain('licensed under the project');
+    expect(
+      compiled.querySelector<HTMLAnchorElement>(
+        'a[href="https://github.com/chiragpatel273/ngnova-ui/security/advisories/new"]',
+      ),
+    ).toBeTruthy();
   });
 
   it('links every Guide table-of-contents item to an existing section', async () => {
@@ -335,6 +467,13 @@ describe('App', () => {
     expect(
       Array.from(groupToggles ?? [], (toggle) => toggle.getAttribute('aria-expanded')),
     ).toEqual(['true', 'true', 'true', 'true', 'true']);
+    expect(Array.from(groupToggles ?? [], (toggle) => toggle.textContent?.trim())).toEqual([
+      'Actions & status',
+      'Forms',
+      'Layout & data',
+      'Navigation & workflow',
+      'Overlays & feedback',
+    ]);
     expect(sidebarSlugs).toHaveLength(documentedSlugs.length);
     expect(new Set(sidebarSlugs).size).toBe(documentedSlugs.length);
     expect(new Set(sidebarSlugs)).toEqual(new Set(documentedSlugs));
@@ -382,6 +521,15 @@ describe('App', () => {
 
     expect(dashboard).toBeTruthy();
     expect(dashboardHeader).toBeTruthy();
+    expect(dashboard?.classList.contains('h-screen')).toBe(true);
+    expect(dashboard?.classList.contains('min-h-screen')).toBe(true);
+    expect(dashboard?.classList.contains('h-dvh')).toBe(true);
+    expect(dashboard?.classList.contains('min-h-dvh')).toBe(true);
+    expect(dashboard?.classList.contains('xl:grid-rows-[minmax(0,1fr)]')).toBe(true);
+    expect(dashboard?.classList.contains('overflow-hidden')).toBe(true);
+    expect(dashboardHeader?.classList.contains('sticky')).toBe(true);
+    expect(dashboardHeader?.classList.contains('top-0')).toBe(true);
+    expect(mainContent?.classList.contains('overflow-y-auto')).toBe(true);
     expect(mainContent?.getAttribute('aria-labelledby')).toBe('admin-title');
     expect(skipLink?.textContent).toContain('Skip to dashboard content');
     expect(mainContent?.querySelector('h1')?.textContent).toContain('Overview');
@@ -420,6 +568,133 @@ describe('App', () => {
 
     expect(dashboard?.querySelector('[role="dialog"][aria-label="Admin navigation"]')).toBeNull();
     expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('supports advanced admin navigation, sidebar, customer, and theme workflows', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+    localStorage.removeItem('ngnova-admin-sidebar');
+    localStorage.removeItem('ngnova-admin-theme');
+
+    await router.navigateByUrl('/templates');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const dashboard = compiled.querySelector<HTMLElement>('[data-admin-template]');
+    const desktopNavigation = dashboard?.querySelector<HTMLElement>(
+      '[data-admin-desktop-navigation]',
+    );
+    const collapseButton = desktopNavigation?.querySelector<HTMLButtonElement>(
+      'button[aria-label="Collapse admin sidebar"]',
+    );
+
+    collapseButton?.click();
+    fixture.detectChanges();
+
+    expect(collapseButton).toBeTruthy();
+    expect(localStorage.getItem('ngnova-admin-sidebar')).toBe('1');
+    const expandButton = desktopNavigation?.querySelector<HTMLButtonElement>(
+      'button[aria-label="Expand admin sidebar"]',
+    );
+    expect(expandButton).toBeTruthy();
+    expect(dashboard?.style.gridTemplateColumns).toContain('4rem');
+    expect(expandButton?.classList.contains('rounded-lg')).toBe(true);
+    expect(expandButton?.classList.contains('border-slate-200')).toBe(true);
+    expect(desktopNavigation?.querySelector('[data-admin-brand-mark]')).toBeNull();
+
+    const customersButton = Array.from(
+      desktopNavigation?.querySelectorAll<HTMLButtonElement>('nav button') ?? [],
+    ).find((button) => button.getAttribute('aria-label') === 'Customers');
+    customersButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(dashboard?.querySelector('#admin-title')?.textContent?.trim()).toBe('Customers');
+    expect(dashboard?.textContent).toContain(
+      'Search, filter, create, and update customer accounts.',
+    );
+    expect(dashboard?.textContent).toContain('Olivia Martin');
+
+    const customerSearch = dashboard?.querySelector<HTMLInputElement>(
+      'input[aria-label="Search customers"]',
+    );
+    if (customerSearch) {
+      customerSearch.value = 'Stark';
+      customerSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    fixture.detectChanges();
+
+    expect(dashboard?.textContent).toContain('Sophia Patel');
+    expect(dashboard?.textContent).not.toContain('Olivia Martin');
+
+    const viewCustomerButton = Array.from(
+      dashboard?.querySelectorAll<HTMLButtonElement>('button') ?? [],
+    ).find((button) => button.textContent?.trim() === 'View');
+    viewCustomerButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const customerEditor = dashboard?.querySelector<HTMLElement>(
+      '[role="dialog"][aria-label="Edit customer"]',
+    );
+    expect(customerEditor).toBeTruthy();
+    expect(
+      customerEditor?.querySelector<HTMLInputElement>('input[name="customerName"]')?.value,
+    ).toBe('Sophia Patel');
+
+    customerEditor
+      ?.querySelector<HTMLFormElement>('form')
+      ?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(dashboard?.querySelector('[role="dialog"][aria-label="Edit customer"]')).toBeNull();
+    expect(document.body.textContent).toContain('Customer updated');
+
+    const ordersButton = Array.from(
+      desktopNavigation?.querySelectorAll<HTMLButtonElement>('nav button') ?? [],
+    ).find((button) => button.getAttribute('aria-label') === 'Orders');
+    ordersButton?.click();
+    fixture.detectChanges();
+
+    const orderSearch = dashboard?.querySelector<HTMLInputElement>(
+      'input[aria-label="Search orders"]',
+    );
+    if (orderSearch) {
+      orderSearch.value = 'Wayne';
+      orderSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    fixture.detectChanges();
+
+    expect(dashboard?.querySelector('#admin-title')?.textContent?.trim()).toBe('Orders');
+    expect(dashboard?.textContent).toContain('Wayne Enterprises');
+    expect(dashboard?.textContent).not.toContain('Northwind Traders');
+
+    dashboard?.querySelector<HTMLInputElement>('input[aria-label^="Select row"]')?.click();
+    fixture.detectChanges();
+    const markShippedButton = Array.from(
+      dashboard?.querySelectorAll<HTMLButtonElement>('button') ?? [],
+    ).find((button) => button.textContent?.trim() === 'Mark shipped');
+    markShippedButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(markShippedButton).toBeTruthy();
+    expect(dashboard?.textContent).toContain('Shipped');
+    expect(document.body.textContent).toContain('Orders updated');
+
+    const themeButton = dashboard?.querySelector<HTMLButtonElement>(
+      'button[aria-label="Use dark dashboard theme"]',
+    );
+    themeButton?.click();
+    fixture.detectChanges();
+
+    expect(dashboard?.classList.contains('dark')).toBe(true);
+    expect(localStorage.getItem('ngnova-admin-theme')).toBe('dark');
+
+    localStorage.removeItem('ngnova-admin-sidebar');
+    localStorage.removeItem('ngnova-admin-theme');
   });
 
   it('provides complete dashboard source files, a ZIP download, and a focused preview route', async () => {

@@ -1,69 +1,55 @@
-# Admin dashboard design QA
+# Homepage Design QA
 
-## Visual truth
+- Source visual truth: `.tmp/homepage-audit/source-final.png`
+- Implementation screenshot: `.tmp/homepage-audit/03-home-implementation-desktop.png`
+- Responsive screenshot: `.tmp/homepage-audit/04-home-implementation-mobile.png`
+- Combined comparison: `.tmp/homepage-audit/05-source-vs-implementation.png`
+- State: root documentation route, light theme, default navigation state
+- Desktop viewport: 1487 × 1056 CSS px at device scale factor 1
+- Source pixels: 1487 × 1058
+- Implementation pixels: 1487 × 1056
+- Mobile viewport: 390 × 844 CSS px at device scale factor 1; full-page capture
+- Density normalization: both desktop images are 1×. The two-pixel source-height difference was retained and aligned at the top in the combined comparison.
 
-- Selected direction: option 1, compact light enterprise operations workspace
-- Source image: `C:\Users\DELL\.codex\generated_images\019f702f-3386-7383-8a4d-cc24fcd4c95c\call_lzKxyjTS8R5DvRx5CwHejEHq.png`
-- Source dimensions: 1487 × 1058 px
-- Implementation route: `http://localhost:4200/#/templates`
-- Desktop viewport: 1440 × 1024 CSS px at device scale factor 1
-- Desktop page capture: `tmp/admin-dashboard-option-one/03-implementation-page-pass2.png`
-- Dashboard capture: `tmp/admin-dashboard-option-one/04-implementation-dashboard-pass2.png`
-- Dashboard capture dimensions: 1078 × 967 px
-- Mobile viewport: 390 × 844 CSS px at device scale factor 1
-- Mobile capture: `tmp/admin-dashboard-option-one/06-mobile.png`
-- Mobile drawer capture: `tmp/admin-dashboard-option-one/07-mobile-drawer.png`
-- State: light theme, default dashboard data, templates route
+## Full-view comparison evidence
 
-## Comparison evidence
+The combined comparison confirms the implementation preserves the selected design's documentation shell, asymmetric hero, two-step quick start, three-part assurance row, split benefits section, and task-oriented closing band. The desktop hero and assurance row terminate at the same visual landmarks as the source. The task band begins within the same viewport and the mobile layout reflows without horizontal page overflow.
 
-- Full source-versus-implementation comparison: `tmp/admin-dashboard-option-one/05-source-implementation-comparison.png`
-- Focused dashboard comparison: `tmp/admin-dashboard-option-one/09-focused-dashboard-comparison.png`
-- The focused comparison keeps the navigation, target strip, KPI band, analytics panels, and full orders table readable together.
+## Focused region comparison evidence
 
-## Fidelity surfaces
+The hero and quick-start controls were readable at full-view scale, so a separate crop was not required. The implementation uses the repository's existing button, badge, and Heroicons integrations. Both copy controls retain readable code, visible focus targets, and working copied state.
 
-- Content: realistic labels, dates, targets, metrics, activity, and order data mirror the selected direction.
-- Structure: compact navigation, context bar, target strip, four-part KPI band, three-panel analytics row, and orders table follow the source hierarchy.
-- Visual: Inter typography, NgNova blue/slate/semantic colors, subtle borders, restrained radii, compact padding, and Heroicons remain consistent with the project design system.
-- Behavior: navigation selection, profile menu, responsive drawer, order-row selection, and primary supporting controls are functional.
-- Responsive: the desktop hierarchy collapses cleanly on mobile, the drawer is usable, cards stack without clipping, and the page has no horizontal overflow.
+## Required fidelity surfaces
 
-## Findings and resolutions
+- Fonts and typography: the existing documentation font stack is preserved. Heading weight, two-line desktop wrapping, compact labels, body scale, and line height match the visual hierarchy of the source.
+- Spacing and layout rhythm: hero height, assurance-row height, section boundaries, column proportions, and closing-band placement match the source closely after one iteration.
+- Colors and visual tokens: existing NgNova blue, slate, white, dark-mode, border, and focus-ring tokens replace generated-image approximations while preserving the source balance.
+- Image quality and asset fidelity: the selected design contains no raster imagery. Icons use the repository's installed Heroicons library; no CSS drawings, emoji, handcrafted SVGs, or placeholder assets were introduced.
+- Copy and content: component-count metrics and release-report language were removed. The approved developer-outcome copy and task-oriented navigation are present.
 
-### Pass 1
+## Interaction and accessibility checks
 
-- P2: The analytics grid allowed min-content width to clip the recent-activity panel.
-  - Resolved with explicit `minmax(0, …)` tracks and `min-w-0` panel surfaces.
-- P2: The notification glyph did not align with the button icon contract.
-  - Resolved with the NgNova leading-icon directive.
-- P2: Chart, activity rows, KPI padding, and team rows were taller than the selected direction.
-  - Resolved by tightening the vertical rhythm while retaining readable type and control targets.
-- P2: Order IDs and dates wrapped, and the table paginator made the template unnecessarily tall.
-  - Resolved with compact table cells, non-wrapping identifiers and dates, and a five-row table without a redundant footer.
+- Install copy action: passed.
+- Get started navigation to `#/guide`: passed.
+- Desktop and mobile page errors: none.
+- Desktop and mobile console errors: none.
+- Headings, landmarks, labelled copy controls, live copied-state announcement, keyboard focus styles, and dark-mode classes are present.
 
-### Pass 2
+## Comparison history
 
-- No open P0, P1, or P2 visual issues.
-- P3: The implementation uses the documentation shell's wider type and spacing scale, so it appears slightly larger than the generated source at the same page viewport. The dashboard itself preserves the source hierarchy and density while remaining consistent with NgNova's established design system.
+### Iteration 1
 
-## Responsive and interaction checks
+- P2: the desktop hero headline wrapped to three lines instead of two.
+- P2: excessive desktop vertical spacing pushed the task-entry band below the reference viewport.
+- Fixes: widened the hero text track, reduced the desktop display size slightly, tightened hero padding, compacted benefit rows, and reduced the task-card height.
+- Post-fix evidence: `.tmp/homepage-audit/03-home-implementation-desktop.png` and `.tmp/homepage-audit/05-source-vs-implementation.png` show the two-line headline and task band within the target viewport.
 
-- Desktop navigation updates its selected visual state.
-- The profile menu opens and exposes profile, workspace, billing, and sign-out actions.
-- Order-row checkbox selection works.
-- Mobile admin navigation opens and renders the complete workspace navigation and profile area.
-- Mobile document width remains 390 px with no page-level horizontal overflow.
-- No console errors or uncaught page errors were observed during desktop or mobile checks.
+## Findings
 
-## Automated checks
+No actionable P0, P1, or P2 differences remain.
 
-- `npm.cmd run format:check` — passed
-- `npm.cmd run lint` — passed for documentation and library
-- `npm.cmd run test:lib` — passed
-- `npm.cmd run test:docs` — passed
-- `npm.cmd run build:lib` — passed
-- `npm.cmd run build:docs` — passed with the existing selector-warning output
-- `npm.cmd pack --dry-run` from `dist/ui` — passed
+## Follow-up polish
+
+- P3: the implementation intentionally uses fewer decorative icons than the generated source so the homepage stays aligned with the existing documentation system and avoids visual noise.
 
 final result: passed

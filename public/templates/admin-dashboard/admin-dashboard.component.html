@@ -434,7 +434,9 @@
       class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95"
       data-admin-header
     >
-      <div class="flex min-h-16 items-center gap-3 px-3 sm:px-4 lg:px-5">
+      <div
+        class="mx-auto flex min-h-14 w-full max-w-[100rem] items-center gap-2.5 px-3 sm:px-4 lg:px-5"
+      >
         <button
           type="button"
           uiButton
@@ -508,6 +510,7 @@
             ariaLabel="View notifications, 3 unread"
             variant="ghost"
             size="sm"
+            (click)="showAction('Notifications', 'You have three unread operational updates.')"
           >
             <ng-icon uiButtonIconStart name="heroBell" />
             <span
@@ -547,9 +550,9 @@
       </div>
     </header>
 
-    <div class="space-y-4 p-3 sm:p-4 lg:p-5">
+    <div class="mx-auto w-full max-w-[100rem] space-y-4 p-3 sm:p-4 lg:p-5">
       <section
-        class="flex flex-col gap-4 pb-1 sm:flex-row sm:items-end sm:justify-between"
+        class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"
         data-admin-page-intro
       >
         <div class="min-w-0">
@@ -562,17 +565,24 @@
           </div>
           <h1
             id="admin-title"
-            class="text-2xl font-bold tracking-tight text-slate-950 dark:text-white"
+            class="text-xl font-bold tracking-tight text-slate-950 dark:text-white"
           >
             {{ activeNavigation() }}
           </h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
             {{ activePageDescription() }}
           </p>
         </div>
         <div class="flex shrink-0 items-center gap-2">
           @if (activeNavigation() === 'Overview' || activeNavigation() === 'Orders') {
-            <button type="button" uiButton variant="outline" size="sm" class="bg-white">
+            <button
+              type="button"
+              uiButton
+              variant="outline"
+              size="sm"
+              class="bg-white dark:bg-slate-950"
+              (click)="exportOrders()"
+            >
               <ng-icon uiButtonIconStart name="heroArrowDownTray" />
               Export
             </button>
@@ -596,7 +606,7 @@
 
       @if (activeNavigation() === 'Overview') {
         <section
-          class="grid items-center gap-3 rounded-lg border border-emerald-200/80 bg-emerald-50/70 px-3.5 py-3 sm:grid-cols-[minmax(0,1fr)_13rem] dark:border-emerald-900 dark:bg-emerald-950/30"
+          class="grid items-center gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 shadow-sm sm:grid-cols-[minmax(0,1fr)_14rem] dark:border-slate-800 dark:bg-slate-900"
           aria-label="Quarterly revenue target"
         >
           <div class="flex min-w-0 items-center gap-2.5">
@@ -632,7 +642,7 @@
             <ui-card class="min-w-0" padding="none" [ariaLabel]="metric.label + ' metric'">
               <article
                 data-admin-metric
-                class="min-w-0 p-3 sm:p-3.5"
+                class="min-w-0 p-3.5"
                 [attr.aria-label]="metric.label + ' metric'"
               >
                 <div class="flex items-start justify-between gap-2 sm:gap-3">
@@ -660,21 +670,23 @@
         </section>
 
         <section
-          class="grid items-stretch gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,0.95fr)]"
+          class="grid items-stretch gap-3 xl:grid-cols-[minmax(0,1.6fr)_minmax(19rem,0.8fr)]"
+          aria-label="Performance and operations"
         >
           <ui-card class="h-full min-w-0" padding="none" ariaLabel="Revenue overview">
-            <div class="flex items-start justify-between gap-3 px-4 pt-4">
+            <div
+              class="flex flex-col gap-3 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-start sm:justify-between dark:border-slate-800"
+            >
               <div>
                 <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
                   Revenue overview
                 </h2>
-                <p class="mt-2 text-xl font-bold tracking-tight text-slate-950 dark:text-white">
-                  $253,400
-                </p>
-                <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <span class="text-xs text-slate-500">Total revenue</span>
+                <div class="mt-2 flex flex-wrap items-end gap-x-3 gap-y-1">
+                  <p class="text-xl font-bold tracking-tight text-slate-950 dark:text-white">
+                    $253,400
+                  </p>
                   <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                    +12.8%
+                    +12.8% vs. previous period
                   </span>
                 </div>
               </div>
@@ -685,13 +697,16 @@
                 size="sm"
                 class="gap-1.5 text-xs"
                 aria-label="Revenue date range, July 18 through July 24, 2026"
+                (click)="
+                  showAction('Reporting period', 'Showing revenue from July 18 through July 24.')
+                "
               >
                 Jul 18 – Jul 24
                 <ng-icon name="heroCalendarDays" class="size-3.5" aria-hidden="true" />
               </button>
             </div>
 
-            <div class="mt-3 px-4">
+            <div class="px-4 pb-2 pt-3">
               <app-admin-revenue-chart />
             </div>
 
@@ -700,7 +715,7 @@
             >
               <span class="inline-flex items-center gap-1.5">
                 <span class="size-2 rounded-full bg-blue-600"></span>
-                Revenue
+                Current period
               </span>
               <span class="inline-flex items-center gap-1.5">
                 <span class="size-2 rounded-full bg-slate-300"></span>
@@ -709,22 +724,22 @@
             </div>
           </ui-card>
 
-          <ui-card class="h-full min-w-0" padding="none" ariaLabel="Team capacity">
+          <ui-card class="h-full min-w-0" padding="none" ariaLabel="Operations pulse">
             <div class="flex items-center justify-between gap-3 px-4 py-3">
-              <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Team capacity</h2>
-              <button
-                type="button"
-                class="-mr-2 inline-flex min-h-8 items-center rounded-md px-2 text-xs font-medium text-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-blue-300 dark:hover:bg-blue-950 dark:focus-visible:ring-offset-slate-950"
-              >
-                View team
-              </button>
+              <div>
+                <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
+                  Operations pulse
+                </h2>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Team capacity</p>
+              </div>
+              <ui-tag size="sm" variant="success">Healthy</ui-tag>
             </div>
             <div
               class="divide-y divide-slate-200 border-t border-slate-200 dark:divide-slate-800 dark:border-slate-800"
             >
               @for (team of teamCapacity; track team.label) {
                 <div
-                  class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2.5 px-4 py-3.5"
+                  class="grid grid-cols-[4.5rem_2rem_minmax(3rem,1fr)_3rem] items-center gap-2.5 px-4 py-2.5"
                 >
                   <span class="truncate text-xs font-medium text-slate-600 dark:text-slate-300">
                     {{ team.label }}
@@ -745,21 +760,24 @@
             </div>
           </ui-card>
 
-          <ui-card class="h-full min-w-0" padding="none" ariaLabel="Recent activity">
+          <ui-card class="h-full min-w-0 xl:col-span-2" padding="none" ariaLabel="Recent activity">
             <div class="flex items-center justify-between gap-3 px-4 py-3">
               <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent activity</h2>
               <button
                 type="button"
                 class="-mr-2 inline-flex min-h-8 items-center rounded-md px-2 text-xs font-medium text-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-blue-300 dark:hover:bg-blue-950 dark:focus-visible:ring-offset-slate-950"
+                (click)="
+                  showAction('Activity feed', 'You are viewing the latest workspace events.')
+                "
               >
                 View all
               </button>
             </div>
             <ol
-              class="divide-y divide-slate-200 border-t border-slate-200 px-4 dark:divide-slate-800 dark:border-slate-800"
+              class="grid border-t border-slate-200 px-4 sm:grid-cols-2 xl:grid-cols-4 xl:divide-x dark:border-slate-800 dark:divide-slate-800"
             >
               @for (activity of activities; track activity.title + activity.time) {
-                <li class="flex gap-2.5 py-2.5">
+                <li class="flex min-w-0 gap-2.5 py-2.5 sm:px-3 sm:first:pl-0 xl:last:pr-0">
                   <span [class]="activityIconClasses(activity.tone)">
                     <ng-icon [name]="activity.icon" class="size-4" aria-hidden="true" />
                   </span>
@@ -782,10 +800,16 @@
           <div
             class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-800"
           >
-            <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent orders</h2>
+            <div>
+              <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Recent orders</h2>
+              <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                Latest transactions requiring operational visibility
+              </p>
+            </div>
             <button
               type="button"
               class="-mr-2 inline-flex min-h-8 items-center rounded-md px-2 text-xs font-medium text-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-blue-300 dark:hover:bg-blue-950 dark:focus-visible:ring-offset-slate-950"
+              (click)="selectNavigation('Orders')"
             >
               View all orders
             </button>
@@ -820,6 +844,7 @@
                     variant="ghost"
                     size="sm"
                     [attr.aria-label]="'Order actions for ' + text(row['id'])"
+                    (click)="showOrderActions(row)"
                   >
                     <ng-icon name="heroEllipsisVertical" class="size-4" aria-hidden="true" />
                   </button>
@@ -878,6 +903,7 @@
                 variant="ghost"
                 size="sm"
                 [attr.aria-label]="'Order actions for ' + text(row['id'])"
+                (click)="showOrderActions(row)"
               >
                 <ng-icon name="heroEllipsisVertical" class="size-4" aria-hidden="true" />
               </button>

@@ -4132,6 +4132,45 @@ await button.click();`,
   <input uiFormFieldControl type="search" [formControl]="query" />
 </ui-form-field>`,
         },
+        {
+          title: 'Validated currency amount',
+          description:
+            'Currency adornments stay outside the editable number while touched validation replaces the helper message.',
+          code: `<ui-form-field
+  label="Monthly budget"
+  helperText="Enter the approved operating budget."
+  [invalid]="budget.invalid && budget.touched"
+  errorText="Enter a budget greater than zero."
+  required
+>
+  <span uiFormFieldPrefix aria-hidden="true">$</span>
+  <input
+    uiFormFieldControl
+    type="number"
+    inputmode="decimal"
+    min="1"
+    step="100"
+    [formControl]="budget"
+  />
+  <span uiFormFieldSuffix>USD</span>
+</ui-form-field>`,
+        },
+        {
+          title: 'Deployment environment',
+          description:
+            'The same label and message foundation can compose a native select when a specialized value component is unnecessary.',
+          code: `<ui-form-field
+  label="Deployment environment"
+  helperText="Production deployments require approval."
+  appearance="filled"
+>
+  <select uiFormFieldControl [formControl]="environment">
+    <option value="development">Development</option>
+    <option value="staging">Staging</option>
+    <option value="production">Production</option>
+  </select>
+</ui-form-field>`,
+        },
       ],
       accessibility: [
         'The native label targets the projected control using a consumer ID when present or a generated stable ID.',

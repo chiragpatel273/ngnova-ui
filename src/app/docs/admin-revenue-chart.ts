@@ -26,7 +26,7 @@ const REVENUE_LABELS = ['Jul 18', 'Jul 19', 'Jul 20', 'Jul 21', 'Jul 22', 'Jul 2
   template: `
     <canvas
       #chart
-      class="block h-36 w-full"
+      class="block h-44 w-full"
       role="img"
       aria-label="Revenue trend from July 18 through July 24, comparing current and previous periods"
     ></canvas>
@@ -55,7 +55,7 @@ export class AdminRevenueChartComponent {
 
   private drawChart(canvas: HTMLCanvasElement): void {
     const width = Math.max(canvas.clientWidth, 280);
-    const height = 144;
+    const height = 176;
     const density = globalThis.devicePixelRatio || 1;
     canvas.width = Math.round(width * density);
     canvas.height = Math.round(height * density);

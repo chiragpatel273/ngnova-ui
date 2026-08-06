@@ -6,6 +6,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroArrowRight,
   heroBell,
+  heroCheckCircle,
+  heroClipboardDocument,
   heroEllipsisHorizontal,
   heroMagnifyingGlass,
   heroPlus,
@@ -669,6 +671,8 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
     provideIcons({
       heroArrowRight,
       heroBell,
+      heroCheckCircle,
+      heroClipboardDocument,
       heroEllipsisHorizontal,
       heroMagnifyingGlass,
       heroPlus,
@@ -733,64 +737,55 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
               }
             </dl>
           </div>
-        </header>
 
-        <section id="setup" class="border-b border-blue-200 py-6 dark:border-blue-950/70">
-          <div
-            class="overflow-hidden rounded border border-blue-200 bg-white shadow-sm dark:border-blue-950 dark:bg-slate-950"
-          >
-            <div class="grid gap-0 lg:grid-cols-[16rem_minmax(0,1fr)]">
-              <div
-                class="border-b border-blue-100 bg-blue-50/60 p-4 dark:border-blue-950/70 dark:bg-blue-950/20 lg:border-b-0 lg:border-r"
+          <section id="setup" class="mt-5 w-full" aria-labelledby="component-import-heading">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h2
+                id="component-import-heading"
+                class="text-sm font-semibold text-slate-950 dark:text-slate-100"
               >
-                <p
-                  class="text-xs font-semibold uppercase tracking-normal text-blue-800 dark:text-blue-200"
+                Import
+              </h2>
+              <div class="flex flex-wrap gap-1.5" aria-label="Component capabilities">
+                <span
+                  data-component-capability
+                  class="rounded-full border border-slate-300 bg-white px-2.5 py-1 text-[0.6875rem] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
                 >
-                  Setup
-                </p>
-                <h2 class="mt-1.5 text-lg font-bold text-slate-950 dark:text-slate-50">
-                  Use this component
-                </h2>
-                <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
-                  Import the standalone entry point in the Angular component that renders this UI
-                  primitive.
-                </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <span
-                    class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
-                  >
-                    Standalone
-                  </span>
-                  <span
-                    class="rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-200 dark:bg-slate-950 dark:text-blue-200 dark:ring-blue-900"
-                  >
-                    Tailwind v4
-                  </span>
-                </div>
-              </div>
-
-              <div class="grid content-center p-4 sm:p-5">
-                <div
-                  class="grid gap-3 rounded border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4"
+                  Standalone
+                </span>
+                <span
+                  data-component-capability
+                  class="rounded-full border border-slate-300 bg-white px-2.5 py-1 text-[0.6875rem] font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300"
                 >
-                  <div class="flex items-center justify-between gap-3">
-                    <div class="min-w-0">
-                      <p class="text-sm font-semibold text-slate-950 dark:text-slate-50">
-                        Component import
-                      </p>
-                    </div>
-                    <ui-button variant="secondary" size="sm" (click)="copyImportStatement()">
-                      {{ copiedImportStatement() ? 'Copied' : 'Copy' }}
-                    </ui-button>
-                  </div>
-                  <pre
-                    class="overflow-x-auto whitespace-pre rounded bg-slate-950 px-4 py-2.5 font-mono text-sm leading-5 text-slate-50"
-                  ><code>{{ importStatement() }}</code></pre>
-                </div>
+                  Tailwind v4
+                </span>
               </div>
             </div>
-          </div>
-        </section>
+            <div
+              class="relative mt-2 min-w-0 overflow-hidden rounded bg-slate-950 shadow-sm ring-1 ring-slate-800"
+            >
+              <pre
+                class="max-w-full overflow-x-auto whitespace-pre py-3 pl-4 pr-13 font-mono text-xs leading-5 text-slate-100"
+                [title]="importStatement()"
+              ><code>{{ importStatement() }}</code></pre>
+              <ui-button
+                class="absolute right-2 top-2"
+                appearance="solid"
+                intent="neutral"
+                size="sm"
+                [iconOnly]="true"
+                [ariaLabel]="importCopyButtonLabel()"
+                [title]="importCopyButtonLabel()"
+                (click)="copyImportStatement()"
+              >
+                <ng-icon
+                  uiButtonIcon
+                  [name]="copiedImportStatement() ? 'heroCheckCircle' : 'heroClipboardDocument'"
+                />
+              </ui-button>
+            </div>
+          </section>
+        </header>
 
         <section id="usage" class="py-7">
           <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
@@ -2017,6 +2012,9 @@ export class ComponentDocPageComponent {
   protected readonly buttonFocused = signal(false);
   protected readonly lastSearch = signal('');
   protected readonly copiedImportStatement = signal(false);
+  protected readonly importCopyButtonLabel = computed(() =>
+    this.copiedImportStatement() ? 'Component import copied' : 'Copy component import',
+  );
   protected readonly modalOpen = signal(false);
   protected readonly drawerOpen = signal(false);
   protected readonly lastMenuAction = signal('');
@@ -2297,9 +2295,10 @@ export class ComponentDocPageComponent {
       { title: 'Watch for', body: edge },
     ];
   });
-  protected readonly examples = computed<readonly ComponentExample[]>(
-    () => this.details()?.examples.slice(0, 2) ?? [],
-  );
+  protected readonly examples = computed<readonly ComponentExample[]>(() => {
+    const examples = this.details()?.examples ?? [];
+    return examples.slice(0, this.slug() === 'form-field' ? 4 : 2);
+  });
   protected readonly primaryPreviewTitle = computed(
     () => PRIMARY_PREVIEW_TITLES[this.slug()] ?? `${this.doc()?.name ?? 'Component'} example`,
   );

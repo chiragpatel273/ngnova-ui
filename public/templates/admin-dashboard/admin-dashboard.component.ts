@@ -626,6 +626,48 @@ export class AdminDashboardComponent {
     this.selectedOrderKeys.set([]);
   }
 
+  protected exportOrders(): void {
+    const csvRows = [
+      ['Order ID', 'Customer', 'Date', 'Status', 'Total', 'Items'],
+      ...this.orderRows().map((row) => [
+        this.text(row['id']),
+        this.text(row['customer']),
+        this.text(row['date']),
+        this.text(row['status']),
+        this.text(row['total']),
+        this.text(row['items']),
+      ]),
+    ];
+    const csv = csvRows.map((row) => row.map((value) => this.csvCell(value)).join(',')).join('\n');
+    const browserWindow = this.document.defaultView;
+
+    if (!browserWindow || typeof browserWindow.URL.createObjectURL !== 'function') {
+      this.showAction('Export ready', 'The current order report is ready to download.');
+      return;
+    }
+
+    const downloadUrl = browserWindow.URL.createObjectURL(
+      new Blob([csv], { type: 'text/csv;charset=utf-8' }),
+    );
+    const downloadLink = this.document.createElement('a');
+    downloadLink.href = downloadUrl;
+    downloadLink.download = 'northstar-orders.csv';
+    downloadLink.click();
+    browserWindow.URL.revokeObjectURL(downloadUrl);
+    this.showAction('Export complete', 'The latest order report was downloaded as CSV.');
+  }
+
+  protected showOrderActions(row: UiTableRow): void {
+    this.showAction(
+      `Order ${this.text(row['id'])}`,
+      `${this.text(row['customer'])} · ${this.text(row['status'])} · ${this.text(row['total'])}`,
+    );
+  }
+
+  protected showAction(title: string, message: string): void {
+    this.toastService.success(title, message, 3000);
+  }
+
   protected inputValue(event: Event): string {
     return (event.target as HTMLInputElement | HTMLSelectElement).value;
   }
@@ -677,6 +719,10 @@ export class AdminDashboardComponent {
       amber: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
     };
     return `inline-flex size-8 shrink-0 items-center justify-center rounded-md ${tones[tone]}`;
+  }
+
+  private csvCell(value: string): string {
+    return `"${value.replaceAll('"', '""')}"`;
   }
 
   private readPreference(key: string): string | null {

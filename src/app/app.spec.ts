@@ -58,18 +58,33 @@ describe('App', () => {
 
     const homeCompiled = fixture.nativeElement as HTMLElement;
     const homeArticle = homeCompiled.querySelector<HTMLElement>('app-docs-home > article');
+    const homeHero = homeCompiled.querySelector<HTMLElement>('[data-home-hero]');
     const quickStartCard = homeCompiled.querySelector<HTMLElement>(
       'app-docs-home aside[aria-labelledby="quick-start-heading"]',
     );
     expect(homeArticle?.classList.contains('max-w-[76rem]')).toBe(true);
-    expect(quickStartCard?.classList.contains('border-blue-200')).toBe(true);
-    expect(quickStartCard?.classList.contains('bg-white')).toBe(true);
+    expect(homeHero?.classList.contains('border-blue-200')).toBe(true);
+    expect(homeHero?.classList.contains('bg-white')).toBe(true);
+    expect(quickStartCard?.classList.contains('bg-slate-50/70')).toBe(true);
     expect(homeCompiled.textContent?.match(/NgNova UI/g)).toHaveLength(1);
     expect(homeCompiled.textContent?.match(/v1\.0\.0/g)).toHaveLength(1);
     expect(homeArticle?.textContent).not.toContain('NgNova UI');
     expect(homeArticle?.textContent).not.toContain('v1.0.0');
     expect(homeArticle?.textContent).toContain('Angular 22 ready');
-    expect(homeCompiled.querySelector('[data-home-showcase]')).toBeNull();
+    const showcase = homeCompiled.querySelector<HTMLElement>('[data-home-showcase]');
+    expect(showcase).toBeTruthy();
+    expect(showcase?.querySelectorAll('article')).toHaveLength(6);
+    expect(showcase?.textContent).toContain('Start from a product workflow, not a blank screen.');
+    expect(showcase?.textContent).toContain('Payment method');
+    expect(showcase?.textContent).toContain('Customer reply');
+    expect(showcase?.textContent).toContain(
+      "import { UiAvatarComponent } from '@ngnova/ui/avatar';",
+    );
+    expect(
+      showcase?.querySelector<HTMLButtonElement>(
+        'button[aria-label="Copy workflow starter imports command"]',
+      ),
+    ).toBeTruthy();
     expect(homeCompiled.textContent).not.toContain(
       'From individual components to a complete product',
     );
@@ -441,6 +456,27 @@ describe('App', () => {
     expect(recipeTitles).toEqual(['Settings card', 'Usage summary']);
   });
 
+  it('renders four distinct Form Field product recipes', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/form-field');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const recipes = (fixture.nativeElement as HTMLElement).querySelector('#examples');
+    const recipeTitles = Array.from(recipes?.querySelectorAll('h3') ?? [], (heading) =>
+      heading.textContent?.trim(),
+    );
+
+    expect(recipeTitles).toEqual([
+      'Composed native control',
+      'Hidden search label',
+      'Validated currency amount',
+      'Deployment environment',
+    ]);
+  });
+
   it('lists every documented component exactly once in the left sidebar', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
@@ -477,6 +513,17 @@ describe('App', () => {
     expect(sidebarSlugs).toHaveLength(documentedSlugs.length);
     expect(new Set(sidebarSlugs).size).toBe(documentedSlugs.length);
     expect(new Set(sidebarSlugs)).toEqual(new Set(documentedSlugs));
+
+    await router.navigateByUrl('/components/badge');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const activeBadgeLink = compiled.querySelector<HTMLAnchorElement>(
+      'nav[aria-label="Component documentation"] a[href="/components/badge"]',
+    );
+    expect(activeBadgeLink?.classList.contains('bg-blue-100/80')).toBe(true);
+    expect(activeBadgeLink?.classList.contains('ring-inset')).toBe(true);
+    expect(activeBadgeLink?.className).not.toContain('shadow-[inset_3px');
   });
 
   it('scrolls to the top whenever a left-sidebar link is clicked', async () => {
@@ -541,8 +588,12 @@ describe('App', () => {
     expect(metrics?.length).toBe(4);
     expect(dashboard?.textContent).toContain('Revenue overview');
     expect(dashboard?.textContent).toContain('Team capacity');
+    expect(dashboard?.textContent).toContain('Operations pulse');
     expect(dashboard?.textContent).toContain('Recent orders');
-    expect(dashboard?.querySelector('canvas[aria-label^="Revenue trend"]')).toBeTruthy();
+    expect(dashboard?.querySelector('[aria-label="Performance and operations"]')).toBeTruthy();
+    expect(
+      dashboard?.querySelector('canvas[aria-label^="Revenue trend"]')?.classList.contains('h-44'),
+    ).toBe(true);
     expect(dashboard?.querySelector('ui-table')).toBeTruthy();
     expect(mobileOrders?.length).toBe(5);
     expect(dashboard?.querySelector('ui-input')).toBeTruthy();
@@ -776,6 +827,23 @@ describe('App', () => {
       for (const expectedId of ['setup', 'usage', 'guide', 'api', 'accessibility']) {
         expect(compiled.querySelector(`#${expectedId}`)).toBeTruthy();
       }
+
+      const importSection = compiled.querySelector<HTMLElement>('#setup');
+      expect(importSection?.querySelector('h2')?.textContent?.trim()).toBe('Import');
+      expect(importSection?.classList.contains('w-full')).toBe(true);
+      expect(importSection?.classList.contains('max-w-3xl')).toBe(false);
+      expect(importSection?.textContent).not.toContain('Use this component');
+      expect(
+        Array.from(
+          importSection?.querySelectorAll<HTMLElement>('[data-component-capability]') ?? [],
+          (capability) => capability.textContent?.trim(),
+        ),
+      ).toEqual(['Standalone', 'Tailwind v4']);
+      expect(
+        importSection
+          ?.querySelector<HTMLButtonElement>('ui-button button')
+          ?.getAttribute('aria-label'),
+      ).toBe('Copy component import');
 
       expect(compiled.querySelectorAll('app-docs-code-block figure').length).toBeGreaterThan(0);
     }

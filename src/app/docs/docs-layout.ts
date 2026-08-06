@@ -215,8 +215,8 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             </p>
             <a
               routerLink="/guide"
-              routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
-              class="flex min-h-9 items-center rounded-md px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+              routerLinkActive="bg-blue-100/80 font-semibold text-blue-900 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/70 dark:text-blue-100 dark:ring-blue-800"
+              class="flex min-h-9 items-center rounded-md px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400"
               (click)="handleSidebarNavigation()"
             >
               Getting Started
@@ -249,8 +249,8 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
                   @for (item of group.docs; track item.slug) {
                     <a
                       [routerLink]="['/components', item.slug]"
-                      routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
-                      class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                      routerLinkActive="bg-blue-100/80 font-semibold text-blue-900 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/70 dark:text-blue-100 dark:ring-blue-800"
+                      class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400"
                       (click)="handleSidebarNavigation()"
                     >
                       {{ item.name }}
@@ -281,8 +281,8 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
             @for (item of referenceItems; track item.label) {
               <a
                 [routerLink]="item.path"
-                routerLinkActive="bg-blue-50 font-semibold text-blue-800 shadow-[inset_3px_0_0_#2563eb] dark:bg-blue-950/50 dark:text-blue-200 dark:shadow-[inset_3px_0_0_#60a5fa]"
-                class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+                routerLinkActive="bg-blue-100/80 font-semibold text-blue-900 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/70 dark:text-blue-100 dark:ring-blue-800"
+                class="flex min-h-8 items-center rounded-md px-3 py-1.5 text-[0.8125rem] text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400"
                 (click)="handleSidebarNavigation()"
               >
                 {{ item.label }}

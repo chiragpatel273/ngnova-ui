@@ -76,7 +76,11 @@ describe('App', () => {
     expect(showcase?.querySelectorAll('article')).toHaveLength(6);
     expect(showcase?.textContent).toContain('Start from a product workflow, not a blank screen.');
     expect(showcase?.textContent).toContain('Payment method');
+    expect(showcase?.textContent).toContain('Product team');
+    expect(showcase?.textContent).toContain('Active sessions');
+    expect(showcase?.textContent).toContain('361 tests passed in the latest run');
     expect(showcase?.textContent).toContain('Customer reply');
+    expect(showcase?.textContent).toContain('18 of 25');
     expect(showcase?.textContent).toContain(
       "import { UiAvatarComponent } from '@ngnova/ui/avatar';",
     );
@@ -524,6 +528,58 @@ describe('App', () => {
     expect(activeBadgeLink?.classList.contains('bg-blue-100/80')).toBe(true);
     expect(activeBadgeLink?.classList.contains('ring-inset')).toBe(true);
     expect(activeBadgeLink?.className).not.toContain('shadow-[inset_3px');
+  });
+
+  it('renders independently controlled Tabs variants without vertical overflow controls', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/tabs');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const segmented = compiled.querySelector<HTMLElement>(
+      '[role="tablist"][aria-label="Segmented tabs preview"]',
+    );
+    const underline = compiled.querySelector<HTMLElement>(
+      '[role="tablist"][aria-label="Underline tabs preview"]',
+    );
+    const pills = compiled.querySelector<HTMLElement>(
+      '[role="tablist"][aria-label="Pills tabs preview"]',
+    );
+
+    expect(segmented?.className).toContain('bg-slate-100');
+    expect(underline?.className).toContain('border-b');
+    expect(underline?.className).toContain('overflow-y-hidden');
+    expect(pills?.querySelector('button')?.className).toContain('rounded-full');
+    expect(compiled.textContent).toContain("'segmented' | 'underline' | 'pills'");
+
+    underline?.querySelectorAll<HTMLButtonElement>('button')[1]?.click();
+    fixture.detectChanges();
+
+    expect(
+      segmented?.querySelectorAll<HTMLButtonElement>('button')[0]?.getAttribute('aria-selected'),
+    ).toBe('true');
+    expect(
+      underline?.querySelectorAll<HTMLButtonElement>('button')[1]?.getAttribute('aria-selected'),
+    ).toBe('true');
+    expect(
+      pills?.querySelectorAll<HTMLButtonElement>('button')[0]?.getAttribute('aria-selected'),
+    ).toBe('true');
+
+    pills?.querySelectorAll<HTMLButtonElement>('button')[1]?.click();
+    fixture.detectChanges();
+
+    expect(
+      segmented?.querySelectorAll<HTMLButtonElement>('button')[0]?.getAttribute('aria-selected'),
+    ).toBe('true');
+    expect(
+      underline?.querySelectorAll<HTMLButtonElement>('button')[1]?.getAttribute('aria-selected'),
+    ).toBe('true');
+    expect(
+      pills?.querySelectorAll<HTMLButtonElement>('button')[1]?.getAttribute('aria-selected'),
+    ).toBe('true');
   });
 
   it('scrolls to the top whenever a left-sidebar link is clicked', async () => {

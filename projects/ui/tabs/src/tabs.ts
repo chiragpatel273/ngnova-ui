@@ -19,6 +19,34 @@ export interface UiTabItem {
 }
 
 export type UiTabsOrientation = 'horizontal' | 'vertical';
+export type UiTabsVariant = 'segmented' | 'underline' | 'pills';
+
+const TABLIST_VARIANT_CLASSES: Record<UiTabsVariant, string> = {
+  segmented: 'gap-1 rounded-[var(--ui-control-radius,0.5rem)] bg-slate-100 p-1 dark:bg-slate-900',
+  underline: 'gap-4 border-slate-200 bg-transparent dark:border-slate-800',
+  pills: 'gap-2 bg-transparent',
+};
+
+const TAB_VARIANT_BASE_CLASSES: Record<UiTabsVariant, string> = {
+  segmented: 'rounded-md px-3 py-1.5',
+  underline: '',
+  pills: 'rounded-full border px-3.5 py-1.5',
+};
+
+const TAB_VARIANT_ACTIVE_CLASSES: Record<UiTabsVariant, string> = {
+  segmented: 'bg-white text-slate-950 shadow-sm dark:bg-slate-800 dark:text-slate-50',
+  underline: 'border-blue-600 text-blue-700 dark:border-blue-400 dark:text-blue-300',
+  pills:
+    'border-blue-600 bg-blue-600 text-white shadow-sm dark:border-blue-500 dark:bg-blue-500 dark:text-slate-950',
+};
+
+const TAB_VARIANT_INACTIVE_CLASSES: Record<UiTabsVariant, string> = {
+  segmented: 'text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-slate-50',
+  underline:
+    'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50',
+  pills:
+    'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-50',
+};
 
 let nextTabsId = 0;
 
@@ -72,6 +100,7 @@ export class UiTabsComponent {
   @Input() active = '';
   @Input() ariaLabel = 'Tabs';
   @Input() orientation: UiTabsOrientation = 'horizontal';
+  @Input() variant: UiTabsVariant = 'segmented';
   @Input({ transform: booleanAttribute }) fullWidth = false;
   readonly activeChange = output<string>();
 
@@ -89,9 +118,12 @@ export class UiTabsComponent {
 
   protected get tablistClasses(): string {
     return uiClassNames(
-      'inline-flex max-w-full gap-1 overflow-auto rounded-[var(--ui-control-radius,0.5rem)] bg-slate-100 p-1 dark:bg-slate-900',
-      this.orientation === 'horizontal' && 'flex-row',
-      this.orientation === 'vertical' && 'flex-col items-stretch',
+      'inline-flex max-w-full',
+      TABLIST_VARIANT_CLASSES[this.variant],
+      this.orientation === 'horizontal' && 'flex-row overflow-x-auto overflow-y-hidden',
+      this.orientation === 'vertical' && 'flex-col items-stretch overflow-x-hidden overflow-y-auto',
+      this.variant === 'underline' && this.orientation === 'horizontal' && 'border-b',
+      this.variant === 'underline' && this.orientation === 'vertical' && 'border-l',
     );
   }
 
@@ -105,11 +137,18 @@ export class UiTabsComponent {
 
   protected tabClasses(tab: UiTabItem): string {
     return uiClassNames(
-      'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950',
+      'inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950',
+      TAB_VARIANT_BASE_CLASSES[this.variant],
+      this.variant === 'underline' &&
+        this.orientation === 'horizontal' &&
+        '-mb-px rounded-none border-b-2 px-1 py-2.5',
+      this.variant === 'underline' &&
+        this.orientation === 'vertical' &&
+        '-ml-px rounded-none border-l-2 px-3 py-2',
       this.fullWidth && 'flex-1',
       tab.value === this.selectedValue
-        ? 'bg-white text-slate-950 shadow-sm dark:bg-slate-800 dark:text-slate-50'
-        : 'text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-slate-50',
+        ? TAB_VARIANT_ACTIVE_CLASSES[this.variant]
+        : TAB_VARIANT_INACTIVE_CLASSES[this.variant],
     );
   }
 

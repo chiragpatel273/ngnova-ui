@@ -1564,28 +1564,71 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
                     </div>
                   }
                   @case ('tabs') {
-                    <div class="w-full max-w-md">
-                      <ui-tabs
-                        [tabs]="componentTabs"
-                        [active]="activeTab()"
-                        (activeChange)="activeTab.set($event)"
-                        ariaLabel="Component documentation tabs preview"
-                        fullWidth
-                      >
-                        @if (activeTab() === 'overview') {
+                    <div class="w-full max-w-2xl space-y-6">
+                      <div>
+                        <p
+                          class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
+                        >
+                          Segmented
+                        </p>
+                        <ui-tabs
+                          [tabs]="componentTabs"
+                          [active]="segmentedActiveTab()"
+                          (activeChange)="segmentedActiveTab.set($event)"
+                          ariaLabel="Segmented tabs preview"
+                          variant="segmented"
+                          fullWidth
+                        >
                           <p
-                            class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
+                            class="rounded border border-slate-200 bg-white p-4 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
                           >
-                            Overview panel content stays associated with the selected tab.
+                            {{ tabPanelDescription(segmentedActiveTab()) }}
                           </p>
-                        } @else {
+                        </ui-tabs>
+                      </div>
+
+                      <div>
+                        <p
+                          class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
+                        >
+                          Underline
+                        </p>
+                        <ui-tabs
+                          [tabs]="componentTabs"
+                          [active]="underlineActiveTab()"
+                          (activeChange)="underlineActiveTab.set($event)"
+                          ariaLabel="Underline tabs preview"
+                          variant="underline"
+                          fullWidth
+                        >
                           <p
-                            class="rounded bg-white p-4 text-sm text-slate-600 dark:bg-slate-950 dark:text-slate-300"
+                            class="rounded border border-slate-200 bg-white p-4 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
                           >
-                            API panel content can hold reference tables, forms, or related content.
+                            {{ tabPanelDescription(underlineActiveTab()) }}
                           </p>
-                        }
-                      </ui-tabs>
+                        </ui-tabs>
+                      </div>
+
+                      <div>
+                        <p
+                          class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
+                        >
+                          Pills
+                        </p>
+                        <ui-tabs
+                          [tabs]="componentTabs"
+                          [active]="pillsActiveTab()"
+                          (activeChange)="pillsActiveTab.set($event)"
+                          ariaLabel="Pills tabs preview"
+                          variant="pills"
+                        >
+                          <p
+                            class="rounded border border-slate-200 bg-white p-4 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                          >
+                            {{ tabPanelDescription(pillsActiveTab()) }}
+                          </p>
+                        </ui-tabs>
+                      </div>
                     </div>
                   }
                   @case ('accordion') {
@@ -2038,7 +2081,9 @@ export class ComponentDocPageComponent {
   protected readonly docsActiveStep = signal('review');
   protected readonly docsPage = signal(3);
   protected readonly docsPageSize = signal(10);
-  protected readonly activeTab = signal('overview');
+  protected readonly segmentedActiveTab = signal('overview');
+  protected readonly underlineActiveTab = signal('overview');
+  protected readonly pillsActiveTab = signal('overview');
   protected readonly accordionActive = signal<readonly string[]>(['overview']);
   protected readonly selectedTableKeys = signal<readonly UiTableRowKey[]>([]);
   protected readonly tableSort = signal<UiTableSort>({ key: 'component', direction: 'asc' });
@@ -2312,6 +2357,12 @@ export class ComponentDocPageComponent {
     ];
     return this.slug() === 'button' ? notes : notes.slice(0, 3);
   });
+
+  protected tabPanelDescription(activeTab: string): string {
+    return activeTab === 'overview'
+      ? 'Overview panel content stays associated with the selected tab.'
+      : 'API panel content can hold reference tables, forms, or related content.';
+  }
 
   protected showToast(): void {
     this.toast.success('Package saved', 'The toast service is ready for application feedback.');

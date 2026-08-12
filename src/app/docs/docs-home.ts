@@ -227,12 +227,12 @@ interface HomeTaskLink {
         </div>
 
         <div
-          class="grid gap-4 md:grid-cols-2 lg:grid-cols-12"
+          class="grid gap-4 lg:grid-cols-2"
           aria-label="Example product interfaces built with NgNova UI"
         >
           <article
             id="showcase-payment"
-            class="min-w-0 rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-5"
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
           >
             <div class="flex items-start justify-between gap-3">
               <div>
@@ -270,29 +270,84 @@ interface HomeTaskLink {
                 <ui-button size="sm">Continue</ui-button>
               </a>
             </div>
-          </article>
-
-          <article
-            class="flex min-h-64 flex-col items-center justify-center rounded border border-slate-200 bg-white p-5 text-center shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-3"
-          >
-            <div class="flex -space-x-2" aria-hidden="true">
-              <ui-avatar label="Maya Chen" size="sm" />
-              <ui-avatar label="Alex Morgan" size="sm" />
-              <ui-avatar label="Sam Rivera" size="sm" />
+            <div
+              class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Input</ui-tag>
+                <ui-tag size="sm">Button</ui-tag>
+              </div>
+              <span class="text-xs text-slate-500 dark:text-slate-400">
+                Accessible labels and autofill
+              </span>
             </div>
-            <h3 class="mt-4 text-sm font-semibold text-slate-950 dark:text-slate-100">
-              Bring your team together
-            </h3>
-            <p class="mt-1 max-w-52 text-xs leading-5 text-slate-500 dark:text-slate-400">
-              Invite collaborators and give every project a clear owner.
-            </p>
-            <a routerLink="/components/avatar" class="mt-4">
-              <ui-button size="sm">Invite members</ui-button>
-            </a>
           </article>
 
           <article
-            class="min-w-0 rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-4"
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold text-slate-950 dark:text-slate-100">
+                  Product team
+                </h3>
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  Collaborators across the release workspace.
+                </p>
+              </div>
+              <ui-badge size="sm" variant="success">3 online</ui-badge>
+            </div>
+
+            <div
+              class="mt-4 divide-y divide-slate-200 rounded border border-slate-200 bg-slate-50 px-3 dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <div class="flex items-center gap-3 py-3">
+                <ui-avatar label="Maya Chen" size="sm" />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
+                    Maya Chen
+                  </p>
+                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Product owner</p>
+                </div>
+                <ui-tag size="sm" variant="success">Online</ui-tag>
+              </div>
+              <div class="flex items-center gap-3 py-3">
+                <ui-avatar label="Alex Morgan" size="sm" />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
+                    Alex Morgan
+                  </p>
+                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Engineering</p>
+                </div>
+                <ui-tag size="sm">Editor</ui-tag>
+              </div>
+              <div class="flex items-center gap-3 py-3">
+                <ui-avatar label="Sam Rivera" size="sm" />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-xs font-semibold text-slate-900 dark:text-slate-100">
+                    Sam Rivera
+                  </p>
+                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Design systems</p>
+                </div>
+                <ui-tag size="sm">Viewer</ui-tag>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Avatar</ui-tag>
+                <ui-tag size="sm">Tag</ui-tag>
+              </div>
+              <a routerLink="/components/avatar">
+                <ui-button variant="outline" size="sm">Manage team</ui-button>
+              </a>
+            </div>
+          </article>
+
+          <article
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
           >
             <div class="flex items-start justify-between gap-3">
               <div>
@@ -328,10 +383,38 @@ interface HomeTaskLink {
               <ng-icon name="heroCheckCircle" size="16" aria-hidden="true" />
               Recovery methods are up to date.
             </div>
+            <div
+              class="mt-3 flex items-center justify-between gap-3 rounded border border-slate-200 px-3 py-3 dark:border-slate-800"
+            >
+              <div>
+                <p class="text-xs font-semibold text-slate-800 dark:text-slate-100">
+                  Active sessions
+                </p>
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  3 trusted devices · Last activity now
+                </p>
+              </div>
+              <ui-badge size="sm">3</ui-badge>
+            </div>
+            <div
+              class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Tag</ui-tag>
+                <ui-tag size="sm">Badge</ui-tag>
+              </div>
+              <a
+                routerLink="/components/switch"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300"
+              >
+                Security recipe
+                <ng-icon name="heroArrowRight" size="14" aria-hidden="true" />
+              </a>
+            </div>
           </article>
 
           <article
-            class="min-w-0 rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-4"
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
           >
             <div class="flex items-center justify-between gap-3">
               <div>
@@ -364,10 +447,46 @@ interface HomeTaskLink {
                 <p class="mt-0.5 text-xs text-slate-500">Docs</p>
               </div>
             </div>
+            <div
+              class="mt-4 flex items-center justify-between gap-3 rounded border border-slate-200 px-3 py-3 dark:border-slate-800"
+            >
+              <div class="flex items-center gap-2">
+                <ng-icon
+                  name="heroCheckCircle"
+                  size="16"
+                  class="text-emerald-600"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p class="text-xs font-semibold text-slate-800 dark:text-slate-100">
+                    Library build completed
+                  </p>
+                  <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    361 tests passed in the latest run
+                  </p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-500">2m ago</span>
+            </div>
+            <div
+              class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Progress Bar</ui-tag>
+                <ui-tag size="sm">Tag</ui-tag>
+              </div>
+              <a
+                routerLink="/components/progress-bar"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300"
+              >
+                Release recipe
+                <ng-icon name="heroArrowRight" size="14" aria-hidden="true" />
+              </a>
+            </div>
           </article>
 
           <article
-            class="min-w-0 rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-5"
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
           >
             <div class="flex items-center justify-between gap-3">
               <div>
@@ -383,6 +502,13 @@ interface HomeTaskLink {
             <div
               class="mt-4 rounded border border-slate-200 bg-slate-50 p-3 text-xs leading-5 text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
             >
+              <div class="mb-2 flex items-center gap-2">
+                <ui-avatar label="Jordan Lee" size="sm" />
+                <div>
+                  <p class="font-semibold text-slate-800 dark:text-slate-100">Jordan Lee</p>
+                  <p class="text-slate-500 dark:text-slate-400">Customer · 8 minutes ago</p>
+                </div>
+              </div>
               Could you help me update the billing contact before our next renewal?
             </div>
             <div class="mt-3 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
@@ -391,10 +517,20 @@ interface HomeTaskLink {
                 <ui-button size="sm">Send reply</ui-button>
               </a>
             </div>
+            <div
+              class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Avatar</ui-tag>
+                <ui-tag size="sm">Input</ui-tag>
+                <ui-tag size="sm">Button</ui-tag>
+              </div>
+              <span class="text-xs text-slate-500 dark:text-slate-400">Draft autosaved</span>
+            </div>
           </article>
 
           <article
-            class="min-w-0 rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950 lg:col-span-3"
+            class="flex min-w-0 flex-col rounded border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
           >
             <div class="flex items-start justify-between gap-3">
               <div>
@@ -414,9 +550,29 @@ interface HomeTaskLink {
             <p class="mt-3 text-xs leading-5 text-slate-500 dark:text-slate-400">
               6.8 GB of 10 GB used. Upgrade before the next reporting cycle.
             </p>
-            <a routerLink="/components/progress-bar" class="mt-4 inline-block">
-              <ui-button variant="outline" size="sm">View usage</ui-button>
-            </a>
+            <div class="mt-4 rounded border border-slate-200 p-3 dark:border-slate-800">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-semibold text-slate-800 dark:text-slate-100">Team seats</span>
+                <span class="text-slate-500 dark:text-slate-400">18 of 25</span>
+              </div>
+              <ui-progress-bar
+                class="mt-3"
+                [value]="72"
+                label="Team seats"
+                ariaValueText="18 of 25 seats used"
+              />
+            </div>
+            <div
+              class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"
+            >
+              <div class="flex gap-2">
+                <ui-tag size="sm">Progress Bar</ui-tag>
+                <ui-tag size="sm">Badge</ui-tag>
+              </div>
+              <a routerLink="/components/progress-bar">
+                <ui-button variant="outline" size="sm">View usage</ui-button>
+              </a>
+            </div>
           </article>
         </div>
 

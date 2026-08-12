@@ -1906,6 +1906,12 @@ export const componentDocs: ComponentDoc[] = [
         description: 'Tab layout and matching arrow-key navigation axis.',
       },
       {
+        name: 'variant',
+        type: "'segmented' | 'underline' | 'pills'",
+        defaultValue: "'segmented'",
+        description: 'Visual treatment for the tablist without changing its interaction model.',
+      },
+      {
         name: 'fullWidth',
         type: 'boolean',
         defaultValue: 'false',
@@ -4995,6 +5001,22 @@ await button.click();`,
   @if (activeTab === 'overview') { Overview }
 </ui-tabs>`,
         },
+        {
+          title: 'Visual variants',
+          description:
+            'Choose segmented for general navigation, underline for content sections, or pills for compact filters.',
+          code: `<ui-tabs variant="segmented" [tabs]="tabs" [(active)]="activeTab">
+  Segmented panel
+</ui-tabs>
+
+<ui-tabs variant="underline" [tabs]="tabs" [(active)]="activeTab">
+  Underline panel
+</ui-tabs>
+
+<ui-tabs variant="pills" [tabs]="tabs" [(active)]="activeTab">
+  Pills panel
+</ui-tabs>`,
+        },
       ],
       accessibility: [
         'Uses tablist, tab, and tabpanel roles with generated ARIA relationships.',
@@ -5010,6 +5032,7 @@ await button.click();`,
         'Disabled tabs are skipped during keyboard navigation.',
         'Tab values must be unique, stable identifiers; keep localized copy in labels.',
         'Long localized tab lists scroll within their own maximum width instead of widening the page.',
+        'All variants support horizontal and vertical orientations; underline uses the matching axis indicator.',
         'Do not hide critical errors inside inactive tabs without summary messaging.',
       ],
       testing: ['Assert keyboard navigation, disabled tabs, activeChange, and ARIA IDs.'],

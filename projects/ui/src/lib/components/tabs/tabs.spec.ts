@@ -190,10 +190,61 @@ describe('UiTabsComponent', () => {
     const button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
     expect(tablist.className).toContain('max-w-full');
-    expect(tablist.className).toContain('overflow-auto');
+    expect(tablist.className).toContain('overflow-x-auto');
+    expect(tablist.className).toContain('overflow-y-hidden');
     expect(tablist.className).toContain('dark:bg-slate-900');
     expect(tablist.className).toContain('w-full');
     expect(button.className).toContain('flex-1');
     expect(button.className).toContain('dark:focus-visible:ring-blue-400');
+  });
+
+  it('renders segmented, underline, and pills variants', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'overview');
+    tabsFixture.detectChanges();
+
+    let tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    let button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(tablist.className).toContain('bg-slate-100');
+    expect(button.className).toContain('rounded-md');
+    expect(button.className).toContain('bg-white');
+
+    tabsFixture.componentRef.setInput('variant', 'underline');
+    tabsFixture.detectChanges();
+    tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(tablist.className).toContain('border-b');
+    expect(button.className).toContain('border-b-2');
+    expect(button.className).toContain('border-blue-600');
+
+    tabsFixture.componentRef.setInput('variant', 'pills');
+    tabsFixture.detectChanges();
+    tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(tablist.className).toContain('gap-2');
+    expect(button.className).toContain('rounded-full');
+    expect(button.className).toContain('bg-blue-600');
+  });
+
+  it('uses a vertical indicator for underline tabs in vertical orientation', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('active', 'overview');
+    tabsFixture.componentRef.setInput('variant', 'underline');
+    tabsFixture.componentRef.setInput('orientation', 'vertical');
+    tabsFixture.detectChanges();
+
+    const tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+
+    expect(tablist.className).toContain('border-l');
+    expect(tablist.className).toContain('overflow-x-hidden');
+    expect(tablist.className).toContain('overflow-y-auto');
+    expect(button.className).toContain('border-l-2');
+    expect(button.className).not.toContain('border-b-2');
   });
 });

@@ -95,6 +95,8 @@ Available harnesses:
   <div uiCardFooter>Footer actions</div>
 </ui-card>
 
+<ui-tabs variant="underline" [tabs]="tabs" [(active)]="activeTab"> Current panel content </ui-tabs>
+
 <ui-input
   label="Email"
   type="email"

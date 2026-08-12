@@ -1927,14 +1927,20 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
 
         <section
           id="accessibility"
-          class="grid gap-4 border-t border-blue-200 py-7 dark:border-blue-950/70 md:grid-cols-2"
+          class="grid items-start gap-4 border-t border-blue-200 py-7 dark:border-blue-950/70 md:grid-cols-2"
         >
           <div class="rounded bg-blue-100 p-5 dark:bg-blue-950/60">
-            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">
-              Accessibility matters
-            </h2>
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Accessibility</h2>
             <ul class="mt-3 grid gap-2 text-sm leading-5 text-slate-800 dark:text-slate-200">
               @for (item of accessibilityNotes(); track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+            <h3 class="mt-5 text-sm font-bold text-slate-950 dark:text-slate-50">
+              Keyboard behavior
+            </h3>
+            <ul class="mt-2 grid gap-2 text-sm leading-5 text-slate-800 dark:text-slate-200">
+              @for (item of keyboardNotes(); track item) {
                 <li>{{ item }}</li>
               }
             </ul>
@@ -1942,7 +1948,7 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
           <div
             class="rounded border border-blue-200 bg-slate-200 p-5 dark:border-blue-950 dark:bg-slate-900"
           >
-            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Fast to verify</h2>
+            <h2 class="text-lg font-bold text-slate-950 dark:text-slate-50">Testing guidance</h2>
             <ul class="mt-3 grid gap-2 text-sm leading-5 text-slate-700 dark:text-slate-300">
               @for (item of testingNotes(); track item) {
                 <li>{{ item }}</li>
@@ -2348,14 +2354,17 @@ export class ComponentDocPageComponent {
     () => PRIMARY_PREVIEW_TITLES[this.slug()] ?? `${this.doc()?.name ?? 'Component'} example`,
   );
   protected readonly accessibilityNotes = computed<readonly string[]>(() => {
-    const notes = this.details()?.accessibility ?? ['Preserve native semantics whenever possible.'];
-    return this.slug() === 'button' ? notes : notes.slice(0, 3);
+    return this.details()?.accessibility ?? ['Preserve native semantics whenever possible.'];
+  });
+  protected readonly keyboardNotes = computed<readonly string[]>(() => {
+    return this.details()?.keyboard ?? ['No component-specific keyboard interaction.'];
   });
   protected readonly testingNotes = computed<readonly string[]>(() => {
-    const notes = this.details()?.testing ?? [
-      'Test public inputs, outputs, keyboard behavior, and state classes.',
-    ];
-    return this.slug() === 'button' ? notes : notes.slice(0, 3);
+    return (
+      this.details()?.testing ?? [
+        'Test public inputs, outputs, keyboard behavior, and state classes.',
+      ]
+    );
   });
 
   protected tabPanelDescription(activeTab: string): string {

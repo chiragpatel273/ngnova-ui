@@ -402,10 +402,20 @@ describe('App', () => {
         details?.examples.length,
         `${doc.name} should teach at least two distinct product scenarios`,
       ).toBeGreaterThanOrEqual(2);
+      expect(details?.accessibility.length).toBeGreaterThan(0);
+      expect(details?.keyboard.length).toBeGreaterThan(0);
+      expect(details?.testing.length).toBeGreaterThan(0);
       for (const example of details?.examples ?? []) {
         expect(example.title.toLowerCase()).not.toContain('interactive example');
         expect(example.description.trim().length).toBeGreaterThan(20);
         expect(example.code.trim().length).toBeGreaterThan(20);
+      }
+      for (const note of [
+        ...(details?.accessibility ?? []),
+        ...(details?.keyboard ?? []),
+        ...(details?.testing ?? []),
+      ]) {
+        expect(note.trim().length).toBeGreaterThan(20);
       }
       expect(doc.selector).toMatch(/^(ui-|\[ui)/);
     }
@@ -903,6 +913,27 @@ describe('App', () => {
 
       expect(compiled.querySelectorAll('app-docs-code-block figure').length).toBeGreaterThan(0);
     }
+  });
+
+  it('renders complete accessibility, keyboard, and testing guidance', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/components/input');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const accessibilitySection = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+      '#accessibility',
+    );
+    expect(accessibilitySection?.querySelector('h2')?.textContent?.trim()).toBe('Accessibility');
+    expect(accessibilitySection?.querySelector('h3')?.textContent?.trim()).toBe(
+      'Keyboard behavior',
+    );
+    expect(accessibilitySection?.textContent).toContain('Invalid state sets aria-invalid');
+    expect(accessibilitySection?.textContent).toContain('Enter emits submitted');
+    expect(accessibilitySection?.textContent).toContain('Testing guidance');
+    expect(accessibilitySection?.textContent).not.toContain('Docs route tests');
   });
 
   it('uses the shared accessible Preview and Code pattern for flagship component pages', async () => {

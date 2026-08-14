@@ -65,17 +65,10 @@ const input = await loader.getHarness(UiInputHarness.with({ label: 'Email' }));
 await input.setValue('dev@example.com');
 ```
 
-Available harnesses:
-
-- `UiButtonHarness`
-- `UiInputHarness`
-- `UiCheckboxHarness`
-- `UiSelectHarness`
-- `UiRadioGroupHarness`
-- `UiSwitchHarness`
-- `UiTextareaHarness`
-- `UiModalHarness`
-- `UiTabsHarness`
+The testing entry point covers 32 interactive component surfaces across actions, forms, overlays,
+navigation, feedback, and data workflows. Import harnesses by name from `@ngnova/ui/testing`; the
+generated testing declarations and API documentation are the source of truth for the complete
+current export list.
 
 ## Components
 

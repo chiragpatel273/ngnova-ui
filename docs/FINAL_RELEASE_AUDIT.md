@@ -1,6 +1,6 @@
 # Final release audit
 
-Audit date: 2026-07-31
+Audit date: 2026-08-14
 
 Release: `@ngnova/ui` 1.0.0
 
@@ -16,10 +16,12 @@ External status: GitHub Pages verified; awaiting npm publication
 - Documentation metadata matched all 40 visual components.
 - Focus-visible, theme, Angular compatibility, browser/AT, visual-manifest, release-documentation,
   project-policy, and versioned-hosting contracts passed.
-- Library tests passed: 42 files and 361 tests.
-- Documentation tests passed: 1 file and 19 tests.
-- The library built as 43 JavaScript entry points with 238 reviewed exported symbols.
-- Bundle budgets passed at 609,744 raw bytes and 121,809 deterministic gzip bytes.
+- The maintainer and clean-consumer toolchains use patched Angular 22 releases, and `npm.cmd audit`
+  reports zero production or development vulnerabilities.
+- Library tests passed: 42 files and 363 tests.
+- Documentation tests passed: 1 file and 26 tests.
+- The library built as 43 JavaScript entry points with 239 reviewed exported symbols.
+- Bundle budgets passed at 611,909 raw bytes and 122,254 deterministic gzip bytes.
 - The documentation production build, package audit, and `dist/ui` npm dry run passed.
 - A clean packed-package consumer passed zoneless compilation, SSR browser/server builds, runtime
   rendering, and hydration-annotation verification.
@@ -37,7 +39,7 @@ Total: 130 passed, 20 skipped, 0 failed.
 
 ## Package verification
 
-- The publishable `dist/ui` tarball contains 134 files, is approximately 243.5 kB packed, and is
+- The publishable `dist/ui` tarball contains 134 files, is approximately 244.8 kB packed, and is
   approximately 1.5 MB unpacked.
 - The root `npm.cmd pack --dry-run` also completed, satisfying the repository-level required
   command; the root workspace remains private and is not the publish target.

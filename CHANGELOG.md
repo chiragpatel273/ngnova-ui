@@ -16,6 +16,8 @@ All notable changes to `@ngnova/ui` are recorded here. NgNova UI follows Semanti
   File Upload, Command Palette, connected Overlay, and Promise-based confirmation workflows.
 - Intent/appearance Button API, icon marker directives, icon-only actions, link directives, Button
   groups, loading states, and semantic interaction outputs.
+- Segmented, underline, and pills Tabs variants with horizontal and vertical layouts and
+  axis-specific overflow behavior.
 - Light/dark semantic design tokens, Inter variable typography, forced-colors and reduced-motion
   contracts, and keyboard/focus-visible standards.
 - Public API, compatibility, browser/AT, visual regression, consumer-runtime, and bundle-budget

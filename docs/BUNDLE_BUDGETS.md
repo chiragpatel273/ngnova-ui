@@ -7,9 +7,9 @@ bytes and deterministic gzip level 9. The machine-readable measurements and ceil
 ## Current package
 
 - 43 JavaScript entry points measured.
-- 609,744 cumulative raw bytes across isolated entry points.
-- 121,809 cumulative gzip bytes across isolated entry points.
-- Theme stylesheet: 7,954 raw / 1,648 gzip bytes.
+- 611,909 cumulative raw bytes across isolated entry points.
+- 122,254 cumulative gzip bytes across isolated entry points.
+- Theme stylesheet: 8,361 raw / 1,702 gzip bytes.
 
 The cumulative number is inventory, not an application bundle estimate: Angular, shared helpers,
 and individual entry points are optimized together by the consuming application. Focused imports
@@ -19,15 +19,15 @@ remain the supported way to avoid unrelated component code.
 
 | Entry point       |      Raw |    Gzip | Raw budget | Gzip budget |
 | ----------------- | -------: | ------: | ---------: | ----------: |
-| `date-picker`     | 38,878 B | 6,659 B |   42,766 B |     7,325 B |
+| `date-picker`     | 38,878 B | 6,661 B |   42,766 B |     7,328 B |
 | `testing`         | 46,355 B | 6,346 B |   50,991 B |     6,981 B |
-| `table`           | 44,001 B | 6,036 B |   48,402 B |     6,640 B |
-| `combobox`        | 29,654 B | 5,288 B |   32,620 B |     5,817 B |
-| `command-palette` | 28,314 B | 4,983 B |   31,146 B |     5,482 B |
-| `overlay`         | 26,990 B | 4,801 B |   29,690 B |     5,282 B |
-| `file-upload`     | 24,321 B | 4,294 B |   26,754 B |     4,724 B |
-| `tree-table`      | 24,152 B | 4,081 B |   26,568 B |     4,490 B |
-| `button`          | 21,944 B | 3,966 B |   24,139 B |     4,363 B |
+| `table`           | 44,001 B | 6,038 B |   48,402 B |     6,642 B |
+| `combobox`        | 29,654 B | 5,290 B |   32,620 B |     5,820 B |
+| `command-palette` | 28,314 B | 4,985 B |   31,146 B |     5,484 B |
+| `overlay`         | 26,990 B | 4,803 B |   29,690 B |     5,284 B |
+| `input`           | 21,538 B | 4,442 B |   23,692 B |     4,887 B |
+| `confirmation`    | 22,021 B | 4,320 B |   24,224 B |     4,752 B |
+| `file-upload`     | 24,421 B | 4,297 B |   26,864 B |     4,727 B |
 
 All other entry points have the same per-entry-point measurement and budget in the JSON baseline.
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
   "packageVersion": "1.0.0",
-  "angularPeer": "^22.0.0",
+  "angularPeer": ">=22.0.2 <23.0.0",
   "rootPolicy": "minimal",
   "entryPoints": {
     ".": {
@@ -299,8 +299,8 @@
     },
     "./tabs": {
       "importPath": "@ngnova/ui/tabs",
-      "symbols": ["UiTabItem", "UiTabsComponent", "UiTabsOrientation"],
-      "signatureSha256": "25d05e0b376378e430df05c8d7d4fc666e8e0e2665801040a61f30114609e332"
+      "symbols": ["UiTabItem", "UiTabsComponent", "UiTabsOrientation", "UiTabsVariant"],
+      "signatureSha256": "295248be6bbde4442c40441f9bef7871621374e7c72e251151dce22eb16542e1"
     },
     "./tag": {
       "importPath": "@ngnova/ui/tag",

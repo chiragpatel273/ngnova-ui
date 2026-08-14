@@ -33,13 +33,13 @@ optional-CDK integrations, and supported component harnesses.
 
 - Import components from `@ngnova/ui/<component>`; the root stays minimal.
 - Angular CDK is optional and only required by CDK-backed entry points.
-- The package is partial-Ivy, targets ES2022, and supports Angular `^22.0.0`.
+- The package is partial-Ivy, targets ES2022, and supports patched Angular `>=22.0.2 <23.0.0`.
 - All 43 JavaScript entry points and the theme asset have raw/gzip regression budgets.
 - A clean tarball consumer proves focused exports and Tailwind theme scanning.
 
 ## Release evidence
 
-- Public declaration compatibility baseline: 43 TypeScript entry points and 238 exported symbols.
+- Public declaration compatibility baseline: 43 TypeScript entry points and 239 exported symbols.
 - Visual regression: 194 reviewed images across Chromium desktop/mobile and WebKit, including 10
   open/visible interaction states.
 - Runtime consumers: zoneless build, SSR browser/server builds, live server rendering, and Angular

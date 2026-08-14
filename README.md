@@ -27,7 +27,7 @@ focused package entry points, accessible interaction contracts, and Tailwind CSS
 | Dependency   | Supported version                                                   |
 | ------------ | ------------------------------------------------------------------- |
 | NgNova UI    | `1.0.0`                                                             |
-| Angular      | `^22.0.0`                                                           |
+| Angular      | `>=22.0.2 <23.0.0`                                                  |
 | Tailwind CSS | `4.x`                                                               |
 | Angular CDK  | `^22.0.0` when using CDK-backed entry points or component harnesses |
 

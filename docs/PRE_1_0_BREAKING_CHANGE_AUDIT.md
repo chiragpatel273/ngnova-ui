@@ -11,7 +11,7 @@ No undocumented breaking change exists between the packaged 0.1.0 candidate and
 
 The review covered:
 
-- all 43 packaged TypeScript entry points and 238 exported symbols;
+- all 43 packaged TypeScript entry points and 239 exported symbols;
 - selectors, inputs, outputs, services, exported types, and declaration signatures;
 - the deliberately minimal package root and focused secondary entry points;
 - the optional Angular CDK peer boundary;

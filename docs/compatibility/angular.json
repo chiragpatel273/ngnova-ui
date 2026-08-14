@@ -3,7 +3,7 @@
   "libraryVersion": "1.0.0",
   "angular": {
     "major": 22,
-    "peerRange": "^22.0.0",
+    "peerRange": ">=22.0.2 <23.0.0",
     "packages": ["@angular/common", "@angular/core", "@angular/forms"]
   },
   "angularCdk": {

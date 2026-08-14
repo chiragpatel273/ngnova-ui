@@ -109,6 +109,8 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'Contributing', path: '/contributing' },
 ];
 
+const DOCS_THEME_STORAGE_KEY = 'ngnova-docs-theme';
+
 @Component({
   selector: 'app-docs-layout',
   standalone: true,
@@ -359,7 +361,7 @@ export class DocsLayoutComponent {
     viewChild<ElementRef<HTMLButtonElement>>('mobileNavigationTrigger');
 
   protected readonly query = signal('');
-  protected readonly darkMode = signal(false);
+  protected readonly darkMode = signal(this.initialDarkMode());
   protected readonly mobileNavigationOpen = signal(false);
   protected readonly expandedGroups = signal<ReadonlySet<string>>(
     new Set(COMPONENT_GROUPS.map((group) => group.label)),
@@ -418,7 +420,16 @@ export class DocsLayoutComponent {
   }
 
   protected toggleTheme(): void {
-    this.darkMode.update((enabled) => !enabled);
+    const next = !this.darkMode();
+    this.darkMode.set(next);
+    try {
+      this.document.defaultView?.localStorage.setItem(
+        DOCS_THEME_STORAGE_KEY,
+        next ? 'dark' : 'light',
+      );
+    } catch {
+      // Theme switching remains available when storage is blocked.
+    }
   }
 
   protected openMobileNavigation(): void {
@@ -469,6 +480,24 @@ export class DocsLayoutComponent {
       doc.importName,
       getComponentImportPath(doc.slug),
     ].some((value) => value.toLowerCase().includes(query));
+  }
+
+  private initialDarkMode(): boolean {
+    const browserWindow = this.document.defaultView;
+    if (!browserWindow) {
+      return false;
+    }
+
+    try {
+      const storedTheme = browserWindow.localStorage.getItem(DOCS_THEME_STORAGE_KEY);
+      if (storedTheme === 'dark' || storedTheme === 'light') {
+        return storedTheme === 'dark';
+      }
+    } catch {
+      // Fall through to the user's system preference when storage is blocked.
+    }
+
+    return browserWindow.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
   }
 
   constructor() {

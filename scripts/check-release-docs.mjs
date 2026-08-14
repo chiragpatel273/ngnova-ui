@@ -82,7 +82,7 @@ const releaseEvidence = [
   '40 documented visual components',
   'Angular 22',
   '@ngnova/ui/<component>',
-  '194 reviewed images',
+  '196 reviewed images',
   'zoneless',
   'SSR',
   'hydration',

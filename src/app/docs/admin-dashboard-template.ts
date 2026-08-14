@@ -161,10 +161,15 @@ interface AdminActivity {
                 [class.justify-center]="compact"
                 [class.bg-blue-50]="activeNavigation() === item.label"
                 [class.text-blue-700]="activeNavigation() === item.label"
+                [class.dark:bg-blue-950]="activeNavigation() === item.label"
+                [class.dark:text-blue-200]="activeNavigation() === item.label"
                 [class.shadow-[inset_2px_0_0_#2563eb]]="activeNavigation() === item.label"
                 [class.text-slate-600]="activeNavigation() !== item.label"
+                [class.dark:text-slate-300]="activeNavigation() !== item.label"
                 [class.hover:bg-slate-100]="activeNavigation() !== item.label"
                 [class.hover:text-slate-950]="activeNavigation() !== item.label"
+                [class.dark:hover:bg-slate-900]="activeNavigation() !== item.label"
+                [class.dark:hover:text-white]="activeNavigation() !== item.label"
                 [attr.aria-label]="compact ? item.label : null"
                 [uiTooltip]="item.label"
                 tooltipPosition="right"
@@ -201,7 +206,9 @@ interface AdminActivity {
             @if (!compact) {
               <span class="min-w-0 flex-1">
                 <span class="block truncate text-xs font-semibold text-slate-900">Maya Chen</span>
-                <span class="block truncate text-xs text-slate-500">Administrator</span>
+                <span class="block truncate text-xs text-slate-500 dark:text-slate-400"
+                  >Administrator</span
+                >
               </span>
               <ng-icon name="heroChevronDown" class="size-3.5 text-slate-400" aria-hidden="true" />
             }
@@ -255,7 +262,7 @@ interface AdminActivity {
                   <span class="block truncate text-sm font-semibold text-slate-900 dark:text-white">
                     {{ customer.name }}
                   </span>
-                  <span class="mt-0.5 block truncate text-xs text-slate-500">
+                  <span class="mt-0.5 block truncate text-xs text-slate-500 dark:text-slate-400">
                     {{ customer.company }} · {{ customer.plan }}
                   </span>
                 </span>
@@ -291,7 +298,9 @@ interface AdminActivity {
                           <p class="font-semibold text-slate-900 dark:text-slate-100">
                             {{ customer.name }}
                           </p>
-                          <p class="mt-0.5 text-slate-500">{{ customer.email }}</p>
+                          <p class="mt-0.5 text-slate-500 dark:text-slate-400">
+                            {{ customer.email }}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -306,7 +315,7 @@ interface AdminActivity {
                         {{ customer.status }}
                       </ui-tag>
                     </td>
-                    <td class="whitespace-nowrap px-4 py-3 text-slate-500">
+                    <td class="whitespace-nowrap px-4 py-3 text-slate-500 dark:text-slate-400">
                       {{ customer.joined }}
                     </td>
                     <td class="px-4 py-3 text-right">
@@ -328,7 +337,9 @@ interface AdminActivity {
         } @else {
           <div class="px-4 py-12 text-center">
             <p class="text-sm font-semibold text-slate-900 dark:text-white">No customers found</p>
-            <p class="mt-1 text-xs text-slate-500">Try a different search or status filter.</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              Try a different search or status filter.
+            </p>
           </div>
         }
       </ui-card>
@@ -412,7 +423,9 @@ interface AdminActivity {
                 <p class="mt-1.5 truncate text-sm font-medium text-slate-800 dark:text-slate-100">
                   {{ text(row['customer']) }}
                 </p>
-                <p class="mt-1 text-xs text-slate-500">{{ text(row['date']) }}</p>
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  {{ text(row['date']) }}
+                </p>
               </div>
               <p class="whitespace-nowrap text-sm font-semibold text-slate-950 dark:text-white">
                 {{ text(row['total']) }}
@@ -532,12 +545,14 @@ interface AdminActivity {
             </span>
             <span class="min-w-0 flex-1">
               <span class="block truncate text-xs font-bold tracking-wide">NORTHSTAR</span>
-              <span class="block truncate text-xs text-slate-500">Operations cloud</span>
+              <span class="block truncate text-xs text-slate-500 dark:text-slate-400"
+                >Operations cloud</span
+              >
             </span>
           }
           <button
             type="button"
-            class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-800 dark:hover:bg-blue-950/60 dark:hover:text-blue-300 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+            class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-blue-800 dark:hover:bg-blue-950/60 dark:hover:text-blue-300 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
             [attr.aria-label]="
               sidebarCollapsed() ? 'Expand admin sidebar' : 'Collapse admin sidebar'
             "
@@ -581,7 +596,9 @@ interface AdminActivity {
         (openChange)="mobileNavigationOpen.set($event)"
       >
         <span uiDrawerHeader>Northstar workspace</span>
-        <div class="-m-4 flex min-h-full flex-col bg-white p-4 text-slate-950">
+        <div
+          class="-m-4 flex min-h-full flex-col bg-white p-4 text-slate-950 dark:bg-slate-950 dark:text-slate-50"
+        >
           <ng-container
             [ngTemplateOutlet]="adminNavigation"
             [ngTemplateOutletContext]="{ compact: false }"
@@ -624,7 +641,7 @@ interface AdminActivity {
               </span>
               <span class="min-w-0">
                 <span class="block truncate text-xs font-bold tracking-wide">NORTHSTAR</span>
-                <span class="hidden truncate text-xs text-slate-500 sm:block"
+                <span class="hidden truncate text-xs text-slate-500 sm:block dark:text-slate-400"
                   >Operations cloud</span
                 >
               </span>
@@ -885,11 +902,11 @@ interface AdminActivity {
                 </div>
 
                 <div class="px-4 pb-2 pt-3">
-                  <app-admin-revenue-chart />
+                  <app-admin-revenue-chart [darkMode]="darkMode()" />
                 </div>
 
                 <div
-                  class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-4 py-2.5 text-xs text-slate-500 dark:border-slate-800"
+                  class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-200 px-4 py-2.5 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400"
                 >
                   <span class="inline-flex items-center gap-1.5">
                     <span class="size-2 rounded-full bg-blue-600"></span>
@@ -932,7 +949,7 @@ interface AdminActivity {
                         [label]="team.label + ' capacity'"
                         [ariaValueText]="team.value + ' percent allocated'"
                       />
-                      <span class="text-right text-xs text-slate-500">
+                      <span class="text-right text-xs text-slate-500 dark:text-slate-400">
                         {{ team.assigned }}
                       </span>
                     </div>
@@ -971,7 +988,7 @@ interface AdminActivity {
                         <p class="truncate text-xs font-medium text-slate-800 dark:text-slate-100">
                           {{ activity.title }}
                         </p>
-                        <p class="mt-0.5 truncate text-xs text-slate-500">
+                        <p class="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
                           {{ activity.detail }}
                         </p>
                       </div>

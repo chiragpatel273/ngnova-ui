@@ -413,13 +413,13 @@ const INPUT_USAGE_EXAMPLES: readonly InputUsageExample[] = [
       'Project short, non-editable context before or after the value without putting it in the label.',
     filename: 'input-adornments.example.html',
     code: `<ui-input label="Workspace URL" placeholder="design-system">
-  <span uiInputPrefix class="text-sm text-slate-500">https://</span>
-  <span uiInputSuffix class="text-sm text-slate-500">.ngnova.app</span>
+  <span uiInputPrefix class="text-sm text-slate-500 dark:text-slate-400">https://</span>
+  <span uiInputSuffix class="text-sm text-slate-500 dark:text-slate-400">.ngnova.app</span>
 </ui-input>
 
 <ui-input label="Monthly budget" type="number" inputMode="decimal">
-  <span uiInputPrefix class="text-sm text-slate-500">$</span>
-  <span uiInputSuffix class="text-sm text-slate-500">USD</span>
+  <span uiInputPrefix class="text-sm text-slate-500 dark:text-slate-400">$</span>
+  <span uiInputSuffix class="text-sm text-slate-500 dark:text-slate-400">USD</span>
 </ui-input>`,
   },
   {
@@ -1359,7 +1359,7 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
                   @case ('modal') {
                     <div class="text-center">
                       <ui-button (click)="modalOpen.set(true)">Open dialog</ui-button>
-                      <p class="mt-3 text-sm text-slate-500">
+                      <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
                         Escape, backdrop policy, and focus restore are documented below.
                       </p>
                     </div>
@@ -1551,7 +1551,9 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
                           <div
                             class="grid h-full grid-cols-[5rem_1fr_auto] items-center gap-3 px-4 text-sm"
                           >
-                            <span class="font-mono text-xs text-slate-500">#{{ index + 1 }}</span>
+                            <span class="font-mono text-xs text-slate-500 dark:text-slate-400"
+                              >#{{ index + 1 }}</span
+                            >
                             <span class="font-medium text-slate-900 dark:text-slate-100">
                               {{ row.name }}
                             </span>
@@ -1966,7 +1968,7 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
               [routerLink]="['/components', previous.slug]"
               class="rounded border border-blue-200 bg-white p-4 text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
             >
-              <span class="text-slate-500">Previous</span>
+              <span class="text-slate-500 dark:text-slate-400">Previous</span>
               <strong class="mt-1 block text-base text-blue-800 dark:text-blue-200">{{
                 previous.name
               }}</strong>
@@ -1979,7 +1981,7 @@ const TABLE_USAGE_EXAMPLES: readonly TableUsageExample[] = [
               [routerLink]="['/components', next.slug]"
               class="rounded border border-blue-200 bg-white p-4 text-right text-sm transition hover:bg-blue-50 dark:border-blue-950 dark:bg-slate-950 dark:hover:bg-blue-950/30"
             >
-              <span class="text-slate-500">Next</span>
+              <span class="text-slate-500 dark:text-slate-400">Next</span>
               <strong class="mt-1 block text-base text-blue-800 dark:text-blue-200">{{
                 next.name
               }}</strong>

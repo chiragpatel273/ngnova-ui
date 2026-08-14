@@ -58,7 +58,9 @@ shell or `html` element.
 
 The `@ngnova/ui/styles/theme.css` import is optional but recommended. It provides the supported
 `--ui-*` foundation, semantic, and component tokens. Applications can omit it to use only the
-component utility styles, or override semantic tokens after the import to apply product branding.
+component utility styles. Brand and feedback overrides drive the mapped Tailwind color families;
+foundation and component tokens apply where their concepts are used, while neutral semantic tokens
+support consumer application composition.
 See the [theme migration and customization guide](docs/THEME_MIGRATION.md).
 
 ### Optional Angular CDK entry points

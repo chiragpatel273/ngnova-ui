@@ -436,15 +436,15 @@ interface HomeTaskLink {
             <div class="mt-4 grid grid-cols-3 gap-2 text-center">
               <div class="rounded bg-slate-50 p-2 dark:bg-slate-900">
                 <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Passed</p>
-                <p class="mt-0.5 text-xs text-slate-500">Tests</p>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Tests</p>
               </div>
               <div class="rounded bg-slate-50 p-2 dark:bg-slate-900">
                 <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Valid</p>
-                <p class="mt-0.5 text-xs text-slate-500">Package</p>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Package</p>
               </div>
               <div class="rounded bg-slate-50 p-2 dark:bg-slate-900">
                 <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Synced</p>
-                <p class="mt-0.5 text-xs text-slate-500">Docs</p>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Docs</p>
               </div>
             </div>
             <div
@@ -466,7 +466,7 @@ interface HomeTaskLink {
                   </p>
                 </div>
               </div>
-              <span class="text-xs text-slate-500">2m ago</span>
+              <span class="text-xs text-slate-500 dark:text-slate-400">2m ago</span>
             </div>
             <div
               class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800"

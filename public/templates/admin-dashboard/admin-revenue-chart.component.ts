@@ -1,9 +1,11 @@
 import {
   afterNextRender,
+  afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
+  input,
   viewChild,
 } from '@angular/core';
 import type { ElementRef } from '@angular/core';
@@ -36,6 +38,7 @@ const REVENUE_LABELS = ['Jul 18', 'Jul 19', 'Jul 20', 'Jul 21', 'Jul 22', 'Jul 2
 export class AdminRevenueChartComponent {
   private readonly chart = viewChild.required<ElementRef<HTMLCanvasElement>>('chart');
   private readonly destroyRef = inject(DestroyRef);
+  readonly darkMode = input(false);
 
   constructor() {
     afterNextRender(() => {
@@ -45,15 +48,22 @@ export class AdminRevenueChartComponent {
 
       const canvas = this.chart().nativeElement;
       if (typeof globalThis.ResizeObserver === 'function') {
-        const observer = new ResizeObserver(() => this.drawChart(canvas));
+        const observer = new ResizeObserver(() => this.drawChart(canvas, this.darkMode()));
         observer.observe(canvas);
         this.destroyRef.onDestroy(() => observer.disconnect());
       }
-      this.drawChart(canvas);
+      this.drawChart(canvas, this.darkMode());
+    });
+
+    afterRenderEffect(() => {
+      if (typeof globalThis.CanvasRenderingContext2D === 'undefined') {
+        return;
+      }
+      this.drawChart(this.chart().nativeElement, this.darkMode());
     });
   }
 
-  private drawChart(canvas: HTMLCanvasElement): void {
+  private drawChart(canvas: HTMLCanvasElement, darkMode: boolean): void {
     const width = Math.max(canvas.clientWidth, 280);
     const height = 176;
     const density = globalThis.devicePixelRatio || 1;
@@ -78,12 +88,12 @@ export class AdminRevenueChartComponent {
 
     for (const tick of yTicks) {
       const y = plot.top + ((80 - tick) / 80) * (plot.bottom - plot.top);
-      context.strokeStyle = '#e2e8f0';
+      context.strokeStyle = darkMode ? '#334155' : '#e2e8f0';
       context.beginPath();
       context.moveTo(plot.left, y);
       context.lineTo(plot.right, y);
       context.stroke();
-      context.fillStyle = '#64748b';
+      context.fillStyle = darkMode ? '#94a3b8' : '#64748b';
       context.textAlign = 'right';
       context.fillText(tick === 0 ? '$0' : `$${tick}k`, plot.left - 7, y);
     }
@@ -92,13 +102,19 @@ export class AdminRevenueChartComponent {
     context.textBaseline = 'alphabetic';
     REVENUE_LABELS.forEach((label, index) => {
       const x = plot.left + (index / (REVENUE_LABELS.length - 1)) * (plot.right - plot.left);
-      context.fillStyle = '#64748b';
+      context.fillStyle = darkMode ? '#94a3b8' : '#64748b';
       context.fillText(label, x, height - 4);
     });
 
     for (const series of REVENUE_SERIES) {
-      context.strokeStyle = series.color;
-      context.fillStyle = '#ffffff';
+      const seriesColor =
+        darkMode && series.color === '#2563eb'
+          ? '#60a5fa'
+          : darkMode && series.color === '#cbd5e1'
+            ? '#64748b'
+            : series.color;
+      context.strokeStyle = seriesColor;
+      context.fillStyle = darkMode ? '#0f172a' : '#ffffff';
       context.lineWidth = series.color === '#2563eb' ? 2 : 1.5;
       context.beginPath();
 
@@ -119,7 +135,7 @@ export class AdminRevenueChartComponent {
         context.beginPath();
         context.arc(x, y, 2.75, 0, Math.PI * 2);
         context.fill();
-        context.strokeStyle = series.color;
+        context.strokeStyle = seriesColor;
         context.lineWidth = 1.5;
         context.stroke();
       });

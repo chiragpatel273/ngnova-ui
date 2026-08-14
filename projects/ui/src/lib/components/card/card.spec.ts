@@ -49,7 +49,7 @@ describe('UiCardComponent', () => {
     cardFixture.componentRef.setInput('variant', 'elevated');
     cardFixture.detectChanges();
     expect(card.className).toContain('shadow-md');
-    expect(card.className).toContain('dark:shadow-black/20');
+    expect(card.className).toContain('dark:shadow-black/30');
 
     const paddingClasses = [
       ['none', 'p-0'],
@@ -90,7 +90,8 @@ describe('UiCardComponent', () => {
     expect(footer.className).toContain('ui-card-slot');
     expect(footer.textContent?.trim()).toBe('');
     expect(card.className).toContain('overflow-hidden');
-    expect(card.className).toContain('dark:bg-slate-950');
+    expect(card.className).toContain('dark:bg-slate-900');
+    expect(card.className).toContain('dark:border-slate-700');
     expect(cardFixture.nativeElement.className).toContain('block');
   });
 });

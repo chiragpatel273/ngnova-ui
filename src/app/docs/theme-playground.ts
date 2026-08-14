@@ -27,7 +27,7 @@ import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
             Theme playground
           </h2>
           <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Change semantic tokens without rebuilding components.
+            Change brand and feedback tokens without rebuilding components.
           </p>
         </div>
         <button
@@ -42,7 +42,7 @@ import { UiProgressBarComponent } from '@ngnova/ui/progress-bar';
       <div class="grid gap-4 bg-slate-50 p-4 dark:bg-slate-900 lg:grid-cols-[13rem_minmax(0,1fr)]">
         <fieldset class="grid content-start gap-3">
           <legend class="text-sm font-semibold text-slate-950 dark:text-white">
-            Semantic colors
+            Brand and feedback colors
           </legend>
           <label
             class="grid grid-cols-[1fr_auto] items-center gap-3 text-sm text-slate-700 dark:text-slate-200"

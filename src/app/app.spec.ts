@@ -283,6 +283,7 @@ describe('App', () => {
   it('toggles the docs theme from the header control', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
+    localStorage.removeItem('ngnova-docs-theme');
 
     await router.navigateByUrl('/');
     fixture.detectChanges();
@@ -307,6 +308,52 @@ describe('App', () => {
     expect(layout?.classList.contains('dark')).toBe(true);
     expect(lightToggle?.getAttribute('aria-pressed')).toBe('true');
     expect(lightToggle?.textContent?.trim()).toBe('Light mode');
+    expect(localStorage.getItem('ngnova-docs-theme')).toBe('dark');
+    localStorage.removeItem('ngnova-docs-theme');
+  });
+
+  it('restores the stored docs theme preference', async () => {
+    localStorage.setItem('ngnova-docs-theme', 'dark');
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const layout = (fixture.nativeElement as HTMLElement).querySelector('app-docs-layout');
+    expect(layout?.classList.contains('dark')).toBe(true);
+
+    fixture.destroy();
+    localStorage.removeItem('ngnova-docs-theme');
+  });
+
+  it('uses the system theme when no docs preference is stored', async () => {
+    const originalMatchMedia = window.matchMedia;
+    localStorage.removeItem('ngnova-docs-theme');
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      value: vi.fn().mockReturnValue({ matches: true }),
+    });
+
+    try {
+      const fixture = TestBed.createComponent(App);
+      const router = TestBed.inject(Router);
+
+      await router.navigateByUrl('/');
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const layout = (fixture.nativeElement as HTMLElement).querySelector('app-docs-layout');
+      expect(layout?.classList.contains('dark')).toBe(true);
+      fixture.destroy();
+    } finally {
+      Object.defineProperty(window, 'matchMedia', {
+        configurable: true,
+        value: originalMatchMedia,
+      });
+      localStorage.removeItem('ngnova-docs-theme');
+    }
   });
 
   it('previews scoped theme tokens without mutating the application theme', async () => {

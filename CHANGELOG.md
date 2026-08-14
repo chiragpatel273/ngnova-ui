@@ -34,6 +34,9 @@ All notable changes to `@ngnova/ui` are recorded here. NgNova UI follows Semanti
 
 ### Fixed
 
+- Dark-theme preference persistence, system-theme initialization, readable muted text, distinct
+  Card surfaces, adaptive dashboard charts, and dark-safe navigation and drawer states.
+
 - Button typography, per-size height/padding/font metrics, icon alignment and clarity, click
   feedback, focus treatment, and documentation preview/code presentation.
 - Consistent spacing, typography, icons, dark mode, disabled/loading states, and accessible names

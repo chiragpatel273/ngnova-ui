@@ -63,7 +63,7 @@ is verified. See `FINAL_RELEASE_AUDIT.md`.
 
 - Added Playwright comparison for all 40 component routes, 48 static states, and 10 interactive
   open/visible states.
-- Committed 194 reviewed baselines: 106 Chromium desktop, 48 WebKit desktop, and 40 Chromium
+- Committed 196 reviewed baselines: 108 Chromium desktop, 48 WebKit desktop, and 40 Chromium
   mobile images.
 - Covered light/dark, desktop/mobile, reduced motion, local fonts, and deterministic static
   production-doc serving.

@@ -13,7 +13,10 @@ they import it after Tailwind:
 ```
 
 Import order matters. The NgNova stylesheet deliberately maps Tailwind's blue, emerald, amber, and
-red utility palettes to the public semantic tokens, so it must follow the Tailwind import.
+red utility palettes to the public brand and feedback tokens, so it must follow the Tailwind import.
+Foundation and component tokens are consumed directly where their concepts apply. Neutral semantic
+tokens remain stable composition primitives for consumer application surfaces; built-in components
+retain NgNova's slate neutral palette.
 
 ## Branding
 

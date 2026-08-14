@@ -231,13 +231,13 @@ export class ThemeToggleComponent {
                   class="mt-4 grid grid-cols-2 gap-3 border-t border-blue-100 pt-3 text-xs dark:border-blue-950/70"
                 >
                   <div>
-                    <dt class="text-slate-500">Inputs</dt>
+                    <dt class="text-slate-500 dark:text-slate-400">Inputs</dt>
                     <dd class="font-semibold text-slate-950 dark:text-slate-50">
                       {{ component.inputs.length }}
                     </dd>
                   </div>
                   <div>
-                    <dt class="text-slate-500">Outputs</dt>
+                    <dt class="text-slate-500 dark:text-slate-400">Outputs</dt>
                     <dd class="font-semibold text-slate-950 dark:text-slate-50">
                       {{ component.outputs.length }}
                     </dd>

@@ -76,7 +76,7 @@ Every public component must uphold six promises.
 
 ## Current Baseline
 
-As of the 1.0 release audit on 2026-07-31:
+As of the 1.0 release audit on 2026-08-14:
 
 - The package source is version `1.0.0` and targets Angular 22.
 - Forty documented visual components ship through focused secondary entry points.
@@ -84,7 +84,7 @@ As of the 1.0 release audit on 2026-07-31:
   with intentional exports.
 - The release gate covers API/docs consistency, theme and focus contracts, unit tests, production
   builds, package contents, bundle budgets, and clean zoneless and SSR/hydration consumers.
-- The reviewed public surface contains 43 TypeScript entry points and 238 exported symbols.
+- The reviewed public surface contains 43 TypeScript entry points and 239 exported symbols.
 - GitHub Pages serves the maintained documentation at the project root; npm publication remains
   the only external release action.
 
@@ -286,7 +286,7 @@ component count.
 
 ## Phase 5 — 1.0 Stability
 
-**Status: Locally complete (2026-07-31); npm publication pending.**
+**Status: Locally complete (2026-08-14); npm publication pending.**
 
 **Goal:** publish a stable contract that production teams can adopt confidently.
 

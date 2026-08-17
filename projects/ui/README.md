@@ -16,19 +16,30 @@ entry points, accessible interaction contracts, and Tailwind CSS theming.
 npm install @ngnova/ui
 ```
 
-Install and configure Tailwind CSS in the consuming Angular app:
+If the consuming application does not already use Tailwind CSS v4, configure it:
 
 ```bash
 ng add tailwindcss
 ```
 
-Tailwind ignores `node_modules` by default. Add the package as an explicit source in the consumer app stylesheet:
+In the application's global stylesheet, ensure Tailwind is imported once and add NgNova UI as an
+explicit source:
 
 ```css
 @import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
+
 @custom-variant dark (&:where(.dark, .dark *));
 @source "../node_modules/@ngnova/ui";
 ```
+
+- `@source` is required because Tailwind v4 ignores `node_modules` by default.
+- `@custom-variant` is required when dark mode is controlled by a `.dark` class on the application
+  shell or `html` element.
+- If `@import 'tailwindcss'` already exists, do not add it again.
+
+The `@ngnova/ui/styles/theme.css` import is optional but recommended. It provides NgNova UI's
+supported design tokens and customization contract.
 
 ## Usage
 

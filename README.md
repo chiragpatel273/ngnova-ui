@@ -36,14 +36,20 @@ See the complete [Angular compatibility policy](docs/ANGULAR_COMPATIBILITY.md) a
 
 ## Installation
 
-Install the library and configure Tailwind CSS in the consuming Angular application:
+Install NgNova UI:
 
 ```bash
 npm install @ngnova/ui
+```
+
+If the consuming application does not already use Tailwind CSS v4, configure it:
+
+```bash
 ng add tailwindcss
 ```
 
-Add NgNova UI to the consumer application's global stylesheet:
+In the application's global stylesheet, ensure Tailwind is imported once and add NgNova UI as an
+explicit source:
 
 ```css
 @import 'tailwindcss';
@@ -52,9 +58,10 @@ Add NgNova UI to the consumer application's global stylesheet:
 @source "../node_modules/@ngnova/ui";
 ```
 
-Tailwind v4 ignores `node_modules` by default, so the `@source` line is required. The
-`@custom-variant` line connects Tailwind's `dark:` utilities to a `.dark` class on the application
-shell or `html` element.
+- `@source` is required because Tailwind v4 ignores `node_modules` by default.
+- `@custom-variant` is required when dark mode is controlled by a `.dark` class on the application
+  shell or `html` element.
+- If `@import 'tailwindcss'` already exists, do not add it again.
 
 The `@ngnova/ui/styles/theme.css` import is optional but recommended. It provides the supported
 `--ui-*` foundation, semantic, and component tokens. Applications can omit it to use only the

@@ -27,6 +27,31 @@ jobs:
       - name: Release check
         run: npm run release:check
 
+  quick-start:
+    name: Verify npm quick start
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: examples/quick-start
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: examples/quick-start/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build published-package consumer
+        run: npm run build
+
   visual:
     name: Visual regression
     runs-on: windows-latest

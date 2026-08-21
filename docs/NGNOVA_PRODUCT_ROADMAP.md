@@ -85,8 +85,8 @@ As of the 1.0 release audit on 2026-08-14:
 - The release gate covers API/docs consistency, theme and focus contracts, unit tests, production
   builds, package contents, bundle budgets, and clean zoneless and SSR/hydration consumers.
 - The reviewed public surface contains 43 TypeScript entry points and 239 exported symbols.
-- GitHub Pages serves the maintained documentation at the project root; npm publication remains
-  the only external release action.
+- GitHub Pages serves the maintained documentation at the project root, and `@ngnova/ui@1.0.0` is
+  publicly available from npm.
 
 The release evidence source of truth is `docs/FINAL_RELEASE_AUDIT.md`.
 
@@ -286,7 +286,7 @@ component count.
 
 ## Phase 5 — 1.0 Stability
 
-**Status: Locally complete (2026-08-14); npm publication pending.**
+**Status: Complete. Published to npm on 2026-08-17.**
 
 **Goal:** publish a stable contract that production teams can adopt confidently.
 
@@ -302,6 +302,30 @@ component count.
 - Complete changesets, changelog, migration guide, and release notes.
 - Security, contribution, support, and deprecation policies.
 - Hosted documentation with stable versioned URLs.
+
+## Phase 6 - Adoption And Feedback
+
+**Status: Active.**
+
+**Goal:** prove that Angular developers can discover, install, evaluate, and successfully adopt
+NgNova UI before expanding the component catalog.
+
+### Work
+
+1. Complete the GitHub launch surface with a release, repository metadata, and discovery topics.
+2. Maintain a runnable minimal consumer that installs from npm and reaches a working screen quickly.
+3. Collect structured installation, API, theming, accessibility, and workflow feedback.
+4. Publish realistic product examples without duplicating component documentation.
+5. Track successful onboarding and external usage alongside directional npm download counts.
+6. Prepare trusted publishing with provenance before the next npm release.
+7. Prioritize patch fixes from observed user friction before planning new components.
+
+### Exit gate
+
+- At least three external developers complete the quick start and provide actionable feedback.
+- The quick start builds against the public npm package in CI or an equivalent clean environment.
+- No known critical installation, accessibility, or package defect remains unresolved.
+- The next release scope is supported by observed adoption needs rather than component-count goals.
 
 ## Quality Scorecard
 

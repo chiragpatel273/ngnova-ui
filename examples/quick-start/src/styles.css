@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+@source "../node_modules/@ngnova/ui";
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}

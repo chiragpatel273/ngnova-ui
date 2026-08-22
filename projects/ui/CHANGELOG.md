@@ -1,5 +1,12 @@
 # @ngnova/ui
 
+## 1.0.1
+
+### Patch Changes
+
+- Improve the published npm onboarding with direct links to the documentation, component catalog,
+  GitHub repository, and runnable Angular 22 quick start.
+
 ## 1.0.0
 
 ### Major Changes

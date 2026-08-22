@@ -1,7 +1,18 @@
 # @ngnova/ui
 
-NgNova UI 1.0.0 is an Angular 22 component library built with standalone components, focused
+[![npm version](https://img.shields.io/npm/v/%40ngnova%2Fui)](https://www.npmjs.com/package/@ngnova/ui)
+[![weekly downloads](https://img.shields.io/npm/dw/%40ngnova%2Fui)](https://www.npmjs.com/package/@ngnova/ui)
+[![CI](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml)
+[![MIT license](https://img.shields.io/npm/l/%40ngnova%2Fui)](https://github.com/chiragpatel273/ngnova-ui/blob/main/LICENSE)
+
+NgNova UI 1.0.1 is an Angular 22 component library built with standalone components, focused
 entry points, accessible interaction contracts, and Tailwind CSS theming.
+
+- [Documentation](https://chiragpatel273.github.io/ngnova-ui/)
+- [Getting started](https://chiragpatel273.github.io/ngnova-ui/#/guide)
+- [Runnable Angular 22 quick start](https://github.com/chiragpatel273/ngnova-ui/tree/main/examples/quick-start)
+- [Components](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+- [GitHub repository](https://github.com/chiragpatel273/ngnova-ui)
 
 ## Why NgNova UI
 

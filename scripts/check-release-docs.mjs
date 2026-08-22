@@ -22,6 +22,7 @@ const [
 ]);
 
 const errors = [];
+const stableVersionMatch = /^(\d+)\.(\d+)\.(\d+)$/.exec(libraryPackage.version);
 
 const requireValue = (condition, message) => {
   if (!condition) {
@@ -39,8 +40,8 @@ requireValue(
 );
 requireValue(libraryPackage.name === '@ngnova/ui', 'The release package must be named @ngnova/ui.');
 requireValue(
-  libraryPackage.version === '1.0.0',
-  'The release package must declare the stable 1.0.0 version.',
+  stableVersionMatch !== null && Number(stableVersionMatch[1]) >= 1,
+  'The release package must declare a stable semantic version at or above 1.0.0.',
 );
 requireValue(
   changesetConfig.baseBranch === 'main' && changesetConfig.access === 'public',
@@ -49,6 +50,10 @@ requireValue(
 requireValue(
   packageChangelog.includes('## 1.0.0') && packageChangelog.includes('### Major Changes'),
   'The package changelog must contain the applied 1.0.0 major release.',
+);
+requireValue(
+  packageChangelog.includes(`## ${libraryPackage.version}`),
+  `The package changelog must contain the current ${libraryPackage.version} release.`,
 );
 
 for (const heading of ['Added', 'Changed', 'Fixed', 'Security']) {
@@ -104,5 +109,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  'Release documentation check passed: workspace, package version, changelogs, migration guide, and 1.0 release notes agree.',
+  `Release documentation check passed for ${libraryPackage.version}: workspace, changelogs, migration guide, and 1.0 release notes agree.`,
 );

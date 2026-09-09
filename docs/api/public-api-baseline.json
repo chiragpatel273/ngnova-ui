@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "1.0.0",
+  "packageVersion": "1.0.1",
   "angularPeer": ">=22.0.2 <23.0.0",
   "rootPolicy": "minimal",
   "entryPoints": {
@@ -115,7 +115,7 @@
     "./date-picker": {
       "importPath": "@ngnova/ui/date-picker",
       "symbols": ["UiDatePickerComponent", "UiDatePickerSelection", "UiDatePickerSize"],
-      "signatureSha256": "52114103a55d453a4240d75befcc8bb8461e835ca2699fbf8a72e61c6b97edc7"
+      "signatureSha256": "a0c1977235317878fcc9fd0ba83f5ef0062b6c75470e6ec9cd2ebb7e3ea5e541"
     },
     "./divider": {
       "importPath": "@ngnova/ui/divider",

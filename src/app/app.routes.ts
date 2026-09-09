@@ -28,6 +28,12 @@ export const routes: Routes = [
         data: { topic: 'components' },
       },
       {
+        path: 'forms',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: { topic: 'forms' },
+      },
+      {
         path: 'templates',
         loadComponent: () =>
           import('./docs/docs-templates').then((module) => module.DocsTemplatesComponent),

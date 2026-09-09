@@ -73,6 +73,33 @@ Button icons are library-agnostic. Mark an icon-only glyph with `uiButtonIcon`, 
 `iconOnly`, and choose `size="sm"`, `"md"`, or `"lg"`; use `uiButtonIconStart` and
 `uiButtonIconEnd` for icons beside visible labels.
 
+## Angular Signal Forms
+
+NgNova's Input, Textarea, Checkbox, Switch, Radio Group, Select, Combobox, and Date Picker support
+Angular 22 Signal Forms through the `[formField]` directive. Reactive Forms and template-driven
+forms remain supported.
+
+```ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required } from '@angular/forms/signals';
+import { UiInputComponent } from '@ngnova/ui/input';
+
+@Component({
+  standalone: true,
+  imports: [FormField, UiInputComponent],
+  template: `<ui-input label="Email" [formField]="accountForm.email" />`,
+})
+export class AccountFormComponent {
+  readonly account = signal({ email: '' });
+  readonly accountForm = form(this.account, (path) => {
+    required(path.email, { message: 'Email is required.' });
+  });
+}
+```
+
+See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/#/forms) for the supported
+controls and form-state behavior.
+
 ## Testing
 
 NgNova UI provides Angular CDK test harnesses from `@ngnova/ui/testing`.

@@ -56,3 +56,18 @@ The checked baseline is the final pre-1.0 candidate contract. At the time it was
 - no undocumented breaking change was known between the reviewed implementation and baseline.
 
 Compatibility from 1.0 follows the policy in `docs/VERSIONING_AND_DEPRECATION.md`.
+
+## Post-1.0 reviewed changes
+
+### 1.0.1 Signal Forms compatibility fix
+
+Date Picker's `min` and `max` Angular input write types now accept `undefined` and `null`
+constraint metadata and normalize those values to the existing empty-string representation. This
+is an additive widening: existing string bindings and runtime behavior remain compatible.
+
+The control's internal selected value was also renamed so Angular Signal Forms does not
+structurally misclassify the existing `ControlValueAccessor` as a native
+`FormValueControl`. That internal rename does not change the exported consumer contract.
+
+Review result: no breaking change and no migration step required. The matching patch changeset and
+Angular Forms compatibility guide document the consumer-visible fix.

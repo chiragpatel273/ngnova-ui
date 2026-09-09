@@ -140,7 +140,7 @@ let nextDatePickerId = 0;
             (keydown)="handleInputKeydown($event)"
           />
 
-          @if (clearable && value && !isDisabled) {
+          @if (clearable && selectedValue && !isDisabled) {
             <button
               type="button"
               tabindex="-1"
@@ -258,7 +258,7 @@ let nextDatePickerId = 0;
                     role="gridcell"
                     [attr.data-date]="day.value"
                     [attr.aria-label]="dateAriaLabel(day.value)"
-                    [attr.aria-selected]="day.value === value"
+                    [attr.aria-selected]="day.value === selectedValue"
                     [attr.aria-current]="day.today ? 'date' : null"
                     [disabled]="day.disabled"
                     [tabIndex]="day.value === activeDate() ? 0 : -1"
@@ -285,7 +285,7 @@ let nextDatePickerId = 0;
               >
                 {{ todayText }}
               </button>
-              @if (value) {
+              @if (selectedValue) {
                 <span class="text-xs text-slate-500 dark:text-slate-400">{{ displayValue }}</span>
               }
             </div>
@@ -320,8 +320,8 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   @Input() ariaLabel = '';
   @Input() locale = 'en-US';
   @Input() size: UiDatePickerSize = 'md';
-  @Input() min = '';
-  @Input() max = '';
+  @Input({ transform: (value: string | null | undefined) => value ?? '' }) min = '';
+  @Input({ transform: (value: string | null | undefined) => value ?? '' }) max = '';
   @Input() startAt = '';
   @Input() disabledDates: readonly string[] = [];
   @Input({ transform: booleanAttribute }) open = false;
@@ -347,7 +347,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   readonly focused = output<FocusEvent>();
   readonly blurred = output<FocusEvent>();
 
-  protected value = '';
+  protected selectedValue = '';
   protected readonly isOpen = signal(false);
   protected readonly activeDate = signal(todayIso());
   private readonly visibleMonth = signal(startOfMonth(todayIso()));
@@ -382,7 +382,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   }
 
   protected get displayValue(): string {
-    const date = parseIso(this.value);
+    const date = parseIso(this.selectedValue);
     return date
       ? new Intl.DateTimeFormat(this.locale, {
           dateStyle: 'medium',
@@ -466,8 +466,8 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   }
 
   writeValue(value: string | null): void {
-    this.value = value && parseIso(value) ? value : '';
-    if (this.value) {
+    this.selectedValue = value && parseIso(value) ? value : '';
+    if (this.selectedValue) {
       this.activeDate.set(value as string);
       this.visibleMonth.set(startOfMonth(value as string));
     }
@@ -615,20 +615,22 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   protected dayClasses(day: UiCalendarDay): string {
     return uiClassNames(
       'inline-flex size-9 items-center justify-center rounded-lg text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-blue-600 dark:focus-visible:ring-blue-400',
-      day.value === this.value &&
+      day.value === this.selectedValue &&
         'bg-blue-700 font-semibold text-white hover:bg-blue-800 dark:bg-blue-500 dark:text-slate-950 dark:hover:bg-blue-400',
-      day.value !== this.value &&
+      day.value !== this.selectedValue &&
         !day.disabled &&
         'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
-      day.outside && day.value !== this.value && 'text-slate-400 dark:text-slate-600',
-      day.today && day.value !== this.value && 'font-semibold text-blue-700 dark:text-blue-300',
+      day.outside && day.value !== this.selectedValue && 'text-slate-400 dark:text-slate-600',
+      day.today &&
+        day.value !== this.selectedValue &&
+        'font-semibold text-blue-700 dark:text-blue-300',
       day.disabled && 'cursor-not-allowed text-slate-300 opacity-50 dark:text-slate-700',
     );
   }
 
   private commitValue(value: string): void {
-    if (this.value === value) return;
-    this.value = value;
+    if (this.selectedValue === value) return;
+    this.selectedValue = value;
     this.onChange(value);
     this.valueChange.emit(value);
   }
@@ -650,7 +652,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   }
 
   private resolveInitialDate(): string {
-    const candidates = [this.value, this.startAt, this.today].filter(
+    const candidates = [this.selectedValue, this.startAt, this.today].filter(
       (value) => Boolean(value) && Boolean(parseIso(value)),
     );
     for (const candidate of candidates) {

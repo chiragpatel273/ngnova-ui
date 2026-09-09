@@ -31,6 +31,24 @@ package.
 - Angular CDK remains an optional peer. Consumers that import `overlay` or
   `table-virtual-scroll` install the matching CDK major; all other entry points remain CDK-free.
 
+## Angular forms compatibility
+
+NgNova UI supports Angular 22 Signal Forms, Reactive Forms, and template-driven forms for Input,
+Textarea, Checkbox, Switch, Radio Group, Select, Combobox, and Date Picker. Signal Forms
+compatibility is verified with Angular's `FormField` directive across initial model values,
+user-to-model updates, touched state, blur debouncing, validation, disabled state, and constraint
+metadata.
+
+The current stable controls retain their `ControlValueAccessor` contracts so existing Reactive
+Forms and template-driven consumers are not broken. Angular Signal Forms supports these controls
+through its documented CVA interoperability path. NgNova UI does not also implement
+`FormValueControl` or `FormCheckboxControl` on the same components because Angular explicitly
+discourages combining the native Signal Forms contract with CVA on one control. A future move to
+native model-signal controls would therefore be planned as a semver-major migration.
+
+File Upload is modeled as a file-selection and upload-workflow component rather than a scalar
+Angular form value control.
+
 ## Consumer upgrade sequence
 
 1. Read the NgNova UI release notes and migration guide for the target version.
@@ -56,6 +74,7 @@ The release gate verifies that:
 - the repository's installed Angular compiler and Node engine requirements match the published
   matrix;
 - a clean Angular 22 consumer can install the packed tarball and build.
+- the form-control suite binds to an Angular 22 Signal Forms model and preserves form state.
 
 SSR, hydration, and zoneless execution are separately tested by the consumer matrix rather than
 inferred from compilation.

@@ -223,6 +223,14 @@ const DOCS_THEME_STORAGE_KEY = 'ngnova-docs-theme';
             >
               Getting Started
             </a>
+            <a
+              routerLink="/forms"
+              routerLinkActive="bg-blue-100/80 font-semibold text-blue-900 ring-1 ring-inset ring-blue-200 dark:bg-blue-950/70 dark:text-blue-100 dark:ring-blue-800"
+              class="mt-0.5 flex min-h-9 items-center rounded-md px-3 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white dark:focus-visible:ring-blue-400"
+              (click)="handleSidebarNavigation()"
+            >
+              Angular Forms
+            </a>
           </nav>
 
           <nav class="mt-5 grid gap-3" aria-label="Component documentation">
@@ -374,6 +382,7 @@ export class DocsLayoutComponent {
   protected readonly primaryNav: readonly PrimaryNavItem[] = [
     { label: 'Guide', path: '/guide', exact: true },
     { label: 'Components', path: '/components' },
+    { label: 'Forms', path: '/forms', exact: true },
     { label: 'Templates', path: '/templates', exact: true },
     { label: 'APIs', path: '/apis', exact: true },
     { label: 'Playground', path: '/playground', exact: true },

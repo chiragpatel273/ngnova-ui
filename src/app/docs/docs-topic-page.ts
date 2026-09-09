@@ -6,6 +6,7 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 
 import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';
+import { SignalFormsPlaygroundComponent } from './signal-forms-playground';
 import { ThemePlaygroundComponent } from './theme-playground';
 
 interface TopicSection {
@@ -24,6 +25,44 @@ interface DocsTopic {
 }
 
 const TOPICS: Readonly<Record<string, DocsTopic>> = {
+  forms: {
+    badge: 'Angular Forms',
+    title: 'Build Forms With Signals Or Classic Angular APIs',
+    summary:
+      'NgNova value controls work with Angular 22 Signal Forms, Reactive Forms, and template-driven forms, so applications can choose their form model without changing the component layer.',
+    ctaLabel: 'Open Input Docs',
+    ctaPath: '/components/input',
+    sections: [
+      {
+        title: 'Signal Forms',
+        description:
+          'Import FormField from @angular/forms/signals, create a signal-backed form, and bind controls with [formField].',
+        items: [
+          'Signal model synchronization',
+          'Touched and validation state',
+          'Blur debouncing',
+          'Disabled and constraint metadata',
+        ],
+      },
+      {
+        title: 'Reactive and template-driven forms',
+        description:
+          'Existing formControl, formControlName, and ngModel integrations remain supported through the same component APIs.',
+        items: ['Reactive Forms', 'Template-driven forms', 'Custom validation messages'],
+      },
+      {
+        title: 'Verified value controls',
+        description:
+          'A shared integration suite covers the complete scalar value-control set. File Upload remains an explicit file-workflow component.',
+        items: [
+          'Input and Textarea',
+          'Checkbox and Switch',
+          'Radio Group and Select',
+          'Combobox and Date Picker',
+        ],
+      },
+    ],
+  },
   components: {
     badge: 'Component Catalog',
     title: 'Explore Core Components',
@@ -176,7 +215,13 @@ export class ThemeToggleComponent {
 @Component({
   selector: 'app-docs-topic-page',
   standalone: true,
-  imports: [RouterLink, UiButtonComponent, DocsCodeBlockComponent, ThemePlaygroundComponent],
+  imports: [
+    RouterLink,
+    UiButtonComponent,
+    DocsCodeBlockComponent,
+    SignalFormsPlaygroundComponent,
+    ThemePlaygroundComponent,
+  ],
   template: `
     @if (topic(); as page) {
       <article class="mx-auto max-w-[76rem] pb-14">
@@ -245,6 +290,33 @@ export class ThemeToggleComponent {
                 </dl>
               </a>
             }
+          </section>
+        } @else if (slug() === 'forms') {
+          <section class="mt-7 grid gap-5">
+            <app-signal-forms-playground />
+            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              @for (section of page.sections; track section.title) {
+                <article
+                  class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+                >
+                  <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                    {{ section.title }}
+                  </h2>
+                  <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
+                    {{ section.description }}
+                  </p>
+                  <div class="mt-5 flex flex-wrap gap-2">
+                    @for (item of section.items; track item) {
+                      <span
+                        class="rounded bg-slate-100 px-2.5 py-1.5 text-sm text-slate-800 dark:bg-slate-800 dark:text-slate-100"
+                      >
+                        {{ item }}
+                      </span>
+                    }
+                  </div>
+                </article>
+              }
+            </div>
           </section>
         } @else if (slug() === 'theming') {
           <section class="mt-7 grid gap-4">
@@ -388,7 +460,20 @@ export class DocsTopicPageComponent {
   protected readonly topic = computed(() => TOPICS[this.slug()] ?? TOPICS['components']);
 
   protected categoryFor(slug: string): string {
-    if (['input', 'textarea', 'checkbox', 'radio', 'switch', 'select'].includes(slug)) {
+    if (
+      [
+        'form-field',
+        'input',
+        'textarea',
+        'checkbox',
+        'radio',
+        'switch',
+        'select',
+        'combobox',
+        'date-picker',
+        'file-upload',
+      ].includes(slug)
+    ) {
       return 'Forms';
     }
 

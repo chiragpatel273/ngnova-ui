@@ -319,6 +319,8 @@ NgNova UI before expanding the component catalog.
 5. Track successful onboarding and external usage alongside directional npm download counts.
 6. Prepare trusted publishing with provenance before the next npm release.
 7. Prioritize patch fixes from observed user friction before planning new components.
+8. Deepen the forms foundation with verified Signal Forms compatibility, documented recipes, and
+   feedback-driven validation workflows.
 
 ### Exit gate
 
@@ -326,6 +328,7 @@ NgNova UI before expanding the component catalog.
 - The quick start builds against the public npm package in CI or an equivalent clean environment.
 - No known critical installation, accessibility, or package defect remains unresolved.
 - The next release scope is supported by observed adoption needs rather than component-count goals.
+- External form examples validate both Signal Forms and existing Reactive Forms adoption paths.
 
 ## Quality Scorecard
 

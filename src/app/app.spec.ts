@@ -203,6 +203,7 @@ describe('App', () => {
     for (const path of [
       '/',
       '/guide',
+      '/forms',
       '/components/button',
       '/templates',
       '/apis',
@@ -226,6 +227,91 @@ describe('App', () => {
         false,
       );
     }
+  });
+
+  it('publishes Angular Signal Forms compatibility guidance', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/forms');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Build Forms With Signals Or Classic Angular APIs');
+    expect(compiled.textContent).toContain('@angular/forms/signals');
+    expect(compiled.textContent).toContain('[formField]');
+    expect(compiled.textContent).toContain('Combobox and Date Picker');
+    expect(
+      Array.from(
+        compiled.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Documentation start"] a'),
+      ).some((link) => link.textContent?.trim() === 'Angular Forms'),
+    ).toBe(true);
+  });
+
+  it('runs the live Signal Forms validation and submission example', async () => {
+    const fixture = TestBed.createComponent(App);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/forms');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const form = compiled.querySelector<HTMLFormElement>('[data-testid="signal-form"]');
+    const modelJson = compiled.querySelector<HTMLElement>('[data-testid="model-json"]');
+    const managedSwitch = compiled.querySelector<HTMLInputElement>(
+      'ui-switch input[type="checkbox"]',
+    );
+
+    expect(form).toBeTruthy();
+    expect(form?.querySelectorAll('ui-combobox')).toHaveLength(2);
+    expect(form?.querySelector('ui-date-picker')).toBeTruthy();
+    expect(form?.querySelector('ui-radio-group')).toBeTruthy();
+    expect(form?.querySelector('ui-textarea')).toBeTruthy();
+    expect(modelJson?.textContent).toContain('"email": ""');
+    expect(managedSwitch?.disabled).toBe(true);
+
+    form?.querySelector<HTMLButtonElement>('ui-button button[type="submit"]')?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('[data-testid="terms-error"]')).toBeTruthy();
+    expect(compiled.querySelector('[data-testid="submission-message"]')?.textContent).toContain(
+      'Submission blocked',
+    );
+    expect(
+      compiled.querySelector<HTMLInputElement>('ui-input input')?.getAttribute('aria-invalid'),
+    ).toBe('true');
+
+    compiled
+      .querySelector<HTMLButtonElement>('ui-button[data-testid="fill-valid"] button')
+      ?.click();
+    fixture.detectChanges();
+    expect(modelJson?.textContent).toContain('"email": "builder@example.com"');
+    expect(modelJson?.textContent).toContain('"workspaceName": "Nova Commerce"');
+    expect(modelJson?.textContent).toContain('"role": "engineering"');
+    expect(modelJson?.textContent).toContain('"launchDate": "2026-09-18"');
+
+    form?.querySelector<HTMLButtonElement>('ui-button button[type="submit"]')?.click();
+    fixture.detectChanges();
+    expect(
+      form
+        ?.querySelector<HTMLButtonElement>('ui-button button[type="submit"]')
+        ?.getAttribute('aria-busy'),
+    ).toBe('true');
+
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('[data-testid="submission-message"]')?.textContent).toContain(
+      'Workspace submitted successfully',
+    );
+    expect(compiled.querySelector('[data-testid="submitted-json"]')?.textContent).toContain(
+      '"acceptTerms": true',
+    );
   });
 
   it('publishes an actionable contribution guide', async () => {

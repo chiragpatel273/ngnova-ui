@@ -59,7 +59,7 @@ Compatibility from 1.0 follows the policy in `docs/VERSIONING_AND_DEPRECATION.md
 
 ## Post-1.0 reviewed changes
 
-### 1.0.1 Signal Forms compatibility fix
+### 1.0.2 Signal Forms compatibility fix
 
 Date Picker's `min` and `max` Angular input write types now accept `undefined` and `null`
 constraint metadata and normalize those values to the existing empty-string representation. This

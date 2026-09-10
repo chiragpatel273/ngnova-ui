@@ -1,5 +1,13 @@
 # @ngnova/ui
 
+## 1.0.2
+
+### Patch Changes
+
+- a3e1c84: Fix Date Picker integration with Angular 22 Signal Forms, document verified `FormField`
+  compatibility across the NgNova value-control suite, and add an interactive Signal Forms
+  validation and submission playground.
+
 ## 1.0.1
 
 ### Patch Changes

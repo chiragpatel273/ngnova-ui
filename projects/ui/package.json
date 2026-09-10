@@ -1,6 +1,6 @@
 {
   "name": "@ngnova/ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Accessible Angular 22 standalone components with focused entry points and Tailwind CSS theming.",
   "license": "MIT",
   "repository": {

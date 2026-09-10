@@ -5,7 +5,7 @@
 [![CI](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/npm/l/%40ngnova%2Fui)](https://github.com/chiragpatel273/ngnova-ui/blob/main/LICENSE)
 
-NgNova UI 1.0.1 is an Angular 22 component library built with standalone components, focused
+NgNova UI 1.0.2 is an Angular 22 component library built with standalone components, focused
 entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 - [Documentation](https://chiragpatel273.github.io/ngnova-ui/)

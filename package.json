@@ -33,6 +33,7 @@
     "check:bundle-budgets": "node scripts/check-bundle-budgets.mjs",
     "check:release-docs": "node scripts/check-release-docs.mjs",
     "check:project-policies": "node scripts/check-project-policies.mjs",
+    "check:release-tag": "node scripts/check-release-tag.mjs",
     "check:versioned-docs": "node scripts/check-versioned-docs.mjs",
     "check:public-api": "node scripts/check-public-api.mjs",
     "baseline:public-api": "npm run build:lib && node scripts/check-public-api.mjs --write",

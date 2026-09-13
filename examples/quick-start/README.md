@@ -29,3 +29,6 @@ import { UiInputComponent } from '@ngnova/ui/input';
 
 Its global stylesheet demonstrates the required Tailwind source configuration and the recommended
 NgNova theme contract.
+
+CI verifies this application twice: once with the committed lockfile for reproducibility and once
+after installing the latest published `@ngnova/ui` version to catch registry-release regressions.

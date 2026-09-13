@@ -236,17 +236,15 @@ or the repository's [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Publishing
 
-Publish only the ng-packagr output from `dist/ui`, never the source under `projects/ui`:
+Stable releases are published from GitHub Actions using npm trusted publishing. The workflow runs
+the full release gate and publishes only the ng-packagr output from `dist/ui`:
 
 ```bash
 npm run release:check
-npm run pack:lib
-cd dist/ui
-npm publish --access public
 ```
 
-Before publishing, confirm access to the `@ngnova` npm scope and inspect the generated tarball.
-For automated releases, prefer npm trusted publishing with provenance.
+Create a stable GitHub Release with a tag matching the package version, such as `v1.0.3`. See the
+[trusted npm publishing guide](docs/TRUSTED_PUBLISHING.md) for environment configuration, and release operation.
 
 ## License
 

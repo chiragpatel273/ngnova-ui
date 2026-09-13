@@ -14,14 +14,11 @@ Version packages:
 npm run version:packages
 ```
 
-Publish only after the library is built and verified:
+After committing the version and changelog updates, run the complete release gate:
 
 ```bash
-npm run test:lib
-npm run lint
-npm run build:lib
-npm run build:docs
-npm run pack:lib
-cd dist/ui
-npm publish --access public
+npm run release:check
 ```
+
+Publish by creating a stable GitHub Release whose tag matches the package version. The
+[trusted-publishing workflow](../docs/TRUSTED_PUBLISHING.md) verifies and publishes `dist/ui`.

@@ -28,7 +28,7 @@ jobs:
         run: npm run release:check
 
   quick-start:
-    name: Verify npm quick start
+    name: Verify locked npm quick start
     runs-on: windows-latest
 
     defaults:
@@ -50,6 +50,37 @@ jobs:
         run: npm ci
 
       - name: Build published-package consumer
+        run: npm run build
+
+  quick-start-latest:
+    name: Verify latest npm quick start
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: examples/quick-start
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: examples/quick-start/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install latest published NgNova UI
+        run: npm install @ngnova/ui@latest --no-save --package-lock=false
+
+      - name: Report tested NgNova UI version
+        run: npm ls @ngnova/ui --depth=0
+
+      - name: Build latest published-package consumer
         run: npm run build
 
   visual:

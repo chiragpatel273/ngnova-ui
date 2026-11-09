@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Configure Tailwind CSS v4, the NgNova UI theme, dark mode, and package sources in an Angular application.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
+    }
+  }
+}

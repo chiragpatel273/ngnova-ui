@@ -330,6 +330,53 @@ NgNova UI before expanding the component catalog.
 - The next release scope is supported by observed adoption needs rather than component-count goals.
 - External form examples validate both Signal Forms and existing Reactive Forms adoption paths.
 
+## Phase 7 - Adoption Foundations
+
+**Status: Active (started 2026-11-09).** Runs alongside Phase 6; it removes the adoption barriers
+found in the 2026-11-09 product review.
+
+**Goal:** make NgNova UI the easiest Angular 22 library to discover, install, and use correctly,
+including through AI coding assistants, before widening the component catalog.
+
+**Evidence that motivated this phase (2026-11-09):** 2 GitHub stars, 0 forks, and 41 npm downloads
+in the preceding 30 days. Engineering quality gates were green, so the limiting factor was
+discovery and first-run friction, not component quality.
+
+### Work
+
+1. [x] `ng add @ngnova/ui` schematic: Tailwind CSS v4 + PostCSS, theme import, dark-mode variant,
+       `@source`, optional CDK; idempotent; Tailwind v3 refusal; unit tests in the release gate and
+       a verified end-to-end run in a fresh `ng new` application.
+2. [x] `llms.txt`, `llms-full.txt`, and per-component Markdown generated from the verified docs
+       data on every documentation build.
+3. [x] Run the release gate on Linux and Windows in CI.
+4. [ ] Release 1.1.0 with the schematic, then switch the home page and guide install snippets to
+       `ng add @ngnova/ui`.
+5. [ ] Path-based documentation routes with prerendering, per-page titles and descriptions, Open
+       Graph images, and a sitemap, so component pages can be indexed and shared.
+6. [ ] NgNova UI MCP server exposing component search, API lookup, and examples from the same data
+       as `llms-full.txt`.
+7. [ ] Internationalization: a typed `provideNgNovaLabels()` contract replacing hard-coded English
+       accessible names (for example "Next page", "Clear date", "Remove"), plus locale-aware dates.
+8. [ ] Right-to-left support: logical properties, `Directionality`-aware keyboard handling, and RTL
+       visual regression states.
+9. [ ] Public launch: release post, Angular community channels, and the Phase 6 external quick-start
+       feedback round.
+
+### Candidate components (demand-gated)
+
+Promote only with recorded user requests or a template that needs them: Slider, Date Range Picker,
+Time Picker, Input OTP, Toggle Group, Number Input, Sidebar/App Shell, Context Menu, Hover Card,
+Resizable panels, Carousel.
+
+### Exit gate
+
+- `ng add @ngnova/ui` works against the published package in CI on Linux and Windows.
+- Every documented component page has a crawlable URL, title, and description.
+- Built-in accessible names can be translated without forking components.
+- At least one RTL locale passes keyboard and visual checks for form and overlay components.
+- npm downloads and GitHub stars are reported per release as directional, not vanity, signals.
+
 ## Quality Scorecard
 
 Track these metrics per release. Do not replace them with vanity metrics.

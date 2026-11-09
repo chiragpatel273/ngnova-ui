@@ -94,7 +94,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ui/tsconfig.spec.json"
+            "tsConfig": "projects/ui/tsconfig.spec.json",
+            "exclude": ["schematics/**"]
           }
         },
         "lint": {

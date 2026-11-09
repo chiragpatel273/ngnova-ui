@@ -13,7 +13,7 @@ const distLicenseFile = join(distRoot, 'LICENSE');
 const componentDirs = readdirSync(uiRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name)
-  .filter((name) => !['src', 'styles', 'testing'].includes(name))
+  .filter((name) => !['schematics', 'src', 'styles', 'testing'].includes(name))
   .sort();
 const documentedUtilityEntryPoints = new Set(['table-state']);
 
@@ -215,6 +215,31 @@ if (existsSync(distRoot)) {
       fail('dist package must export ./styles/theme.css');
     }
     requireFile(join(distRoot, 'styles', 'theme.css'), 'dist package is missing styles/theme.css');
+
+    if (packageJson.schematics !== './schematics/collection.json') {
+      fail('dist package must declare ./schematics/collection.json for ng add');
+    }
+
+    if (packageJson['ng-add']?.save !== 'dependencies') {
+      fail('dist package ng-add metadata must save @ngnova/ui to dependencies');
+    }
+
+    for (const file of [
+      'schematics/collection.json',
+      'schematics/package.json',
+      'schematics/ng-add/index.js',
+      'schematics/ng-add/schema.json',
+    ]) {
+      requireFile(join(distRoot, file), `dist package is missing ${file}`);
+    }
+
+    const npmIgnoreFile = join(distRoot, '.npmignore');
+    if (
+      existsSync(npmIgnoreFile) &&
+      !read(npmIgnoreFile).split(/\r?\n/).includes('!schematics/package.json')
+    ) {
+      fail('dist .npmignore must keep schematics/package.json so schematics load as CommonJS');
+    }
 
     if (packageJson.publishConfig?.access !== 'public') {
       fail('dist package publishConfig.access must be public');

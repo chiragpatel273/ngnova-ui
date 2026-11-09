@@ -8,8 +8,13 @@ on:
 
 jobs:
   verify:
-    name: Verify library
-    runs-on: windows-latest
+    name: Verify library (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout

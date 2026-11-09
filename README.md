@@ -42,6 +42,27 @@ See the complete [Angular compatibility policy](docs/ANGULAR_COMPATIBILITY.md) a
 
 ## Installation
 
+### Automatic setup with `ng add` (1.1.0 and later)
+
+```bash
+ng add @ngnova/ui
+```
+
+The schematic installs the package, adds Tailwind CSS v4 and its PostCSS plugin when they are
+missing, and writes the stylesheet lines shown in the manual setup below. It is safe to run again.
+
+| Option           | Default | Effect                                                              |
+| ---------------- | ------- | ------------------------------------------------------------------- |
+| `--project`      | current | Application to configure; required only in multi-app workspaces.    |
+| `--theme`        | `true`  | Import the optional `@ngnova/ui/styles/theme.css` token stylesheet. |
+| `--dark-mode`    | `class` | `class` adds the `.dark` custom variant; `media` follows the OS.    |
+| `--cdk`          | `false` | Install `@angular/cdk` for the overlay and virtual-scroll entries.  |
+| `--skip-install` | `false` | Update files without installing added dependencies.                 |
+
+Workspaces on Tailwind CSS v3 are not modified; upgrade with `npx @tailwindcss/upgrade` first.
+
+### Manual setup
+
 Install NgNova UI:
 
 ```bash
@@ -171,6 +192,21 @@ await email.setValue('dev@example.com');
 
 The testing entry point includes harnesses for interactive controls, forms, overlays, navigation,
 feedback, and data components. Treat harness methods as supported public API.
+
+## AI coding assistants
+
+The documentation site publishes [`llms.txt`](https://llmstxt.org/) files generated from the same
+API data that the release gate verifies against the component implementations:
+
+- [`llms.txt`](https://chiragpatel273.github.io/ngnova-ui/llms.txt) — rules for generating NgNova
+  UI code, setup, and an index of per-component references.
+- [`llms-full.txt`](https://chiragpatel273.github.io/ngnova-ui/llms-full.txt) — every component's
+  inputs, outputs, examples, accessibility, keyboard, forms, and testing notes in one file.
+- `llms/<component>.md` — one component at a time, for example
+  [`llms/select.md`](https://chiragpatel273.github.io/ngnova-ui/llms/select.md).
+
+Point Claude, Copilot, Cursor, or another assistant at these URLs so generated code uses real
+inputs and focused entry points. Regenerate locally with `npm run build:docs:app`.
 
 ## Local development
 

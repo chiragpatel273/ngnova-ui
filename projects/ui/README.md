@@ -23,6 +23,17 @@ entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 ## Install
 
+The fastest setup configures Tailwind CSS v4, the theme stylesheet, dark mode, and package scanning:
+
+```bash
+ng add @ngnova/ui
+```
+
+Options: `--theme=false` skips the token stylesheet, `--dark-mode=media` follows the operating
+system, and `--cdk` installs `@angular/cdk` for the overlay and virtual-scroll entry points.
+
+### Manual setup
+
 ```bash
 npm install @ngnova/ui
 ```

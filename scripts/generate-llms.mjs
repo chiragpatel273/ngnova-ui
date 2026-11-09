@@ -165,6 +165,10 @@ const rules = `## Rules for generating NgNova UI code
   (\`[formField]\`), Reactive Forms, and template-driven forms.
 - Styling uses Tailwind CSS v4 utility classes. Dark mode follows a \`.dark\` class on \`<html>\`
   when the app is configured with the class-based custom variant.
+- To translate built-in text (accessible names, status messages), use the component's labels
+  provider instead of repeating inputs, for example
+  \`provideUiModalLabels({ close: 'Fermer' })\` from \`@ngnova/ui/modal\`. Each entry point with
+  built-in text exports \`provideUi<Name>Labels()\`, \`UI_<NAME>_LABELS\`, and \`Ui<Name>Labels\`.
 - \`@ngnova/ui/overlay\` and \`@ngnova/ui/table-virtual-scroll\` require \`@angular/cdk\`. Test
   harnesses come from \`@ngnova/ui/testing\` and require \`@angular/cdk\` as a dev dependency.
 `;

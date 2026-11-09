@@ -176,6 +176,38 @@ Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/
 for current APIs, live examples, accessibility guidance, and import statements. Headless table
 state utilities are also available from `@ngnova/ui/table-state`.
 
+## Translating built-in labels
+
+From 1.1.0, components with built-in text (accessible names, status messages, and button text) export
+a typed labels provider from their own entry point. Provide translations once instead of repeating
+inputs on every instance:
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideUiModalLabels } from '@ngnova/ui/modal';
+import { provideUiPaginatorLabels } from '@ngnova/ui/paginator';
+
+bootstrapApplication(App, {
+  providers: [
+    provideUiModalLabels({ close: 'Fermer la boîte de dialogue' }),
+    provideUiPaginatorLabels({
+      nextPage: 'Page suivante',
+      range: (start, end, total) => `${start}–${end} sur ${total}`,
+    }),
+  ],
+});
+```
+
+- Each provider accepts a partial object and merges over labels from parent injectors, so it also
+  works in route and component `providers`.
+- An explicit input on an instance, such as `closeAriaLabel`, still wins.
+- Text that combines words with values — ranges, counts, step positions, file sizes — is a label
+  function, so a translation controls word order and pluralization.
+- Labels are read when a component is created. To switch language at runtime, re-create the view or
+  bind the inputs.
+
+See [ADR 0004](docs/decisions/0004-built-in-label-contract.md) for the contract.
+
 ## Component test harnesses
 
 NgNova UI publishes Angular CDK harnesses from the dedicated testing entry point:

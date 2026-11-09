@@ -71,3 +71,19 @@ structurally misclassify the existing `ControlValueAccessor` as a native
 
 Review result: no breaking change and no migration step required. The matching patch changeset and
 Angular Forms compatibility guide document the consumer-visible fix.
+
+### 1.1.0 built-in label providers (unreleased)
+
+Twenty-six component entry points each add one interface, one `InjectionToken`, and one provider
+function following [ADR 0004](decisions/0004-built-in-label-contract.md), for example
+`UiModalLabels`, `UI_MODAL_LABELS`, and `provideUiModalLabels()`. Stepper also exports
+`UiStepperStepLabelContext`.
+
+- Existing inputs keep their names and types; their defaults now come from the labels token, which
+  resolves to the same English text when no provider is present.
+- `UiConfirmationDialogComponent` now implements `OnChanges` to detect an explicitly bound
+  `queueLabel`; rendering is unchanged when it is bound or left at its default.
+- Generated declarations were diffed against the published 1.0.2 package: no input, output,
+  selector, or exported type was removed or retyped.
+
+Review result: additive minor change, no migration step required.

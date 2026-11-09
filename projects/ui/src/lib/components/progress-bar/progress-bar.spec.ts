@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UiProgressBarComponent } from '../../../../progress-bar/src/progress-bar';
+import { provideUiProgressBarLabels } from '../../../../progress-bar/src/progress-bar-labels';
 
 describe('UiProgressBarComponent', () => {
   beforeEach(async () => {
@@ -91,5 +92,31 @@ describe('UiProgressBarComponent', () => {
     const bar = fixture.nativeElement.querySelector('[role="progressbar"] > div') as HTMLElement;
     expect(bar.classList).toContain(lightClass);
     expect(bar.classList).toContain(darkClass);
+  });
+});
+
+describe('UiProgressBarComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiProgressBarComponent],
+      providers: [provideUiProgressBarLabels({ progress: 'Progression' })],
+    });
+  });
+
+  it('uses provided labels for the progress bar name', () => {
+    const fixture = TestBed.createComponent(UiProgressBarComponent);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('[role="progressbar"]').getAttribute('aria-label'),
+    ).toBe('Progression');
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiProgressBarComponent);
+    fixture.componentRef.setInput('label', 'Upload progress');
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('[role="progressbar"]').getAttribute('aria-label'),
+    ).toBe('Upload progress');
   });
 });

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { UiStepperComponent } from '../../../../stepper/src/stepper';
 import type { UiStepItem, UiStepperSelection } from '../../../../stepper/src/stepper';
+import { provideUiStepperLabels } from '../../../../stepper/src/stepper-labels';
 
 const STEPS: readonly UiStepItem[] = [
   { value: 'account', label: 'Account', description: 'Your details', completed: true },
@@ -139,5 +141,70 @@ describe('UiStepperComponent', () => {
     expect(current.id).toContain('-step-account');
     expect(panel.getAttribute('aria-labelledby')).toBe(current.id);
     expect(first.componentInstance.id).not.toBe(second.componentInstance.id);
+  });
+});
+
+describe('UiStepperComponent labels', () => {
+  function render(): ComponentFixture<UiStepperComponent> {
+    const fixture = TestBed.createComponent(UiStepperComponent);
+    fixture.componentRef.setInput('steps', STEPS);
+    fixture.componentRef.setInput('active', 'plan');
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function stepAriaLabels(element: HTMLElement): (string | null)[] {
+    return Array.from(element.querySelectorAll('button')).map((button) =>
+      button.getAttribute('aria-label'),
+    );
+  }
+
+  it('defaults to English labels without a provider', () => {
+    const fixture = render();
+    const nav = fixture.nativeElement.querySelector('nav') as HTMLElement;
+
+    expect(nav.getAttribute('aria-label')).toBe('Progress');
+    expect(stepAriaLabels(nav)).toEqual([
+      'Account, step 1 of 4, complete',
+      'Review, step 3 of 4, upcoming',
+    ]);
+    expect(nav.querySelectorAll('li')[2].textContent).toContain('Optional');
+  });
+
+  it('uses provided labels for the landmark, optional marker, and step announcement', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideUiStepperLabels({
+          navigation: 'Progression',
+          optional: 'Facultatif',
+          step: ({ label, position, total, status }) =>
+            `${label}, étape ${position} sur ${total}, ${status === 'complete' ? 'terminée' : status}`,
+        }),
+      ],
+    });
+    const fixture = render();
+    const nav = fixture.nativeElement.querySelector('nav') as HTMLElement;
+
+    expect(nav.getAttribute('aria-label')).toBe('Progression');
+    expect(stepAriaLabels(nav)).toEqual([
+      'Account, étape 1 sur 4, terminée',
+      'Review, étape 3 sur 4, upcoming',
+    ]);
+    expect(nav.querySelectorAll('li')[2].textContent).toContain('Facultatif');
+    expect(nav.textContent).not.toContain('Optional');
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    TestBed.configureTestingModule({
+      providers: [provideUiStepperLabels({ navigation: 'Progression' })],
+    });
+    const fixture = TestBed.createComponent(UiStepperComponent);
+    fixture.componentRef.setInput('steps', STEPS);
+    fixture.componentRef.setInput('ariaLabel', 'Checkout progress');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('nav').getAttribute('aria-label')).toBe(
+      'Checkout progress',
+    );
   });
 });

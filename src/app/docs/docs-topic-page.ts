@@ -114,6 +114,17 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
           'Documented focus handling for overlays',
         ],
       },
+      {
+        title: 'Translated built-in labels',
+        description:
+          'From 1.1.0, every component with built-in text exports a typed labels provider, so accessible names and status messages can be translated once per application.',
+        items: [
+          "Call provideUiModalLabels({ close: 'Fermer' }) and similar providers in bootstrapApplication",
+          'Providers merge partial overrides and can be scoped to a route or component',
+          'An explicit input on an instance still wins over provided labels',
+          'Counts, ranges, step positions, and file sizes are label functions, so translations control word order',
+        ],
+      },
     ],
   },
   theming: {

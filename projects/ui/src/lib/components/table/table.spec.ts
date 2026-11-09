@@ -7,6 +7,7 @@ import {
   UiTableComponent,
   UiTableHeaderDirective,
 } from '../../../../table/src/table';
+import { provideUiTableLabels } from '../../../../table/src/table-labels';
 
 describe('UiTableComponent', () => {
   const columns: readonly UiTableColumn[] = [
@@ -401,5 +402,105 @@ describe('UiTableComponent', () => {
     expect(headers[0].className).toContain('left-0');
     expect(headers[1].className).toContain('right-0');
     expect(fixture.nativeElement.querySelector('table')).not.toBeNull();
+  });
+
+  describe('labels', () => {
+    const keyedRows: readonly UiTableRow[] = [{ id: 'a1', name: 'NgNova', status: 'Ready' }];
+
+    function render(inputs: Record<string, unknown>): HTMLElement {
+      const fixture = TestBed.createComponent(UiTableComponent);
+      fixture.componentRef.setInput('columns', columns);
+      for (const [name, value] of Object.entries(inputs)) {
+        fixture.componentRef.setInput(name, value);
+      }
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    function text(element: Element | null | undefined): string | undefined {
+      return element?.textContent?.trim();
+    }
+
+    it('keeps the English pagination summary and status without a provider', () => {
+      const element = render({ rows: [], pageSize: 10, totalItems: 0 });
+
+      expect(text(element.querySelector('[aria-live]'))).toBe('0 items');
+      expect(text(element.querySelector('nav span'))).toBe('Page 1 of 1');
+    });
+
+    it('uses provided labels for states, selection, and pagination', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          provideUiTableLabels({
+            empty: 'Aucun enregistrement.',
+            loading: 'Chargement des enregistrements…',
+            error: 'Impossible de charger les enregistrements.',
+            selectionColumn: 'Sélection de ligne',
+            selectAll: 'Sélectionner toutes les lignes',
+            selectRow: 'Sélectionner la ligne',
+            pagination: 'Pagination du tableau',
+            previousText: 'Précédent',
+            nextText: 'Suivant',
+            previousPage: 'Page précédente',
+            nextPage: 'Page suivante',
+            paginationSummary: (start, end, total) =>
+              total === 0 ? 'Aucun élément' : `${start} à ${end} sur ${total}`,
+            pageStatus: (page, totalPages) => `Page ${page} sur ${totalPages}`,
+          }),
+        ],
+      });
+
+      const table = render({
+        rows: keyedRows,
+        rowKey: 'id',
+        selectionMode: 'multiple',
+        page: 2,
+        pageSize: 10,
+        totalItems: 23,
+      });
+      const nav = table.querySelector('nav') as HTMLElement;
+      const [previous, next] = Array.from(nav.querySelectorAll('button'));
+      const [selectAll, selectRow] = Array.from(table.querySelectorAll('input'));
+
+      expect(selectAll.getAttribute('aria-label')).toBe('Sélectionner toutes les lignes');
+      expect(selectRow.getAttribute('aria-label')).toBe('Sélectionner la ligne a1');
+      expect(nav.getAttribute('aria-label')).toBe('Pagination du tableau');
+      expect(text(table.querySelector('[aria-live]'))).toBe('11 à 11 sur 23');
+      expect(text(nav.querySelector('span'))).toBe('Page 2 sur 3');
+      expect(previous.getAttribute('aria-label')).toBe('Page précédente');
+      expect(text(previous)).toBe('Précédent');
+      expect(next.getAttribute('aria-label')).toBe('Page suivante');
+      expect(text(next)).toBe('Suivant');
+
+      const single = render({ rows: keyedRows, rowKey: 'id', selectionMode: 'single' });
+      expect(text(single.querySelector('th .sr-only'))).toBe('Sélection de ligne');
+
+      const empty = render({ rows: [], pageSize: 10, totalItems: 0 });
+      expect(text(empty.querySelector('[role="status"]'))).toBe('Aucun enregistrement.');
+      expect(text(empty.querySelector('[aria-live]'))).toBe('Aucun élément');
+      expect(text(render({ loading: true }).querySelector('[role="status"]'))).toBe(
+        'Chargement des enregistrements…',
+      );
+      expect(text(render({ error: true }).querySelector('[role="alert"]'))).toBe(
+        'Impossible de charger les enregistrements.',
+      );
+    });
+
+    it('lets explicit inputs win over provided labels', () => {
+      TestBed.configureTestingModule({
+        providers: [provideUiTableLabels({ empty: 'Aucun enregistrement.', nextText: 'Suivant' })],
+      });
+
+      const table = render({
+        rows: [],
+        emptyText: 'Nothing here yet.',
+        nextPageLabel: 'Forward',
+        pageSize: 10,
+        totalItems: 23,
+      });
+
+      expect(text(table.querySelector('[role="status"]'))).toBe('Nothing here yet.');
+      expect(text(table.querySelectorAll('nav button')[1])).toBe('Forward');
+    });
   });
 });

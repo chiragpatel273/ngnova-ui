@@ -3,12 +3,15 @@ import {
   Component,
   booleanAttribute,
   computed,
+  inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
 import type { ElementRef } from '@angular/core';
+
+import { UI_TREE_TABLE_LABELS } from './tree-table-labels';
 
 export type UiTreeTableAlign = 'left' | 'center' | 'right';
 export type UiTreeTableSortDirection = 'asc' | 'desc';
@@ -195,20 +198,22 @@ function flattenNodes(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTreeTableComponent {
+  private readonly labels = inject(UI_TREE_TABLE_LABELS);
+
   readonly columns = input<readonly UiTreeTableColumn[]>([]);
   readonly nodes = input<readonly UiTreeTableNode[]>([]);
   readonly expanded = input<readonly string[]>([]);
   readonly selected = input<string | null>(null);
   readonly sort = input<UiTreeTableSort | null>(null);
-  readonly caption = input('Tree table');
+  readonly caption = input(this.labels.caption);
   readonly loading = input(false, { transform: booleanAttribute });
   readonly error = input(false, { transform: booleanAttribute });
   readonly selectable = input(true, { transform: booleanAttribute });
-  readonly loadingText = input('Loading rows...');
-  readonly errorText = input('Unable to load rows.');
-  readonly emptyText = input('No rows found.');
-  readonly expandAriaLabel = input('Expand row');
-  readonly collapseAriaLabel = input('Collapse row');
+  readonly loadingText = input(this.labels.loading);
+  readonly errorText = input(this.labels.error);
+  readonly emptyText = input(this.labels.empty);
+  readonly expandAriaLabel = input(this.labels.expand);
+  readonly collapseAriaLabel = input(this.labels.collapse);
   readonly expandedChange = output<readonly string[]>();
   readonly selectedChange = output<string | null>();
   readonly sortChange = output<UiTreeTableSort>();

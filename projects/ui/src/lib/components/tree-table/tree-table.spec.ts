@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import type { UiTreeTableColumn, UiTreeTableNode } from '../../../../tree-table/src/tree-table';
 import { UiTreeTableComponent } from '../../../../tree-table/src/tree-table';
+import { provideUiTreeTableLabels } from '../../../../tree-table/src/tree-table-labels';
 
 describe('UiTreeTableComponent', () => {
   const columns: readonly UiTreeTableColumn[] = [
@@ -79,5 +80,62 @@ describe('UiTreeTableComponent', () => {
     fixture.componentRef.setInput('loading', true);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Loading');
+  });
+
+  describe('labels', () => {
+    function render(inputs: Record<string, unknown>): HTMLElement {
+      const fixture = TestBed.createComponent(UiTreeTableComponent);
+      fixture.componentRef.setInput('columns', columns);
+      for (const [name, value] of Object.entries(inputs)) {
+        fixture.componentRef.setInput(name, value);
+      }
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    function text(element: Element | null): string | undefined {
+      return element?.textContent?.trim();
+    }
+
+    it('uses provided labels for the caption, states, and expansion buttons', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          provideUiTreeTableLabels({
+            caption: 'Tableau arborescent',
+            loading: 'Chargement des lignes…',
+            error: 'Impossible de charger les lignes.',
+            empty: 'Aucune ligne.',
+            expand: 'Développer la ligne',
+            collapse: 'Réduire la ligne',
+          }),
+        ],
+      });
+
+      const tree = render({ nodes, expanded: ['components'] });
+      const toggles = tree.querySelectorAll('tbody button');
+      expect(tree.querySelector('table')?.getAttribute('aria-label')).toBe('Tableau arborescent');
+      expect(toggles[0].getAttribute('aria-label')).toBe('Réduire la ligne');
+      expect(toggles[1].getAttribute('aria-label')).toBe('Développer la ligne');
+
+      expect(text(render({}).querySelector('[role="status"]'))).toBe('Aucune ligne.');
+      expect(text(render({ loading: true }).querySelector('[role="status"]'))).toBe(
+        'Chargement des lignes…',
+      );
+      expect(text(render({ error: true }).querySelector('[role="alert"]'))).toBe(
+        'Impossible de charger les lignes.',
+      );
+    });
+
+    it('lets explicit inputs win over provided labels', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          provideUiTreeTableLabels({ caption: 'Tableau arborescent', empty: 'Aucune ligne.' }),
+        ],
+      });
+
+      const tree = render({ caption: 'Component inventory', emptyText: 'Nothing to show.' });
+      expect(tree.querySelector('table')?.getAttribute('aria-label')).toBe('Component inventory');
+      expect(text(tree.querySelector('[role="status"]'))).toBe('Nothing to show.');
+    });
   });
 });

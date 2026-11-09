@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UiAlertComponent } from '../../../../alert/src/alert';
+import { provideUiAlertLabels } from '../../../../alert/src/alert-labels';
 
 describe('UiAlertComponent', () => {
   beforeEach(async () => {
@@ -118,5 +119,33 @@ describe('UiAlertComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Reopenable');
+  });
+});
+
+describe('UiAlertComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiAlertComponent],
+      providers: [provideUiAlertLabels({ dismiss: "Fermer l'alerte" })],
+    });
+  });
+
+  it('uses provided labels for the dismiss button', () => {
+    const fixture = TestBed.createComponent(UiAlertComponent);
+    fixture.componentRef.setInput('dismissible', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      "Fermer l'alerte",
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiAlertComponent);
+    fixture.componentRef.setInput('dismissible', true);
+    fixture.componentRef.setInput('dismissAriaLabel', 'Hide warning');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      'Hide warning',
+    );
   });
 });

@@ -5,6 +5,7 @@ import {
   UiTableVirtualRowDirective,
   UiTableVirtualScrollComponent,
 } from '../../../../table-virtual-scroll/src/table-virtual-scroll';
+import { provideUiTableVirtualScrollLabels } from '../../../../table-virtual-scroll/src/table-virtual-scroll-labels';
 
 describe('UiTableVirtualScrollComponent', () => {
   const clientHeightDescriptor = Object.getOwnPropertyDescriptor(
@@ -90,5 +91,33 @@ describe('UiTableVirtualScrollComponent', () => {
     ) as HTMLElement;
     expect(viewport.getAttribute('aria-busy')).toBe('true');
     expect(viewport.getAttribute('role')).toBe('rowgroup');
+  });
+});
+
+describe('UiTableVirtualScrollComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiTableVirtualScrollComponent],
+      providers: [provideUiTableVirtualScrollLabels({ rows: 'Lignes du tableau' })],
+    });
+  });
+
+  it('uses provided labels for the row group', () => {
+    const fixture = TestBed.createComponent(UiTableVirtualScrollComponent);
+    fixture.componentRef.setInput('rows', ['one']);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('cdk-virtual-scroll-viewport').getAttribute('aria-label'),
+    ).toBe('Lignes du tableau');
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiTableVirtualScrollComponent);
+    fixture.componentRef.setInput('rows', ['one']);
+    fixture.componentRef.setInput('ariaLabel', 'Order rows');
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('cdk-virtual-scroll-viewport').getAttribute('aria-label'),
+    ).toBe('Order rows');
   });
 });

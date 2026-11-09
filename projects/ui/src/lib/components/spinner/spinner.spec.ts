@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { UiSpinnerComponent } from '../../../../spinner/src/spinner';
+import { provideUiSpinnerLabels } from '../../../../spinner/src/spinner-labels';
 
 describe('UiSpinnerComponent', () => {
   beforeEach(async () => {
@@ -52,5 +53,35 @@ describe('UiSpinnerComponent', () => {
     const spinner = fixture.nativeElement.querySelector('span') as HTMLSpanElement;
     expect(spinner.classList).toContain(dimensionClass);
     expect(spinner.classList).toContain(borderClass);
+  });
+
+  describe('labels', () => {
+    beforeEach(() => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [UiSpinnerComponent],
+        providers: [provideUiSpinnerLabels({ loading: 'Chargement' })],
+      });
+    });
+
+    it('uses provided labels for the default and the empty-label fallback', () => {
+      const fixture = TestBed.createComponent(UiSpinnerComponent);
+      fixture.detectChanges();
+      const spinner = fixture.nativeElement.querySelector('[role="status"]') as HTMLElement;
+      expect(spinner.getAttribute('aria-label')).toBe('Chargement');
+
+      fixture.componentRef.setInput('label', ' ');
+      fixture.detectChanges();
+      expect(spinner.getAttribute('aria-label')).toBe('Chargement');
+    });
+
+    it('lets an explicit input win over provided labels', () => {
+      const fixture = TestBed.createComponent(UiSpinnerComponent);
+      fixture.componentRef.setInput('label', 'Saving');
+      fixture.detectChanges();
+      expect(
+        fixture.nativeElement.querySelector('[role="status"]').getAttribute('aria-label'),
+      ).toBe('Saving');
+    });
   });
 });

@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { signal } from '@angular/core';
 
+import { UI_TOAST_LABELS } from './toast-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -156,10 +158,12 @@ export class UiToastService {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiToastComponent {
+  private readonly labels = inject(UI_TOAST_LABELS);
+
   readonly position = input<UiToastPosition>('top-right');
   readonly viewportOffset = input('var(--ui-toast-offset, 1rem)');
   readonly maxMessages = input(5, { transform: numberAttribute });
-  readonly dismissAriaLabel = input('Dismiss notification');
+  readonly dismissAriaLabel = input(this.labels.dismiss);
   protected readonly service = inject(UiToastService);
   protected readonly visibleMessages = computed(() => {
     const maximum = Math.max(1, Math.trunc(this.maxMessages()) || 1);

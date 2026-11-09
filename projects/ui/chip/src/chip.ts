@@ -1,5 +1,14 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, Input, output } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  output,
+} from '@angular/core';
+
+import { UI_CHIP_LABELS } from './chip-labels';
 
 export type UiChipVariant = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
 export type UiChipSize = 'sm' | 'md';
@@ -62,13 +71,15 @@ const SIZES: Record<UiChipSize, string> = { sm: 'min-h-7 text-xs', md: 'min-h-8 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiChipComponent {
+  private readonly labels = inject(UI_CHIP_LABELS);
+
   @Input() variant: UiChipVariant = 'neutral';
   @Input() size: UiChipSize = 'md';
   @Input({ transform: booleanAttribute }) selectable = false;
   @Input({ transform: booleanAttribute }) selected = false;
   @Input({ transform: booleanAttribute }) removable = false;
   @Input({ transform: booleanAttribute }) disabled = false;
-  @Input() removeAriaLabel = 'Remove';
+  @Input() removeAriaLabel = this.labels.remove;
   readonly selectedChange = output<boolean>();
   readonly removed = output<void>();
 

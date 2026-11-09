@@ -3,9 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  inject,
   numberAttribute,
   output,
 } from '@angular/core';
+
+import { UI_PAGINATOR_LABELS } from './paginator-labels';
 
 export type UiPaginatorItem = number | 'ellipsis-start' | 'ellipsis-end';
 
@@ -103,6 +106,8 @@ export type UiPaginatorItem = number | 'ellipsis-start' | 'ellipsis-end';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiPaginatorComponent {
+  private readonly labels = inject(UI_PAGINATOR_LABELS);
+
   @Input({ transform: numberAttribute }) page = 1;
   @Input({ transform: numberAttribute }) pageSize = 10;
   @Input({ transform: numberAttribute }) totalItems = 0;
@@ -110,18 +115,14 @@ export class UiPaginatorComponent {
   @Input({ transform: numberAttribute }) siblingCount = 1;
   @Input({ transform: booleanAttribute }) showFirstLast = true;
   @Input({ transform: booleanAttribute }) disabled = false;
-  @Input() ariaLabel = 'Pagination';
-  @Input() itemsPerPageLabel = 'Items per page';
-  @Input() firstPageAriaLabel = 'First page';
-  @Input() previousPageAriaLabel = 'Previous page';
-  @Input() nextPageAriaLabel = 'Next page';
-  @Input() lastPageAriaLabel = 'Last page';
-  @Input() getPageAriaLabel: (page: number) => string = (page) => `Page ${page}`;
-  @Input() getRangeLabel: (start: number, end: number, total: number) => string = (
-    start,
-    end,
-    total,
-  ) => `${start}–${end} of ${total}`;
+  @Input() ariaLabel = this.labels.navigation;
+  @Input() itemsPerPageLabel = this.labels.itemsPerPage;
+  @Input() firstPageAriaLabel = this.labels.firstPage;
+  @Input() previousPageAriaLabel = this.labels.previousPage;
+  @Input() nextPageAriaLabel = this.labels.nextPage;
+  @Input() lastPageAriaLabel = this.labels.lastPage;
+  @Input() getPageAriaLabel: (page: number) => string = this.labels.page;
+  @Input() getRangeLabel: (start: number, end: number, total: number) => string = this.labels.range;
   readonly pageChange = output<number>();
   readonly pageSizeChange = output<number>();
 

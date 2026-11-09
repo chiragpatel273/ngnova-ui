@@ -3,6 +3,7 @@ import {
   Component,
   booleanAttribute,
   computed,
+  inject,
   input,
   numberAttribute,
   output,
@@ -10,6 +11,8 @@ import {
   viewChild,
 } from '@angular/core';
 import type { ElementRef } from '@angular/core';
+
+import { UI_FILE_UPLOAD_LABELS } from './file-upload-labels';
 
 export type UiFileUploadRejectionReason =
   | 'file-type'
@@ -176,6 +179,8 @@ function matchesAccept(file: File, accept: string): boolean {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiFileUploadComponent {
+  private readonly labels = inject(UI_FILE_UPLOAD_LABELS);
+
   readonly files = input<readonly File[]>([]);
   readonly accept = input('');
   readonly multiple = input(true, { transform: booleanAttribute });
@@ -185,15 +190,15 @@ export class UiFileUploadComponent {
   readonly maxFileSize = input(0, { transform: numberAttribute });
   readonly maxTotalSize = input(0, { transform: numberAttribute });
   readonly progress = input<Readonly<Record<string, number>>>({});
-  readonly ariaLabel = input('File upload');
-  readonly chooseLabel = input('Choose files');
-  readonly dropLabel = input('Drop files here');
-  readonly helperText = input('or choose files from your device');
-  readonly clearLabel = input('Clear');
-  readonly uploadLabel = input('Upload');
-  readonly fileListAriaLabel = input('Selected files');
-  readonly removeAriaLabel = input('Remove');
-  readonly rejectionText = input('Some files could not be added.');
+  readonly ariaLabel = input(this.labels.region);
+  readonly chooseLabel = input(this.labels.choose);
+  readonly dropLabel = input(this.labels.drop);
+  readonly helperText = input(this.labels.helper);
+  readonly clearLabel = input(this.labels.clear);
+  readonly uploadLabel = input(this.labels.upload);
+  readonly fileListAriaLabel = input(this.labels.fileList);
+  readonly removeAriaLabel = input(this.labels.remove);
+  readonly rejectionText = input(this.labels.rejected);
   readonly filesChange = output<readonly File[]>();
   readonly rejected = output<readonly UiFileUploadRejection[]>();
   readonly uploadRequested = output<UiFileUploadRequest>();
@@ -289,9 +294,7 @@ export class UiFileUploadComponent {
   }
 
   protected formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    return this.labels.fileSize(bytes);
   }
 
   protected dropZoneClasses(): string {

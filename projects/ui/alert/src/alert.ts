@@ -2,11 +2,14 @@ import {
   ChangeDetectionStrategy,
   booleanAttribute,
   Component,
+  inject,
   Input,
   output,
   signal,
 } from '@angular/core';
 import type { OnChanges, SimpleChanges } from '@angular/core';
+
+import { UI_ALERT_LABELS } from './alert-labels';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -69,10 +72,12 @@ const VARIANT_CLASSES: Record<UiAlertVariant, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiAlertComponent implements OnChanges {
+  private readonly labels = inject(UI_ALERT_LABELS);
+
   @Input() variant: UiAlertVariant = 'info';
   @Input() title = '';
   @Input() ariaRole = '';
-  @Input() dismissAriaLabel = 'Dismiss alert';
+  @Input() dismissAriaLabel = this.labels.dismiss;
   @Input({ transform: booleanAttribute }) open = true;
   @Input({ transform: booleanAttribute }) dismissible = false;
   readonly openChange = output<boolean>();

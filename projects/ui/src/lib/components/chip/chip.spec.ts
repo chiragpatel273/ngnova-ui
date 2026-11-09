@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiChipComponent } from '../../../../chip/src/chip';
+import { provideUiChipLabels } from '../../../../chip/src/chip-labels';
 @Component({
   standalone: true,
   imports: [UiChipComponent],
@@ -49,5 +50,31 @@ describe('UiChipComponent', () => {
     expect(f.componentInstance.selected).toBe(false);
     expect(f.componentInstance.removed).toBe(false);
     expect(Array.from(buttons).every((b) => b.disabled)).toBe(true);
+  });
+});
+
+describe('UiChipComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiChipComponent],
+      providers: [provideUiChipLabels({ remove: 'Retirer' })],
+    });
+  });
+
+  it('uses provided labels for the remove button', () => {
+    const f = TestBed.createComponent(UiChipComponent);
+    f.componentRef.setInput('removable', true);
+    f.detectChanges();
+    expect(f.nativeElement.querySelector('button').getAttribute('aria-label')).toBe('Retirer');
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const f = TestBed.createComponent(UiChipComponent);
+    f.componentRef.setInput('removable', true);
+    f.componentRef.setInput('removeAriaLabel', 'Remove filter');
+    f.detectChanges();
+    expect(f.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      'Remove filter',
+    );
   });
 });

@@ -17,6 +17,7 @@ import {
   UiButtonIconEndDirective,
   UiButtonIconStartDirective,
 } from '../../../../button/src/button';
+import { provideUiButtonLabels } from '../../../../button/src/button-labels';
 
 @Component({
   standalone: true,
@@ -546,5 +547,31 @@ describe('UiButtonComponent', () => {
 
     expect(group.className).toContain('w-full');
     expect(group.className).toContain('[&_ui-button_button]:w-full');
+  });
+});
+
+describe('UiButtonComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiButtonComponent],
+      providers: [provideUiButtonLabels({ loading: 'Chargement' })],
+    });
+  });
+
+  it('uses provided labels for the loading announcement', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.detectChanges();
+    expect(buttonFixture.nativeElement.querySelector('.sr-only').textContent.trim()).toBe(
+      'Chargement',
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const buttonFixture = TestBed.createComponent(UiButtonComponent);
+    buttonFixture.componentRef.setInput('loading', true);
+    buttonFixture.componentRef.setInput('loadingLabel', 'Saving');
+    buttonFixture.detectChanges();
+    expect(buttonFixture.nativeElement.querySelector('.sr-only').textContent.trim()).toBe('Saving');
   });
 });

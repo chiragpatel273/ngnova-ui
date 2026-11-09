@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "1.0.1",
+  "packageVersion": "1.0.2",
   "angularPeer": ">=22.0.2 <23.0.0",
   "rootPolicy": "minimal",
   "entryPoints": {
@@ -17,8 +17,14 @@
     },
     "./alert": {
       "importPath": "@ngnova/ui/alert",
-      "symbols": ["UiAlertComponent", "UiAlertVariant"],
-      "signatureSha256": "c4f4fa44c4533edb6677bff04286c6d2ab5fe0d5ab0fb486973fb404e0e50594"
+      "symbols": [
+        "UI_ALERT_LABELS",
+        "UiAlertComponent",
+        "UiAlertLabels",
+        "UiAlertVariant",
+        "provideUiAlertLabels"
+      ],
+      "signatureSha256": "59028e896a57fbab8b99a61ee7cc5cb16a87b774a7ced6604b4bb5114100a365"
     },
     "./avatar": {
       "importPath": "@ngnova/ui/avatar",
@@ -33,16 +39,20 @@
     "./breadcrumb": {
       "importPath": "@ngnova/ui/breadcrumb",
       "symbols": [
+        "UI_BREADCRUMB_LABELS",
         "UiBreadcrumbComponent",
         "UiBreadcrumbDisplayItem",
         "UiBreadcrumbItem",
-        "UiBreadcrumbSelection"
+        "UiBreadcrumbLabels",
+        "UiBreadcrumbSelection",
+        "provideUiBreadcrumbLabels"
       ],
-      "signatureSha256": "0329ad75520b55f3c92b2793b2b06a93c515727bbc4c35c9a6939cc367fa785f"
+      "signatureSha256": "ace33695025b8c6e266c1bb2c3ef78153c89ec57726909a39afe4e4759f58ffb"
     },
     "./button": {
       "importPath": "@ngnova/ui/button",
       "symbols": [
+        "UI_BUTTON_LABELS",
         "UiButtonAppearance",
         "UiButtonComponent",
         "UiButtonDirective",
@@ -51,11 +61,13 @@
         "UiButtonIconEndDirective",
         "UiButtonIconStartDirective",
         "UiButtonIntent",
+        "UiButtonLabels",
         "UiButtonSize",
         "UiButtonType",
-        "UiButtonVariant"
+        "UiButtonVariant",
+        "provideUiButtonLabels"
       ],
-      "signatureSha256": "f3b2b30629694872aa03a17345b0082855113ce638c591c3f2969c6d56999839"
+      "signatureSha256": "746cdc3da843795b1b842a6e63d7e2cbb7853ad07729331c08d5b20d897306d8"
     },
     "./card": {
       "importPath": "@ngnova/ui/card",
@@ -69,53 +81,83 @@
     },
     "./chip": {
       "importPath": "@ngnova/ui/chip",
-      "symbols": ["UiChipComponent", "UiChipSize", "UiChipVariant"],
-      "signatureSha256": "d8011ad5d0368843641d64ac628c859a444f0e5b0344d3d18f47b70892bc1285"
+      "symbols": [
+        "UI_CHIP_LABELS",
+        "UiChipComponent",
+        "UiChipLabels",
+        "UiChipSize",
+        "UiChipVariant",
+        "provideUiChipLabels"
+      ],
+      "signatureSha256": "af2d849c6fd3c37a3cc72836c110c7c2744036d6d085fe7f4934c9612c27849f"
     },
     "./combobox": {
       "importPath": "@ngnova/ui/combobox",
       "symbols": [
+        "UI_COMBOBOX_LABELS",
         "UiComboboxComponent",
+        "UiComboboxLabels",
         "UiComboboxOption",
         "UiComboboxSelection",
-        "UiComboboxSize"
+        "UiComboboxSize",
+        "provideUiComboboxLabels"
       ],
-      "signatureSha256": "0f3f664fe83902abd5b54156e7e0911e867264da7d1aceb656963594d3460edf"
+      "signatureSha256": "f1557b26b0d9d48b9ae72015ea921ddea1157398df4413ebafe6d12e1177ba27"
     },
     "./command-palette": {
       "importPath": "@ngnova/ui/command-palette",
-      "symbols": ["UiCommand", "UiCommandPaletteComponent", "UiCommandSelection"],
-      "signatureSha256": "7aac53747a812bb5851abac11b47f98f1c760b0b064495e646a5d4623f8feff9"
+      "symbols": [
+        "UI_COMMAND_PALETTE_LABELS",
+        "UiCommand",
+        "UiCommandPaletteComponent",
+        "UiCommandPaletteLabels",
+        "UiCommandSelection",
+        "provideUiCommandPaletteLabels"
+      ],
+      "signatureSha256": "6b28da0f75aadcff16c83adad5246088de102063813e1a66223eb0fffc33a55e"
     },
     "./confirmation": {
       "importPath": "@ngnova/ui/confirmation",
       "symbols": [
+        "UI_CONFIRMATION_LABELS",
         "UiConfirmationDialogComponent",
         "UiConfirmationIntent",
+        "UiConfirmationLabels",
         "UiConfirmationOptions",
         "UiConfirmationReason",
         "UiConfirmationRequest",
         "UiConfirmationResult",
-        "UiConfirmationService"
+        "UiConfirmationService",
+        "provideUiConfirmationLabels"
       ],
-      "signatureSha256": "977680e9e5d9e97eb8864205d621cb22cf7669333d14b1925d30eda56e269d74"
+      "signatureSha256": "0cdcb5775cee2472fa9a642eef5acb0f81cd0047e8b96544515e85682d39e14c"
     },
     "./data-view": {
       "importPath": "@ngnova/ui/data-view",
       "symbols": [
+        "UI_DATA_VIEW_LABELS",
         "UiDataViewComponent",
         "UiDataViewGap",
         "UiDataViewItemContext",
         "UiDataViewItemDirective",
+        "UiDataViewLabels",
         "UiDataViewLayout",
-        "UiDataViewTrackBy"
+        "UiDataViewTrackBy",
+        "provideUiDataViewLabels"
       ],
-      "signatureSha256": "58ab05d85603def9223eccc57a2ff8691ee390ae881b046050efa3d7b03b5b8e"
+      "signatureSha256": "338b5b5fa65f08cd7b128209174908170c239d06910743b1b17309e3f36b41c5"
     },
     "./date-picker": {
       "importPath": "@ngnova/ui/date-picker",
-      "symbols": ["UiDatePickerComponent", "UiDatePickerSelection", "UiDatePickerSize"],
-      "signatureSha256": "a0c1977235317878fcc9fd0ba83f5ef0062b6c75470e6ec9cd2ebb7e3ea5e541"
+      "symbols": [
+        "UI_DATE_PICKER_LABELS",
+        "UiDatePickerComponent",
+        "UiDatePickerLabels",
+        "UiDatePickerSelection",
+        "UiDatePickerSize",
+        "provideUiDatePickerLabels"
+      ],
+      "signatureSha256": "18ad7612b3e96e074e50ccfed8d560313640ad82fe9a61199a6138b3fdbe4dc8"
     },
     "./divider": {
       "importPath": "@ngnova/ui/divider",
@@ -125,23 +167,29 @@
     "./drawer": {
       "importPath": "@ngnova/ui/drawer",
       "symbols": [
+        "UI_DRAWER_LABELS",
         "UiDrawerComponent",
         "UiDrawerFooterDirective",
         "UiDrawerHeaderDirective",
+        "UiDrawerLabels",
         "UiDrawerPosition",
-        "UiDrawerSize"
+        "UiDrawerSize",
+        "provideUiDrawerLabels"
       ],
-      "signatureSha256": "54b3e9fb37359b18ac9b4e5945a24cb76d229f6f4211d0d9c872ca039f543806"
+      "signatureSha256": "e0a491a27af8af91c7951aa5cbbbf765255f0b9c142fce9f7ebc669a6956fc16"
     },
     "./file-upload": {
       "importPath": "@ngnova/ui/file-upload",
       "symbols": [
+        "UI_FILE_UPLOAD_LABELS",
         "UiFileUploadComponent",
+        "UiFileUploadLabels",
         "UiFileUploadRejection",
         "UiFileUploadRejectionReason",
-        "UiFileUploadRequest"
+        "UiFileUploadRequest",
+        "provideUiFileUploadLabels"
       ],
-      "signatureSha256": "59390fd74964755841a4526aabccb2cc12e538a6bee10f946541b02c7a1073f8"
+      "signatureSha256": "7deac789000b0d3b934f32966101acec6760419db5cc38fe6efe6b43dcab4779"
     },
     "./form-field": {
       "importPath": "@ngnova/ui/form-field",
@@ -158,31 +206,43 @@
     "./input": {
       "importPath": "@ngnova/ui/input",
       "symbols": [
+        "UI_INPUT_LABELS",
         "UiInputAppearance",
         "UiInputComponent",
         "UiInputCounterMode",
         "UiInputIntent",
         "UiInputLabelMode",
+        "UiInputLabels",
         "UiInputSize",
-        "UiInputType"
+        "UiInputType",
+        "provideUiInputLabels"
       ],
-      "signatureSha256": "e6bc39f991f430259d133a0ecb4398d880c7eb5ee32e73923462b56cd26aff36"
+      "signatureSha256": "7611613654af3fbed374925e4c93182203d4d8f5237e055ad2d4066b4b7fe7b6"
     },
     "./menu": {
       "importPath": "@ngnova/ui/menu",
       "symbols": [
+        "UI_MENU_LABELS",
         "UiMenuAlign",
         "UiMenuComponent",
         "UiMenuItem",
+        "UiMenuLabels",
         "UiMenuSelection",
-        "UiMenuTriggerDirective"
+        "UiMenuTriggerDirective",
+        "provideUiMenuLabels"
       ],
-      "signatureSha256": "0308a26585f63825f14b79ccc86c1a60e90eb353de3649aafa9d453a94b096f8"
+      "signatureSha256": "c9037c86371518c3fb04c04722f8c98d4d24cf0d9fb2e9bd8d714dc69ca344cb"
     },
     "./modal": {
       "importPath": "@ngnova/ui/modal",
-      "symbols": ["UiModalComponent", "UiModalSize"],
-      "signatureSha256": "d040a79c57b8d6a45a072971409e54c865aaa36bf05a9d797989f772d0637f79"
+      "symbols": [
+        "UI_MODAL_LABELS",
+        "UiModalComponent",
+        "UiModalLabels",
+        "UiModalSize",
+        "provideUiModalLabels"
+      ],
+      "signatureSha256": "16c40a1e54913c57b7b000c47eea2d3b2ecadd184c874315099d1791371a6af1"
     },
     "./overlay": {
       "importPath": "@ngnova/ui/overlay",
@@ -201,8 +261,14 @@
     },
     "./paginator": {
       "importPath": "@ngnova/ui/paginator",
-      "symbols": ["UiPaginatorComponent", "UiPaginatorItem"],
-      "signatureSha256": "dc38e92c3dd44f834ae468be099b88c71fa7c7cb876a5e2ad9288420dc9f2e34"
+      "symbols": [
+        "UI_PAGINATOR_LABELS",
+        "UiPaginatorComponent",
+        "UiPaginatorItem",
+        "UiPaginatorLabels",
+        "provideUiPaginatorLabels"
+      ],
+      "signatureSha256": "607deb1d7f804fdf185476ea216801ddb9c18f00631283fcb1ed530711e62414"
     },
     "./popover": {
       "importPath": "@ngnova/ui/popover",
@@ -216,8 +282,14 @@
     },
     "./progress-bar": {
       "importPath": "@ngnova/ui/progress-bar",
-      "symbols": ["UiProgressBarComponent", "UiProgressBarVariant"],
-      "signatureSha256": "3b7b415c4da254d57dcca20102b28d1e0e742021f72a70f1b649c534ecd76889"
+      "symbols": [
+        "UI_PROGRESS_BAR_LABELS",
+        "UiProgressBarComponent",
+        "UiProgressBarLabels",
+        "UiProgressBarVariant",
+        "provideUiProgressBarLabels"
+      ],
+      "signatureSha256": "38b945ffd64871da9f3250dfd25cf2769694e692c045f0282ccaae509fd7fce9"
     },
     "./radio": {
       "importPath": "@ngnova/ui/radio",
@@ -236,19 +308,29 @@
     },
     "./spinner": {
       "importPath": "@ngnova/ui/spinner",
-      "symbols": ["UiSpinnerComponent", "UiSpinnerSize"],
-      "signatureSha256": "7e66683610fcef4e233a1cb9e73f98a48908ef3d64f27ea0fcc51d8b9f637d7c"
+      "symbols": [
+        "UI_SPINNER_LABELS",
+        "UiSpinnerComponent",
+        "UiSpinnerLabels",
+        "UiSpinnerSize",
+        "provideUiSpinnerLabels"
+      ],
+      "signatureSha256": "8b0ddd77140c4ecbd421b2551276e8d9f70b31125cbe61fa3425064eae154f63"
     },
     "./stepper": {
       "importPath": "@ngnova/ui/stepper",
       "symbols": [
+        "UI_STEPPER_LABELS",
         "UiStepItem",
         "UiStepState",
         "UiStepperComponent",
+        "UiStepperLabels",
         "UiStepperOrientation",
-        "UiStepperSelection"
+        "UiStepperSelection",
+        "UiStepperStepLabelContext",
+        "provideUiStepperLabels"
       ],
-      "signatureSha256": "168759ff490523d9d17994625f197ffb05810b9881bdf53bb9c815041d180a6c"
+      "signatureSha256": "3a04b1e418e34357638dd4fe8a28367b02f1c03470143f8b8521fa3bf41920ae"
     },
     "./switch": {
       "importPath": "@ngnova/ui/switch",
@@ -258,6 +340,7 @@
     "./table": {
       "importPath": "@ngnova/ui/table",
       "symbols": [
+        "UI_TABLE_LABELS",
         "UiTableAlign",
         "UiTableCellContext",
         "UiTableCellDirective",
@@ -265,13 +348,15 @@
         "UiTableComponent",
         "UiTableHeaderContext",
         "UiTableHeaderDirective",
+        "UiTableLabels",
         "UiTableRow",
         "UiTableRowKey",
         "UiTableSelectionMode",
         "UiTableSort",
-        "UiTableSortDirection"
+        "UiTableSortDirection",
+        "provideUiTableLabels"
       ],
-      "signatureSha256": "59386bf8da9808a98a85b9fa2bc61f50bf174b6aca7e480559a266d669cdc301"
+      "signatureSha256": "080a68fe8cf1789200a2be1805511185011360d28029f462d754f9f77ad26480"
     },
     "./table-state": {
       "importPath": "@ngnova/ui/table-state",
@@ -289,23 +374,42 @@
     "./table-virtual-scroll": {
       "importPath": "@ngnova/ui/table-virtual-scroll",
       "symbols": [
+        "UI_TABLE_VIRTUAL_SCROLL_LABELS",
         "UiTableVirtualRowContext",
         "UiTableVirtualRowDirective",
         "UiTableVirtualScrollBehavior",
         "UiTableVirtualScrollComponent",
-        "UiTableVirtualTrackBy"
+        "UiTableVirtualScrollLabels",
+        "UiTableVirtualTrackBy",
+        "provideUiTableVirtualScrollLabels"
       ],
-      "signatureSha256": "070c3c1a2f7b93ad118b99633abe5f4cbdc7f45d459fda75b790886b870220c4"
+      "signatureSha256": "9ae18576943bcef0c65a305784828a509d65e6e14b650b4843683b824ff70b72"
     },
     "./tabs": {
       "importPath": "@ngnova/ui/tabs",
-      "symbols": ["UiTabItem", "UiTabsComponent", "UiTabsOrientation", "UiTabsVariant"],
-      "signatureSha256": "295248be6bbde4442c40441f9bef7871621374e7c72e251151dce22eb16542e1"
+      "symbols": [
+        "UI_TABS_LABELS",
+        "UiTabItem",
+        "UiTabsComponent",
+        "UiTabsLabels",
+        "UiTabsOrientation",
+        "UiTabsVariant",
+        "provideUiTabsLabels"
+      ],
+      "signatureSha256": "eb11c2177e8e1d97aa2918ef258d05c6ac5a378ae71c9eafc1a52cc373d78f35"
     },
     "./tag": {
       "importPath": "@ngnova/ui/tag",
-      "symbols": ["UiTagComponent", "UiTagIconDirective", "UiTagSize", "UiTagVariant"],
-      "signatureSha256": "ebe408eb3ab0a3c842b5f51cfc3d5ac60d9d7849c76f329a3d83d5b63c7e3b75"
+      "symbols": [
+        "UI_TAG_LABELS",
+        "UiTagComponent",
+        "UiTagIconDirective",
+        "UiTagLabels",
+        "UiTagSize",
+        "UiTagVariant",
+        "provideUiTagLabels"
+      ],
+      "signatureSha256": "888b9c566fe71a1af4e714614b94d6c26d992de68a0b1093e5d3bcb0601daa8b"
     },
     "./testing": {
       "importPath": "@ngnova/ui/testing",
@@ -380,24 +484,30 @@
     "./textarea": {
       "importPath": "@ngnova/ui/textarea",
       "symbols": [
+        "UI_TEXTAREA_LABELS",
         "UiTextareaAppearance",
         "UiTextareaComponent",
+        "UiTextareaLabels",
         "UiTextareaResize",
-        "UiTextareaSize"
+        "UiTextareaSize",
+        "provideUiTextareaLabels"
       ],
-      "signatureSha256": "f5e74fbe4cd2e37f742006b76691617b5ce99d86c1175a585449611040569bd8"
+      "signatureSha256": "a46c0eed40b7596644aa7531d26820877712098b0ab8119bb915d6b287f80466"
     },
     "./toast": {
       "importPath": "@ngnova/ui/toast",
       "symbols": [
+        "UI_TOAST_LABELS",
         "UiToastComponent",
         "UiToastInput",
+        "UiToastLabels",
         "UiToastMessage",
         "UiToastPosition",
         "UiToastService",
-        "UiToastVariant"
+        "UiToastVariant",
+        "provideUiToastLabels"
       ],
-      "signatureSha256": "57cdd2d7b8daa60781a233203e27e2509c0e4f99da2480759b413065c90f6416"
+      "signatureSha256": "3a6fde1b60cb3d60120bde6378067b09fad1abef5c288bcd66caafaa44a9c2e3"
     },
     "./tooltip": {
       "importPath": "@ngnova/ui/tooltip",
@@ -406,21 +516,31 @@
     },
     "./tree": {
       "importPath": "@ngnova/ui/tree",
-      "symbols": ["UiTreeComponent", "UiTreeNode", "UiTreeVisibleNode"],
-      "signatureSha256": "b2cd243e254f2651a4bb8bca12231d372df2aff81a552fda6eafdd8b4c7c507b"
+      "symbols": [
+        "UI_TREE_LABELS",
+        "UiTreeComponent",
+        "UiTreeLabels",
+        "UiTreeNode",
+        "UiTreeVisibleNode",
+        "provideUiTreeLabels"
+      ],
+      "signatureSha256": "141b821b83a5eca5d7cb7e0622118dafa2fda6817fc007c06d4f0263317ee60e"
     },
     "./tree-table": {
       "importPath": "@ngnova/ui/tree-table",
       "symbols": [
+        "UI_TREE_TABLE_LABELS",
         "UiTreeTableAlign",
         "UiTreeTableColumn",
         "UiTreeTableComponent",
+        "UiTreeTableLabels",
         "UiTreeTableNode",
         "UiTreeTableSort",
         "UiTreeTableSortDirection",
-        "UiTreeTableVisibleNode"
+        "UiTreeTableVisibleNode",
+        "provideUiTreeTableLabels"
       ],
-      "signatureSha256": "78958fe54beec30fd938ae75e38b6f0418e2cb0af7436b15c67d602bb4477a43"
+      "signatureSha256": "cc401da2b30206ec5b9e9db41ea8ddd59363d7cc215422c6d08083837edc237a"
     }
   }
 }

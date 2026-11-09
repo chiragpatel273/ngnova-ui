@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { UiDatePickerComponent } from '../../../../date-picker/src/date-picker';
 import type { UiDatePickerSelection } from '../../../../date-picker/src/date-picker';
+import { provideUiDatePickerLabels } from '../../../../date-picker/src/date-picker-labels';
 
 @Component({
   standalone: true,
@@ -168,5 +169,47 @@ describe('UiDatePickerComponent', () => {
     expect(headers[0].getAttribute('aria-label')).toBe('Monday');
     expect(fixture.nativeElement.querySelectorAll('[role="gridcell"]')).toHaveLength(42);
     expect(fixture.nativeElement.querySelectorAll('[data-date]').length).toBeLessThan(42);
+  });
+});
+
+describe('UiDatePickerComponent labels', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiDatePickerComponent],
+      providers: [
+        provideUiDatePickerLabels({
+          placeholder: 'Choisir une date',
+          previousMonth: 'Mois précédent',
+          today: "Aujourd'hui",
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  it('uses provided labels', () => {
+    const fixture = TestBed.createComponent(UiDatePickerComponent);
+    fixture.componentRef.setInput('startAt', '2026-06-01');
+    fixture.componentRef.setInput('open', true);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const dialog = element.querySelector('[role="dialog"]') as HTMLElement;
+
+    expect(element.querySelector('input')?.getAttribute('placeholder')).toBe('Choisir une date');
+    expect(dialog.getAttribute('aria-label')).toBe('Choose date');
+    expect(dialog.querySelector('button[aria-label="Mois précédent"]')).not.toBeNull();
+    expect(dialog.textContent).toContain("Aujourd'hui");
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiDatePickerComponent);
+    fixture.componentRef.setInput('placeholder', 'Pick a day');
+    fixture.componentRef.setInput('todayText', 'Now');
+    fixture.componentRef.setInput('open', true);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('input')?.getAttribute('placeholder')).toBe('Pick a day');
+    expect(element.querySelector('[role="dialog"]')?.textContent).toContain('Now');
+    expect(element.querySelector('[role="dialog"]')?.textContent).not.toContain("Aujourd'hui");
   });
 });

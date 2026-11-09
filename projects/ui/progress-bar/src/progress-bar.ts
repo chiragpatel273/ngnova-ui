@@ -3,9 +3,12 @@ import {
   Component,
   booleanAttribute,
   computed,
+  inject,
   input,
   numberAttribute,
 } from '@angular/core';
+
+import { UI_PROGRESS_BAR_LABELS } from './progress-bar-labels';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -39,9 +42,11 @@ const BAR_CLASSES: Record<UiProgressBarVariant, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiProgressBarComponent {
+  private readonly labels = inject(UI_PROGRESS_BAR_LABELS);
+
   readonly value = input(0, { transform: numberAttribute });
   readonly max = input(100, { transform: numberAttribute });
-  readonly label = input('Progress');
+  readonly label = input(this.labels.progress);
   readonly ariaValueText = input('');
   readonly variant = input<UiProgressBarVariant>('primary');
   readonly indeterminate = input(false, { transform: booleanAttribute });

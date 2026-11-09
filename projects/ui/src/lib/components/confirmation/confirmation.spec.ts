@@ -11,6 +11,7 @@ import type {
   UiConfirmationOptions,
   UiConfirmationResult,
 } from '../../../../confirmation/src/confirmation';
+import { provideUiConfirmationLabels } from '../../../../confirmation/src/confirmation-labels';
 
 @Component({
   standalone: true,
@@ -183,6 +184,19 @@ describe('UiConfirmationDialogComponent and UiConfirmationService', () => {
     expect(service.pendingCount()).toBe(0);
   });
 
+  it('announces queued confirmations in English by default', async () => {
+    void service.confirm({ title: 'First', message: 'First request' });
+    void service.confirm({ title: 'Second', message: 'Second request' });
+    void service.confirm({ title: 'Third', message: 'Third request' });
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const status = fixture.debugElement.query(By.css('[aria-live="polite"]'))
+      .nativeElement as HTMLElement;
+    expect(status.textContent?.trim()).toBe('2 more confirmations pending');
+    service.cancelAll();
+  });
+
   it('resolves pending work when its application-shell host is destroyed', async () => {
     const shell = TestBed.createComponent(HostComponent);
     shell.detectChanges();
@@ -196,5 +210,60 @@ describe('UiConfirmationDialogComponent and UiConfirmationService', () => {
 
     expect((await resultPromise).reason).toBe('destroyed');
     expect(service.current()).toBeNull();
+  });
+});
+
+describe('UiConfirmationDialogComponent labels', () => {
+  let fixture: ComponentFixture<UiConfirmationDialogComponent>;
+  let service: UiConfirmationService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiConfirmationDialogComponent],
+      providers: [
+        provideUiConfirmationLabels({
+          cancel: 'Annuler',
+          pendingConfirmations: (count) => `Encore ${count} confirmation(s) en attente`,
+        }),
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(UiConfirmationDialogComponent);
+    service = TestBed.inject(UiConfirmationService);
+  });
+
+  afterEach(() => fixture.destroy());
+
+  function openQueue(): HTMLElement {
+    void service.confirm({ title: 'First', message: 'First request' });
+    void service.confirm({ title: 'Second', message: 'Second request' });
+    fixture.detectChanges();
+    return fixture.nativeElement.querySelector('[role="alertdialog"]') as HTMLElement;
+  }
+
+  it('uses provided labels for button text and the pending count', () => {
+    const dialog = openQueue();
+
+    expect(dialog.querySelector('button')?.textContent?.trim()).toBe('Annuler');
+    expect(dialog.querySelector('[aria-live="polite"]')?.textContent?.trim()).toBe(
+      'Encore 1 confirmation(s) en attente',
+    );
+  });
+
+  it('lets explicit inputs and request fields win over provided labels', () => {
+    fixture.componentRef.setInput('cancelLabel', 'Dismiss');
+    fixture.componentRef.setInput('queueLabel', 'queued');
+    void service.confirm({ title: 'First', message: 'First request', cancelLabel: 'Keep' });
+    void service.confirm({ title: 'Second', message: 'Second request' });
+    fixture.detectChanges();
+    const dialog = fixture.nativeElement.querySelector('[role="alertdialog"]') as HTMLElement;
+
+    expect(dialog.querySelector('button')?.textContent?.trim()).toBe('Keep');
+    expect(dialog.querySelector('[aria-live="polite"]')?.textContent?.trim()).toBe('1 queued');
+
+    service.respond('cancel');
+    void service.confirm({ title: 'Third', message: 'Third request' });
+    fixture.detectChanges();
+    const next = fixture.nativeElement.querySelector('[role="alertdialog"]') as HTMLElement;
+    expect(next.querySelector('button')?.textContent?.trim()).toBe('Dismiss');
   });
 });

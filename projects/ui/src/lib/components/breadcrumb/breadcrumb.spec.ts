@@ -5,6 +5,7 @@ import type {
   UiBreadcrumbItem,
   UiBreadcrumbSelection,
 } from '../../../../breadcrumb/src/breadcrumb';
+import { provideUiBreadcrumbLabels } from '../../../../breadcrumb/src/breadcrumb-labels';
 
 const ITEMS: readonly UiBreadcrumbItem[] = [
   { label: 'Home', href: '/' },
@@ -76,5 +77,29 @@ describe('UiBreadcrumbComponent', () => {
     const current = fixture.nativeElement.querySelectorAll('[aria-current="page"]');
     expect(current).toHaveLength(1);
     expect(current[0].textContent.trim()).toBe('Components');
+  });
+});
+
+describe('UiBreadcrumbComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiBreadcrumbComponent],
+      providers: [provideUiBreadcrumbLabels({ navigation: "Fil d'Ariane" })],
+    });
+  });
+
+  it('uses provided labels for the navigation landmark', () => {
+    const fixture = TestBed.createComponent(UiBreadcrumbComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('nav').getAttribute('aria-label')).toBe(
+      "Fil d'Ariane",
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiBreadcrumbComponent);
+    fixture.componentRef.setInput('ariaLabel', 'Location');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('nav').getAttribute('aria-label')).toBe('Location');
   });
 });

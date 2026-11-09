@@ -357,8 +357,10 @@ discovery and first-run friction, not component quality.
        legacy `#/` links. Follow-up: Open Graph preview images, Search Console sitemap submission.
 6. [ ] NgNova UI MCP server exposing component search, API lookup, and examples from the same data
        as `llms-full.txt`.
-7. [ ] Internationalization: a typed `provideNgNovaLabels()` contract replacing hard-coded English
-       accessible names (for example "Next page", "Clear date", "Remove"), plus locale-aware dates.
+7. [x] Internationalization: per-entry-point typed labels providers (ADR 0004) for 26
+       components, making every built-in English string replaceable, including formerly fixed
+       Stepper, Table, Spinner, Combobox, File Upload, Input, and Textarea text. Date Picker keeps
+       its `locale` input for Intl formatting.
 8. [ ] Right-to-left support: logical properties, `Directionality`-aware keyboard handling, and RTL
        visual regression states.
 9. [ ] Public launch: release post, Angular community channels, and the Phase 6 external quick-start

@@ -3,6 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { UiTagComponent, UiTagIconDirective } from '../../../../tag/src/tag';
+import { provideUiTagLabels } from '../../../../tag/src/tag-labels';
 
 @Component({
   standalone: true,
@@ -87,5 +88,33 @@ describe('UiTagComponent', () => {
     const tag = fixture.nativeElement.querySelector('span') as HTMLSpanElement;
     expect(tag.classList).toContain(paddingClass);
     expect(tag.classList).toContain(textClass);
+  });
+});
+
+describe('UiTagComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiTagComponent],
+      providers: [provideUiTagLabels({ remove: "Supprimer l'étiquette" })],
+    });
+  });
+
+  it('uses provided labels for the remove button', () => {
+    const fixture = TestBed.createComponent(UiTagComponent);
+    fixture.componentRef.setInput('removable', true);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      "Supprimer l'étiquette",
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiTagComponent);
+    fixture.componentRef.setInput('removable', true);
+    fixture.componentRef.setInput('removeLabel', 'Remove Angular');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      'Remove Angular',
+    );
   });
 });

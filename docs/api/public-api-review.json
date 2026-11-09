@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "reviewedPackageVersion": "1.0.1",
+  "reviewedPackageVersion": "1.0.2",
   "stabilityStage": "stable-1.0",
-  "reviewedOn": "2026-08-25",
-  "baselineSha256": "2f7e4432cfb1e7a188557e963ba9737aa8f59cb09fa79cdc8bd24c5a49196c00",
+  "reviewedOn": "2026-11-09",
+  "baselineSha256": "68fce00bb0f78c9cbf0ab710e25c87e312a1e77174977fd8e1619c403b7a100f",
   "breakingChangeLedger": "../PUBLIC_API_COMPATIBILITY.md",
   "undocumentedBreakingChanges": []
 }

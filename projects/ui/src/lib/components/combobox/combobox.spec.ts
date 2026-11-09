@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { UiComboboxComponent } from '../../../../combobox/src/combobox';
 import type { UiComboboxOption, UiComboboxSelection } from '../../../../combobox/src/combobox';
+import { provideUiComboboxLabels } from '../../../../combobox/src/combobox-labels';
 
 const OPTIONS: readonly UiComboboxOption[] = [
   { value: 'angular', label: 'Angular', description: 'Application framework' },
@@ -142,6 +143,48 @@ describe('UiComboboxComponent', () => {
     fixture.componentRef.setInput('noResultsText', 'Nothing matches');
     fixture.detectChanges();
     listbox = fixture.nativeElement.querySelector('[role="listbox"]') as HTMLElement;
+    expect(listbox.querySelector('[role="status"]')?.textContent).toContain('Nothing matches');
+  });
+});
+
+describe('UiComboboxComponent labels', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiComboboxComponent],
+      providers: [
+        provideUiComboboxLabels({
+          noResults: 'Aucun résultat',
+          open: 'Ouvrir les suggestions',
+          suggestions: 'Propositions',
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  it('uses provided labels, including the listbox fallback name', () => {
+    const fixture = TestBed.createComponent(UiComboboxComponent);
+    fixture.componentRef.setInput('options', []);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label="Ouvrir les suggestions"]'),
+    ).not.toBeNull();
+
+    fixture.componentRef.setInput('open', true);
+    fixture.detectChanges();
+    const listbox = fixture.nativeElement.querySelector('[role="listbox"]') as HTMLElement;
+    expect(listbox.getAttribute('aria-label')).toBe('Propositions');
+    expect(listbox.querySelector('[role="status"]')?.textContent).toContain('Aucun résultat');
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiComboboxComponent);
+    fixture.componentRef.setInput('options', []);
+    fixture.componentRef.setInput('open', true);
+    fixture.componentRef.setInput('noResultsText', 'Nothing matches');
+    fixture.componentRef.setInput('ariaLabel', 'Frameworks');
+    fixture.detectChanges();
+    const listbox = fixture.nativeElement.querySelector('[role="listbox"]') as HTMLElement;
+    expect(listbox.getAttribute('aria-label')).toBe('Frameworks');
     expect(listbox.querySelector('[role="status"]')?.textContent).toContain('Nothing matches');
   });
 });

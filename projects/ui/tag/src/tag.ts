@@ -4,9 +4,12 @@ import {
   Directive,
   booleanAttribute,
   computed,
+  inject,
   input,
   output,
 } from '@angular/core';
+
+import { UI_TAG_LABELS } from './tag-labels';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -83,12 +86,14 @@ export class UiTagIconDirective {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTagComponent {
+  private readonly labels = inject(UI_TAG_LABELS);
+
   readonly variant = input<UiTagVariant>('default');
   readonly size = input<UiTagSize>('md');
   readonly icon = input('');
   readonly ariaLabel = input('');
   readonly removable = input(false, { transform: booleanAttribute });
-  readonly removeLabel = input('Remove tag');
+  readonly removeLabel = input(this.labels.remove);
   readonly removed = output<void>();
 
   protected readonly classes = computed(() =>

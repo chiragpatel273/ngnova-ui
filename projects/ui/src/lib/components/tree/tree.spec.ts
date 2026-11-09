@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import type { UiTreeNode } from '../../../../tree/src/tree';
 import { UiTreeComponent } from '../../../../tree/src/tree';
+import { provideUiTreeLabels } from '../../../../tree/src/tree-labels';
 
 describe('UiTreeComponent', () => {
   const nodes: readonly UiTreeNode[] = [
@@ -80,5 +81,32 @@ describe('UiTreeComponent', () => {
     expect(disabled.getAttribute('aria-disabled')).toBe('true');
     disabled.click();
     expect(selected).toBe('');
+  });
+});
+
+describe('UiTreeComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiTreeComponent],
+      providers: [provideUiTreeLabels({ tree: 'Arborescence', empty: 'Aucun élément.' })],
+    });
+  });
+
+  it('uses provided labels for the tree name and empty state', () => {
+    const fixture = TestBed.createComponent(UiTreeComponent);
+    fixture.detectChanges();
+    const tree = fixture.nativeElement.querySelector('[role="tree"]') as HTMLElement;
+    expect(tree.getAttribute('aria-label')).toBe('Arborescence');
+    expect(tree.querySelector('[role="status"]')?.textContent?.trim()).toBe('Aucun élément.');
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiTreeComponent);
+    fixture.componentRef.setInput('ariaLabel', 'Folders');
+    fixture.componentRef.setInput('emptyText', 'No folders yet.');
+    fixture.detectChanges();
+    const tree = fixture.nativeElement.querySelector('[role="tree"]') as HTMLElement;
+    expect(tree.getAttribute('aria-label')).toBe('Folders');
+    expect(tree.querySelector('[role="status"]')?.textContent?.trim()).toBe('No folders yet.');
   });
 });

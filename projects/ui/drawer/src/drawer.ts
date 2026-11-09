@@ -17,6 +17,8 @@ import type {
   SimpleChanges,
 } from '@angular/core';
 
+import { UI_DRAWER_LABELS } from './drawer-labels';
+
 export type UiDrawerPosition = 'left' | 'right' | 'top' | 'bottom';
 export type UiDrawerSize = 'sm' | 'md' | 'lg';
 
@@ -109,6 +111,8 @@ const VERTICAL_SIZE_CLASSES: Record<UiDrawerSize, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiDrawerComponent implements AfterViewChecked, OnChanges, OnDestroy {
+  private readonly labels = inject(UI_DRAWER_LABELS);
+
   @Input({ transform: booleanAttribute }) open = false;
   @Input() position: UiDrawerPosition = 'right';
   @Input() size: UiDrawerSize = 'md';
@@ -116,7 +120,7 @@ export class UiDrawerComponent implements AfterViewChecked, OnChanges, OnDestroy
   @Input() titleId = `${this.drawerId}-title`;
   @Input() descriptionId = '';
   @Input() ariaLabel = '';
-  @Input() closeAriaLabel = 'Close drawer';
+  @Input() closeAriaLabel = this.labels.close;
   @Input() initialFocus = '';
   @Input({ transform: booleanAttribute }) closeOnBackdrop = true;
   @Input({ transform: booleanAttribute }) closeOnEscape = true;

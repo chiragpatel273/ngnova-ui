@@ -20,6 +20,8 @@ import {
   viewChild,
 } from '@angular/core';
 
+import { UI_TABLE_VIRTUAL_SCROLL_LABELS } from './table-virtual-scroll-labels';
+
 export type UiTableVirtualScrollBehavior = 'auto' | 'smooth';
 export type UiTableVirtualTrackBy<T> = (index: number, item: T) => unknown;
 
@@ -79,12 +81,14 @@ export class UiTableVirtualRowDirective<T = unknown> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTableVirtualScrollComponent<T = unknown> {
+  private readonly labels = inject(UI_TABLE_VIRTUAL_SCROLL_LABELS);
+
   readonly rows = input<readonly T[]>([]);
   readonly itemSize = input(48, { transform: numberAttribute });
   readonly minBufferPx = input(192, { transform: numberAttribute });
   readonly maxBufferPx = input(384, { transform: numberAttribute });
   readonly height = input('24rem');
-  readonly ariaLabel = input('Virtualized table rows');
+  readonly ariaLabel = input(this.labels.rows);
   readonly loading = input(false, { transform: booleanAttribute });
   readonly trackBy = input<UiTableVirtualTrackBy<T> | null>(null);
   readonly scrolledIndexChange = output<number>();

@@ -1,9 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, EnvironmentInjector, createEnvironmentInjector, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
+import type { ValidationErrors } from '@angular/forms';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { UiInputComponent } from '../../../../input/src/input';
+import { UI_INPUT_LABELS, provideUiInputLabels } from '../../../../input/src/input-labels';
 
 @Component({
   standalone: true,
@@ -70,6 +72,19 @@ class PremiumHostComponent {
 class ValueChangeHostComponent {
   control = new FormControl('initial', { nonNullable: true });
   readonly valueChanges = signal(0);
+}
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiInputComponent],
+  template: `
+    <ui-input label="Code" [formControl]="control" [validationMessages]="validationMessages" />
+  `,
+})
+class LabelsHostComponent {
+  errors: ValidationErrors | null = null;
+  validationMessages: Record<string, string> = {};
+  readonly control = new FormControl('', { nonNullable: true, validators: () => this.errors });
 }
 
 describe('UiInputComponent', () => {
@@ -218,5 +233,135 @@ describe('UiInputComponent', () => {
     premiumFixture.detectChanges();
 
     expect(premiumFixture.componentInstance.submittedValue).toBe('alpha beta gamma delta');
+  });
+});
+
+describe('UiInputComponent labels', () => {
+  const FRENCH_BUTTON_LABELS = {
+    clear: 'Effacer la saisie',
+    clearText: 'Effacer',
+    showPassword: 'Afficher le mot de passe',
+    showText: 'Afficher',
+    hidePassword: 'Masquer le mot de passe',
+    hideText: 'Masquer',
+  };
+
+  function renderMessage(
+    errors: ValidationErrors,
+    validationMessages: Record<string, string> = {},
+  ): string | undefined {
+    const fixture = TestBed.createComponent(LabelsHostComponent);
+    fixture.componentInstance.errors = errors;
+    fixture.componentInstance.validationMessages = validationMessages;
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+    const message = (fixture.nativeElement.querySelector('p') as HTMLParagraphElement | null)
+      ?.textContent;
+    fixture.destroy();
+    return message?.trim();
+  }
+
+  function renderPasswordButtons(): ComponentFixture<UiInputComponent> {
+    const fixture = TestBed.createComponent(UiInputComponent);
+    fixture.componentRef.setInput('type', 'password');
+    fixture.componentRef.setInput('clearable', true);
+    fixture.componentRef.setInput('revealable', true);
+    fixture.componentInstance.writeValue('secret');
+    return fixture;
+  }
+
+  function buttons(fixture: ComponentFixture<UiInputComponent>): HTMLButtonElement[] {
+    return Array.from(fixture.nativeElement.querySelectorAll('button'));
+  }
+
+  it('defaults to English labels without a provider', () => {
+    TestBed.configureTestingModule({ imports: [LabelsHostComponent] });
+
+    expect(renderMessage({ email: true })).toBe('Enter a valid email address.');
+    expect(renderMessage({ custom: true })).toBe('Enter a valid value.');
+    expect(TestBed.inject(UI_INPUT_LABELS).clear).toBe('Clear input');
+  });
+
+  it('uses provided labels for the clear and password buttons', () => {
+    TestBed.configureTestingModule({ providers: [provideUiInputLabels(FRENCH_BUTTON_LABELS)] });
+    const fixture = renderPasswordButtons();
+    fixture.detectChanges();
+    const [clearButton, revealButton] = buttons(fixture);
+
+    expect(clearButton.getAttribute('aria-label')).toBe('Effacer la saisie');
+    expect(clearButton.textContent?.trim()).toBe('Effacer');
+    expect(revealButton.getAttribute('aria-label')).toBe('Afficher le mot de passe');
+    expect(revealButton.textContent?.trim()).toBe('Afficher');
+
+    revealButton.click();
+    fixture.detectChanges();
+
+    expect(revealButton.getAttribute('aria-label')).toBe('Masquer le mot de passe');
+    expect(revealButton.textContent?.trim()).toBe('Masquer');
+  });
+
+  it('uses provided validation messages merged over the defaults and the fallback', () => {
+    TestBed.configureTestingModule({
+      imports: [LabelsHostComponent],
+      providers: [
+        provideUiInputLabels({
+          validationMessages: { required: 'Ce champ est obligatoire.' },
+          invalidValue: 'Saisissez une valeur valide.',
+        }),
+      ],
+    });
+
+    expect(renderMessage({ required: true })).toBe('Ce champ est obligatoire.');
+    expect(renderMessage({ email: true })).toBe('Enter a valid email address.');
+    expect(renderMessage({ custom: true })).toBe('Saisissez une valeur valide.');
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    TestBed.configureTestingModule({
+      imports: [LabelsHostComponent],
+      providers: [
+        provideUiInputLabels({
+          ...FRENCH_BUTTON_LABELS,
+          validationMessages: { required: 'Ce champ est obligatoire.' },
+        }),
+      ],
+    });
+
+    expect(renderMessage({ required: true }, { required: 'Code is required.' })).toBe(
+      'Code is required.',
+    );
+
+    const fixture = renderPasswordButtons();
+    fixture.componentRef.setInput('clearLabel', 'Reset code');
+    fixture.componentRef.setInput('showPasswordLabel', 'Reveal code');
+    fixture.detectChanges();
+    const [clearButton, revealButton] = buttons(fixture);
+
+    expect(clearButton.getAttribute('aria-label')).toBe('Reset code');
+    expect(clearButton.textContent?.trim()).toBe('Reset code');
+    expect(revealButton.getAttribute('aria-label')).toBe('Reveal code');
+    expect(revealButton.textContent?.trim()).toBe('Reveal code');
+  });
+
+  it('merges nested providers per validation key', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideUiInputLabels({
+          validationMessages: { required: 'Obligatoire.' },
+          clear: 'Effacer',
+        }),
+      ],
+    });
+    const child = createEnvironmentInjector(
+      [provideUiInputLabels({ validationMessages: { email: 'Adresse invalide.' } })],
+      TestBed.inject(EnvironmentInjector),
+    );
+    const labels = child.get(UI_INPUT_LABELS);
+
+    expect(labels.clear).toBe('Effacer');
+    expect(labels.validationMessages['required']).toBe('Obligatoire.');
+    expect(labels.validationMessages['email']).toBe('Adresse invalide.');
+    expect(labels.validationMessages['minlength']).toBe('The value is too short.');
+    child.destroy();
   });
 });

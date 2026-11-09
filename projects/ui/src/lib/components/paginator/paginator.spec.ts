@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { UiPaginatorComponent } from '../../../../paginator/src/paginator';
+import { provideUiPaginatorLabels } from '../../../../paginator/src/paginator-labels';
 
 @Component({
   standalone: true,
@@ -93,5 +95,85 @@ describe('UiPaginatorComponent', () => {
         (control) => (control as HTMLButtonElement | HTMLSelectElement).disabled,
       ),
     ).toBe(true);
+  });
+});
+
+describe('UiPaginatorComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiPaginatorComponent],
+      providers: [
+        provideUiPaginatorLabels({
+          navigation: 'Pagination des résultats',
+          itemsPerPage: 'Éléments par page',
+          firstPage: 'Première page',
+          previousPage: 'Page précédente',
+          nextPage: 'Page suivante',
+          lastPage: 'Dernière page',
+          page: (page) => `Aller à la page ${page}`,
+          range: (start, end, total) => `${start} à ${end} sur ${total}`,
+        }),
+      ],
+    });
+  });
+
+  function render(totalItems: number): ComponentFixture<UiPaginatorComponent> {
+    const fixture = TestBed.createComponent(UiPaginatorComponent);
+    fixture.componentRef.setInput('totalItems', totalItems);
+    fixture.componentRef.setInput('page', 2);
+    fixture.componentRef.setInput('pageSizeOptions', [10, 25]);
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function ariaLabels(element: HTMLElement): (string | null)[] {
+    return Array.from(element.querySelectorAll('button')).map((button) =>
+      button.getAttribute('aria-label'),
+    );
+  }
+
+  it('uses provided labels for every built-in string', () => {
+    const fixture = render(30);
+    const nav = fixture.nativeElement.querySelector('nav') as HTMLElement;
+
+    expect(nav.getAttribute('aria-label')).toBe('Pagination des résultats');
+    expect(nav.querySelector('label span')?.textContent?.trim()).toBe('Éléments par page');
+    expect(nav.querySelector('[aria-live]')?.textContent?.trim()).toBe('11 à 20 sur 30');
+    expect(ariaLabels(nav)).toEqual([
+      'Première page',
+      'Page précédente',
+      'Aller à la page 1',
+      'Aller à la page 2',
+      'Aller à la page 3',
+      'Page suivante',
+      'Dernière page',
+    ]);
+  });
+
+  it('uses the provided range label for an empty collection', () => {
+    const fixture = render(0);
+
+    expect(fixture.nativeElement.querySelector('[aria-live]').textContent.trim()).toBe(
+      '0 à 0 sur 0',
+    );
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiPaginatorComponent);
+    fixture.componentRef.setInput('totalItems', 30);
+    fixture.componentRef.setInput('ariaLabel', 'Results pages');
+    fixture.componentRef.setInput('nextPageAriaLabel', 'Forward');
+    fixture.componentRef.setInput('getPageAriaLabel', (page: number) => `Go to ${page}`);
+    fixture.componentRef.setInput(
+      'getRangeLabel',
+      (start: number, end: number, total: number) => `${start}-${end}/${total}`,
+    );
+    fixture.detectChanges();
+    const nav = fixture.nativeElement.querySelector('nav') as HTMLElement;
+
+    expect(nav.getAttribute('aria-label')).toBe('Results pages');
+    expect(nav.querySelector('[aria-live]')?.textContent?.trim()).toBe('1-10/30');
+    expect(nav.querySelector('button[aria-label="Forward"]')).not.toBeNull();
+    expect(nav.querySelector('button[aria-label="Go to 1"]')).not.toBeNull();
   });
 });

@@ -42,7 +42,7 @@ async function waitForStablePage(page: import('@playwright/test').Page) {
 
 for (const component of manifest.componentStates) {
   test(`${component.slug} documented visual states`, async ({ page }, testInfo) => {
-    await page.goto(`/#/components/${component.slug}`);
+    await page.goto(`/components/${component.slug}`);
     await waitForStablePage(page);
 
     const isDesktopChromium = testInfo.project.name === 'chromium-desktop';
@@ -67,7 +67,7 @@ for (const component of manifest.componentStates) {
 for (const state of manifest.interactiveStates) {
   test(`${state.slug} ${state.stateName} visual state`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'chromium-desktop');
-    await page.goto(`/#/components/${state.slug}`);
+    await page.goto(`/components/${state.slug}`);
     await waitForStablePage(page);
     const preview = page.locator(`[data-visual-example="${state.slug}-default"]`);
     await preview.scrollIntoViewIfNeeded();

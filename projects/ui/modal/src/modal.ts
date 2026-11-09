@@ -16,6 +16,8 @@ import type {
   SimpleChanges,
 } from '@angular/core';
 
+import { UI_MODAL_LABELS } from './modal-labels';
+
 export type UiModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 let nextModalId = 0;
@@ -96,6 +98,8 @@ const documentScrollLocks = new WeakMap<
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy {
+  private readonly labels = inject(UI_MODAL_LABELS);
+
   @Input({ transform: booleanAttribute }) open = false;
   @Input({ transform: booleanAttribute }) closeOnBackdrop = true;
   @Input({ transform: booleanAttribute }) closeOnEscape = true;
@@ -103,7 +107,7 @@ export class UiModalComponent implements AfterViewChecked, OnChanges, OnDestroy 
   @Input() titleId = `ui-modal-title-${++nextModalId}`;
   @Input() descriptionId = '';
   @Input() ariaLabel = '';
-  @Input() closeAriaLabel = 'Close dialog';
+  @Input() closeAriaLabel = this.labels.close;
   @Input() initialFocus = '';
   @Input({ transform: booleanAttribute }) restoreFocus = true;
   readonly openChange = output<boolean>();

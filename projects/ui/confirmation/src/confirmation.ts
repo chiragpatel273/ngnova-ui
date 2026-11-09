@@ -12,7 +12,9 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import type { ElementRef, OnDestroy } from '@angular/core';
+import type { ElementRef, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+
+import { UI_CONFIRMATION_LABELS } from './confirmation-labels';
 
 export type UiConfirmationIntent = 'primary' | 'warning' | 'danger';
 export type UiConfirmationReason = 'confirm' | 'cancel' | 'escape' | 'backdrop' | 'destroyed';
@@ -170,7 +172,7 @@ export class UiConfirmationService {
 
           @if (pendingCount()) {
             <p class="mt-4 text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
-              {{ pendingCount() }} {{ queueLabel() }}
+              {{ pendingText() }}
             </p>
           }
 
@@ -198,11 +200,17 @@ export class UiConfirmationService {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiConfirmationDialogComponent implements OnDestroy {
-  readonly confirmLabel = input('Confirm');
-  readonly cancelLabel = input('Cancel');
-  readonly promptLabel = input('Confirmation text');
-  readonly promptHint = input('Type exactly:');
+export class UiConfirmationDialogComponent implements OnChanges, OnDestroy {
+  private readonly labels = inject(UI_CONFIRMATION_LABELS);
+
+  readonly confirmLabel = input(this.labels.confirm);
+  readonly cancelLabel = input(this.labels.cancel);
+  readonly promptLabel = input(this.labels.prompt);
+  readonly promptHint = input(this.labels.promptHint);
+  /**
+   * Text after the pending count. When bound, it replaces the `pendingConfirmations` label and
+   * renders as `<count> <queueLabel>`.
+   */
   readonly queueLabel = input('more confirmations pending');
   readonly restoreFocus = input(true, { transform: booleanAttribute });
 
@@ -224,6 +232,13 @@ export class UiConfirmationDialogComponent implements OnDestroy {
 
   protected readonly request = this.service.current;
   protected readonly pendingCount = this.service.pendingCount;
+  private readonly queueLabelBound = signal(false);
+  protected readonly pendingText = computed(() => {
+    const count = this.pendingCount();
+    return this.queueLabelBound()
+      ? `${count} ${this.queueLabel()}`
+      : this.labels.pendingConfirmations(count);
+  });
   protected readonly typedValue = signal('');
   protected readonly canConfirm = computed(() => {
     const required = this.request()?.requireText;
@@ -263,6 +278,12 @@ export class UiConfirmationDialogComponent implements OnDestroy {
         }
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['queueLabel']) {
+      this.queueLabelBound.set(true);
+    }
   }
 
   ngOnDestroy(): void {

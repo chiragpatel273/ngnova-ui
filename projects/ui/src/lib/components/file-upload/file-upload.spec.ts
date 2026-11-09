@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import type { UiFileUploadRejection } from '../../../../file-upload/src/file-upload';
 import { UiFileUploadComponent } from '../../../../file-upload/src/file-upload';
+import { provideUiFileUploadLabels } from '../../../../file-upload/src/file-upload-labels';
 
 describe('UiFileUploadComponent', () => {
   it('validates type, size, count, total size, and duplicates immutably', async () => {
@@ -79,5 +80,66 @@ describe('UiFileUploadComponent', () => {
     expect((fixture.nativeElement.querySelector('button') as HTMLButtonElement).disabled).toBe(
       true,
     );
+  });
+});
+
+describe('UiFileUploadComponent default labels', () => {
+  it('formats file sizes in English bytes, kilobytes, and megabytes', async () => {
+    await TestBed.configureTestingModule({ imports: [UiFileUploadComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(UiFileUploadComponent);
+    fixture.componentRef.setInput('files', [
+      new File(['content'], 'small.txt', { lastModified: 1 }),
+      new File([new Uint8Array(1536)], 'medium.txt', { lastModified: 2 }),
+      new File([new Uint8Array(3 * 1024 * 1024)], 'large.txt', { lastModified: 3 }),
+    ]);
+    fixture.detectChanges();
+    const items = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('li'));
+
+    expect(items[0]?.textContent).toContain('7 B');
+    expect(items[1]?.textContent).toContain('1.5 KB');
+    expect(items[2]?.textContent).toContain('3.0 MB');
+  });
+});
+
+describe('UiFileUploadComponent labels', () => {
+  const file = new File(['content'], 'release.txt', { lastModified: 1 });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiFileUploadComponent],
+      providers: [
+        provideUiFileUploadLabels({
+          upload: 'Téléverser',
+          fileSize: (bytes) => `${bytes} octets`,
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  it('uses provided labels, including the file size format', () => {
+    const fixture = TestBed.createComponent(UiFileUploadComponent);
+    fixture.componentRef.setInput('files', [file]);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+    const buttons = Array.from(element.querySelectorAll('button')).map((button) =>
+      button.textContent?.trim(),
+    );
+
+    expect(buttons).toContain('Téléverser');
+    expect(buttons).toContain('Clear');
+    expect(element.querySelector('li')?.textContent).toContain('7 octets');
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiFileUploadComponent);
+    fixture.componentRef.setInput('files', [file]);
+    fixture.componentRef.setInput('uploadLabel', 'Send');
+    fixture.detectChanges();
+    const buttons = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll('button'),
+    ).map((button) => button.textContent?.trim());
+
+    expect(buttons).toContain('Send');
+    expect(buttons).not.toContain('Téléverser');
   });
 });

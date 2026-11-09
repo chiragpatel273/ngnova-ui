@@ -13,6 +13,8 @@ import {
 import type { ControlValueAccessor, ValidationErrors } from '@angular/forms';
 import { NgControl } from '@angular/forms';
 
+import { UI_INPUT_LABELS } from './input-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -42,16 +44,6 @@ const INTENT_CLASSES: Record<UiInputIntent, string> = {
   success: 'border-emerald-500 focus-within:border-emerald-500 dark:border-emerald-400',
   warning: 'border-amber-500 focus-within:border-amber-500 dark:border-amber-400',
   danger: 'border-red-500 focus-within:border-red-500 dark:border-red-400',
-};
-
-const DEFAULT_VALIDATION_MESSAGES: Record<string, string> = {
-  required: 'This field is required.',
-  email: 'Enter a valid email address.',
-  minlength: 'The value is too short.',
-  maxlength: 'The value is too long.',
-  min: 'The value is below the minimum.',
-  max: 'The value is above the maximum.',
-  pattern: 'Enter a valid value.',
 };
 
 let nextInputId = 0;
@@ -157,6 +149,8 @@ let nextInputId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiInputComponent implements ControlValueAccessor {
+  private readonly labels = inject(UI_INPUT_LABELS);
+
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -176,9 +170,9 @@ export class UiInputComponent implements ControlValueAccessor {
   @Input() inputMode = '';
   @Input() ariaLabel = '';
   @Input() validationMessages: Record<string, string> = {};
-  @Input() clearLabel = 'Clear input';
-  @Input() showPasswordLabel = 'Show password';
-  @Input() hidePasswordLabel = 'Hide password';
+  @Input() clearLabel = this.labels.clear;
+  @Input() showPasswordLabel = this.labels.showPassword;
+  @Input() hidePasswordLabel = this.labels.hidePassword;
   @Input() counterMode: UiInputCounterMode = 'characters';
   @Input({ transform: numberAttribute }) maxLength: number | null = null;
   @Input({ transform: numberAttribute }) minLength: number | null = null;
@@ -307,15 +301,19 @@ export class UiInputComponent implements ControlValueAccessor {
   }
 
   protected get clearButtonText(): string {
-    return this.clearLabel === 'Clear input' ? 'Clear' : this.clearLabel;
+    return this.clearLabel === this.labels.clear ? this.labels.clearText : this.clearLabel;
   }
 
   protected get showButtonText(): string {
-    return this.showPasswordLabel === 'Show password' ? 'Show' : this.showPasswordLabel;
+    return this.showPasswordLabel === this.labels.showPassword
+      ? this.labels.showText
+      : this.showPasswordLabel;
   }
 
   protected get hideButtonText(): string {
-    return this.hidePasswordLabel === 'Hide password' ? 'Hide' : this.hidePasswordLabel;
+    return this.hidePasswordLabel === this.labels.hidePassword
+      ? this.labels.hideText
+      : this.hidePasswordLabel;
   }
 
   writeValue(value: string | number | null): void {
@@ -417,7 +415,9 @@ export class UiInputComponent implements ControlValueAccessor {
   private resolveValidationMessage(errors: ValidationErrors): string {
     const key = Object.keys(errors)[0];
     return (
-      this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.'
+      this.validationMessages[key] ||
+      this.labels.validationMessages[key] ||
+      this.labels.invalidValue
     );
   }
 }

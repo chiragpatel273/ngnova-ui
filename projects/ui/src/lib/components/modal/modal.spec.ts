@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { UiModalComponent } from '../../../../modal/src/modal';
+import { UI_MODAL_LABELS, provideUiModalLabels } from '../../../../modal/src/modal-labels';
 
 @Component({
   standalone: true,
@@ -355,5 +356,36 @@ describe('UiModalComponent', () => {
     expect(firstCloseRequests).toBe(1);
     first.destroy();
     second.destroy();
+  });
+});
+
+describe('UiModalComponent labels', () => {
+  it('defaults to English labels without a provider', () => {
+    expect(TestBed.inject(UI_MODAL_LABELS).close).toBe('Close dialog');
+  });
+
+  it('uses provided labels for the close button', () => {
+    TestBed.configureTestingModule({
+      imports: [HostComponent],
+      providers: [provideUiModalLabels({ close: 'Fermer la boîte de dialogue' })],
+    });
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label="Fermer la boîte de dialogue"]'),
+    ).not.toBeNull();
+    fixture.destroy();
+  });
+
+  it('merges nested providers over parent labels', () => {
+    TestBed.configureTestingModule({ providers: [provideUiModalLabels({ close: 'Fermer' })] });
+    const child = createEnvironmentInjector(
+      [provideUiModalLabels({})],
+      TestBed.inject(EnvironmentInjector),
+    );
+
+    expect(child.get(UI_MODAL_LABELS).close).toBe('Fermer');
+    child.destroy();
   });
 });

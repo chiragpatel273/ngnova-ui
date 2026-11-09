@@ -8,6 +8,7 @@ import type {
   UiCommand,
   UiCommandSelection,
 } from '../../../../command-palette/src/command-palette';
+import { provideUiCommandPaletteLabels } from '../../../../command-palette/src/command-palette-labels';
 
 const COMMANDS: readonly UiCommand[] = [
   {
@@ -150,5 +151,50 @@ describe('UiCommandPaletteComponent', () => {
 
     expect(host.selection?.command.value).toBe('open-settings');
     expect(host.selection?.source).toBe('pointer');
+  });
+});
+
+describe('UiCommandPaletteComponent labels', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiCommandPaletteComponent],
+      providers: [
+        provideUiCommandPaletteLabels({
+          search: 'Rechercher des commandes',
+          empty: 'Aucune commande trouvée.',
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  it('uses provided labels', () => {
+    const fixture = TestBed.createComponent(UiCommandPaletteComponent);
+    fixture.componentRef.setInput('open', true);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+      'Rechercher des commandes',
+    );
+    expect(element.querySelector('[role="status"]')?.textContent?.trim()).toBe(
+      'Aucune commande trouvée.',
+    );
+    expect(element.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe(
+      'Command palette',
+    );
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiCommandPaletteComponent);
+    fixture.componentRef.setInput('open', true);
+    fixture.componentRef.setInput('inputAriaLabel', 'Find an action');
+    fixture.componentRef.setInput('emptyText', 'Nothing here.');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('[role="combobox"]')?.getAttribute('aria-label')).toBe(
+      'Find an action',
+    );
+    expect(element.querySelector('[role="status"]')?.textContent?.trim()).toBe('Nothing here.');
   });
 });

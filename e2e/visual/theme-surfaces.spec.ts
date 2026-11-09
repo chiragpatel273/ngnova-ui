@@ -9,7 +9,7 @@ async function waitForFonts(page: import('@playwright/test').Page): Promise<void
 test('theme playground dark mode', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
 
-  await page.goto('/#/theming');
+  await page.goto('/theming');
   await page.locator('app-docs-layout').waitFor();
   await waitForFonts(page);
   await page.getByRole('button', { name: 'Preview dark mode' }).click();
@@ -22,7 +22,7 @@ test('theme playground dark mode', async ({ page }, testInfo) => {
 test('admin dashboard dark mode', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
 
-  await page.goto('/#/templates/admin-dashboard');
+  await page.goto('/templates/admin-dashboard');
   await page.locator('[data-admin-template]').waitFor();
   await waitForFonts(page);
   await page.getByRole('button', { name: 'Use dark dashboard theme' }).click();

@@ -17,6 +17,8 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "static",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -94,7 +96,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ui/tsconfig.spec.json"
+            "tsConfig": "projects/ui/tsconfig.spec.json",
+            "exclude": ["schematics/**"]
           }
         },
         "lint": {

@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { UiTabsComponent } from '../../../../tabs/src/tabs';
 import type { UiTabItem } from '../../../../tabs/src/tabs';
+import { provideUiTabsLabels } from '../../../../tabs/src/tabs-labels';
 
 const TABS: readonly UiTabItem[] = [
   { label: 'Overview', value: 'overview' },
@@ -246,5 +247,33 @@ describe('UiTabsComponent', () => {
     expect(tablist.className).toContain('overflow-y-auto');
     expect(button.className).toContain('border-l-2');
     expect(button.className).not.toContain('border-b-2');
+  });
+});
+
+describe('UiTabsComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiTabsComponent],
+      providers: [provideUiTabsLabels({ tabList: 'Onglets' })],
+    });
+  });
+
+  it('uses provided labels for the tab list', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.detectChanges();
+    expect(
+      tabsFixture.nativeElement.querySelector('[role="tablist"]').getAttribute('aria-label'),
+    ).toBe('Onglets');
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const tabsFixture = TestBed.createComponent(UiTabsComponent);
+    tabsFixture.componentRef.setInput('tabs', TABS);
+    tabsFixture.componentRef.setInput('ariaLabel', 'Settings sections');
+    tabsFixture.detectChanges();
+    expect(
+      tabsFixture.nativeElement.querySelector('[role="tablist"]').getAttribute('aria-label'),
+    ).toBe('Settings sections');
   });
 });

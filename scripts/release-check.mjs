@@ -16,6 +16,7 @@ const steps = [
   ['Versioned documentation contract', npm, ['run', 'check:versioned-docs']],
   ['Library tests', npm, ['run', 'test:lib']],
   ['Library build', npm, ['run', 'build:lib']],
+  ['ng add schematic tests', 'node', ['--test', 'projects/ui/schematics/ng-add/ng-add.spec.mts']],
   ['Documentation app tests', npm, ['run', 'test:docs']],
   ['Public API compatibility', npm, ['run', 'check:public-api']],
   ['Entry-point bundle budgets', npm, ['run', 'check:bundle-budgets']],

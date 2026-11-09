@@ -13,6 +13,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 import type { ElementRef } from '@angular/core';
 
+import { UI_COMMAND_PALETTE_LABELS } from './command-palette-labels';
+
 export interface UiCommand {
   readonly value: string;
   readonly label: string;
@@ -177,6 +179,8 @@ let nextCommandPaletteId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiCommandPaletteComponent {
+  private readonly labels = inject(UI_COMMAND_PALETTE_LABELS);
+
   readonly commands = input<readonly UiCommand[]>([]);
   readonly open = input(false, { transform: booleanAttribute });
   readonly query = input('');
@@ -186,15 +190,15 @@ export class UiCommandPaletteComponent {
   readonly closeOnSelection = input(true, { transform: booleanAttribute });
   readonly closeOnBackdrop = input(true, { transform: booleanAttribute });
   readonly closeOnEscape = input(true, { transform: booleanAttribute });
-  readonly ariaLabel = input('Command palette');
-  readonly inputAriaLabel = input('Search commands');
-  readonly resultsAriaLabel = input('Available commands');
-  readonly placeholder = input('Type a command or search...');
-  readonly emptyText = input('No commands found.');
-  readonly loadingText = input('Loading commands...');
-  readonly closeLabel = input('Close command palette');
-  readonly hintText = input('Use arrow keys to navigate and Enter to select');
-  readonly shortcutHint = input('Ctrl or Command + K');
+  readonly ariaLabel = input(this.labels.palette);
+  readonly inputAriaLabel = input(this.labels.search);
+  readonly resultsAriaLabel = input(this.labels.results);
+  readonly placeholder = input(this.labels.placeholder);
+  readonly emptyText = input(this.labels.empty);
+  readonly loadingText = input(this.labels.loading);
+  readonly closeLabel = input(this.labels.close);
+  readonly hintText = input(this.labels.hint);
+  readonly shortcutHint = input(this.labels.shortcut);
 
   readonly openChange = output<boolean>();
   readonly queryChange = output<string>();

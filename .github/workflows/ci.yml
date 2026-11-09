@@ -8,8 +8,13 @@ on:
 
 jobs:
   verify:
-    name: Verify library
-    runs-on: windows-latest
+    name: Verify library (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -26,6 +31,34 @@ jobs:
 
       - name: Release check
         run: npm run release:check
+
+  mcp:
+    name: Verify MCP server
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: projects/mcp
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: projects/mcp/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build and test over stdio
+        run: npm test
+
+      - name: Package dry run
+        run: npm pack --dry-run
 
   quick-start:
     name: Verify locked npm quick start

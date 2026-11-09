@@ -8,6 +8,8 @@ import {
   output,
 } from '@angular/core';
 
+import { UI_TABS_LABELS } from './tabs-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -93,12 +95,14 @@ let nextTabsId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTabsComponent {
+  private readonly labels = inject(UI_TABS_LABELS);
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @Input() id = `ui-tabs-${++nextTabsId}`;
   @Input() tabs: readonly UiTabItem[] = [];
   @Input() active = '';
-  @Input() ariaLabel = 'Tabs';
+  @Input() ariaLabel = this.labels.tabList;
   @Input() orientation: UiTabsOrientation = 'horizontal';
   @Input() variant: UiTabsVariant = 'segmented';
   @Input({ transform: booleanAttribute }) fullWidth = false;

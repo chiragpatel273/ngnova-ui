@@ -12,6 +12,8 @@ import {
 import type { ControlValueAccessor, ValidationErrors } from '@angular/forms';
 import { NgControl } from '@angular/forms';
 
+import { UI_TEXTAREA_LABELS } from './textarea-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -36,12 +38,6 @@ const RESIZE_CLASSES: Record<UiTextareaResize, string> = {
 const APPEARANCE_CLASSES: Record<UiTextareaAppearance, string> = {
   outline: 'bg-white dark:bg-slate-950',
   filled: 'bg-slate-100 dark:bg-slate-900',
-};
-
-const DEFAULT_VALIDATION_MESSAGES: Record<string, string> = {
-  required: 'This field is required.',
-  minlength: 'The value is too short.',
-  maxlength: 'The value is too long.',
 };
 
 let nextTextareaId = 0;
@@ -107,6 +103,8 @@ let nextTextareaId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTextareaComponent implements ControlValueAccessor {
+  private readonly labels = inject(UI_TEXTAREA_LABELS);
+
   private readonly ngControl = inject(NgControl, { self: true, optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -257,7 +255,9 @@ export class UiTextareaComponent implements ControlValueAccessor {
   private resolveValidationMessage(errors: ValidationErrors): string {
     const key = Object.keys(errors)[0];
     return (
-      this.validationMessages[key] || DEFAULT_VALIDATION_MESSAGES[key] || 'Enter a valid value.'
+      this.validationMessages[key] ||
+      this.labels.validationMessages[key] ||
+      this.labels.invalidValue
     );
   }
 }

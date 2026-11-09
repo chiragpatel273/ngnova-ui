@@ -16,6 +16,8 @@ import type { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ControlValueAccessor } from '@angular/forms';
 
+import { UI_DATE_PICKER_LABELS } from './date-picker-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -311,8 +313,10 @@ let nextDatePickerId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, OnDestroy {
+  private readonly labels = inject(UI_DATE_PICKER_LABELS);
+
   @Input() label = '';
-  @Input() placeholder = 'Select a date';
+  @Input() placeholder = this.labels.placeholder;
   @Input() helperText = '';
   @Input() errorText = '';
   @Input() inputId = `ui-date-picker-${++nextDatePickerId}`;
@@ -332,13 +336,13 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   @Input({ transform: booleanAttribute }) closeOnSelect = true;
   @Input({ transform: (value: unknown) => Math.max(0, Math.min(6, Number(value) || 0)) })
   firstDayOfWeek = 0;
-  @Input() calendarAriaLabel = 'Choose date';
-  @Input() openAriaLabel = 'Open calendar';
-  @Input() closeAriaLabel = 'Close calendar';
-  @Input() clearAriaLabel = 'Clear date';
-  @Input() previousMonthAriaLabel = 'Previous month';
-  @Input() nextMonthAriaLabel = 'Next month';
-  @Input() todayText = 'Today';
+  @Input() calendarAriaLabel = this.labels.calendar;
+  @Input() openAriaLabel = this.labels.open;
+  @Input() closeAriaLabel = this.labels.close;
+  @Input() clearAriaLabel = this.labels.clear;
+  @Input() previousMonthAriaLabel = this.labels.previousMonth;
+  @Input() nextMonthAriaLabel = this.labels.nextMonth;
+  @Input() todayText = this.labels.today;
 
   readonly valueChange = output<string>();
   readonly openChange = output<boolean>();

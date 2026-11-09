@@ -40,6 +40,10 @@
   "sideEffects": [
     "./styles/theme.css"
   ],
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
   "exports": {
     "./styles/theme.css": {
       "style": "./styles/theme.css",

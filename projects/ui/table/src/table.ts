@@ -16,6 +16,8 @@ import {
 } from '@angular/core';
 import type { QueryList } from '@angular/core';
 
+import { UI_TABLE_LABELS } from './table-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -283,6 +285,8 @@ const ALIGN_CLASSES: Record<UiTableAlign, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTableComponent {
+  private readonly labels = inject(UI_TABLE_LABELS);
+
   @ContentChildren(UiTableCellDirective)
   private readonly cellTemplateDirectives?: QueryList<UiTableCellDirective>;
   @ContentChildren(UiTableHeaderDirective)
@@ -290,9 +294,9 @@ export class UiTableComponent {
 
   readonly columns = input<readonly UiTableColumn[]>([]);
   readonly rows = input<readonly UiTableRow[]>([]);
-  readonly emptyText = input('No records found.');
-  readonly loadingText = input('Loading records...');
-  readonly errorText = input('Unable to load records.');
+  readonly emptyText = input(this.labels.empty);
+  readonly loadingText = input(this.labels.loading);
+  readonly errorText = input(this.labels.error);
   readonly caption = input('');
   readonly captionVisible = input(false, { transform: booleanAttribute });
   readonly rowKey = input('');
@@ -302,19 +306,19 @@ export class UiTableComponent {
   readonly selectable = input(false, { transform: booleanAttribute });
   readonly selectionMode = input<UiTableSelectionMode>('none');
   readonly selectedKeys = input<readonly UiTableRowKey[] | null>(null);
-  readonly selectionColumnLabel = input('Row selection');
-  readonly selectAllAriaLabel = input('Select all rows on this page');
-  readonly rowSelectionAriaLabel = input('Select row');
+  readonly selectionColumnLabel = input(this.labels.selectionColumn);
+  readonly selectAllAriaLabel = input(this.labels.selectAll);
+  readonly rowSelectionAriaLabel = input(this.labels.selectRow);
   readonly stickyHeader = input(false, { transform: booleanAttribute });
   readonly stickySelectionColumn = input(false, { transform: booleanAttribute });
   readonly page = input(1, { transform: numberAttribute });
   readonly pageSize = input(0, { transform: numberAttribute });
   readonly totalItems = input(0, { transform: numberAttribute });
-  readonly paginationAriaLabel = input('Table pagination');
-  readonly previousPageLabel = input('Previous');
-  readonly nextPageLabel = input('Next');
-  readonly previousPageAriaLabel = input('Previous page');
-  readonly nextPageAriaLabel = input('Next page');
+  readonly paginationAriaLabel = input(this.labels.pagination);
+  readonly previousPageLabel = input(this.labels.previousText);
+  readonly nextPageLabel = input(this.labels.nextText);
+  readonly previousPageAriaLabel = input(this.labels.previousPage);
+  readonly nextPageAriaLabel = input(this.labels.nextPage);
   readonly rowSelected = output<UiTableRow>();
   readonly sortChange = output<UiTableSort>();
   readonly selectedKeysChange = output<readonly UiTableRowKey[]>();
@@ -360,14 +364,14 @@ export class UiTableComponent {
   protected readonly paginationSummary = computed(() => {
     const total = Math.max(0, Math.trunc(this.totalItems()));
     if (total === 0) {
-      return '0 items';
+      return this.labels.paginationSummary(0, 0, 0);
     }
     const start = (this.normalizedPage() - 1) * Math.max(1, this.pageSize()) + 1;
     const end = Math.min(total, start + this.rows().length - 1);
-    return `${start}–${Math.max(start, end)} of ${total}`;
+    return this.labels.paginationSummary(start, Math.max(start, end), total);
   });
-  protected readonly pageStatus = computed(
-    () => `Page ${this.normalizedPage()} of ${this.totalPages()}`,
+  protected readonly pageStatus = computed(() =>
+    this.labels.pageStatus(this.normalizedPage(), this.totalPages()),
   );
 
   protected get columnSpan(): number {

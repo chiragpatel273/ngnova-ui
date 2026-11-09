@@ -114,6 +114,17 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
           'Documented focus handling for overlays',
         ],
       },
+      {
+        title: 'Translated built-in labels',
+        description:
+          'From 1.1.0, every component with built-in text exports a typed labels provider, so accessible names and status messages can be translated once per application.',
+        items: [
+          "Call provideUiModalLabels({ close: 'Fermer' }) and similar providers in bootstrapApplication",
+          'Providers merge partial overrides and can be scoped to a route or component',
+          'An explicit input on an instance still wins over provided labels',
+          'Counts, ranges, step positions, and file sizes are label functions, so translations control word order',
+        ],
+      },
     ],
   },
   theming: {
@@ -129,6 +140,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         description:
           'Consumer apps need Tailwind to scan the package so utility classes are generated.',
         items: [
+          'From 1.1.0, run ng add @ngnova/ui to apply this setup automatically',
           'Add @custom-variant dark (&:where(.dark, .dark *)) for class-based dark mode',
           'Add @source "../node_modules/@ngnova/ui"',
           'Optionally import @ngnova/ui/styles/theme.css for the public --ui-* token contract',

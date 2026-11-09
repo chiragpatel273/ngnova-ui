@@ -13,6 +13,8 @@ import {
   output,
 } from '@angular/core';
 
+import { UI_DATA_VIEW_LABELS } from './data-view-labels';
+
 export type UiDataViewLayout = 'grid' | 'list';
 export type UiDataViewGap = 'sm' | 'md' | 'lg';
 export type UiDataViewTrackBy<T> = (index: number, item: T) => unknown;
@@ -120,19 +122,21 @@ export class UiDataViewItemDirective<T = unknown> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiDataViewComponent<T = unknown> {
+  private readonly labels = inject(UI_DATA_VIEW_LABELS);
+
   readonly items = input<readonly T[]>([]);
   readonly layout = input<UiDataViewLayout>('grid');
   readonly gap = input<UiDataViewGap>('md');
   readonly showLayoutToggle = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
   readonly error = input(false, { transform: booleanAttribute });
-  readonly loadingText = input('Loading items...');
-  readonly errorText = input('Unable to load items.');
-  readonly emptyText = input('No items found.');
-  readonly ariaLabel = input('Data view');
-  readonly layoutToggleAriaLabel = input('Choose layout');
-  readonly gridLabel = input('Grid');
-  readonly listLabel = input('List');
+  readonly loadingText = input(this.labels.loading);
+  readonly errorText = input(this.labels.error);
+  readonly emptyText = input(this.labels.empty);
+  readonly ariaLabel = input(this.labels.region);
+  readonly layoutToggleAriaLabel = input(this.labels.layout);
+  readonly gridLabel = input(this.labels.grid);
+  readonly listLabel = input(this.labels.list);
   readonly trackBy = input<UiDataViewTrackBy<T> | null>(null);
   readonly layoutChange = output<UiDataViewLayout>();
 

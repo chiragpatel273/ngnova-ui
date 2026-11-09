@@ -3,8 +3,11 @@ import {
   booleanAttribute,
   Component,
   computed,
+  inject,
   input,
 } from '@angular/core';
+
+import { UI_SPINNER_LABELS } from './spinner-labels';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -32,11 +35,13 @@ const SIZE_CLASSES: Record<UiSpinnerSize, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiSpinnerComponent {
+  private readonly labels = inject(UI_SPINNER_LABELS);
+
   readonly size = input<UiSpinnerSize>('md');
-  readonly label = input('Loading');
+  readonly label = input(this.labels.loading);
   readonly decorative = input(false, { transform: booleanAttribute });
 
-  protected readonly accessibleLabel = computed(() => this.label().trim() || 'Loading');
+  protected readonly accessibleLabel = computed(() => this.label().trim() || this.labels.loading);
   protected readonly classes = computed(() =>
     uiClassNames(
       'inline-block animate-spin rounded-full border-current border-t-transparent text-blue-600 motion-reduce:animate-none dark:text-blue-400',

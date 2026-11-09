@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector, createEnvironmentInjector } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
+import type { ValidationErrors } from '@angular/forms';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { UiTextareaComponent } from '../../../../textarea/src/textarea';
+import {
+  UI_TEXTAREA_LABELS,
+  provideUiTextareaLabels,
+} from '../../../../textarea/src/textarea-labels';
 
 @Component({
   standalone: true,
@@ -61,6 +66,19 @@ class CustomValidationHostComponent {
   `,
 })
 class NativeAttributesHostComponent {}
+
+@Component({
+  standalone: true,
+  imports: [ReactiveFormsModule, UiTextareaComponent],
+  template: `
+    <ui-textarea label="Notes" [formControl]="control" [validationMessages]="validationMessages" />
+  `,
+})
+class LabelsHostComponent {
+  errors: ValidationErrors | null = null;
+  validationMessages: Record<string, string> = {};
+  readonly control = new FormControl('', { nonNullable: true, validators: () => this.errors });
+}
 
 describe('UiTextareaComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
@@ -227,5 +245,84 @@ describe('UiTextareaComponent', () => {
     expect(textarea.className).toContain('px-4');
     expect(textarea.className).toContain('py-2.5');
     expect(textarea.className).toContain('text-base');
+  });
+});
+
+describe('UiTextareaComponent labels', () => {
+  function renderMessage(
+    errors: ValidationErrors,
+    validationMessages: Record<string, string> = {},
+  ): string | undefined {
+    const fixture = TestBed.createComponent(LabelsHostComponent);
+    fixture.componentInstance.errors = errors;
+    fixture.componentInstance.validationMessages = validationMessages;
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+    const message = (fixture.nativeElement.querySelector('p') as HTMLParagraphElement | null)
+      ?.textContent;
+    fixture.destroy();
+    return message?.trim();
+  }
+
+  it('defaults to English labels without a provider', () => {
+    TestBed.configureTestingModule({ imports: [LabelsHostComponent] });
+
+    expect(renderMessage({ required: true })).toBe('This field is required.');
+    expect(renderMessage({ custom: true })).toBe('Enter a valid value.');
+  });
+
+  it('uses provided validation messages merged over the defaults and the fallback', () => {
+    TestBed.configureTestingModule({
+      imports: [LabelsHostComponent],
+      providers: [
+        provideUiTextareaLabels({
+          validationMessages: { required: 'Ce champ est obligatoire.' },
+          invalidValue: 'Saisissez une valeur valide.',
+        }),
+      ],
+    });
+
+    expect(renderMessage({ required: true })).toBe('Ce champ est obligatoire.');
+    expect(renderMessage({ maxlength: { requiredLength: 5, actualLength: 6 } })).toBe(
+      'The value is too long.',
+    );
+    expect(renderMessage({ custom: true })).toBe('Saisissez une valeur valide.');
+  });
+
+  it('lets an explicit validationMessages input win over provided labels', () => {
+    TestBed.configureTestingModule({
+      imports: [LabelsHostComponent],
+      providers: [
+        provideUiTextareaLabels({ validationMessages: { required: 'Ce champ est obligatoire.' } }),
+      ],
+    });
+
+    expect(renderMessage({ required: true }, { required: 'Write a summary.' })).toBe(
+      'Write a summary.',
+    );
+  });
+
+  it('merges nested providers per validation key', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideUiTextareaLabels({
+          validationMessages: { required: 'Obligatoire.' },
+          invalidValue: 'Invalide.',
+        }),
+      ],
+    });
+    const child = createEnvironmentInjector(
+      [provideUiTextareaLabels({ validationMessages: { minlength: 'Trop court.' } })],
+      TestBed.inject(EnvironmentInjector),
+    );
+    const labels = child.get(UI_TEXTAREA_LABELS);
+
+    expect(labels.invalidValue).toBe('Invalide.');
+    expect(labels.validationMessages).toEqual({
+      required: 'Obligatoire.',
+      minlength: 'Trop court.',
+      maxlength: 'The value is too long.',
+    });
+    child.destroy();
   });
 });

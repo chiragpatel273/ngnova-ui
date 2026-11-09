@@ -12,7 +12,7 @@
       "packageRange": "1.x",
       "status": "stable",
       "basePath": "/ngnova-ui/v1/",
-      "routeMode": "hash"
+      "routeMode": "path"
     }
   ]
 }

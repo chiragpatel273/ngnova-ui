@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
 import { UiToastComponent, UiToastService } from '../../../../toast/src/toast';
+import { provideUiToastLabels } from '../../../../toast/src/toast-labels';
 
 describe('UiToastComponent', () => {
   beforeEach(async () => {
@@ -199,5 +200,36 @@ describe('UiToastComponent', () => {
 
     expect(button.getAttribute('aria-label')).toBe('Benachrichtigung schließen');
     expect(content.className).toContain('min-w-0');
+  });
+});
+
+describe('UiToastComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiToastComponent],
+      providers: [provideUiToastLabels({ dismiss: 'Fermer la notification' })],
+    });
+    TestBed.inject(UiToastService).success('Saved');
+  });
+
+  afterEach(() => {
+    TestBed.inject(UiToastService).clear();
+  });
+
+  it('uses provided labels for the dismiss button', () => {
+    const fixture = TestBed.createComponent(UiToastComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      'Fermer la notification',
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiToastComponent);
+    fixture.componentRef.setInput('dismissAriaLabel', 'Close message');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('button').getAttribute('aria-label')).toBe(
+      'Close message',
+    );
   });
 });

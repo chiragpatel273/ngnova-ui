@@ -16,6 +16,8 @@ import type { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ControlValueAccessor } from '@angular/forms';
 
+import { UI_COMBOBOX_LABELS } from './combobox-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -152,7 +154,7 @@ let nextComboboxId = 0;
           <div
             [id]="listboxId"
             role="listbox"
-            [attr.aria-label]="label || ariaLabel || 'Suggestions'"
+            [attr.aria-label]="label || ariaLabel || suggestionsLabel"
             [attr.aria-busy]="loading ? 'true' : null"
             class="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-[950] max-h-64 overflow-y-auto rounded-[var(--ui-surface-radius,0.75rem)] border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-700 dark:bg-slate-950"
           >
@@ -229,6 +231,9 @@ let nextComboboxId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiComboboxComponent implements ControlValueAccessor, OnChanges, OnDestroy {
+  private readonly labels = inject(UI_COMBOBOX_LABELS);
+  protected readonly suggestionsLabel = this.labels.suggestions;
+
   @Input() label = '';
   @Input() placeholder = '';
   @Input() helperText = '';
@@ -246,11 +251,11 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges, OnD
   @Input({ transform: booleanAttribute }) loading = false;
   @Input({ transform: booleanAttribute }) filterOptions = true;
   @Input({ transform: booleanAttribute }) openOnFocus = true;
-  @Input() noResultsText = 'No results found';
-  @Input() loadingText = 'Loading suggestions';
-  @Input() clearAriaLabel = 'Clear selection';
-  @Input() openAriaLabel = 'Open suggestions';
-  @Input() closeAriaLabel = 'Close suggestions';
+  @Input() noResultsText = this.labels.noResults;
+  @Input() loadingText = this.labels.loading;
+  @Input() clearAriaLabel = this.labels.clear;
+  @Input() openAriaLabel = this.labels.open;
+  @Input() closeAriaLabel = this.labels.close;
 
   readonly valueChange = output<string>();
   readonly queryChange = output<string>();

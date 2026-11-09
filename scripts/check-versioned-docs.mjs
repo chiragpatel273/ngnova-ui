@@ -1,12 +1,25 @@
 import { readFile } from 'node:fs/promises';
 
-const [manifest, schema, workflow, packageJson, guide, appConfig] = await Promise.all([
+const [
+  manifest,
+  schema,
+  workflow,
+  packageJson,
+  guide,
+  appConfig,
+  angularJson,
+  serverRoutes,
+  indexHtml,
+] = await Promise.all([
   readFile('docs/hosting/versions.json', 'utf8').then(JSON.parse),
   readFile('docs/hosting/versions.schema.json', 'utf8').then(JSON.parse),
   readFile('.github/workflows/docs.yml', 'utf8'),
   readFile('package.json', 'utf8').then(JSON.parse),
   readFile('docs/HOSTED_DOCUMENTATION.md', 'utf8'),
   readFile('src/app/app.config.ts', 'utf8'),
+  readFile('angular.json', 'utf8').then(JSON.parse),
+  readFile('src/app/app.routes.server.ts', 'utf8'),
+  readFile('src/index.html', 'utf8'),
 ]);
 
 const errors = [];
@@ -47,8 +60,8 @@ for (const version of manifest.versions) {
     `${version.id} packageRange must describe the same major.`,
   );
   requireValue(
-    version.routeMode === 'hash',
-    `${version.id} must use hash routing for static reload safety.`,
+    version.routeMode === 'path',
+    `${version.id} must use prerendered path routing so every route is reload-safe and indexable.`,
   );
 }
 
@@ -57,8 +70,20 @@ requireValue(
   'defaultVersion must reference a declared documentation version.',
 );
 requireValue(
-  appConfig.includes('withHashLocation()'),
-  'The documentation app must retain hash routing for GitHub Pages.',
+  !appConfig.includes('withHashLocation'),
+  'The documentation app must use path routing; hash URLs cannot be indexed or prerendered.',
+);
+requireValue(
+  angularJson.projects?.docs?.architect?.build?.options?.outputMode === 'static',
+  'The documentation app must prerender every route (outputMode: static) for GitHub Pages.',
+);
+requireValue(
+  /getPrerenderParams/.test(serverRoutes) && /RenderMode\.Prerender/.test(serverRoutes),
+  'Server routes must prerender every component page.',
+);
+requireValue(
+  indexHtml.includes("hash.indexOf('#/') === 0"),
+  'index.html must redirect legacy #/ hash links to path routes.',
 );
 requireValue(
   packageJson.scripts?.['build:docs:versioned']?.includes('prepare-versioned-docs.mjs'),
@@ -84,7 +109,7 @@ for (const evidence of [
   );
 }
 
-const latestButtonUrl = `${manifest.canonicalOrigin}${manifest.projectPath}/#/components/button`;
+const latestButtonUrl = `${manifest.canonicalOrigin}${manifest.projectPath}/components/button/`;
 requireValue(
   guide.includes(latestButtonUrl),
   `Hosting guide must publish the latest Button URL: ${latestButtonUrl}`,

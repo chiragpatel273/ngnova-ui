@@ -2,3 +2,4 @@ dist
 .angular
 coverage
 node_modules
+projects/mcp/data

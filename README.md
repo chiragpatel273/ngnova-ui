@@ -9,10 +9,10 @@ NgNova UI 1.0.2 is an open-source Angular 22 component library built with standa
 focused package entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 - [Documentation](https://chiragpatel273.github.io/ngnova-ui/)
-- [Component documentation](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+- [Component documentation](https://chiragpatel273.github.io/ngnova-ui/components/button/)
 - [Runnable quick start](examples/quick-start/README.md)
-- [Getting started](https://chiragpatel273.github.io/ngnova-ui/#/guide)
-- [Contributing](https://chiragpatel273.github.io/ngnova-ui/#/contributing)
+- [Getting started](https://chiragpatel273.github.io/ngnova-ui/guide/)
+- [Contributing](https://chiragpatel273.github.io/ngnova-ui/contributing/)
 - [Release notes](docs/RELEASE_NOTES_1_0.md)
 
 ## Why NgNova UI
@@ -41,6 +41,27 @@ See the complete [Angular compatibility policy](docs/ANGULAR_COMPATIBILITY.md) a
 [browser and assistive-technology support matrix](docs/BROWSER_AND_AT_SUPPORT.md).
 
 ## Installation
+
+### Automatic setup with `ng add` (1.1.0 and later)
+
+```bash
+ng add @ngnova/ui
+```
+
+The schematic installs the package, adds Tailwind CSS v4 and its PostCSS plugin when they are
+missing, and writes the stylesheet lines shown in the manual setup below. It is safe to run again.
+
+| Option           | Default | Effect                                                              |
+| ---------------- | ------- | ------------------------------------------------------------------- |
+| `--project`      | current | Application to configure; required only in multi-app workspaces.    |
+| `--theme`        | `true`  | Import the optional `@ngnova/ui/styles/theme.css` token stylesheet. |
+| `--dark-mode`    | `class` | `class` adds the `.dark` custom variant; `media` follows the OS.    |
+| `--cdk`          | `false` | Install `@angular/cdk` for the overlay and virtual-scroll entries.  |
+| `--skip-install` | `false` | Update files without installing added dependencies.                 |
+
+Workspaces on Tailwind CSS v3 are not modified; upgrade with `npx @tailwindcss/upgrade` first.
+
+### Manual setup
 
 Install NgNova UI:
 
@@ -136,7 +157,7 @@ export class AccountFormComponent {
 }
 ```
 
-See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/#/forms) for the supported
+See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/forms/) for the supported
 controls and form-state behavior.
 
 ## Components
@@ -151,9 +172,41 @@ NgNova UI documents 40 public component surfaces:
 | Navigation and workflow | Breadcrumb, Tabs, Accordion, Stepper, Paginator                                                        |
 | Overlays and feedback   | Modal, Drawer, Popover, Tooltip, Menu, Toast, Command Palette, Advanced Overlay, Confirmation          |
 
-Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/components/button/)
 for current APIs, live examples, accessibility guidance, and import statements. Headless table
 state utilities are also available from `@ngnova/ui/table-state`.
+
+## Translating built-in labels
+
+From 1.1.0, components with built-in text (accessible names, status messages, and button text) export
+a typed labels provider from their own entry point. Provide translations once instead of repeating
+inputs on every instance:
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideUiModalLabels } from '@ngnova/ui/modal';
+import { provideUiPaginatorLabels } from '@ngnova/ui/paginator';
+
+bootstrapApplication(App, {
+  providers: [
+    provideUiModalLabels({ close: 'Fermer la boîte de dialogue' }),
+    provideUiPaginatorLabels({
+      nextPage: 'Page suivante',
+      range: (start, end, total) => `${start}–${end} sur ${total}`,
+    }),
+  ],
+});
+```
+
+- Each provider accepts a partial object and merges over labels from parent injectors, so it also
+  works in route and component `providers`.
+- An explicit input on an instance, such as `closeAriaLabel`, still wins.
+- Text that combines words with values — ranges, counts, step positions, file sizes — is a label
+  function, so a translation controls word order and pluralization.
+- Labels are read when a component is created. To switch language at runtime, re-create the view or
+  bind the inputs.
+
+See [ADR 0004](docs/decisions/0004-built-in-label-contract.md) for the contract.
 
 ## Component test harnesses
 
@@ -171,6 +224,29 @@ await email.setValue('dev@example.com');
 
 The testing entry point includes harnesses for interactive controls, forms, overlays, navigation,
 feedback, and data components. Treat harness methods as supported public API.
+
+## AI coding assistants
+
+The documentation site publishes [`llms.txt`](https://llmstxt.org/) files generated from the same
+API data that the release gate verifies against the component implementations:
+
+- [`llms.txt`](https://chiragpatel273.github.io/ngnova-ui/llms.txt) — rules for generating NgNova
+  UI code, setup, and an index of per-component references.
+- [`llms-full.txt`](https://chiragpatel273.github.io/ngnova-ui/llms-full.txt) — every component's
+  inputs, outputs, examples, accessibility, keyboard, forms, and testing notes in one file.
+- `llms/<component>.md` — one component at a time, for example
+  [`llms/select.md`](https://chiragpatel273.github.io/ngnova-ui/llms/select.md).
+
+Point Claude, Copilot, Cursor, or another assistant at these URLs so generated code uses real
+inputs and focused entry points. Regenerate locally with `npm run build:docs:app`.
+
+For assistants that support the [Model Context Protocol](https://modelcontextprotocol.io), the
+[`@ngnova/mcp`](projects/mcp/README.md) server exposes the same reference as tools
+(`get_setup_guide`, `list_components`, `search_components`, `get_component`):
+
+```bash
+claude mcp add ngnova -- npx -y @ngnova/mcp
+```
 
 ## Local development
 
@@ -224,7 +300,7 @@ zoneless consumers, and the npm tarball.
 
 ## Contributing and project policies
 
-Contributions are welcome. Start with the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/#/contributing)
+Contributions are welcome. Start with the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/contributing/)
 or the repository's [CONTRIBUTING.md](CONTRIBUTING.md).
 
 - [Code of conduct](CODE_OF_CONDUCT.md)

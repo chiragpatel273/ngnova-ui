@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiMenuComponent, UiMenuTriggerDirective } from '../../../../menu/src/menu';
 import type { UiMenuItem, UiMenuSelection } from '../../../../menu/src/menu';
+import { provideUiMenuLabels } from '../../../../menu/src/menu-labels';
 
 const ITEMS: readonly UiMenuItem[] = [
   { value: 'edit', label: 'Edit' },
@@ -115,5 +116,45 @@ describe('UiMenuComponent', () => {
     (fixture.nativeElement.querySelector('[data-menu-index="2"]') as HTMLButtonElement).click();
     fixture.detectChanges();
     expect(fixture.componentInstance.open).toBe(true);
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [UiMenuComponent, UiMenuTriggerDirective],
+  template: `<ui-menu [items]="items" ariaLabel="Row actions">
+    <button uiMenuTrigger type="button">Actions</button>
+  </ui-menu>`,
+})
+class LabelledHostComponent {
+  readonly items = ITEMS;
+}
+
+describe('UiMenuComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HostComponent, LabelledHostComponent],
+      providers: [provideUiMenuLabels({ menu: 'Aktionen' })],
+    });
+  });
+
+  it('uses provided labels for the menu panel', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('[uiMenuTrigger]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="menu"]').getAttribute('aria-label')).toBe(
+      'Aktionen',
+    );
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(LabelledHostComponent);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('[uiMenuTrigger]') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="menu"]').getAttribute('aria-label')).toBe(
+      'Row actions',
+    );
   });
 });

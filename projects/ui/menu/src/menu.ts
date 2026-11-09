@@ -14,6 +14,8 @@ import {
 } from '@angular/core';
 import type { AfterViewInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 
+import { UI_MENU_LABELS } from './menu-labels';
+
 export type UiMenuAlign = 'start' | 'end';
 
 export interface UiMenuItem {
@@ -91,10 +93,12 @@ let nextMenuId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiMenuComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private readonly labels = inject(UI_MENU_LABELS);
+
   @Input() items: readonly UiMenuItem[] = [];
   @Input({ transform: booleanAttribute }) open = false;
   @Input() align: UiMenuAlign = 'start';
-  @Input() ariaLabel = 'Actions';
+  @Input() ariaLabel = this.labels.menu;
   @Input() menuId = `ui-menu-${++nextMenuId}`;
   @Input({ transform: booleanAttribute }) closeOnSelect = true;
   readonly openChange = output<boolean>();

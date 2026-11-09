@@ -1,0 +1,53 @@
+{
+  "name": "@ngnova/mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server that gives AI coding assistants verified NgNova UI component APIs, examples, and setup rules.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chiragpatel273/ngnova-ui.git",
+    "directory": "projects/mcp"
+  },
+  "homepage": "https://chiragpatel273.github.io/ngnova-ui/",
+  "bugs": {
+    "url": "https://github.com/chiragpatel273/ngnova-ui/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "angular",
+    "ngnova",
+    "component-library",
+    "ai"
+  ],
+  "type": "module",
+  "bin": {
+    "ngnova-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:data": "cd ../.. && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-llms.mjs --json projects/mcp/data/reference.json",
+    "build": "npm run build:data && tsc -p tsconfig.json",
+    "test": "npm run build && node --test \"test/**/*.test.mjs\"",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "~6.0.2"
+  }
+}

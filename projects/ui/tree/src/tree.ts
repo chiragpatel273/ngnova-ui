@@ -3,12 +3,15 @@ import {
   Component,
   booleanAttribute,
   computed,
+  inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
 import type { ElementRef } from '@angular/core';
+
+import { UI_TREE_LABELS } from './tree-labels';
 
 export interface UiTreeNode {
   readonly value: string;
@@ -107,11 +110,13 @@ function flattenTree(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTreeComponent {
+  private readonly labels = inject(UI_TREE_LABELS);
+
   readonly nodes = input<readonly UiTreeNode[]>([]);
   readonly expanded = input<readonly string[]>([]);
   readonly selected = input<string | null>(null);
-  readonly ariaLabel = input('Tree');
-  readonly emptyText = input('No items.');
+  readonly ariaLabel = input(this.labels.tree);
+  readonly emptyText = input(this.labels.empty);
   readonly selectable = input(true, { transform: booleanAttribute });
   readonly expandOnActivate = input(true, { transform: booleanAttribute });
   readonly expandedChange = output<readonly string[]>();

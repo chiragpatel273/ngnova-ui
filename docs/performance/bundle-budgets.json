@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "1.0.0",
+  "packageVersion": "1.0.2",
   "compression": "gzip-9",
   "entryPoints": {
     ".": {
@@ -24,11 +24,11 @@
     },
     "./alert": {
       "importPath": "@ngnova/ui/alert",
-      "rawBytes": 6239,
-      "gzipBytes": 1732,
+      "rawBytes": 6975,
+      "gzipBytes": 2009,
       "budget": {
-        "rawBytes": 6863,
-        "gzipBytes": 1988
+        "rawBytes": 7673,
+        "gzipBytes": 2265
       }
     },
     "./avatar": {
@@ -51,29 +51,29 @@
     },
     "./breadcrumb": {
       "importPath": "@ngnova/ui/breadcrumb",
-      "rawBytes": 6522,
-      "gzipBytes": 1526,
+      "rawBytes": 7319,
+      "gzipBytes": 1822,
       "budget": {
-        "rawBytes": 7175,
-        "gzipBytes": 1782
+        "rawBytes": 8051,
+        "gzipBytes": 2078
       }
     },
     "./button": {
       "importPath": "@ngnova/ui/button",
-      "rawBytes": 24075,
-      "gzipBytes": 4085,
+      "rawBytes": 24748,
+      "gzipBytes": 4366,
       "budget": {
-        "rawBytes": 26483,
-        "gzipBytes": 4494
+        "rawBytes": 27223,
+        "gzipBytes": 4803
       }
     },
     "./card": {
       "importPath": "@ngnova/ui/card",
       "rawBytes": 3258,
-      "gzipBytes": 1056,
+      "gzipBytes": 1055,
       "budget": {
         "rawBytes": 3770,
-        "gzipBytes": 1312
+        "gzipBytes": 1311
       }
     },
     "./checkbox": {
@@ -87,56 +87,56 @@
     },
     "./chip": {
       "importPath": "@ngnova/ui/chip",
-      "rawBytes": 6831,
-      "gzipBytes": 1724,
+      "rawBytes": 7554,
+      "gzipBytes": 2011,
       "budget": {
-        "rawBytes": 7515,
-        "gzipBytes": 1980
+        "rawBytes": 8310,
+        "gzipBytes": 2267
       }
     },
     "./combobox": {
       "importPath": "@ngnova/ui/combobox",
-      "rawBytes": 29654,
-      "gzipBytes": 5290,
+      "rawBytes": 30627,
+      "gzipBytes": 5617,
       "budget": {
-        "rawBytes": 32620,
-        "gzipBytes": 5820
+        "rawBytes": 33690,
+        "gzipBytes": 6179
       }
     },
     "./command-palette": {
       "importPath": "@ngnova/ui/command-palette",
-      "rawBytes": 28314,
-      "gzipBytes": 4985,
+      "rawBytes": 29429,
+      "gzipBytes": 5352,
       "budget": {
-        "rawBytes": 31146,
-        "gzipBytes": 5484
+        "rawBytes": 32372,
+        "gzipBytes": 5888
       }
     },
     "./confirmation": {
       "importPath": "@ngnova/ui/confirmation",
-      "rawBytes": 22021,
-      "gzipBytes": 4320,
+      "rawBytes": 23765,
+      "gzipBytes": 4818,
       "budget": {
-        "rawBytes": 24224,
-        "gzipBytes": 4752
+        "rawBytes": 26142,
+        "gzipBytes": 5300
       }
     },
     "./data-view": {
       "importPath": "@ngnova/ui/data-view",
-      "rawBytes": 14874,
-      "gzipBytes": 2703,
+      "rawBytes": 15830,
+      "gzipBytes": 3032,
       "budget": {
-        "rawBytes": 16362,
-        "gzipBytes": 2974
+        "rawBytes": 17413,
+        "gzipBytes": 3336
       }
     },
     "./date-picker": {
       "importPath": "@ngnova/ui/date-picker",
-      "rawBytes": 38878,
-      "gzipBytes": 6661,
+      "rawBytes": 40274,
+      "gzipBytes": 7083,
       "budget": {
-        "rawBytes": 42766,
-        "gzipBytes": 7328
+        "rawBytes": 44302,
+        "gzipBytes": 7792
       }
     },
     "./divider": {
@@ -150,20 +150,20 @@
     },
     "./drawer": {
       "importPath": "@ngnova/ui/drawer",
-      "rawBytes": 15917,
-      "gzipBytes": 3532,
+      "rawBytes": 16652,
+      "gzipBytes": 3807,
       "budget": {
-        "rawBytes": 17509,
-        "gzipBytes": 3886
+        "rawBytes": 18318,
+        "gzipBytes": 4188
       }
     },
     "./file-upload": {
       "importPath": "@ngnova/ui/file-upload",
-      "rawBytes": 24421,
-      "gzipBytes": 4297,
+      "rawBytes": 25561,
+      "gzipBytes": 4687,
       "budget": {
-        "rawBytes": 26864,
-        "gzipBytes": 4727
+        "rawBytes": 28118,
+        "gzipBytes": 5156
       }
     },
     "./form-field": {
@@ -177,29 +177,29 @@
     },
     "./input": {
       "importPath": "@ngnova/ui/input",
-      "rawBytes": 21538,
-      "gzipBytes": 4442,
+      "rawBytes": 22860,
+      "gzipBytes": 4776,
       "budget": {
-        "rawBytes": 23692,
-        "gzipBytes": 4887
+        "rawBytes": 25147,
+        "gzipBytes": 5254
       }
     },
     "./menu": {
       "importPath": "@ngnova/ui/menu",
-      "rawBytes": 12540,
-      "gzipBytes": 3122,
+      "rawBytes": 13251,
+      "gzipBytes": 3400,
       "budget": {
-        "rawBytes": 13795,
-        "gzipBytes": 3435
+        "rawBytes": 14577,
+        "gzipBytes": 3741
       }
     },
     "./modal": {
       "importPath": "@ngnova/ui/modal",
-      "rawBytes": 15772,
-      "gzipBytes": 3362,
+      "rawBytes": 16496,
+      "gzipBytes": 3645,
       "budget": {
-        "rawBytes": 17350,
-        "gzipBytes": 3699
+        "rawBytes": 18146,
+        "gzipBytes": 4010
       }
     },
     "./overlay": {
@@ -213,11 +213,11 @@
     },
     "./paginator": {
       "importPath": "@ngnova/ui/paginator",
-      "rawBytes": 13714,
-      "gzipBytes": 2515,
+      "rawBytes": 14756,
+      "gzipBytes": 2861,
       "budget": {
-        "rawBytes": 15086,
-        "gzipBytes": 2771
+        "rawBytes": 16232,
+        "gzipBytes": 3148
       }
     },
     "./popover": {
@@ -231,11 +231,11 @@
     },
     "./progress-bar": {
       "importPath": "@ngnova/ui/progress-bar",
-      "rawBytes": 5729,
-      "gzipBytes": 1469,
+      "rawBytes": 6541,
+      "gzipBytes": 1756,
       "budget": {
-        "rawBytes": 6302,
-        "gzipBytes": 1725
+        "rawBytes": 7196,
+        "gzipBytes": 2012
       }
     },
     "./radio": {
@@ -267,20 +267,20 @@
     },
     "./spinner": {
       "importPath": "@ngnova/ui/spinner",
-      "rawBytes": 3330,
-      "gzipBytes": 1094,
+      "rawBytes": 4098,
+      "gzipBytes": 1364,
       "budget": {
-        "rawBytes": 3842,
-        "gzipBytes": 1350
+        "rawBytes": 4610,
+        "gzipBytes": 1620
       }
     },
     "./stepper": {
       "importPath": "@ngnova/ui/stepper",
-      "rawBytes": 13689,
-      "gzipBytes": 2864,
+      "rawBytes": 14746,
+      "gzipBytes": 3233,
       "budget": {
-        "rawBytes": 15058,
-        "gzipBytes": 3151
+        "rawBytes": 16221,
+        "gzipBytes": 3557
       }
     },
     "./switch": {
@@ -294,11 +294,11 @@
     },
     "./table": {
       "importPath": "@ngnova/ui/table",
-      "rawBytes": 44001,
-      "gzipBytes": 6038,
+      "rawBytes": 45346,
+      "gzipBytes": 6493,
       "budget": {
-        "rawBytes": 48402,
-        "gzipBytes": 6642
+        "rawBytes": 49881,
+        "gzipBytes": 7143
       }
     },
     "./table-state": {
@@ -312,29 +312,29 @@
     },
     "./table-virtual-scroll": {
       "importPath": "@ngnova/ui/table-virtual-scroll",
-      "rawBytes": 11213,
-      "gzipBytes": 2396,
+      "rawBytes": 12110,
+      "gzipBytes": 2702,
       "budget": {
-        "rawBytes": 12335,
-        "gzipBytes": 2652
+        "rawBytes": 13322,
+        "gzipBytes": 2973
       }
     },
     "./tabs": {
       "importPath": "@ngnova/ui/tabs",
-      "rawBytes": 9983,
-      "gzipBytes": 2536,
+      "rawBytes": 10700,
+      "gzipBytes": 2807,
       "budget": {
-        "rawBytes": 10982,
-        "gzipBytes": 2792
+        "rawBytes": 11771,
+        "gzipBytes": 3088
       }
     },
     "./tag": {
       "importPath": "@ngnova/ui/tag",
-      "rawBytes": 7674,
-      "gzipBytes": 1877,
+      "rawBytes": 8386,
+      "gzipBytes": 2150,
       "budget": {
-        "rawBytes": 8442,
-        "gzipBytes": 2133
+        "rawBytes": 9225,
+        "gzipBytes": 2406
       }
     },
     "./testing": {
@@ -348,20 +348,20 @@
     },
     "./textarea": {
       "importPath": "@ngnova/ui/textarea",
-      "rawBytes": 11744,
-      "gzipBytes": 2870,
+      "rawBytes": 12785,
+      "gzipBytes": 3162,
       "budget": {
-        "rawBytes": 12919,
-        "gzipBytes": 3158
+        "rawBytes": 14064,
+        "gzipBytes": 3479
       }
     },
     "./toast": {
       "importPath": "@ngnova/ui/toast",
-      "rawBytes": 10065,
-      "gzipBytes": 2469,
+      "rawBytes": 10793,
+      "gzipBytes": 2722,
       "budget": {
-        "rawBytes": 11072,
-        "gzipBytes": 2725
+        "rawBytes": 11873,
+        "gzipBytes": 2995
       }
     },
     "./tooltip": {
@@ -375,31 +375,31 @@
     },
     "./tree": {
       "importPath": "@ngnova/ui/tree",
-      "rawBytes": 13411,
-      "gzipBytes": 3030,
+      "rawBytes": 14160,
+      "gzipBytes": 3311,
       "budget": {
-        "rawBytes": 14753,
-        "gzipBytes": 3334
+        "rawBytes": 15577,
+        "gzipBytes": 3643
       }
     },
     "./tree-table": {
       "importPath": "@ngnova/ui/tree-table",
-      "rawBytes": 24252,
-      "gzipBytes": 4085,
+      "rawBytes": 25202,
+      "gzipBytes": 4403,
       "budget": {
-        "rawBytes": 26678,
-        "gzipBytes": 4494
+        "rawBytes": 27723,
+        "gzipBytes": 4844
       }
     }
   },
   "assets": {
     "./styles/theme.css": {
       "importPath": "@ngnova/ui/styles/theme.css",
-      "rawBytes": 8361,
-      "gzipBytes": 1702,
+      "rawBytes": 8167,
+      "gzipBytes": 1692,
       "budget": {
-        "rawBytes": 9198,
-        "gzipBytes": 1958
+        "rawBytes": 8984,
+        "gzipBytes": 1948
       }
     }
   }

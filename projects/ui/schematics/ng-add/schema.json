@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "NgNovaUiNgAdd",
+  "title": "NgNova UI ng-add schematic",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The Angular application to configure.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "theme": {
+      "type": "boolean",
+      "default": true,
+      "description": "Import the optional versioned NgNova UI token stylesheet (@ngnova/ui/styles/theme.css).",
+      "x-prompt": "Import the NgNova UI theme token stylesheet?"
+    },
+    "darkMode": {
+      "type": "string",
+      "enum": ["class", "media"],
+      "default": "class",
+      "description": "Use 'class' to control dark mode with a .dark class, or 'media' to follow prefers-color-scheme.",
+      "x-prompt": {
+        "message": "How should dark mode be controlled?",
+        "type": "list",
+        "items": [
+          { "value": "class", "label": "A .dark class on the html element or app shell" },
+          { "value": "media", "label": "The operating system color scheme (prefers-color-scheme)" }
+        ]
+      }
+    },
+    "cdk": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install @angular/cdk for the overlay and table-virtual-scroll entry points."
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skip installing added dependencies."
+    }
+  },
+  "required": []
+}

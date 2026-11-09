@@ -6,6 +6,7 @@ import {
   UiDrawerFooterDirective,
   UiDrawerHeaderDirective,
 } from '../../../../drawer/src/drawer';
+import { provideUiDrawerLabels } from '../../../../drawer/src/drawer-labels';
 
 @Component({
   standalone: true,
@@ -145,5 +146,39 @@ describe('UiDrawerComponent', () => {
     expect(document.body.style.overflow).toBe('hidden');
     fixture.destroy();
     expect(document.body.style.overflow).toBe('');
+  });
+});
+
+describe('UiDrawerComponent labels', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [UiDrawerComponent],
+      providers: [provideUiDrawerLabels({ close: 'Fermer le panneau' })],
+    });
+  });
+
+  afterEach(() => {
+    document.body.style.overflow = '';
+  });
+
+  it('uses provided labels for the close button', () => {
+    const fixture = TestBed.createComponent(UiDrawerComponent);
+    fixture.componentRef.setInput('open', true);
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label="Fermer le panneau"]'),
+    ).not.toBeNull();
+    fixture.destroy();
+  });
+
+  it('lets an explicit input win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiDrawerComponent);
+    fixture.componentRef.setInput('open', true);
+    fixture.componentRef.setInput('closeAriaLabel', 'Close filters');
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label="Close filters"]'),
+    ).not.toBeNull();
+    fixture.destroy();
   });
 });

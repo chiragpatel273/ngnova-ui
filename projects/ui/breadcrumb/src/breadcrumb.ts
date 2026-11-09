@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, numberAttribute, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  numberAttribute,
+  output,
+} from '@angular/core';
+
+import { UI_BREADCRUMB_LABELS } from './breadcrumb-labels';
 
 export interface UiBreadcrumbItem {
   readonly label: string;
@@ -74,8 +83,10 @@ export type UiBreadcrumbDisplayItem =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiBreadcrumbComponent {
+  private readonly labels = inject(UI_BREADCRUMB_LABELS);
+
   @Input() items: readonly UiBreadcrumbItem[] = [];
-  @Input() ariaLabel = 'Breadcrumb';
+  @Input() ariaLabel = this.labels.navigation;
   @Input({ transform: numberAttribute }) maxItems = 0;
   readonly itemSelected = output<UiBreadcrumbSelection>();
 

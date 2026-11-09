@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { UiDataViewComponent, UiDataViewItemDirective } from '../../../../data-view/src/data-view';
+import { provideUiDataViewLabels } from '../../../../data-view/src/data-view-labels';
 
 describe('UiDataViewComponent', () => {
   it('renders typed items and layout context with stable list semantics', async () => {
@@ -91,5 +92,37 @@ describe('UiDataViewComponent', () => {
     fixture.componentRef.setInput('layout', 'list');
     fixture.detectChanges();
     expect(list.className).toContain('flex-col');
+  });
+});
+
+describe('UiDataViewComponent labels', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UiDataViewComponent],
+      providers: [provideUiDataViewLabels({ empty: 'Aucun élément.', grid: 'Grille' })],
+    }).compileComponents();
+  });
+
+  it('uses provided labels', () => {
+    const fixture = TestBed.createComponent(UiDataViewComponent);
+    fixture.componentRef.setInput('showLayoutToggle', true);
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('[role="status"]')?.textContent?.trim()).toBe('Aucun élément.');
+    expect(element.querySelector('button')?.textContent?.trim()).toBe('Grille');
+    expect(element.querySelector('section')?.getAttribute('aria-label')).toBe('Data view');
+  });
+
+  it('lets explicit inputs win over provided labels', () => {
+    const fixture = TestBed.createComponent(UiDataViewComponent);
+    fixture.componentRef.setInput('showLayoutToggle', true);
+    fixture.componentRef.setInput('emptyText', 'Nothing yet.');
+    fixture.componentRef.setInput('gridLabel', 'Cards');
+    fixture.detectChanges();
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('[role="status"]')?.textContent?.trim()).toBe('Nothing yet.');
+    expect(element.querySelector('button')?.textContent?.trim()).toBe('Cards');
   });
 });

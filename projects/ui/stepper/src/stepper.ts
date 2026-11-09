@@ -1,5 +1,14 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, Input, output } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  inject,
+  output,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+
+import { UI_STEPPER_LABELS } from './stepper-labels';
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -115,7 +124,9 @@ let nextStepperId = 0;
       <span [class]="copyClasses">
         <span data-step-label [class]="labelClasses(step, index)">{{ step.label }}</span>
         @if (step.optional) {
-          <span class="text-xs font-normal text-slate-500 dark:text-slate-400">Optional</span>
+          <span class="text-xs font-normal text-slate-500 dark:text-slate-400">{{
+            optionalText
+          }}</span>
         }
         @if (step.description) {
           <span class="text-xs font-normal leading-5 text-slate-500 dark:text-slate-400">
@@ -128,16 +139,20 @@ let nextStepperId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiStepperComponent {
+  private readonly labels = inject(UI_STEPPER_LABELS);
+
   @Input() id = `ui-stepper-${++nextStepperId}`;
   @Input() steps: readonly UiStepItem[] = [];
   @Input() active = '';
-  @Input() ariaLabel = 'Progress';
+  @Input() ariaLabel = this.labels.navigation;
   @Input() orientation: UiStepperOrientation = 'horizontal';
   @Input({ transform: booleanAttribute }) linear = false;
   @Input({ transform: booleanAttribute }) interactive = true;
 
   readonly activeChange = output<string>();
   readonly stepSelected = output<UiStepperSelection>();
+
+  protected readonly optionalText = this.labels.optional;
 
   protected get activeStep(): UiStepItem | undefined {
     return (
@@ -253,8 +268,12 @@ export class UiStepperComponent {
   }
 
   protected stepAriaLabel(step: UiStepItem, index: number): string {
-    const status = this.state(step, index);
-    return `${step.label}, step ${index + 1} of ${this.steps.length}, ${status}`;
+    return this.labels.step({
+      label: step.label,
+      position: index + 1,
+      total: this.steps.length,
+      status: this.state(step, index),
+    });
   }
 
   private get activeIndex(): number {

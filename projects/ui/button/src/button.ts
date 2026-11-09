@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import type { OnDestroy, OnInit } from '@angular/core';
 
+import { UI_BUTTON_LABELS } from './button-labels';
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -303,6 +305,8 @@ export class UiButtonGroupComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiButtonComponent {
+  private readonly labels = inject(UI_BUTTON_LABELS);
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @Input() variant: UiButtonVariant = 'primary';
@@ -314,7 +318,7 @@ export class UiButtonComponent {
   @Input({ transform: booleanAttribute }) fullWidth = false;
   @Input({ transform: booleanAttribute }) iconOnly = false;
   @Input() ariaLabel = '';
-  @Input() loadingLabel = 'Loading';
+  @Input() loadingLabel = this.labels.loading;
   @Input() type: UiButtonType = 'button';
   readonly pressed = output<MouseEvent>();
   readonly focused = output<FocusEvent>();

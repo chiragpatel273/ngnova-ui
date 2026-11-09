@@ -9,9 +9,9 @@ NgNova UI 1.0.2 is an Angular 22 component library built with standalone compone
 entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 - [Documentation](https://chiragpatel273.github.io/ngnova-ui/)
-- [Getting started](https://chiragpatel273.github.io/ngnova-ui/#/guide)
+- [Getting started](https://chiragpatel273.github.io/ngnova-ui/guide/)
 - [Runnable Angular 22 quick start](https://github.com/chiragpatel273/ngnova-ui/tree/main/examples/quick-start)
-- [Components](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+- [Components](https://chiragpatel273.github.io/ngnova-ui/components/button/)
 - [GitHub repository](https://github.com/chiragpatel273/ngnova-ui)
 
 ## Why NgNova UI
@@ -108,7 +108,7 @@ export class AccountFormComponent {
 }
 ```
 
-See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/#/forms) for the supported
+See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/forms/) for the supported
 controls and form-state behavior.
 
 ## Testing
@@ -204,7 +204,7 @@ npm publish --access public
 
 ## Contributing
 
-Read the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/#/contributing) for
+Read the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/contributing/) for
 the fork-to-pull-request workflow, engineering expectations, release checks, security reporting,
 and contribution-license terms.
 

@@ -352,8 +352,9 @@ discovery and first-run friction, not component quality.
 3. [x] Run the release gate on Linux and Windows in CI.
 4. [ ] Release 1.1.0 with the schematic, then switch the home page and guide install snippets to
        `ng add @ngnova/ui`.
-5. [ ] Path-based documentation routes with prerendering, per-page titles and descriptions, Open
-       Graph images, and a sitemap, so component pages can be indexed and shared.
+5. [x] Path-based documentation routes with all 53 routes prerendered, per-page titles,
+       descriptions, canonical links, Open Graph and Twitter tags, a sitemap, and redirects for
+       legacy `#/` links. Follow-up: Open Graph preview images, Search Console sitemap submission.
 6. [ ] NgNova UI MCP server exposing component search, API lookup, and examples from the same data
        as `llms-full.txt`.
 7. [ ] Internationalization: a typed `provideNgNovaLabels()` contract replacing hard-coded English

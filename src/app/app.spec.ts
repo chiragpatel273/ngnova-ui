@@ -966,7 +966,7 @@ describe('App', () => {
       '[aria-label="Admin dashboard source files"] [role="tab"]',
     );
 
-    expect(openDashboardLink?.getAttribute('href')).toBe('#/templates/admin-dashboard');
+    expect(openDashboardLink?.getAttribute('href')).toBe('templates/admin-dashboard');
     expect(openDashboardLink?.getAttribute('target')).toBe('_blank');
     expect(openDashboardLink?.getAttribute('rel')).toContain('noopener');
     expect(downloadLink?.getAttribute('href')).toBe(

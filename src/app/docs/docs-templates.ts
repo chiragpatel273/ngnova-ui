@@ -38,7 +38,7 @@ import {
 
           <div class="flex flex-wrap items-center gap-2">
             <a
-              href="#/templates/admin-dashboard"
+              href="templates/admin-dashboard"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex min-h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-800 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:border-blue-800 dark:hover:bg-blue-950/50"

@@ -28,8 +28,13 @@ export default async function globalSetup(): Promise<() => Promise<void>> {
       insideRoot && !insideRoot.startsWith('..') && !insideRoot.includes(':')
         ? requestedPath
         : join(root, 'index.html');
+    const prerenderedPage = join(safePath, 'index.html');
     const filePath =
-      existsSync(safePath) && statSync(safePath).isFile() ? safePath : join(root, 'index.html');
+      existsSync(safePath) && statSync(safePath).isFile()
+        ? safePath
+        : existsSync(prerenderedPage)
+          ? prerenderedPage
+          : join(root, 'index.html');
 
     response.writeHead(200, {
       'Cache-Control': 'no-store',

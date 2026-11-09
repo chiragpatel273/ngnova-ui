@@ -21,7 +21,7 @@ const { componentDocs, componentDocDetailsBySlug, getComponentImportPath } = awa
 const packageJson = JSON.parse(readFileSync(join(root, 'projects', 'ui', 'package.json'), 'utf8'));
 const hosting = JSON.parse(readFileSync(join(root, 'docs', 'hosting', 'versions.json'), 'utf8'));
 const siteUrl = `${hosting.canonicalOrigin}${hosting.projectPath}/`;
-const pageUrl = (route) => `${siteUrl}#/${route}`;
+const pageUrl = (route) => `${siteUrl}${route}/`;
 const angularRange = packageJson.peerDependencies['@angular/core'];
 const [major, minor] = packageJson.version.split('.').map(Number);
 const ngAddNote =

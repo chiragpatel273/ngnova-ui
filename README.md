@@ -9,10 +9,10 @@ NgNova UI 1.0.2 is an open-source Angular 22 component library built with standa
 focused package entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 - [Documentation](https://chiragpatel273.github.io/ngnova-ui/)
-- [Component documentation](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+- [Component documentation](https://chiragpatel273.github.io/ngnova-ui/components/button/)
 - [Runnable quick start](examples/quick-start/README.md)
-- [Getting started](https://chiragpatel273.github.io/ngnova-ui/#/guide)
-- [Contributing](https://chiragpatel273.github.io/ngnova-ui/#/contributing)
+- [Getting started](https://chiragpatel273.github.io/ngnova-ui/guide/)
+- [Contributing](https://chiragpatel273.github.io/ngnova-ui/contributing/)
 - [Release notes](docs/RELEASE_NOTES_1_0.md)
 
 ## Why NgNova UI
@@ -157,7 +157,7 @@ export class AccountFormComponent {
 }
 ```
 
-See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/#/forms) for the supported
+See the [Angular Forms guide](https://chiragpatel273.github.io/ngnova-ui/forms/) for the supported
 controls and form-state behavior.
 
 ## Components
@@ -172,7 +172,7 @@ NgNova UI documents 40 public component surfaces:
 | Navigation and workflow | Breadcrumb, Tabs, Accordion, Stepper, Paginator                                                        |
 | Overlays and feedback   | Modal, Drawer, Popover, Tooltip, Menu, Toast, Command Palette, Advanced Overlay, Confirmation          |
 
-Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/#/components/button)
+Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/components/button/)
 for current APIs, live examples, accessibility guidance, and import statements. Headless table
 state utilities are also available from `@ngnova/ui/table-state`.
 
@@ -260,7 +260,7 @@ zoneless consumers, and the npm tarball.
 
 ## Contributing and project policies
 
-Contributions are welcome. Start with the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/#/contributing)
+Contributions are welcome. Start with the [public contribution guide](https://chiragpatel273.github.io/ngnova-ui/contributing/)
 or the repository's [CONTRIBUTING.md](CONTRIBUTING.md).
 
 - [Code of conduct](CODE_OF_CONDUCT.md)

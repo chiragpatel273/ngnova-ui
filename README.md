@@ -240,6 +240,14 @@ API data that the release gate verifies against the component implementations:
 Point Claude, Copilot, Cursor, or another assistant at these URLs so generated code uses real
 inputs and focused entry points. Regenerate locally with `npm run build:docs:app`.
 
+For assistants that support the [Model Context Protocol](https://modelcontextprotocol.io), the
+[`@ngnova/mcp`](projects/mcp/README.md) server exposes the same reference as tools
+(`get_setup_guide`, `list_components`, `search_components`, `get_component`):
+
+```bash
+claude mcp add ngnova -- npx -y @ngnova/mcp
+```
+
 ## Local development
 
 The maintainer toolchain uses the Node.js versions documented in

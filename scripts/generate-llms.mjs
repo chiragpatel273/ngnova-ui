@@ -5,13 +5,16 @@
 // generated reference cannot describe inputs or outputs that do not exist.
 //
 // Usage: node scripts/generate-llms.mjs [--out <dir>]   (default: dist/docs/browser)
+//        node scripts/generate-llms.mjs --json <file>   (reference data for @ngnova/mcp only)
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const root = process.cwd();
 const outArgIndex = process.argv.indexOf('--out');
+const jsonArgIndex = process.argv.indexOf('--json');
+const jsonFile = jsonArgIndex === -1 ? null : resolve(process.argv[jsonArgIndex + 1]);
 const outDir = resolve(outArgIndex === -1 ? 'dist/docs/browser' : process.argv[outArgIndex + 1]);
 
 const { componentDocs, componentDocDetailsBySlug, getComponentImportPath } = await import(
@@ -259,6 +262,40 @@ ${tokens.map((token) => `\`${token}\``).join(', ')}
 # Components
 
 ${componentPages.map((page) => page.markdown).join('\n')}`;
+
+if (jsonFile) {
+  // Structured reference consumed by the @ngnova/mcp server (projects/mcp).
+  const reference = {
+    schemaVersion: 1,
+    packageName: packageJson.name,
+    packageVersion: packageJson.version,
+    angularRange,
+    siteUrl,
+    rules: rules.trim(),
+    setup: setup.trim(),
+    themeTokens: tokens,
+    components: componentPages.map(({ doc, markdown }) => ({
+      slug: doc.slug,
+      name: doc.name,
+      selector: doc.selector,
+      summary: doc.summary,
+      importPath: getComponentImportPath(doc.slug),
+      exports: doc.importName.split(',').map((name) => name.trim()),
+      inputs: doc.inputs.map((input) => input.name),
+      outputs: doc.outputs.map((output) => output.name),
+      harnesses: harnessesFor(doc.slug),
+      docsUrl: pageUrl(`components/${doc.slug}`),
+      markdown,
+    })),
+  };
+
+  mkdirSync(dirname(jsonFile), { recursive: true });
+  writeFileSync(jsonFile, `${JSON.stringify(reference, null, 2)}\n`);
+  console.log(
+    `Generated MCP reference for ${reference.components.length} components in ${jsonFile}.`,
+  );
+  process.exit(0);
+}
 
 if (!existsSync(outDir)) {
   console.error(`${outDir} does not exist. Build the documentation app first.`);

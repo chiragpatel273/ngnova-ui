@@ -355,8 +355,9 @@ discovery and first-run friction, not component quality.
 5. [x] Path-based documentation routes with all 53 routes prerendered, per-page titles,
        descriptions, canonical links, Open Graph and Twitter tags, a sitemap, and redirects for
        legacy `#/` links. Follow-up: Open Graph preview images, Search Console sitemap submission.
-6. [ ] NgNova UI MCP server exposing component search, API lookup, and examples from the same data
-       as `llms-full.txt`.
+6. [x] `@ngnova/mcp` server (projects/mcp) with `get_setup_guide`, `list_components`,
+       `search_components`, and `get_component` tools over the same verified reference as
+       `llms-full.txt`; stdio tests in CI. Follow-up: first npm publish of `@ngnova/mcp`.
 7. [x] Internationalization: per-entry-point typed labels providers (ADR 0004) for 26
        components, making every built-in English string replaceable, including formerly fixed
        Stepper, Table, Spinner, Combobox, File Upload, Input, and Textarea text. Date Picker keeps

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "1.0.2",
+  "packageVersion": "1.1.0",
   "angularPeer": ">=22.0.2 <23.0.0",
   "rootPolicy": "minimal",
   "entryPoints": {
     ".": {
       "importPath": "@ngnova/ui",
       "symbols": ["NGNOVA_UI_VERSION"],
-      "signatureSha256": "90fe4b6effc1fd6b8473933feb65a60d7b8c5bf3c5f2a4467cd91c645853ee70"
+      "signatureSha256": "dedca83579a90b0b616f8517660737e39c9d4900b419a889b372512237c21cc2"
     },
     "./accordion": {
       "importPath": "@ngnova/ui/accordion",
@@ -176,7 +176,7 @@
         "UiDrawerSize",
         "provideUiDrawerLabels"
       ],
-      "signatureSha256": "e0a491a27af8af91c7951aa5cbbbf765255f0b9c142fce9f7ebc669a6956fc16"
+      "signatureSha256": "28f657c13ebb5fae4938b97f23b7bc466fed4e9d88c1609d3b6845fccb3fb074"
     },
     "./file-upload": {
       "importPath": "@ngnova/ui/file-upload",
@@ -356,7 +356,7 @@
         "UiTableSortDirection",
         "provideUiTableLabels"
       ],
-      "signatureSha256": "080a68fe8cf1789200a2be1805511185011360d28029f462d754f9f77ad26480"
+      "signatureSha256": "53bb11a745ecfc93efa6649165d84326a60370e3da95f1ec02c3ab093d318057"
     },
     "./table-state": {
       "importPath": "@ngnova/ui/table-state",
@@ -507,7 +507,7 @@
         "UiToastVariant",
         "provideUiToastLabels"
       ],
-      "signatureSha256": "3a6fde1b60cb3d60120bde6378067b09fad1abef5c288bcd66caafaa44a9c2e3"
+      "signatureSha256": "8da3478e03c03bccf86f272ba896d5824db5ac66aa03f9980f1e840464f0d1ed"
     },
     "./tooltip": {
       "importPath": "@ngnova/ui/tooltip",
@@ -540,7 +540,7 @@
         "UiTreeTableVisibleNode",
         "provideUiTreeTableLabels"
       ],
-      "signatureSha256": "cc401da2b30206ec5b9e9db41ea8ddd59363d7cc215422c6d08083837edc237a"
+      "signatureSha256": "e0e22e06020eea60f19bca9c554ca1147e05c9f0f8c03839871e38d228ecf2f8"
     }
   }
 }

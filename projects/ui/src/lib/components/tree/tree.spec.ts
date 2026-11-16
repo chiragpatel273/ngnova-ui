@@ -82,6 +82,29 @@ describe('UiTreeComponent', () => {
     disabled.click();
     expect(selected).toBe('');
   });
+
+  it('expands with ArrowLeft and moves to the parent with ArrowRight in a right-to-left layout', async () => {
+    await TestBed.configureTestingModule({ imports: [UiTreeComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(UiTreeComponent);
+    let expanded: readonly string[] = [];
+    fixture.componentRef.setInput('nodes', nodes);
+    fixture.componentInstance.expandedChange.subscribe((value) => (expanded = value));
+    (fixture.nativeElement as HTMLElement).setAttribute('dir', 'rtl');
+    fixture.detectChanges();
+    const first = fixture.nativeElement.querySelector('[role="treeitem"]') as HTMLButtonElement;
+    first.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    expect(expanded).toEqual(['components']);
+
+    fixture.componentRef.setInput('expanded', ['components']);
+    fixture.detectChanges();
+    const items = fixture.nativeElement.querySelectorAll(
+      '[role="treeitem"]',
+    ) as NodeListOf<HTMLButtonElement>;
+    items[1].focus();
+    items[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    await Promise.resolve();
+    expect(document.activeElement?.textContent).toContain('Components');
+  });
 });
 
 describe('UiTreeComponent labels', () => {

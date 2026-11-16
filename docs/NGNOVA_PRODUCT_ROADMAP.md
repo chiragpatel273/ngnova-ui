@@ -362,8 +362,13 @@ discovery and first-run friction, not component quality.
        components, making every built-in English string replaceable, including formerly fixed
        Stepper, Table, Spinner, Combobox, File Upload, Input, and Textarea text. Date Picker keeps
        its `locale` input for Intl formatting.
-8. [ ] Right-to-left support: logical properties, `Directionality`-aware keyboard handling, and RTL
-       visual regression states.
+8. [x] Right-to-left support (ADR 0005): logical start/end utilities enforced by
+       `check:direction-contract` in the release gate, mirrored directional icons, direction-aware
+       arrow keys in Tabs, Tree, Tree Table, and Date Picker without a CDK dependency, `start`/`end`
+       option values for Drawer, Toast, and table alignment, a live `/right-to-left` docs preview,
+       and Chromium and WebKit layout and keyboard checks for form, navigation, and overlay
+       components in `e2e/visual/right-to-left.spec.ts`. Follow-up: pixel baselines for the RTL
+       preview once a Windows snapshot run is available.
 9. [ ] Public launch: release post, Angular community channels, and the Phase 6 external quick-start
        feedback round.
 

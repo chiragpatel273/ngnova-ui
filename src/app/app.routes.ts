@@ -88,6 +88,17 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'right-to-left',
+        title: 'Right-to-left layouts',
+        loadComponent: () =>
+          import('./docs/docs-topic-page').then((module) => module.DocsTopicPageComponent),
+        data: {
+          description:
+            'Use NgNova UI Angular components in right-to-left languages: logical start and end layout, mirrored icons, and direction-aware keyboard navigation.',
+          topic: 'rtl',
+        },
+      },
+      {
         path: 'theming',
         title: 'Theming and design tokens',
         loadComponent: () =>

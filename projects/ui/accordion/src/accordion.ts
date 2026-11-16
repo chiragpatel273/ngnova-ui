@@ -33,7 +33,7 @@ let nextAccordionId = 0;
               [disabled]="item.disabled"
               [attr.aria-expanded]="isOpen(item)"
               [attr.aria-controls]="panelId(item)"
-              class="flex w-full items-center justify-between gap-4 px-4 py-3 text-left text-sm font-medium text-slate-900 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-100 dark:hover:bg-slate-900 dark:focus-visible:ring-blue-400"
+              class="flex w-full items-center justify-between gap-4 px-4 py-3 text-start text-sm font-medium text-slate-900 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-100 dark:hover:bg-slate-900 dark:focus-visible:ring-blue-400"
               (click)="toggle(item)"
             >
               <span>{{ item.title }}</span>

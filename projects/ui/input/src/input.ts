@@ -265,7 +265,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected get floatingLabelClasses(): string {
     return uiClassNames(
-      'pointer-events-none absolute left-3 origin-left transition-all duration-[var(--ui-duration-normal,150ms)]',
+      'pointer-events-none absolute start-3 origin-left rtl:origin-right transition-all duration-[var(--ui-duration-normal,150ms)]',
       this.isFloatingLabelRaised
         ? 'top-1 text-xs text-slate-500 dark:text-slate-400'
         : 'top-1/2 -translate-y-1/2 text-sm text-slate-400 dark:text-slate-500',
@@ -277,7 +277,7 @@ export class UiInputComponent implements ControlValueAccessor {
 
   protected get counterTextClasses(): string {
     return uiClassNames(
-      'ml-auto shrink-0 text-sm text-slate-500 dark:text-slate-400',
+      'ms-auto shrink-0 text-sm text-slate-500 dark:text-slate-400',
       this.isCounterExceeded && 'font-medium text-red-600 dark:text-red-400',
     );
   }

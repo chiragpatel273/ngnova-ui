@@ -179,7 +179,7 @@ export class UiStepperComponent {
 
   protected get contentClasses(): string {
     return uiClassNames(
-      'relative z-10 flex min-w-0 border-0 bg-transparent p-0 text-left font-sans outline-none',
+      'relative z-10 flex min-w-0 border-0 bg-transparent p-0 text-start font-sans outline-none',
       this.orientation === 'horizontal' && 'w-full flex-col items-center gap-2 px-2 text-center',
       this.orientation === 'vertical' && 'items-start gap-3',
       'enabled:cursor-pointer enabled:rounded-lg enabled:hover:text-slate-950 enabled:focus-visible:ring-2 enabled:focus-visible:ring-blue-600 enabled:focus-visible:ring-offset-2 dark:enabled:hover:text-white dark:enabled:focus-visible:ring-blue-400 dark:enabled:focus-visible:ring-offset-slate-950',
@@ -242,8 +242,8 @@ export class UiStepperComponent {
     return uiClassNames(
       'absolute bg-slate-200 dark:bg-slate-800',
       this.orientation === 'horizontal' &&
-        'left-[calc(50%+1.25rem)] right-[calc(-50%+1.25rem)] top-4 h-px',
-      this.orientation === 'vertical' && 'bottom-0 left-[0.9375rem] top-9 w-px',
+        'start-[calc(50%+1.25rem)] end-[calc(-50%+1.25rem)] top-4 h-px',
+      this.orientation === 'vertical' && 'bottom-0 start-[0.9375rem] top-9 w-px',
       completed && 'bg-blue-700 dark:bg-blue-500',
     );
   }

@@ -106,6 +106,7 @@ const REFERENCE_ITEMS: readonly SidebarItem[] = [
   { label: 'API Reference', path: '/apis' },
   { label: 'Templates', path: '/templates' },
   { label: 'Style Guide', path: '/theming' },
+  { label: 'Right-to-left', path: '/right-to-left' },
   { label: 'Contributing', path: '/contributing' },
 ];
 

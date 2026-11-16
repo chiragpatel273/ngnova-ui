@@ -107,6 +107,20 @@ describe('UiMenuComponent', () => {
     expect(fixture.componentInstance.open).toBe(false);
   });
 
+  it('closes a pointer-opened menu with Escape on the focused trigger', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+    const trigger = fixture.nativeElement.querySelector('[uiMenuTrigger]') as HTMLButtonElement;
+    trigger.focus();
+    trigger.click();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.open).toBe(true);
+    trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.open).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+  });
+
   it('can remain open after selection', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.componentInstance.closeOnSelect = false;

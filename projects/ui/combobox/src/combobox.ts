@@ -156,7 +156,7 @@ let nextComboboxId = 0;
             role="listbox"
             [attr.aria-label]="label || ariaLabel || suggestionsLabel"
             [attr.aria-busy]="loading ? 'true' : null"
-            class="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-[950] max-h-64 overflow-y-auto rounded-[var(--ui-surface-radius,0.75rem)] border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-700 dark:bg-slate-950"
+            class="absolute inset-x-0 top-[calc(100%+0.375rem)] z-[950] max-h-64 overflow-y-auto rounded-[var(--ui-surface-radius,0.75rem)] border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-700 dark:bg-slate-950"
           >
             @if (loading) {
               <div class="px-3 py-6 text-center text-sm text-slate-500 dark:text-slate-400">
@@ -441,7 +441,7 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges, OnD
 
   protected optionClasses(entry: UiComboboxDisplayOption, visibleIndex: number): string {
     return uiClassNames(
-      'flex w-full min-w-0 items-center gap-3 rounded-[var(--ui-control-radius,0.625rem)] px-3 py-2 text-left text-sm outline-none',
+      'flex w-full min-w-0 items-center gap-3 rounded-[var(--ui-control-radius,0.625rem)] px-3 py-2 text-start text-sm outline-none',
       entry.option.disabled && 'cursor-not-allowed text-slate-400 opacity-60 dark:text-slate-600',
       !entry.option.disabled &&
         visibleIndex === this.activeIndex() &&

@@ -13,7 +13,25 @@ import type { ElementRef } from '@angular/core';
 
 import { UI_TREE_TABLE_LABELS } from './tree-table-labels';
 
-export type UiTreeTableAlign = 'left' | 'center' | 'right';
+/**
+ * Returns the pressed key with ArrowLeft and ArrowRight swapped when the event target is laid out
+ * right-to-left, so horizontal keyboard navigation follows the visual direction.
+ */
+function directionalKey(event: KeyboardEvent): string {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return event.key;
+  const target = event.target;
+  if (!(target instanceof Element) || !isRightToLeft(target)) return event.key;
+  return event.key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft';
+}
+
+function isRightToLeft(element: Element): boolean {
+  const direction = element.ownerDocument.defaultView?.getComputedStyle(element).direction;
+  if (direction === 'rtl' || direction === 'ltr') return direction === 'rtl';
+  return element.closest('[dir]')?.getAttribute('dir')?.toLowerCase() === 'rtl';
+}
+
+/** `start` and `end` follow the text direction; `left` and `right` are physical. */
+export type UiTreeTableAlign = 'start' | 'center' | 'end' | 'left' | 'right';
 export type UiTreeTableSortDirection = 'asc' | 'desc';
 
 export interface UiTreeTableColumn {
@@ -42,6 +60,8 @@ export interface UiTreeTableVisibleNode {
 }
 
 const ALIGN_CLASSES: Record<UiTreeTableAlign, string> = {
+  start: 'text-start',
+  end: 'text-end',
   left: 'text-left',
   center: 'text-center',
   right: 'text-right',
@@ -158,7 +178,7 @@ function flattenNodes(
                       @if (columnIndex === 0) {
                         <span
                           class="inline-flex min-w-0 items-center gap-2"
-                          [style.padding-left.rem]="(entry.level - 1) * 1.25"
+                          [style.padding-inline-start.rem]="(entry.level - 1) * 1.25"
                         >
                           <button
                             type="button"
@@ -171,6 +191,7 @@ function flattenNodes(
                             <svg
                               class="size-4 fill-none stroke-current transition-transform"
                               [class.rotate-90]="isExpanded(entry)"
+                              [class.rtl:rotate-180]="!isExpanded(entry)"
                               viewBox="0 0 20 20"
                               stroke-width="1.75"
                               stroke-linecap="round"
@@ -257,15 +278,16 @@ export class UiTreeTableComponent {
   protected onRowKeydown(event: KeyboardEvent, entry: UiTreeTableVisibleNode, index: number): void {
     const last = this.visibleNodes().length - 1;
     let target: number | null = null;
+    const key = directionalKey(event);
     if (event.key === 'ArrowDown') target = Math.min(last, index + 1);
     else if (event.key === 'ArrowUp') target = Math.max(0, index - 1);
     else if (event.key === 'Home') target = 0;
     else if (event.key === 'End') target = last;
-    else if (event.key === 'ArrowRight' && this.hasChildren(entry) && !this.isExpanded(entry)) {
+    else if (key === 'ArrowRight' && this.hasChildren(entry) && !this.isExpanded(entry)) {
       this.toggleExpanded(entry);
-    } else if (event.key === 'ArrowLeft' && this.hasChildren(entry) && this.isExpanded(entry)) {
+    } else if (key === 'ArrowLeft' && this.hasChildren(entry) && this.isExpanded(entry)) {
       this.toggleExpanded(entry);
-    } else if (event.key === 'ArrowLeft' && entry.parentValue) {
+    } else if (key === 'ArrowLeft' && entry.parentValue) {
       target = this.visibleNodes().findIndex(
         (candidate) => candidate.node.value === entry.parentValue,
       );
@@ -325,11 +347,11 @@ export class UiTreeTableComponent {
   }
 
   protected headerClasses(column: UiTreeTableColumn): string {
-    return `px-4 py-3 text-xs font-semibold uppercase tracking-wide ${ALIGN_CLASSES[column.align ?? 'left']}`;
+    return `px-4 py-3 text-xs font-semibold uppercase tracking-wide ${ALIGN_CLASSES[column.align ?? 'start']}`;
   }
 
   protected cellClasses(column: UiTreeTableColumn): string {
-    return `px-4 py-3 text-slate-700 dark:text-slate-200 ${ALIGN_CLASSES[column.align ?? 'left']}`;
+    return `px-4 py-3 text-slate-700 dark:text-slate-200 ${ALIGN_CLASSES[column.align ?? 'start']}`;
   }
 
   protected rowClasses(entry: UiTreeTableVisibleNode): string {

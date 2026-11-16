@@ -170,6 +170,21 @@ describe('UiDatePickerComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('[role="gridcell"]')).toHaveLength(42);
     expect(fixture.nativeElement.querySelectorAll('[data-date]').length).toBeLessThan(42);
   });
+
+  it('moves to the next day with ArrowLeft in a right-to-left layout', async () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    (fixture.nativeElement as HTMLElement).setAttribute('dir', 'rtl');
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const active = document.activeElement as HTMLButtonElement;
+    active.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect((document.activeElement as HTMLButtonElement).dataset['date']).toBe('2026-06-16');
+  });
 });
 
 describe('UiDatePickerComponent labels', () => {

@@ -138,4 +138,42 @@ describe('UiTreeTableComponent', () => {
       expect(text(tree.querySelector('[role="status"]'))).toBe('Nothing to show.');
     });
   });
+
+  it('expands with ArrowLeft and moves to the parent with ArrowRight in a right-to-left layout', async () => {
+    await TestBed.configureTestingModule({ imports: [UiTreeTableComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(UiTreeTableComponent);
+    let expanded: readonly string[] = [];
+    fixture.componentRef.setInput('columns', columns);
+    fixture.componentRef.setInput('nodes', nodes);
+    fixture.componentInstance.expandedChange.subscribe((value) => (expanded = value));
+    (fixture.nativeElement as HTMLElement).setAttribute('dir', 'rtl');
+    fixture.detectChanges();
+    const first = fixture.nativeElement.querySelector('tbody tr') as HTMLTableRowElement;
+    first.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    expect(expanded).toEqual(['components']);
+
+    fixture.componentRef.setInput('expanded', ['components']);
+    fixture.detectChanges();
+    const rows = fixture.nativeElement.querySelectorAll(
+      'tbody tr',
+    ) as NodeListOf<HTMLTableRowElement>;
+    rows[1].focus();
+    rows[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    await Promise.resolve();
+    expect(document.activeElement).toBe(rows[0]);
+  });
+
+  it('aligns columns to the logical start by default and accepts start and end', async () => {
+    await TestBed.configureTestingModule({ imports: [UiTreeTableComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(UiTreeTableComponent);
+    fixture.componentRef.setInput('columns', [
+      { key: 'name', header: 'Name' },
+      { key: 'status', header: 'Status', align: 'end' },
+    ]);
+    fixture.componentRef.setInput('nodes', nodes);
+    fixture.detectChanges();
+    const headers = fixture.nativeElement.querySelectorAll('th') as NodeListOf<HTMLElement>;
+    expect(headers[0].className).toContain('text-start');
+    expect(headers[1].className).toContain('text-end');
+  });
 });

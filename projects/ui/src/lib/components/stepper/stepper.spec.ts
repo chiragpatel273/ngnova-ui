@@ -124,8 +124,8 @@ describe('UiStepperComponent', () => {
     fixture.detectChanges();
     const connector = fixture.nativeElement.querySelector('[data-step-connector]') as HTMLElement;
 
-    expect(connector.className).toContain('left-[calc(50%+1.25rem)]');
-    expect(connector.className).toContain('right-[calc(-50%+1.25rem)]');
+    expect(connector.className).toContain('start-[calc(50%+1.25rem)]');
+    expect(connector.className).toContain('end-[calc(-50%+1.25rem)]');
   });
 
   it('falls back to the first enabled step and generates unique stable relationships', () => {

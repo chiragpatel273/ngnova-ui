@@ -50,7 +50,7 @@ const SIZES: Record<UiChipSize, string> = { sm: 'min-h-7 text-xs', md: 'min-h-8 
       @if (removable) {
         <button
           type="button"
-          class="mr-1 rounded-full p-1 outline-none hover:bg-black/10 focus-visible:ring-2 focus-visible:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/10 dark:focus-visible:ring-blue-400"
+          class="me-1 rounded-full p-1 outline-none hover:bg-black/10 focus-visible:ring-2 focus-visible:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/10 dark:focus-visible:ring-blue-400"
           [disabled]="disabled"
           [attr.aria-label]="removeAriaLabel"
           (click)="remove()"

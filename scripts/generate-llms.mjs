@@ -172,6 +172,10 @@ const rules = `## Rules for generating NgNova UI code
   provider instead of repeating inputs, for example
   \`provideUiModalLabels({ close: 'Fermer' })\` from \`@ngnova/ui/modal\`. Each entry point with
   built-in text exports \`provideUi<Name>Labels()\`, \`UI_<NAME>_LABELS\`, and \`Ui<Name>Labels\`.
+- For right-to-left languages set \`dir="rtl"\` on \`<html>\` or a container; no provider is needed.
+  Prefer the direction-aware \`start\`/\`end\` option values (Drawer \`position\`, Toast
+  \`top-end\`/\`bottom-end\`, Table column \`align\`) over \`left\`/\`right\`, and use logical
+  Tailwind utilities (\`ms-*\`, \`ps-*\`, \`start-*\`, \`text-start\`) in surrounding markup.
 - \`@ngnova/ui/overlay\` and \`@ngnova/ui/table-virtual-scroll\` require \`@angular/cdk\`. Test
   harnesses come from \`@ngnova/ui/testing\` and require \`@angular/cdk\` as a dev dependency.
 `;
@@ -232,6 +236,7 @@ ${setup}
 - [Getting started](${pageUrl('guide')})
 - [Angular Forms and Signal Forms](${pageUrl('forms')})
 - [Theming and design tokens](${pageUrl('theming')})
+- [Right-to-left layouts](${pageUrl('right-to-left')})
 
 ## Components
 

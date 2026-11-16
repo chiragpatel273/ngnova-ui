@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -7,6 +8,7 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   Input,
   output,
   Renderer2,
@@ -17,6 +19,23 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ControlValueAccessor } from '@angular/forms';
 
 import { UI_DATE_PICKER_LABELS } from './date-picker-labels';
+
+/**
+ * Returns the pressed key with ArrowLeft and ArrowRight swapped when the event target is laid out
+ * right-to-left, so horizontal keyboard navigation follows the visual direction.
+ */
+function directionalKey(event: KeyboardEvent): string {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return event.key;
+  const target = event.target;
+  if (!(target instanceof Element) || !isRightToLeft(target)) return event.key;
+  return event.key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft';
+}
+
+function isRightToLeft(element: Element): boolean {
+  const direction = element.ownerDocument.defaultView?.getComputedStyle(element).direction;
+  if (direction === 'rtl' || direction === 'ltr') return direction === 'rtl';
+  return element.closest('[dir]')?.getAttribute('dir')?.toLowerCase() === 'rtl';
+}
 
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
@@ -192,7 +211,7 @@ let nextDatePickerId = 0;
             [id]="calendarId"
             role="dialog"
             [attr.aria-label]="calendarAriaLabel"
-            class="absolute left-0 top-[calc(100%+0.375rem)] z-[950] w-80 max-w-[calc(100vw-2rem)] rounded-[var(--ui-surface-radius,0.875rem)] border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-700 dark:bg-slate-950"
+            class="absolute start-0 top-[calc(100%+0.375rem)] z-[950] w-80 max-w-[calc(100vw-2rem)] rounded-[var(--ui-surface-radius,0.875rem)] border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-700 dark:bg-slate-950"
             (keydown)="handleCalendarKeydown($event)"
           >
             <div class="mb-3 flex items-center justify-between gap-2">
@@ -204,7 +223,7 @@ let nextDatePickerId = 0;
                 (click)="navigateMonth(-1)"
               >
                 <svg
-                  class="size-4 fill-none stroke-current"
+                  class="size-4 fill-none stroke-current rtl:-scale-x-100"
                   viewBox="0 0 24 24"
                   stroke-width="2"
                   stroke-linecap="round"
@@ -230,7 +249,7 @@ let nextDatePickerId = 0;
                 (click)="navigateMonth(1)"
               >
                 <svg
-                  class="size-4 fill-none stroke-current"
+                  class="size-4 fill-none stroke-current rtl:-scale-x-100"
                   viewBox="0 0 24 24"
                   stroke-width="2"
                   stroke-linecap="round"
@@ -360,6 +379,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
   private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly injector = inject(Injector);
   private removeOutsideListener: (() => void) | null = null;
 
   private onChange: (value: string) => void = () => undefined;
@@ -518,8 +538,9 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
 
   protected handleCalendarKeydown(event: KeyboardEvent): void {
     let next: string | null = null;
-    if (event.key === 'ArrowRight') next = this.nextEnabledDate(this.activeDate(), 1);
-    else if (event.key === 'ArrowLeft') next = this.nextEnabledDate(this.activeDate(), -1);
+    const key = directionalKey(event);
+    if (key === 'ArrowRight') next = this.nextEnabledDate(this.activeDate(), 1);
+    else if (key === 'ArrowLeft') next = this.nextEnabledDate(this.activeDate(), -1);
     else if (event.key === 'ArrowDown') next = this.nextEnabledDate(this.activeDate(), 7);
     else if (event.key === 'ArrowUp') next = this.nextEnabledDate(this.activeDate(), -7);
     else if (event.key === 'Home') {
@@ -589,7 +610,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
     if (target) this.activeDate.set(target);
     this.monthChange.emit(month);
     this.changeDetector.markForCheck();
-    queueMicrotask(() => this.focusActiveDate());
+    this.focusActiveDateAfterRender();
   }
 
   protected canNavigateMonth(amount: 1 | -1): boolean {
@@ -648,7 +669,7 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
       this.activeDate.set(target);
       this.visibleMonth.set(startOfMonth(target));
       this.installOutside();
-      queueMicrotask(() => this.focusActiveDate());
+      this.focusActiveDateAfterRender();
     } else {
       this.removeOutside();
     }
@@ -685,7 +706,13 @@ export class UiDatePickerComponent implements ControlValueAccessor, OnChanges, O
       this.monthChange.emit(month);
     }
     this.changeDetector.markForCheck();
-    queueMicrotask(() => this.focusActiveDate());
+    this.focusActiveDateAfterRender();
+  }
+
+  // Focuses the active date once the calendar has rendered. A microtask is too early in zoneless
+  // applications, where change detection runs after pending microtasks.
+  private focusActiveDateAfterRender(): void {
+    afterNextRender(() => this.focusActiveDate(), { injector: this.injector });
   }
 
   private focusActiveDate(): void {

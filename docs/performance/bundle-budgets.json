@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "packageName": "@ngnova/ui",
-  "packageVersion": "1.0.2",
+  "packageVersion": "1.1.0",
   "compression": "gzip-9",
   "entryPoints": {
     ".": {
       "importPath": "@ngnova/ui",
-      "rawBytes": 154,
-      "gzipBytes": 152,
+      "rawBytes": 252,
+      "gzipBytes": 214,
       "budget": {
-        "rawBytes": 666,
-        "gzipBytes": 408
+        "rawBytes": 764,
+        "gzipBytes": 470
       }
     },
     "./accordion": {

@@ -19,7 +19,8 @@ import type {
 
 import { UI_DRAWER_LABELS } from './drawer-labels';
 
-export type UiDrawerPosition = 'left' | 'right' | 'top' | 'bottom';
+/** `start` and `end` follow the text direction; `left` and `right` are physical. */
+export type UiDrawerPosition = 'start' | 'end' | 'left' | 'right' | 'top' | 'bottom';
 export type UiDrawerSize = 'sm' | 'md' | 'lg';
 
 let nextDrawerId = 0;
@@ -27,6 +28,8 @@ const drawerStacks = new WeakMap<Document, UiDrawerComponent[]>();
 const scrollLocks = new WeakMap<Document, { count: number; readonly previousOverflow: string }>();
 
 const POSITION_CLASSES: Record<UiDrawerPosition, string> = {
+  start: 'inset-y-0 start-0 h-full border-e',
+  end: 'inset-y-0 end-0 h-full border-s',
   left: 'inset-y-0 left-0 h-full border-r',
   right: 'inset-y-0 right-0 h-full border-l',
   top: 'inset-x-0 top-0 w-full border-b',
@@ -78,7 +81,7 @@ const VERTICAL_SIZE_CLASSES: Record<UiDrawerSize, string> = {
             </div>
             <button
               type="button"
-              class="-mr-1 rounded-[var(--ui-control-radius,0.625rem)] p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
+              class="-me-1 rounded-[var(--ui-control-radius,0.625rem)] p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950"
               [attr.aria-label]="closeAriaLabel"
               (click)="close()"
             >
@@ -140,7 +143,7 @@ export class UiDrawerComponent implements AfterViewChecked, OnChanges, OnDestroy
 
   protected get panelClasses(): string {
     const sizing =
-      this.position === 'left' || this.position === 'right'
+      this.position !== 'top' && this.position !== 'bottom'
         ? SIDE_SIZE_CLASSES[this.size]
         : VERTICAL_SIZE_CLASSES[this.size];
     return `absolute flex flex-col overflow-hidden border-slate-200 bg-white shadow-2xl shadow-slate-950/20 outline-none dark:border-slate-800 dark:bg-slate-950 dark:shadow-black/50 ${POSITION_CLASSES[this.position]} ${sizing}`;

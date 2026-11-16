@@ -13,6 +13,23 @@ import type { ElementRef } from '@angular/core';
 
 import { UI_TREE_LABELS } from './tree-labels';
 
+/**
+ * Returns the pressed key with ArrowLeft and ArrowRight swapped when the event target is laid out
+ * right-to-left, so horizontal keyboard navigation follows the visual direction.
+ */
+function directionalKey(event: KeyboardEvent): string {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return event.key;
+  const target = event.target;
+  if (!(target instanceof Element) || !isRightToLeft(target)) return event.key;
+  return event.key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft';
+}
+
+function isRightToLeft(element: Element): boolean {
+  const direction = element.ownerDocument.defaultView?.getComputedStyle(element).direction;
+  if (direction === 'rtl' || direction === 'ltr') return direction === 'rtl';
+  return element.closest('[dir]')?.getAttribute('dir')?.toLowerCase() === 'rtl';
+}
+
 export interface UiTreeNode {
   readonly value: string;
   readonly label: string;
@@ -70,7 +87,7 @@ function flattenTree(
           type="button"
           [class]="nodeClasses(entry)"
           role="treeitem"
-          [style.padding-left.rem]="0.75 + (entry.level - 1) * 1.25"
+          [style.padding-inline-start.rem]="0.75 + (entry.level - 1) * 1.25"
           [attr.aria-level]="entry.level"
           [attr.aria-posinset]="entry.position"
           [attr.aria-setsize]="entry.setSize"
@@ -85,6 +102,7 @@ function flattenTree(
           <svg
             class="size-4 shrink-0 fill-none stroke-current transition-transform"
             [class.rotate-90]="isExpanded(entry)"
+            [class.rtl:rotate-180]="!isExpanded(entry)"
             [class.invisible]="!hasChildren(entry)"
             viewBox="0 0 20 20"
             stroke-width="1.75"
@@ -95,7 +113,7 @@ function flattenTree(
           >
             <path d="m8 6 4 4-4 4" />
           </svg>
-          <span class="min-w-0 flex-1 text-left">
+          <span class="min-w-0 flex-1 text-start">
             <span class="block truncate font-medium">{{ entry.node.label }}</span>
             @if (entry.node.description) {
               <span class="block truncate text-xs text-slate-500 dark:text-slate-400">
@@ -158,7 +176,7 @@ export class UiTreeComponent {
   protected onKeydown(event: KeyboardEvent, entry: UiTreeVisibleNode, index: number): void {
     const last = this.visibleNodes().length - 1;
     let target: number | null = null;
-    switch (event.key) {
+    switch (directionalKey(event)) {
       case 'ArrowDown':
         target = Math.min(last, index + 1);
         break;
@@ -238,7 +256,7 @@ export class UiTreeComponent {
 
   protected nodeClasses(entry: UiTreeVisibleNode): string {
     const base =
-      'flex min-h-10 w-full items-center gap-2 rounded-lg pr-3 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset dark:text-slate-200 dark:focus-visible:ring-blue-400';
+      'flex min-h-10 w-full items-center gap-2 rounded-lg pe-3 text-sm text-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-inset dark:text-slate-200 dark:focus-visible:ring-blue-400';
     if (entry.node.disabled) {
       return `${base} cursor-not-allowed opacity-50`;
     }

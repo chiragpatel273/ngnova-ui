@@ -16,7 +16,8 @@ function uiClassNames(...classes: (string | false | null | undefined)[]): string
 }
 
 export type UiToastVariant = 'info' | 'success' | 'warning' | 'danger';
-export type UiToastPosition = 'top-right' | 'bottom-right';
+/** `top-end` and `bottom-end` follow the text direction; `top-right` and `bottom-right` are physical. */
+export type UiToastPosition = 'top-right' | 'bottom-right' | 'top-end' | 'bottom-end';
 
 export interface UiToastMessage {
   readonly id: string;
@@ -172,11 +173,11 @@ export class UiToastComponent {
 
   protected readonly viewportClasses = computed(() =>
     uiClassNames(
-      'pointer-events-none fixed right-0 z-50 flex w-full max-w-sm flex-col gap-3 p-[var(--ui-toast-viewport-offset)] pl-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-left))] pr-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-right))]',
-      this.position() === 'top-right' &&
-        'top-0 pt-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-top))]',
-      this.position() === 'bottom-right' &&
-        'bottom-0 pb-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-bottom))]',
+      'pointer-events-none fixed z-50 flex w-full max-w-sm flex-col gap-3 p-[var(--ui-toast-viewport-offset)] pl-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-left))] pr-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-right))]',
+      this.position().endsWith('-end') ? 'end-0' : 'right-0',
+      this.position().startsWith('top-')
+        ? 'top-0 pt-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-top))]'
+        : 'bottom-0 pb-[max(var(--ui-toast-viewport-offset),env(safe-area-inset-bottom))]',
     ),
   );
 

@@ -72,7 +72,7 @@ structurally misclassify the existing `ControlValueAccessor` as a native
 Review result: no breaking change and no migration step required. The matching patch changeset and
 Angular Forms compatibility guide document the consumer-visible fix.
 
-### 1.1.0 built-in label providers (unreleased)
+### 1.1.0 built-in label providers
 
 Twenty-six component entry points each add one interface, one `InjectionToken`, and one provider
 function following [ADR 0004](decisions/0004-built-in-label-contract.md), for example
@@ -85,5 +85,29 @@ function following [ADR 0004](decisions/0004-built-in-label-contract.md), for ex
   `queueLabel`; rendering is unchanged when it is bound or left at its default.
 - Generated declarations were diffed against the published 1.0.2 package: no input, output,
   selector, or exported type was removed or retyped.
+
+Review result: additive minor change, no migration step required.
+
+`NGNOVA_UI_VERSION` now reports the actual package version. Releases up to 1.0.2 exported the stale
+literal `'1.0.0'`; from 1.1.0 the declaration is `string` so the value can change on every release
+without changing the declared type. The release documentation check keeps it equal to the package
+version. Only code that relied on the exact literal type `'1.0.0'` is affected.
+
+### 1.1.0 right-to-left support
+
+Following [ADR 0005](decisions/0005-right-to-left-direction-contract.md), three exported types widen
+with direction-aware values:
+
+- `UiDrawerPosition` adds `'start' | 'end'`.
+- `UiToastPosition` adds `'top-end' | 'bottom-end'`.
+- `UiTableAlign` and `UiTreeTableAlign` add `'start' | 'end'`.
+
+Existing values keep their physical meaning and existing defaults are unchanged. When a column has
+no `align`, it now renders `text-start` instead of `text-left`, which is identical in left-to-right
+layouts. Table `sticky: 'start' | 'end'` and Menu `align: 'start' | 'end'` now follow the text
+direction, as their names always promised; left-to-right placement is unchanged.
+
+Code that exhaustively switches over these union types needs a case for the new members; this is
+the usual consequence of an additive union widening and does not affect templates.
 
 Review result: additive minor change, no migration step required.

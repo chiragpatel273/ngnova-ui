@@ -7,6 +7,7 @@ import { UiButtonComponent } from '@ngnova/ui/button';
 import { DocsCodeBlockComponent } from './docs-code-block';
 import { componentDocs } from './docs-data';
 import { SignalFormsPlaygroundComponent } from './signal-forms-playground';
+import { RtlPlaygroundComponent } from './rtl-playground';
 import { ThemePlaygroundComponent } from './theme-playground';
 
 interface TopicSection {
@@ -150,6 +151,47 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
       },
     ],
   },
+  rtl: {
+    badge: 'Right-to-left',
+    title: 'Right-to-Left Layouts',
+    summary:
+      'NgNova UI components mirror under dir="rtl" without a provider or CDK dependency: spacing and positioning use logical start and end utilities, directional icons flip, and horizontal arrow keys follow the visual direction.',
+    ctaLabel: 'Translate Built-in Labels',
+    ctaPath: '/accessibility',
+    sections: [
+      {
+        title: 'Set the direction',
+        description:
+          'Set dir and lang on the html element, or on any container for a mixed-direction page. Components read the computed direction when they handle keys.',
+        items: [
+          'dir="rtl" on html, a layout shell, or a single region',
+          'CSS direction: rtl is honored too',
+          'No Directionality provider or @angular/cdk required',
+        ],
+      },
+      {
+        title: 'Logical options',
+        description:
+          'Options named start and end follow the text direction. left and right stay physical for layouts that must not mirror.',
+        items: [
+          "Drawer position 'start' | 'end'",
+          "Toast position 'top-end' | 'bottom-end'",
+          "Table and Tree Table column align 'start' | 'end'",
+          "Menu align 'start' | 'end', Table sticky 'start' | 'end'",
+        ],
+      },
+      {
+        title: 'Keyboard',
+        description:
+          'Following the WAI-ARIA Authoring Practices, ArrowLeft and ArrowRight swap meaning in right-to-left layouts.',
+        items: [
+          'Tabs: ArrowLeft moves to the next tab',
+          'Tree and Tree Table: ArrowLeft expands, ArrowRight collapses or moves to the parent',
+          'Date Picker: ArrowLeft moves to the next day',
+        ],
+      },
+    ],
+  },
   roadmap: {
     badge: 'Roadmap',
     title: 'NgNova UI Roadmap',
@@ -224,6 +266,15 @@ export class ThemeToggleComponent {
   }
 }`;
 
+const RTL_SETUP_CODE = `<!-- index.html -->
+<html lang="ar" dir="rtl">
+
+<!-- or scope a single region -->
+<section dir="rtl" lang="ar">
+  <ui-tabs [tabs]="tabs" [(active)]="active" />
+  <ui-drawer position="end" [(open)]="filtersOpen">...</ui-drawer>
+</section>`;
+
 @Component({
   selector: 'app-docs-topic-page',
   standalone: true,
@@ -231,6 +282,7 @@ export class ThemeToggleComponent {
     RouterLink,
     UiButtonComponent,
     DocsCodeBlockComponent,
+    RtlPlaygroundComponent,
     SignalFormsPlaygroundComponent,
     ThemePlaygroundComponent,
   ],
@@ -326,6 +378,45 @@ export class ThemeToggleComponent {
                       </span>
                     }
                   </div>
+                </article>
+              }
+            </div>
+          </section>
+        } @else if (slug() === 'rtl') {
+          <section class="mt-7 grid gap-5">
+            <app-rtl-playground />
+            <article
+              class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+            >
+              <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                Enable right-to-left
+              </h2>
+              <p class="mt-2 text-sm leading-5 text-slate-600 dark:text-slate-300">
+                Set the document direction and language. Translate built-in accessible names with
+                the per-component labels providers.
+              </p>
+              <div class="mt-4">
+                <app-docs-code-block [code]="rtlSetupCode" language="HTML" />
+              </div>
+            </article>
+            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              @for (section of page.sections; track section.title) {
+                <article
+                  class="rounded border border-blue-200 bg-white p-5 dark:border-blue-950 dark:bg-slate-950"
+                >
+                  <h2 class="text-base font-semibold text-slate-950 dark:text-slate-50">
+                    {{ section.title }}
+                  </h2>
+                  <p class="mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">
+                    {{ section.description }}
+                  </p>
+                  <ul class="mt-4 grid gap-2 text-sm text-slate-800 dark:text-slate-100">
+                    @for (item of section.items; track item) {
+                      <li class="rounded bg-slate-100 px-2.5 py-1.5 dark:bg-slate-800">
+                        {{ item }}
+                      </li>
+                    }
+                  </ul>
                 </article>
               }
             </div>
@@ -465,6 +556,7 @@ export class DocsTopicPageComponent {
   protected readonly allComponents = componentDocs;
   protected readonly themeStylesheetCode = THEME_STYLESHEET_CODE;
   protected readonly themeToggleCode = THEME_TOGGLE_CODE;
+  protected readonly rtlSetupCode = RTL_SETUP_CODE;
   protected readonly slug = toSignal(
     this.route.data.pipe(map((data) => String(data['topic'] ?? 'components'))),
     { initialValue: String(this.route.snapshot.data['topic'] ?? 'components') },

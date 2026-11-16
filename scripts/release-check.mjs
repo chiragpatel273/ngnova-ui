@@ -7,6 +7,7 @@ const steps = [
   ['Lint', npm, ['run', 'lint']],
   ['Docs API consistency', npm, ['run', 'check:docs-api']],
   ['Focus-visible contract', npm, ['run', 'check:focus-contract']],
+  ['Right-to-left direction contract', npm, ['run', 'check:direction-contract']],
   ['Theme contract', npm, ['run', 'check:theme-contract']],
   ['Angular compatibility', npm, ['run', 'check:angular-compatibility']],
   ['Browser and AT support matrix', npm, ['run', 'check:support-matrix']],

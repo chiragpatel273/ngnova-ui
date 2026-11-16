@@ -42,7 +42,7 @@ See the complete [Angular compatibility policy](docs/ANGULAR_COMPATIBILITY.md) a
 
 ## Installation
 
-### Automatic setup with `ng add` (1.1.0 and later)
+### Automatic setup with `ng add` (recommended)
 
 ```bash
 ng add @ngnova/ui

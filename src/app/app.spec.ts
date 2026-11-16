@@ -145,7 +145,7 @@ describe('App', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(writeText).toHaveBeenCalledWith('npm install @ngnova/ui');
+      expect(writeText).toHaveBeenCalledWith('ng add @ngnova/ui');
       expect(compiled.querySelector('button[aria-label="Install command copied"]')).toBeTruthy();
     } finally {
       Object.defineProperty(navigator, 'clipboard', {

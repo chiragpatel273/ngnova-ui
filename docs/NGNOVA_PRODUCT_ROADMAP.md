@@ -350,8 +350,9 @@ discovery and first-run friction, not component quality.
 2. [x] `llms.txt`, `llms-full.txt`, and per-component Markdown generated from the verified docs
        data on every documentation build.
 3. [x] Run the release gate on Linux and Windows in CI.
-4. [ ] Release 1.1.0 with the schematic, then switch the home page and guide install snippets to
-       `ng add @ngnova/ui`.
+4. [x] Release 1.1.0 with the schematic, then switch the home page and guide install snippets to
+       `ng add @ngnova/ui`. Released 2026-11-16; `ng add` verified against the published package in
+       a fresh `ng new` application.
 5. [x] Path-based documentation routes with all 53 routes prerendered, per-page titles,
        descriptions, canonical links, Open Graph and Twitter tags, a sitemap, and redirects for
        legacy `#/` links. Follow-up: Open Graph preview images, Search Console sitemap submission.

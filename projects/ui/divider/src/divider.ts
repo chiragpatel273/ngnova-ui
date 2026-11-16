@@ -5,8 +5,8 @@ export type UiDividerInset = 'none' | 'start' | 'end' | 'both';
 
 const HORIZONTAL_INSET: Record<UiDividerInset, string> = {
   none: 'mx-0',
-  start: 'ml-4',
-  end: 'mr-4',
+  start: 'ms-4',
+  end: 'me-4',
   both: 'mx-4',
 };
 
@@ -45,7 +45,7 @@ export class UiDividerComponent {
 
   protected get dividerClasses(): string {
     if (this.orientation === 'vertical') {
-      return `inline-block min-h-6 self-stretch border-l border-slate-200 dark:border-slate-800 ${VERTICAL_INSET[this.inset]}`;
+      return `inline-block min-h-6 self-stretch border-s border-slate-200 dark:border-slate-800 ${VERTICAL_INSET[this.inset]}`;
     }
     const line = this.label
       ? 'flex w-full items-center before:h-px before:flex-1 before:bg-slate-200 after:h-px after:flex-1 after:bg-slate-200 dark:before:bg-slate-800 dark:after:bg-slate-800'

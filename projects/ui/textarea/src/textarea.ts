@@ -92,7 +92,7 @@ let nextTextareaId = 0;
             </p>
           }
           @if (showCounter) {
-            <p [id]="counterId" class="ml-auto shrink-0 text-sm text-slate-500 dark:text-slate-400">
+            <p [id]="counterId" class="ms-auto shrink-0 text-sm text-slate-500 dark:text-slate-400">
               {{ value.length }} / {{ maxLength }}
             </p>
           }

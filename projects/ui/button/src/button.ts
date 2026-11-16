@@ -263,7 +263,7 @@ export class UiButtonGroupComponent {
 
   protected get classes(): string {
     return uiClassNames(
-      'isolate inline-flex items-stretch overflow-visible rounded-[var(--ui-control-radius,0.5rem)] shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 [&_ui-button:not(:first-child)_button]:rounded-l-none [&_ui-button:not(:last-child)_button]:rounded-r-none [&_ui-button:not(:last-child)_button]:border-r-0',
+      'isolate inline-flex items-stretch overflow-visible rounded-[var(--ui-control-radius,0.5rem)] shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 [&_ui-button:not(:first-child)_button]:rounded-s-none [&_ui-button:not(:last-child)_button]:rounded-e-none [&_ui-button:not(:last-child)_button]:border-e-0',
       this.fullWidth && 'flex w-full [&_ui-button]:flex-1 [&_ui-button_button]:w-full',
     );
   }

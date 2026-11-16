@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 
 const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
@@ -39,6 +40,12 @@ requireValue(
   'The release workspace must remain private; only the generated library package is publishable.',
 );
 requireValue(libraryPackage.name === '@ngnova/ui', 'The release package must be named @ngnova/ui.');
+requireValue(
+  readFileSync('projects/ui/src/public-api.ts', 'utf8').includes(
+    `NGNOVA_UI_VERSION = '${libraryPackage.version}' as string`,
+  ),
+  `NGNOVA_UI_VERSION must equal the package version ${libraryPackage.version}.`,
+);
 requireValue(
   stableVersionMatch !== null && Number(stableVersionMatch[1]) >= 1,
   'The release package must declare a stable semantic version at or above 1.0.0.',

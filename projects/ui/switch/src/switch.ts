@@ -65,7 +65,7 @@ let nextSwitchId = 0;
           aria-hidden="true"
         ></span>
         <span
-          class="absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5"
+          class="absolute start-0.5 top-0.5 size-5 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5 rtl:peer-checked:-translate-x-5"
           aria-hidden="true"
         ></span>
       </span>

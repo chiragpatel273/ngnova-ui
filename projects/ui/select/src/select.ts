@@ -83,7 +83,7 @@ let nextSelectId = 0;
           stroke-width="1.75"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-slate-500 peer-disabled:opacity-50 dark:text-slate-400"
+          class="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-slate-500 peer-disabled:opacity-50 dark:text-slate-400"
         >
           <path d="m6 8 4 4 4-4" />
         </svg>
@@ -141,7 +141,7 @@ export class UiSelectComponent implements ControlValueAccessor {
 
   protected get selectClasses(): string {
     return uiClassNames(
-      'peer block w-full appearance-none rounded-[var(--ui-control-radius,0.5rem)] border bg-white pr-10 text-slate-900 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950 dark:disabled:bg-slate-900',
+      'peer block w-full appearance-none rounded-[var(--ui-control-radius,0.5rem)] border bg-white pe-10 text-slate-900 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-950 dark:text-slate-100 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-slate-950 dark:disabled:bg-slate-900',
       this.size === 'sm' && 'h-[var(--ui-control-height-sm,2rem)] px-2.5 py-1.5 text-sm',
       this.size === 'md' && 'h-[var(--ui-control-height-md,2.5rem)] px-3 py-2 text-sm',
       this.size === 'lg' && 'h-[var(--ui-control-height-lg,3rem)] px-4 py-2.5 text-base',

@@ -64,7 +64,7 @@ export type UiBreadcrumbDisplayItem =
 
             @if (!last) {
               <svg
-                class="size-4 shrink-0 fill-none stroke-slate-400 dark:stroke-slate-600"
+                class="size-4 shrink-0 fill-none stroke-slate-400 rtl:-scale-x-100 dark:stroke-slate-600"
                 viewBox="0 0 24 24"
                 stroke-width="2"
                 stroke-linecap="round"

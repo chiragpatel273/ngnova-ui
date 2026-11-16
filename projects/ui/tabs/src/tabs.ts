@@ -10,6 +10,17 @@ import {
 
 import { UI_TABS_LABELS } from './tabs-labels';
 
+/**
+ * Returns the pressed key with ArrowLeft and ArrowRight swapped when the event target is laid out
+ * right-to-left, so horizontal keyboard navigation follows the visual direction.
+ */
+function directionalKey({ key, target }: KeyboardEvent): string {
+  if ((key !== 'ArrowLeft' && key !== 'ArrowRight') || !(target instanceof Element)) return key;
+  const rtl =
+    (getComputedStyle(target).direction || target.closest('[dir]')?.getAttribute('dir')) === 'rtl';
+  return rtl ? (key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft') : key;
+}
+
 function uiClassNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -127,7 +138,7 @@ export class UiTabsComponent {
       this.orientation === 'horizontal' && 'flex-row overflow-x-auto overflow-y-hidden',
       this.orientation === 'vertical' && 'flex-col items-stretch overflow-x-hidden overflow-y-auto',
       this.variant === 'underline' && this.orientation === 'horizontal' && 'border-b',
-      this.variant === 'underline' && this.orientation === 'vertical' && 'border-l',
+      this.variant === 'underline' && this.orientation === 'vertical' && 'border-s',
     );
   }
 
@@ -148,7 +159,7 @@ export class UiTabsComponent {
         '-mb-px rounded-none border-b-2 px-1 py-2.5',
       this.variant === 'underline' &&
         this.orientation === 'vertical' &&
-        '-ml-px rounded-none border-l-2 px-3 py-2',
+        '-ms-px rounded-none border-s-2 px-3 py-2',
       this.fullWidth && 'flex-1',
       tab.value === this.selectedValue
         ? TAB_VARIANT_ACTIVE_CLASSES[this.variant]
@@ -172,7 +183,7 @@ export class UiTabsComponent {
 
     const currentIndex = this.getCurrentIndex(enabledTabs);
     const lastIndex = enabledTabs.length - 1;
-    const nextIndex = this.getNextIndex(event.key, currentIndex, lastIndex);
+    const nextIndex = this.getNextIndex(directionalKey(event), currentIndex, lastIndex);
     if (nextIndex === null) {
       return;
     }

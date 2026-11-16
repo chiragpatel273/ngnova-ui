@@ -242,11 +242,30 @@ describe('UiTabsComponent', () => {
     const tablist = tabsFixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
     const button = tabsFixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
-    expect(tablist.className).toContain('border-l');
+    expect(tablist.className).toContain('border-s');
     expect(tablist.className).toContain('overflow-x-hidden');
     expect(tablist.className).toContain('overflow-y-auto');
-    expect(button.className).toContain('border-l-2');
+    expect(button.className).toContain('border-s-2');
     expect(button.className).not.toContain('border-b-2');
+  });
+
+  it('reverses horizontal arrow keys in a right-to-left layout', () => {
+    (fixture.nativeElement as HTMLElement).setAttribute('dir', 'rtl');
+    const tablist = fixture.nativeElement.querySelector('[role="tablist"]') as HTMLDivElement;
+    const buttons = fixture.nativeElement.querySelectorAll(
+      'button',
+    ) as NodeListOf<HTMLButtonElement>;
+    buttons[0].focus();
+
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.active).toBe('api');
+    expect(document.activeElement).toBe(buttons[1]);
+
+    tablist.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.active).toBe('overview');
+    expect(document.activeElement).toBe(buttons[0]);
   });
 });
 

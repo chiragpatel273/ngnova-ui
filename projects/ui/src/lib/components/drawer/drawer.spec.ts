@@ -34,7 +34,7 @@ import { provideUiDrawerLabels } from '../../../../drawer/src/drawer-labels';
 })
 class HostComponent {
   open = false;
-  position: 'left' | 'right' | 'top' | 'bottom' = 'right';
+  position: 'start' | 'end' | 'left' | 'right' | 'top' | 'bottom' = 'right';
   size: 'sm' | 'md' | 'lg' = 'md';
   closeOnBackdrop = true;
   closeOnEscape = true;
@@ -137,6 +137,18 @@ describe('UiDrawerComponent', () => {
     const panel = fixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
     expect(panel.className).toContain('bottom-0');
     expect(panel.className).toContain('--ui-drawer-height-lg');
+  });
+
+  it('anchors start and end positions to the logical inline edges', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.componentInstance.open = true;
+    fixture.componentInstance.position = 'end';
+    fixture.detectChanges();
+    const panel = fixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
+    expect(panel.className).toContain('end-0');
+    expect(panel.className).toContain('border-s');
+    expect(panel.className).toContain('--ui-drawer-width-md');
+    expect(panel.className).not.toContain('right-0');
   });
 
   it('restores document state when destroyed while open', () => {

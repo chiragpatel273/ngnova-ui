@@ -5,7 +5,7 @@
 [![CI](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/chiragpatel273/ngnova-ui/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/npm/l/%40ngnova%2Fui)](LICENSE)
 
-NgNova UI 1.0.2 is an open-source Angular 22 component library built with standalone components,
+NgNova UI 1.1.0 is an open-source Angular 22 component library built with standalone components,
 focused package entry points, accessible interaction contracts, and Tailwind CSS theming.
 
 - [Documentation](https://chiragpatel273.github.io/ngnova-ui/)
@@ -32,7 +32,7 @@ focused package entry points, accessible interaction contracts, and Tailwind CSS
 
 | Dependency   | Supported version                                                   |
 | ------------ | ------------------------------------------------------------------- |
-| NgNova UI    | `1.0.2`                                                             |
+| NgNova UI    | `1.1.0`                                                             |
 | Angular      | `>=22.0.2 <23.0.0`                                                  |
 | Tailwind CSS | `4.x`                                                               |
 | Angular CDK  | `^22.0.0` when using CDK-backed entry points or component harnesses |
@@ -207,6 +207,26 @@ bootstrapApplication(App, {
   bind the inputs.
 
 See [ADR 0004](docs/decisions/0004-built-in-label-contract.md) for the contract.
+
+## Right-to-left languages
+
+Set `dir="rtl"` (and `lang`) on `<html>`, or on any container for a single right-to-left region.
+No provider or `@angular/cdk` dependency is needed.
+
+```html
+<html lang="ar" dir="rtl"></html>
+```
+
+- Spacing, positioning, borders, and radii use logical start/end utilities, and directional icons
+  mirror.
+- ArrowLeft and ArrowRight follow the visual direction in Tabs, Tree, Tree Table, and Date Picker.
+- Prefer the direction-aware option values: Drawer `position="end"`, Toast `position="top-end"`,
+  and Table column `align: 'end'`. `left` and `right` stay physical.
+- Use logical utilities (`ms-*`, `ps-*`, `start-*`, `text-start`) in your own markup around the
+  components.
+
+Try the [live right-to-left preview](https://chiragpatel273.github.io/ngnova-ui/right-to-left/) and
+see [ADR 0005](docs/decisions/0005-right-to-left-direction-contract.md) for the contract.
 
 ## Component test harnesses
 

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { NGNOVA_UI_VERSION } from '@ngnova/ui';
 import { Router } from '@angular/router';
 import { provideRouter } from '@angular/router';
 
@@ -67,9 +68,9 @@ describe('App', () => {
     expect(homeHero?.classList.contains('bg-white')).toBe(true);
     expect(quickStartCard?.classList.contains('bg-slate-50/70')).toBe(true);
     expect(homeCompiled.textContent?.match(/NgNova UI/g)).toHaveLength(1);
-    expect(homeCompiled.textContent?.match(/v1\.0\.0/g)).toHaveLength(1);
+    expect(homeCompiled.textContent?.split(`v${NGNOVA_UI_VERSION}`)).toHaveLength(2);
     expect(homeArticle?.textContent).not.toContain('NgNova UI');
-    expect(homeArticle?.textContent).not.toContain('v1.0.0');
+    expect(homeArticle?.textContent).not.toContain(`v${NGNOVA_UI_VERSION}`);
     expect(homeArticle?.textContent).toContain('Angular 22 ready');
     const showcase = homeCompiled.querySelector<HTMLElement>('[data-home-showcase]');
     expect(showcase).toBeTruthy();

@@ -2591,7 +2591,8 @@ if (result.confirmed) deleteRelease();`,
         name: 'columns',
         type: 'readonly UiTreeTableColumn[]',
         defaultValue: '[]',
-        description: 'Column metadata with key, label, alignment, and sorting.',
+        description:
+          "Column metadata with key, label, alignment ('start' by default; 'start' | 'center' | 'end' | 'left' | 'right'), and sorting.",
       },
       {
         name: 'nodes',
@@ -2924,7 +2925,7 @@ if (result.confirmed) deleteRelease();`,
         type: 'readonly UiTableColumn[]',
         defaultValue: '[]',
         description:
-          'Column definitions with key, header, alignment, sorting, and optional start/end sticky placement.',
+          "Column definitions with key, header, alignment ('start' by default; 'start' | 'center' | 'end' | 'left' | 'right'), sorting, and optional start/end sticky placement.",
       },
       {
         name: 'rows',
@@ -3217,9 +3218,10 @@ if (result.confirmed) deleteRelease();`,
     inputs: [
       {
         name: 'position',
-        type: "'top-right' | 'bottom-right'",
+        type: "'top-right' | 'bottom-right' | 'top-end' | 'bottom-end'",
         defaultValue: "'top-right'",
-        description: 'Viewport placement.',
+        description:
+          'Viewport placement. The -end values follow the text direction and mirror under dir="rtl".',
       },
       {
         name: 'viewportOffset',
@@ -3675,9 +3677,10 @@ if (result.confirmed) deleteRelease();`,
       },
       {
         name: 'position',
-        type: "'left' | 'right' | 'top' | 'bottom'",
+        type: "'start' | 'end' | 'left' | 'right' | 'top' | 'bottom'",
         defaultValue: "'right'",
-        description: 'Viewport edge from which the panel is presented.',
+        description:
+          'Viewport edge from which the panel is presented. start and end follow the text direction; left and right are physical.',
       },
       {
         name: 'size',

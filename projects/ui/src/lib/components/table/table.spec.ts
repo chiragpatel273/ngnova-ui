@@ -399,8 +399,9 @@ describe('UiTableComponent', () => {
     const headers = fixture.nativeElement.querySelectorAll(
       'th',
     ) as NodeListOf<HTMLTableCellElement>;
-    expect(headers[0].className).toContain('left-0');
-    expect(headers[1].className).toContain('right-0');
+    expect(headers[0].className).toContain('start-0');
+    expect(headers[0].className).toContain('text-start');
+    expect(headers[1].className).toContain('end-0');
     expect(fixture.nativeElement.querySelector('table')).not.toBeNull();
   });
 

@@ -48,7 +48,7 @@ describe('UiDividerComponent', () => {
     fixture.componentInstance.decorative = false;
     fixture.detectChanges();
     const divider = fixture.nativeElement.querySelector('div') as HTMLElement;
-    expect(divider.className).toContain('border-l');
+    expect(divider.className).toContain('border-s');
     expect(divider.className).toContain('my-2');
     expect(divider.getAttribute('aria-orientation')).toBe('vertical');
   });

@@ -25,7 +25,8 @@ function uiClassNames(...classes: (string | false | null | undefined)[]): string
 let nextTableId = 0;
 
 export type UiTableRow = Record<string, unknown>;
-export type UiTableAlign = 'left' | 'center' | 'right';
+/** `start` and `end` follow the text direction; `left` and `right` are physical. */
+export type UiTableAlign = 'start' | 'center' | 'end' | 'left' | 'right';
 export type UiTableSortDirection = 'asc' | 'desc';
 export type UiTableSelectionMode = 'none' | 'single' | 'multiple';
 export type UiTableRowKey = string | number;
@@ -75,6 +76,8 @@ export class UiTableHeaderDirective {
 }
 
 const ALIGN_CLASSES: Record<UiTableAlign, string> = {
+  start: 'text-start',
+  end: 'text-end',
   left: 'text-left',
   center: 'text-center',
   right: 'text-right',
@@ -92,7 +95,7 @@ const ALIGN_CLASSES: Record<UiTableAlign, string> = {
         <table class="w-full min-w-full text-sm" [attr.aria-busy]="loading() ? 'true' : null">
           @if (caption()) {
             <caption
-              class="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100"
+              class="px-4 py-3 text-start text-sm font-semibold text-slate-900 dark:text-slate-100"
               [class.sr-only]="!captionVisible()"
             >
               {{
@@ -109,10 +112,10 @@ const ALIGN_CLASSES: Record<UiTableAlign, string> = {
             <tr>
               @if (showsSelectionColumn()) {
                 <th
-                  class="w-12 px-4 py-3 text-left"
+                  class="w-12 px-4 py-3 text-start"
                   scope="col"
                   [class.sticky]="stickySelectionColumn()"
-                  [class.left-0]="stickySelectionColumn()"
+                  [class.start-0]="stickySelectionColumn()"
                   [class.z-30]="stickySelectionColumn()"
                   [class.bg-slate-50]="stickySelectionColumn()"
                   [class.dark:bg-slate-900]="stickySelectionColumn()"
@@ -381,13 +384,13 @@ export class UiTableComponent {
   protected headerClasses(column: UiTableColumn): string {
     return uiClassNames(
       'px-4 py-3 text-xs font-semibold uppercase tracking-wide',
-      ALIGN_CLASSES[column.align ?? 'left'],
+      ALIGN_CLASSES[column.align ?? 'start'],
       column.sticky === 'start' &&
         uiClassNames(
           'sticky z-10 bg-slate-50 dark:bg-slate-900',
-          this.showsSelectionColumn() ? 'left-12' : 'left-0',
+          this.showsSelectionColumn() ? 'start-12' : 'start-0',
         ),
-      column.sticky === 'end' && 'sticky right-0 z-10 bg-slate-50 dark:bg-slate-900',
+      column.sticky === 'end' && 'sticky end-0 z-10 bg-slate-50 dark:bg-slate-900',
     );
   }
 
@@ -406,7 +409,7 @@ export class UiTableComponent {
   protected selectionCellClasses(row: UiTableRow): string {
     return uiClassNames(
       'w-12 px-4 py-3',
-      this.stickySelectionColumn() && 'sticky left-0 z-10',
+      this.stickySelectionColumn() && 'sticky start-0 z-10',
       this.stickySelectionColumn() &&
         (this.isRowSelected(row) ? 'bg-blue-50 dark:bg-blue-950' : 'bg-white dark:bg-slate-950'),
     );
@@ -415,13 +418,13 @@ export class UiTableComponent {
   protected cellClasses(column: UiTableColumn): string {
     return uiClassNames(
       'px-4 py-3 text-slate-700 dark:text-slate-200',
-      ALIGN_CLASSES[column.align ?? 'left'],
+      ALIGN_CLASSES[column.align ?? 'start'],
       column.sticky === 'start' &&
         uiClassNames(
           'sticky z-10 bg-white dark:bg-slate-950',
-          this.showsSelectionColumn() ? 'left-12' : 'left-0',
+          this.showsSelectionColumn() ? 'start-12' : 'start-0',
         ),
-      column.sticky === 'end' && 'sticky right-0 z-10 bg-white dark:bg-slate-950',
+      column.sticky === 'end' && 'sticky end-0 z-10 bg-white dark:bg-slate-950',
     );
   }
 

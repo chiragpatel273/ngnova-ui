@@ -31,6 +31,7 @@
     "format:check": "prettier --check .",
     "check:docs-api": "node scripts/check-docs-api.mjs",
     "check:focus-contract": "node scripts/check-focus-contract.mjs",
+    "check:direction-contract": "node scripts/check-direction-contract.mjs",
     "check:theme-contract": "node scripts/check-theme-contract.mjs",
     "check:angular-compatibility": "node scripts/check-angular-compatibility.mjs",
     "check:support-matrix": "node scripts/check-support-matrix.mjs",

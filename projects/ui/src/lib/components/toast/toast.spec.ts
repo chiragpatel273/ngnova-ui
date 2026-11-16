@@ -85,6 +85,18 @@ describe('UiToastComponent', () => {
     expect(viewport.className).not.toContain('top-0');
   });
 
+  it('anchors end positions to the logical inline end', () => {
+    const fixture = TestBed.createComponent(UiToastComponent);
+    fixture.componentRef.setInput('position', 'bottom-end');
+    fixture.detectChanges();
+
+    const viewport = fixture.nativeElement.querySelector('[aria-live="polite"]') as HTMLElement;
+
+    expect(viewport.className).toContain('end-0');
+    expect(viewport.className).toContain('bottom-0');
+    expect(viewport.className).not.toContain('right-0');
+  });
+
   it('creates unique IDs and typed variant helper messages', () => {
     const service = TestBed.inject(UiToastService);
 

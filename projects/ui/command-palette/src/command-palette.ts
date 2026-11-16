@@ -130,7 +130,7 @@ let nextCommandPaletteId = 0;
                         (mouseenter)="setActive(command)"
                         (click)="select(command, 'pointer')"
                       >
-                        <span class="min-w-0 flex-1 text-left">
+                        <span class="min-w-0 flex-1 text-start">
                           <span class="block truncate text-sm font-semibold">
                             {{ command.label }}
                           </span>
@@ -144,7 +144,7 @@ let nextCommandPaletteId = 0;
                         </span>
                         @if (command.shortcut) {
                           <kbd
-                            class="ml-3 shrink-0 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-[0.6875rem] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+                            class="ms-3 shrink-0 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-[0.6875rem] font-medium text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
                           >
                             {{ command.shortcut }}
                           </kbd>
@@ -354,7 +354,7 @@ export class UiCommandPaletteComponent {
 
   protected commandClasses(command: UiCommand): string {
     const base =
-      'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left outline-none transition-colors';
+      'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-start outline-none transition-colors';
     if (command.disabled)
       return `${base} cursor-not-allowed text-slate-400 opacity-60 dark:text-slate-600`;
     if (this.activeCommand()?.value === command.value)

@@ -29,7 +29,8 @@
 - Fix keyboard focus in zoneless applications: opening Date Picker from the keyboard now focuses
   the active date, moving into a month that is not rendered yet keeps focus in the calendar, and
   opening Menu with ArrowDown or ArrowUp focuses the first or last item instead of dropping focus to
-  the page. Escape now also closes a pointer-opened Menu while focus is still on its trigger.
+  the page. Escape now closes an open Menu wherever focus is, including after a pointer click that
+  leaves focus on the trigger or, in Safari, on the page.
 
 ## 1.0.2
 

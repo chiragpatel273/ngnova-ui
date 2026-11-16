@@ -158,10 +158,6 @@ export class UiMenuComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.pendingFocus = event.key === 'ArrowDown' ? 'first' : 'last';
       if (!this.isOpen()) this.setOpen(true);
       else this.focusPending();
-    } else if (event.key === 'Escape' && this.isOpen()) {
-      // A pointer-opened menu keeps focus on the trigger, so Escape must close it from there too.
-      event.preventDefault();
-      this.setOpen(false, true);
     }
   }
 
@@ -238,6 +234,12 @@ export class UiMenuComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.cleanups.push(
       this.renderer.listen(this.document, 'pointerdown', (event: PointerEvent) => {
         if (this.isOpen() && !this.host.contains(event.target as Node)) this.setOpen(false);
+      }),
+      // A pointer-opened menu may leave focus on the trigger or, in Safari, on the page body.
+      this.renderer.listen(this.document, 'keydown', (event: KeyboardEvent) => {
+        if (event.key !== 'Escape' || event.defaultPrevented || !this.isOpen()) return;
+        event.preventDefault();
+        this.setOpen(false, true);
       }),
     );
   }

@@ -17,17 +17,11 @@ import { UI_TREE_TABLE_LABELS } from './tree-table-labels';
  * Returns the pressed key with ArrowLeft and ArrowRight swapped when the event target is laid out
  * right-to-left, so horizontal keyboard navigation follows the visual direction.
  */
-function directionalKey(event: KeyboardEvent): string {
-  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return event.key;
-  const target = event.target;
-  if (!(target instanceof Element) || !isRightToLeft(target)) return event.key;
-  return event.key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft';
-}
-
-function isRightToLeft(element: Element): boolean {
-  const direction = element.ownerDocument.defaultView?.getComputedStyle(element).direction;
-  if (direction === 'rtl' || direction === 'ltr') return direction === 'rtl';
-  return element.closest('[dir]')?.getAttribute('dir')?.toLowerCase() === 'rtl';
+function directionalKey({ key, target }: KeyboardEvent): string {
+  if ((key !== 'ArrowLeft' && key !== 'ArrowRight') || !(target instanceof Element)) return key;
+  const rtl =
+    (getComputedStyle(target).direction || target.closest('[dir]')?.getAttribute('dir')) === 'rtl';
+  return rtl ? (key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft') : key;
 }
 
 /** `start` and `end` follow the text direction; `left` and `right` are physical. */

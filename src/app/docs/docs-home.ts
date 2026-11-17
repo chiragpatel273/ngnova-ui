@@ -164,7 +164,8 @@ interface HomeTaskLink {
               </div>
 
               <p class="mt-5 text-xs leading-5 text-slate-500 dark:text-slate-400">
-                Import only the component entry points your Angular screen needs.
+                ng add sets up Tailwind CSS v4, the theme, and dark mode. Import only the component
+                entry points your Angular screen needs.
               </p>
               <p class="sr-only" aria-live="polite">{{ copyAnnouncement() }}</p>
             </aside>
@@ -757,7 +758,7 @@ export class DocsHomeComponent implements OnDestroy {
     {
       id: 'install',
       label: 'Install',
-      code: 'npm install @ngnova/ui',
+      code: 'ng add @ngnova/ui',
     },
     {
       id: 'import',

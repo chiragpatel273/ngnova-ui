@@ -141,7 +141,7 @@ const TOPICS: Readonly<Record<string, DocsTopic>> = {
         description:
           'Consumer apps need Tailwind to scan the package so utility classes are generated.',
         items: [
-          'From 1.1.0, run ng add @ngnova/ui to apply this setup automatically',
+          'Run ng add @ngnova/ui to apply this setup automatically, or add the lines below by hand',
           'Add @custom-variant dark (&:where(.dark, .dark *)) for class-based dark mode',
           'Add @source "../node_modules/@ngnova/ui"',
           'Optionally import @ngnova/ui/styles/theme.css for the public --ui-* token contract',

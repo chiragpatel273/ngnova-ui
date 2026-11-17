@@ -166,10 +166,10 @@ export class GetStartedComponent {
       eyebrow: 'Install',
       title: 'Installation',
       description:
-        'Install the package, configure Tailwind scanning, and import only the component entry points your app uses.',
+        'Run ng add to install the package and configure Tailwind CSS v4, scanning, the theme, and dark mode. Then import only the component entry points your app uses.',
       tone: 'default',
       size: 'normal',
-      code: `npm install @ngnova/ui`,
+      code: `ng add @ngnova/ui`,
     },
     {
       id: 'accessibility',

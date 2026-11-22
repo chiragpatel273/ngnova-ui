@@ -370,8 +370,15 @@ discovery and first-run friction, not component quality.
        and Chromium and WebKit layout and keyboard checks for form, navigation, and overlay
        components in `e2e/visual/right-to-left.spec.ts`. Follow-up: pixel baselines for the RTL
        preview once a Windows snapshot run is available.
-9. [ ] Public launch: release post, Angular community channels, and the Phase 6 external quick-start
-       feedback round.
+9. [x] Starter template: Northstar Admin (`templates/admin`), a standalone Angular 22 app on the
+       published package with Overview, Customers, Orders, order details, Settings, and Sign in, using 30
+       entry points. Deployed with the docs at `/templates/admin/` from the library on `main`,
+       verified in CI against the locked npm release, and covered by
+       `e2e/visual/admin-template.spec.ts`. Follow-ups: sortable `ui-table` headers lose the
+       header's `uppercase` style because buttons reset `text-transform` (needs a Windows
+       baseline refresh); more templates (marketing site, auth pages) on demand.
+10. [ ] Public launch: release post, Angular community channels, and the Phase 6 external
+        quick-start feedback round.
 
 ### Candidate components (demand-gated)
 

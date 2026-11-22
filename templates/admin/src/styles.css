@@ -1,0 +1,35 @@
+/* Tailwind CSS v4 and NgNova UI. These are the lines `ng add @ngnova/ui` writes. */
+@import 'tailwindcss';
+@import '@ngnova/ui/styles/theme.css';
+@custom-variant dark (&:where(.dark, .dark *));
+@source "../node_modules/@ngnova/ui";
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root.dark body {
+  background-color: var(--color-slate-950);
+  color: var(--color-slate-100);
+}

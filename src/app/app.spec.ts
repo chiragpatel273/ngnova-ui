@@ -750,7 +750,7 @@ describe('App', () => {
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
   });
 
-  it('renders the admin template as a responsive, component-composed dashboard', async () => {
+  it('presents the Northstar admin template with a live demo, setup, and component links', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
 
@@ -759,244 +759,55 @@ describe('App', () => {
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const dashboard = compiled.querySelector<HTMLElement>('[data-admin-template]');
-    const dashboardHeader = dashboard?.querySelector<HTMLElement>('[data-admin-header]');
-    const metrics = dashboard?.querySelectorAll('[data-admin-metric]');
-    const mainContent = dashboard?.querySelector<HTMLElement>('main#admin-main-content');
-    const skipLink = dashboard?.querySelector<HTMLAnchorElement>('a[href="#admin-main-content"]');
-    const mobileOrders = dashboard?.querySelectorAll('[data-admin-mobile-orders] article');
-
-    expect(dashboard).toBeTruthy();
-    expect(dashboardHeader).toBeTruthy();
-    expect(dashboard?.classList.contains('h-screen')).toBe(true);
-    expect(dashboard?.classList.contains('min-h-screen')).toBe(true);
-    expect(dashboard?.classList.contains('h-dvh')).toBe(true);
-    expect(dashboard?.classList.contains('min-h-dvh')).toBe(true);
-    expect(dashboard?.classList.contains('xl:grid-rows-[minmax(0,1fr)]')).toBe(true);
-    expect(dashboard?.classList.contains('overflow-hidden')).toBe(true);
-    expect(dashboardHeader?.classList.contains('sticky')).toBe(true);
-    expect(dashboardHeader?.classList.contains('top-0')).toBe(true);
-    expect(mainContent?.classList.contains('overflow-y-auto')).toBe(true);
-    expect(mainContent?.getAttribute('aria-labelledby')).toBe('admin-title');
-    expect(skipLink?.textContent).toContain('Skip to dashboard content');
-    expect(mainContent?.querySelector('h1')?.textContent).toContain('Overview');
-    expect(dashboard?.querySelector('[data-admin-page-intro]')?.textContent).toContain(
-      'Good morning, Maya',
+    const links = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('main a'));
+    const demoLink = compiled.querySelector<HTMLAnchorElement>('[data-testid="open-admin-demo"]');
+    const stackblitzLink = links.find((link) => link.textContent?.includes('Open in StackBlitz'));
+    const sourceLink = links.find((link) => link.textContent?.trim() === 'View source');
+    const preview = compiled.querySelector<HTMLIFrameElement>(
+      'iframe[data-testid="admin-template-preview"]',
     );
-    expect(dashboardHeader?.querySelector('[data-admin-header-search]')).toBeTruthy();
-    expect(dashboardHeader?.querySelector('[data-admin-notifications]')).toBeTruthy();
-    expect(metrics?.length).toBe(4);
-    expect(dashboard?.textContent).toContain('Revenue overview');
-    expect(dashboard?.textContent).toContain('Team capacity');
-    expect(dashboard?.textContent).toContain('Operations pulse');
-    expect(dashboard?.textContent).toContain('Recent orders');
-    expect(dashboard?.querySelector('[aria-label="Performance and operations"]')).toBeTruthy();
-    expect(
-      dashboard?.querySelector('canvas[aria-label^="Revenue trend"]')?.classList.contains('h-44'),
-    ).toBe(true);
-    expect(dashboard?.querySelector('ui-table')).toBeTruthy();
-    expect(mobileOrders?.length).toBe(5);
-    expect(dashboard?.querySelector('ui-input')).toBeTruthy();
-    expect(dashboard?.querySelector('ui-progress-bar')).toBeTruthy();
-
-    const mobileNavigationTrigger = dashboard?.querySelector<HTMLButtonElement>(
-      'button[aria-label="Open admin navigation"]',
+    const componentLinks = compiled.querySelectorAll<HTMLAnchorElement>(
+      '[data-testid="admin-template-components"] a',
     );
-    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
 
-    mobileNavigationTrigger?.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const mobileNavigation = dashboard?.querySelector<HTMLElement>(
-      '[role="dialog"][aria-label="Admin navigation"]',
+    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('Northstar Admin');
+    expect(demoLink?.getAttribute('href')).toBe('templates/admin/');
+    expect(demoLink?.getAttribute('target')).toBe('_blank');
+    expect(demoLink?.getAttribute('rel')).toContain('noopener');
+    expect(stackblitzLink?.getAttribute('href')).toBe(
+      'https://stackblitz.com/github/chiragpatel273/ngnova-ui/tree/main/templates/admin',
     );
-    expect(mobileNavigation).toBeTruthy();
-    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('true');
-
-    mobileNavigation?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    fixture.detectChanges();
-
-    expect(dashboard?.querySelector('[role="dialog"][aria-label="Admin navigation"]')).toBeNull();
-    expect(mobileNavigationTrigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(sourceLink?.getAttribute('href')).toBe(
+      'https://github.com/chiragpatel273/ngnova-ui/tree/main/templates/admin',
+    );
+    expect(preview?.getAttribute('src')).toBe('templates/admin/');
+    expect(preview?.getAttribute('title')).toBe('Northstar Admin live demo');
+    expect(compiled.querySelector('app-docs-code-block')?.textContent).toContain(
+      'npx degit chiragpatel273/ngnova-ui/templates/admin my-admin',
+    );
+    expect(componentLinks.length).toBe(30);
+    expect(componentLinks[0]?.getAttribute('href')).toBe('/components/alert');
+    expect(compiled.textContent).toContain('30 NgNova UI entry points in use');
   });
 
-  it('supports advanced admin navigation, sidebar, customer, and theme workflows', async () => {
+  it('forwards the old admin dashboard route to the standalone template', async () => {
     const fixture = TestBed.createComponent(App);
     const router = TestBed.inject(Router);
-    localStorage.removeItem('ngnova-admin-sidebar');
-    localStorage.removeItem('ngnova-admin-theme');
-
-    await router.navigateByUrl('/templates');
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const dashboard = compiled.querySelector<HTMLElement>('[data-admin-template]');
-    const desktopNavigation = dashboard?.querySelector<HTMLElement>(
-      '[data-admin-desktop-navigation]',
-    );
-    const collapseButton = desktopNavigation?.querySelector<HTMLButtonElement>(
-      'button[aria-label="Collapse admin sidebar"]',
-    );
-
-    collapseButton?.click();
-    fixture.detectChanges();
-
-    expect(collapseButton).toBeTruthy();
-    expect(localStorage.getItem('ngnova-admin-sidebar')).toBe('1');
-    const expandButton = desktopNavigation?.querySelector<HTMLButtonElement>(
-      'button[aria-label="Expand admin sidebar"]',
-    );
-    expect(expandButton).toBeTruthy();
-    expect(dashboard?.style.gridTemplateColumns).toContain('4rem');
-    expect(expandButton?.classList.contains('rounded-lg')).toBe(true);
-    expect(expandButton?.classList.contains('border-slate-200')).toBe(true);
-    expect(desktopNavigation?.querySelector('[data-admin-brand-mark]')).toBeNull();
-
-    const customersButton = Array.from(
-      desktopNavigation?.querySelectorAll<HTMLButtonElement>('nav button') ?? [],
-    ).find((button) => button.getAttribute('aria-label') === 'Customers');
-    customersButton?.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(dashboard?.querySelector('#admin-title')?.textContent?.trim()).toBe('Customers');
-    expect(dashboard?.textContent).toContain(
-      'Search, filter, create, and update customer accounts.',
-    );
-    expect(dashboard?.textContent).toContain('Olivia Martin');
-
-    const customerSearch = dashboard?.querySelector<HTMLInputElement>(
-      'input[aria-label="Search customers"]',
-    );
-    if (customerSearch) {
-      customerSearch.value = 'Stark';
-      customerSearch.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    fixture.detectChanges();
-
-    expect(dashboard?.textContent).toContain('Sophia Patel');
-    expect(dashboard?.textContent).not.toContain('Olivia Martin');
-
-    const viewCustomerButton = Array.from(
-      dashboard?.querySelectorAll<HTMLButtonElement>('button') ?? [],
-    ).find((button) => button.textContent?.trim() === 'View');
-    viewCustomerButton?.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const customerEditor = dashboard?.querySelector<HTMLElement>(
-      '[role="dialog"][aria-label="Edit customer"]',
-    );
-    expect(customerEditor).toBeTruthy();
-    expect(
-      customerEditor?.querySelector<HTMLInputElement>('input[name="customerName"]')?.value,
-    ).toBe('Sophia Patel');
-
-    customerEditor
-      ?.querySelector<HTMLFormElement>('form')
-      ?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(dashboard?.querySelector('[role="dialog"][aria-label="Edit customer"]')).toBeNull();
-    expect(document.body.textContent).toContain('Customer updated');
-
-    const ordersButton = Array.from(
-      desktopNavigation?.querySelectorAll<HTMLButtonElement>('nav button') ?? [],
-    ).find((button) => button.getAttribute('aria-label') === 'Orders');
-    ordersButton?.click();
-    fixture.detectChanges();
-
-    const orderSearch = dashboard?.querySelector<HTMLInputElement>(
-      'input[aria-label="Search orders"]',
-    );
-    if (orderSearch) {
-      orderSearch.value = 'Wayne';
-      orderSearch.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    fixture.detectChanges();
-
-    expect(dashboard?.querySelector('#admin-title')?.textContent?.trim()).toBe('Orders');
-    expect(dashboard?.textContent).toContain('Wayne Enterprises');
-    expect(dashboard?.textContent).not.toContain('Northwind Traders');
-
-    dashboard?.querySelector<HTMLInputElement>('input[aria-label^="Select row"]')?.click();
-    fixture.detectChanges();
-    const markShippedButton = Array.from(
-      dashboard?.querySelectorAll<HTMLButtonElement>('button') ?? [],
-    ).find((button) => button.textContent?.trim() === 'Mark shipped');
-    markShippedButton?.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(markShippedButton).toBeTruthy();
-    expect(dashboard?.textContent).toContain('Shipped');
-    expect(document.body.textContent).toContain('Orders updated');
-
-    const themeButton = dashboard?.querySelector<HTMLButtonElement>(
-      'button[aria-label="Use dark dashboard theme"]',
-    );
-    themeButton?.click();
-    fixture.detectChanges();
-
-    expect(dashboard?.classList.contains('dark')).toBe(true);
-    expect(localStorage.getItem('ngnova-admin-theme')).toBe('dark');
-
-    localStorage.removeItem('ngnova-admin-sidebar');
-    localStorage.removeItem('ngnova-admin-theme');
-  });
-
-  it('provides complete dashboard source files, a ZIP download, and a focused preview route', async () => {
-    const fixture = TestBed.createComponent(App);
-    const router = TestBed.inject(Router);
-
-    await router.navigateByUrl('/templates');
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const openDashboardLink = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('a')).find(
-      (link) => link.textContent?.includes('Open dashboard'),
-    );
-    const downloadLink = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('a')).find(
-      (link) => link.textContent?.includes('Download ZIP'),
-    );
-    const sourceTabs = compiled.querySelectorAll<HTMLButtonElement>(
-      '[aria-label="Admin dashboard source files"] [role="tab"]',
-    );
-
-    expect(openDashboardLink?.getAttribute('href')).toBe('templates/admin-dashboard');
-    expect(openDashboardLink?.getAttribute('target')).toBe('_blank');
-    expect(openDashboardLink?.getAttribute('rel')).toContain('noopener');
-    expect(downloadLink?.getAttribute('href')).toBe(
-      'templates/admin-dashboard/ngnova-admin-dashboard.zip',
-    );
-    expect(downloadLink?.hasAttribute('download')).toBe(true);
-    expect(Array.from(sourceTabs, (tab) => tab.textContent?.trim())).toEqual([
-      'HTML',
-      'TypeScript',
-      'CSS',
-      'Chart helper',
-    ]);
-
-    sourceTabs[1]?.click();
-    fixture.detectChanges();
-    expect(compiled.querySelector('app-docs-code-block')?.textContent).toContain(
-      'admin-dashboard.component.ts',
-    );
-    expect(compiled.querySelector('app-docs-code-block')?.textContent).toContain(
-      'export class AdminDashboardComponent',
-    );
 
     await router.navigateByUrl('/templates/admin-dashboard');
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(compiled.querySelector('app-admin-dashboard-preview')).toBeTruthy();
-    expect(compiled.querySelector('[data-admin-template]')).toBeTruthy();
+    const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-docs-layout')).toBeNull();
+    expect(
+      compiled
+        .querySelector<HTMLAnchorElement>('app-admin-template-redirect a')
+        ?.getAttribute('href'),
+    ).toBe('/templates/admin/');
+    expect(document.head.querySelector('meta[http-equiv="refresh"]')?.getAttribute('content')).toBe(
+      '0; url=/templates/admin/',
+    );
   });
 
   it('renders flagship component docs with unique section IDs, valid section links, and code blocks', async () => {

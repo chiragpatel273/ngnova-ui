@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Northstar Admin</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Northstar Admin is a free Angular 22 admin dashboard starter built with NgNova UI and Tailwind CSS v4."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <script>
+      // Static hosts without SPA fallback (GitHub Pages) can send unknown paths to
+      // "<base>?redirect=/full/path"; restore that path before the router starts.
+      (function () {
+        var target = new URLSearchParams(location.search).get('redirect');
+        if (target && target.charAt(0) === '/' && target.charAt(1) !== '/') {
+          history.replaceState(null, '', target);
+        }
+      })();
+    </script>
+    <script>
+      // Apply the saved theme before Angular boots so the first paint matches it.
+      (function () {
+        try {
+          var stored = JSON.parse(localStorage.getItem('northstar-preferences') || '{}');
+          var dark =
+            stored.theme === 'dark' ||
+            (stored.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+          if (stored.direction === 'rtl') document.documentElement.dir = 'rtl';
+        } catch (error) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

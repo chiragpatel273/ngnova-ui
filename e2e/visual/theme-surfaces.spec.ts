@@ -18,16 +18,3 @@ test('theme playground dark mode', async ({ page }, testInfo) => {
   await expect(playground).toHaveAttribute('data-ui-theme', 'dark');
   await expect(playground).toHaveScreenshot('theme-playground-dark.png');
 });
-
-test('admin dashboard dark mode', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-desktop');
-
-  await page.goto('/templates/admin-dashboard');
-  await page.locator('[data-admin-template]').waitFor();
-  await waitForFonts(page);
-  await page.getByRole('button', { name: 'Use dark dashboard theme' }).click();
-
-  const dashboard = page.locator('[data-admin-template]');
-  await expect(dashboard).toHaveClass(/dark/);
-  await expect(dashboard).toHaveScreenshot('admin-dashboard-dark.png');
-});

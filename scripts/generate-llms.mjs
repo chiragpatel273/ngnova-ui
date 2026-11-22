@@ -237,6 +237,8 @@ ${setup}
 - [Angular Forms and Signal Forms](${pageUrl('forms')})
 - [Theming and design tokens](${pageUrl('theming')})
 - [Right-to-left layouts](${pageUrl('right-to-left')})
+- [Northstar Admin template](${siteUrl}templates/admin/): a complete Angular 22 admin dashboard
+  built with NgNova UI; source at https://github.com/chiragpatel273/ngnova-ui/tree/main/templates/admin
 
 ## Components
 

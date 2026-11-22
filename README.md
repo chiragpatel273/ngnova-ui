@@ -176,6 +176,18 @@ Browse the [component documentation](https://chiragpatel273.github.io/ngnova-ui/
 for current APIs, live examples, accessibility guidance, and import statements. Headless table
 state utilities are also available from `@ngnova/ui/table-state`.
 
+## Admin dashboard template
+
+[Northstar Admin](templates/admin) is a free Angular 22 admin dashboard built with NgNova UI:
+overview, customers, orders, order details, settings, and sign-in, with dark mode, right-to-left support,
+a command palette, and Signal Forms. Try the
+[live demo](https://chiragpatel273.github.io/ngnova-ui/templates/admin/) or start a project from
+it:
+
+```bash
+npx degit chiragpatel273/ngnova-ui/templates/admin my-admin
+```
+
 ## Translating built-in labels
 
 From 1.1.0, components with built-in text (accessible names, status messages, and button text) export
@@ -299,6 +311,7 @@ library before validating focused entry points or package output.
 - `projects/ui`: Angular library source and focused package entry points.
 - `projects/ui/README.md`: README included in the published npm package.
 - `src/app`: documentation application.
+- `templates/admin`: Northstar Admin, a standalone starter app built on the published package.
 - `docs`: compatibility, design, release, support, and engineering contracts.
 - `scripts`: release checks, API validation, package audits, and consumer smoke tests.
 

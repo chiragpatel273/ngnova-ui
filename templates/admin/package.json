@@ -1,0 +1,36 @@
+{
+  "name": "northstar-admin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Northstar Admin: a free Angular 22 admin dashboard starter built with NgNova UI and Tailwind CSS v4.",
+  "license": "MIT",
+  "scripts": {
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test --watch=false"
+  },
+  "dependencies": {
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "@ng-icons/core": "^34.0.0",
+    "@ng-icons/heroicons": "^34.0.0",
+    "@ngnova/ui": "^1.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.0",
+    "@angular/cli": "^22.1.0",
+    "@angular/compiler-cli": "^22.1.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "jsdom": "^28.0.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "~6.0.2",
+    "vitest": "^4.0.0"
+  }
+}

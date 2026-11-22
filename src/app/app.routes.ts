@@ -57,12 +57,12 @@ export const routes: Routes = [
       },
       {
         path: 'templates',
-        title: 'Templates',
+        title: 'Free Angular admin dashboard template',
         loadComponent: () =>
           import('./docs/docs-templates').then((module) => module.DocsTemplatesComponent),
         data: {
           description:
-            'Production-style Angular templates built with NgNova UI components, including an admin dashboard.',
+            'Northstar Admin: a free Angular 22 admin dashboard template built with NgNova UI and Tailwind CSS v4, with a live demo and one-command setup.',
         },
       },
       {
@@ -140,11 +140,11 @@ export const routes: Routes = [
     path: 'templates/admin-dashboard',
     title: 'Admin dashboard template',
     loadComponent: () =>
-      import('./docs/admin-dashboard-preview').then(
-        (module) => module.AdminDashboardPreviewComponent,
+      import('./docs/admin-template-redirect').then(
+        (module) => module.AdminTemplateRedirectComponent,
       ),
     data: {
-      description: 'A responsive Angular admin dashboard built entirely from NgNova UI components.',
+      description: 'The NgNova UI admin dashboard template moved to Northstar Admin.',
     },
   },
 ];

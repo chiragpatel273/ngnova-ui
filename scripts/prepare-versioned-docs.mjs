@@ -55,7 +55,34 @@ await mkdir(resolve(outputRoot, activeVersion.id));
 await writeFile(resolve(outputRoot, activeVersion.id, 'index.html'), redirectDocument(targetUrl));
 await mkdir(resolve(outputRoot, 'latest'));
 await writeFile(resolve(outputRoot, 'latest/index.html'), redirectDocument(targetUrl));
-await writeFile(resolve(outputRoot, '404.html'), redirectDocument(targetUrl));
+// GitHub Pages serves this file for every unknown path. Paths inside the admin template go back
+// to the template, which restores them from ?redirect=; everything else opens the docs home.
+const templateBase = `${manifest.projectPath}/templates/admin/`;
+const notFoundDocument = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <title>NgNova UI documentation</title>
+    <script>
+      (function () {
+        var path = location.pathname;
+        var templateBase = ${JSON.stringify(templateBase)};
+        location.replace(
+          path.indexOf(templateBase) === 0
+            ? templateBase + '?redirect=' + encodeURIComponent(path + location.search + location.hash)
+            : ${JSON.stringify(targetUrl)}
+        );
+      })();
+    </script>
+    <noscript><meta http-equiv="refresh" content="0; url=${targetUrl}"></noscript>
+  </head>
+  <body>
+    <p><a href="${targetUrl}">Open NgNova UI documentation</a></p>
+  </body>
+</html>
+`;
+await writeFile(resolve(outputRoot, '404.html'), notFoundDocument);
 await writeFile(resolve(outputRoot, '.nojekyll'), '');
 await writeFile(resolve(outputRoot, 'versions.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 

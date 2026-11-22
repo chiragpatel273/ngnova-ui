@@ -5,7 +5,6 @@ import {
   TitleStrategy,
   withComponentInputBinding,
   withInMemoryScrolling,
-  withViewTransitions,
 } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -19,7 +18,6 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
-      withViewTransitions({ skipInitialTransition: true }),
     ),
     { provide: TitleStrategy, useClass: AppTitleStrategy },
   ],

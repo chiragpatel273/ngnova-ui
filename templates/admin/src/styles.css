@@ -29,20 +29,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Route changes cross-fade with the View Transitions API; skip it for reduced motion. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 160ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
 :root.dark body {
   background-color: var(--color-slate-950);
   color: var(--color-slate-100);
